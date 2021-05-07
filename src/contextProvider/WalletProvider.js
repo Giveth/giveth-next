@@ -26,7 +26,7 @@ const networkId = process.env.NEXT_PUBLIC_NETWORK_ID
 let EVENT_SETUP_DONE = false
 let wallet = {}
 
-function useWallet() {
+function useWallet () {
   const context = React.useContext(WalletContext)
   if (!context) {
     throw new Error(`userWallet must be used within a WalletProvider`)
@@ -34,7 +34,7 @@ function useWallet() {
   return context
 }
 
-function WalletProvider(props) {
+function WalletProvider (props) {
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
 
@@ -76,7 +76,7 @@ function WalletProvider(props) {
     setReady(true)
 
     // TESTS ONLY --------------
-    if (provider.isTest) return
+    if (provider?.isTest) return
 
     // EVENTS ONLY --------------
 
@@ -115,7 +115,7 @@ function WalletProvider(props) {
     start()
   }, [])
 
-  async function logout(walletLoggedOut) {
+  async function logout (walletLoggedOut) {
     !walletLoggedOut && wallet?.logout()
     setLoading(true)
     Auth.handleLogout()
@@ -123,7 +123,7 @@ function WalletProvider(props) {
     setLoading(false)
   }
 
-  async function signMessage(message, publicAddress, loginFromXDAI) {
+  async function signMessage (message, publicAddress, loginFromXDAI) {
     try {
       await checkNetwork()
       console.log({ loginFromXDAI }, process.env.NEXT_PUBLIC_NETWORK_ID)
@@ -184,7 +184,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function updateUserInfoOnly() {
+  async function updateUserInfoOnly () {
     if (!user) return null
     const { data } = await client.query({
       query: GET_USER_BY_ADDRESS,
@@ -200,13 +200,13 @@ function WalletProvider(props) {
     Auth.setUser(newUser)
   }
 
-  async function updateBalance(publicAddress) {
+  async function updateBalance (publicAddress) {
     if (!publicAddress) return null
     const balance = await wallet.web3.eth.getBalance(publicAddress)
     setBalance(wallet.web3.utils.fromWei(balance, 'ether'))
   }
 
-  async function updateUser(accounts) {
+  async function updateUser (accounts) {
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
@@ -250,12 +250,12 @@ function WalletProvider(props) {
     setUser(user)
   }
 
-  async function validateToken() {
+  async function validateToken () {
     const isValid = await validateAuthToken(Auth.getUserToken())
     return isValid
   }
 
-  async function login({ walletProvider, verifier }) {
+  async function login ({ walletProvider, verifier }) {
     try {
       wallet = getWallet(walletProvider)
       setLoading(true)
@@ -298,7 +298,7 @@ function WalletProvider(props) {
     }
   }
 
-  function isWalletAddressValid(address) {
+  function isWalletAddressValid (address) {
     if (address.length !== 42 || !Web3.utils.isAddress(address)) {
       return false
     } else {
@@ -306,11 +306,11 @@ function WalletProvider(props) {
     }
   }
 
-  function isAddressENS(address) {
+  function isAddressENS (address) {
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
-  async function checkNetwork() {
+  async function checkNetwork () {
     if (!wallet) throw new Error('No Eth Provider')
     const byPassXDAI = currentChainId === 100
     const currentNetworkId = await wallet?.web3.eth.getChainId()
@@ -322,7 +322,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function sendEthersTransaction(toAddress, amount, provider) {
+  async function sendEthersTransaction (toAddress, amount, provider) {
     const transaction = {
       to: toAddress,
       value: ethers.utils.parseEther(amount.toString())
@@ -334,7 +334,7 @@ function WalletProvider(props) {
     const signerTransaction = await signer.sendTransaction(transaction)
     return signerTransaction
   }
-  async function sendTransaction(
+  async function sendTransaction (
     params,
     txCallbacks,
     contractAddress,
@@ -409,7 +409,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function getAddressFromENS(address) {
+  async function getAddressFromENS (address) {
     const ens = await wallet.web3.eth.ens.getOwner(address)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {
