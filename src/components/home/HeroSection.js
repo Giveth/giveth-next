@@ -20,6 +20,7 @@ import HeroSideImage from '../content/HeroSideImage'
 // import imgPeopleHeader from '../../images/people-header.svg'
 
 const HeroSection = styled(Grid)`
+  min-height: 100vh;
   grid-template-columns: 1fr auto;
   position: relative;
   @media (max-width: 850px) {
@@ -109,7 +110,7 @@ const Hero = ({ content }) => {
           </Link>
         </Grid>
       </HeroText>
-      <Box sx={{ minHeight: [null, null, '100vh'] }}>
+      <Box sx={{ minHeight: [null, '100vh', '100vh'] }}>
         {isMobile ? null : <HeroImage alt='' />}
       </Box>
     </HeroSection>
