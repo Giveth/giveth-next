@@ -87,7 +87,8 @@ function ImageSection({ image, register }) {
             name='editImage'
             type='hidden'
             value={displayImage}
-            ref={register}
+            {...register('editImage')}
+            // ref={register}
           />
           {displayImage === undefined ? (
             <NextImage

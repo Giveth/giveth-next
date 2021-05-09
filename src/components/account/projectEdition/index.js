@@ -142,7 +142,8 @@ function ProjectEditionForm(props) {
           <input
             type='hidden'
             name='projectId'
-            ref={register}
+            // ref={register}
+            {...register('projectId')}
             value={project.id}
           />
           {project?.status && (
@@ -187,7 +188,7 @@ function ProjectEditionForm(props) {
             <CustomLabel title='Project Name' htmlFor='editTitle' />
             <CustomInput
               name='editTitle'
-              ref={register}
+              {...register('editTitle')}
               defaultValue={project?.title}
             />{' '}
             {/* <CustomLabel title='Project Admin' htmlFor='editAdmin' />
@@ -254,7 +255,8 @@ function ProjectEditionForm(props) {
                         key={`${category.name}-checkbox`}
                         id={category.name}
                         name={category.name}
-                        ref={register}
+                        // ref={register}
+                        {...register(category.name)}
                         onClick={() => {
                           categoryFound
                             ? setCategories(
@@ -345,7 +347,7 @@ function ProjectEditionForm(props) {
             <CustomLabel title='Donation Address' htmlFor='editWalletAddress' />
             <CustomInput
               name='editWalletAddress'
-              ref={register}
+              {...register('editWalletAddress')}
               defaultValue={project?.walletAddress}
             />
             <CustomLabel

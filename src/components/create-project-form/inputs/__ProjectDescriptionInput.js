@@ -60,7 +60,8 @@ export const ProjectDescriptionInput = ({
           }}
           id='projectDescription'
           name='projectDescription'
-          ref={register}
+          // ref={register}
+          {...register('projectDescription')}
           defaultValue={currentValue}
           rows={12}
           maxLength={2000}
