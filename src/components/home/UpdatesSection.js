@@ -6,6 +6,11 @@ import { useMediaQuery } from 'react-responsive'
 // import { useMediumFeed } from './MediumFeed'
 import MailchimpSignup from './MailchimpSignup'
 
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+
+dayjs.extend(localizedFormat)
+
 // apply style to elements
 const Main = styled(Grid)`
   position: relative;
@@ -109,8 +114,7 @@ const UpdatesSection = ({ mediumPosts }) => {
                         month: 'long',
                         day: '2-digit'
                       }).format(node?.pubDate)} */}
-                      {node?.pubDate}
-                      {' - '}
+                      {dayjs(node?.pubDate).format('ll')}
                       {/* {meta} */}
                     </Text>
                   </Grid>
