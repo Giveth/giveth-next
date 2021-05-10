@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-// import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { IconButton, Text, Link, jsx, Flex } from 'theme-ui'
+import { IconButton, Text, Link, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../utils/theme-ui'
@@ -166,7 +165,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = router.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -177,7 +176,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
