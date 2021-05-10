@@ -222,7 +222,7 @@ const ProjectsList = props => {
   const loadMore = () => {
     setLimit(limit + 3)
   }
-  const hasMore = limit < projectsFiltered.length
+  const hasMore = limit < projectsFiltered?.length
 
   return (
     <>
@@ -368,7 +368,7 @@ const ProjectsList = props => {
               }}
             >
               <InfiniteScroll
-                dataLength={projectsFilteredSorted?.length} //This is important field to render the next data
+                dataLength={projectsFilteredSorted?.length || 0} //This is important field to render the next data
                 next={loadMore}
                 hasMore={hasMore}
                 loader={
