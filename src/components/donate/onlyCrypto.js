@@ -240,8 +240,8 @@ const OnlyCrypto = props => {
           }
         })
       : []
-    setSelectedToken(formattedTokenList[0]?.value)
-    setTokenSymbol(formattedTokenList[0]?.label)
+    setSelectedToken(currentMainToken)
+    setTokenSymbol(mainToken)
     setErc20List([
       ...formattedTokenList,
       {
