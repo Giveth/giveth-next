@@ -13,8 +13,6 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
-// import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
-// import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
@@ -176,7 +174,6 @@ const MyDonations = props => {
         setCurrentDonations(props?.donations)
         setLoading(false)
       }
-      console.log('lolo', props?.donations)
     }
 
     setup()
@@ -204,9 +201,9 @@ const MyDonations = props => {
       case 'All Donations':
         return items
       case 'Fiat':
-        return items?.filter(item => item.donationType !== 'crypto')
+        return items?.filter(item => !item.transactionId)
       case 'Crypto':
-        return items?.filter(item => item.donationType === 'crypto')
+        return items?.filter(item => !!item.transactionId)
       default:
         return items
     }
@@ -224,9 +221,8 @@ const MyDonations = props => {
       i => i?.symbol === item?.symbol?.toUpperCase()
     )
     let icon = found
-      ? `/assets/cryptocurrency-icons/32/color/${
-          item?.symbol?.toLowerCase() || 'eth'
-        }.png`
+      ? `/assets/cryptocurrency-icons/32/color/${item?.symbol?.toLowerCase() ||
+          'eth'}.png`
       : `/assets/tokens/${item?.symbol?.toUpperCase()}.png`
     return { ...item, icon }
   }
