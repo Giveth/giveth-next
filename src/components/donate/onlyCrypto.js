@@ -300,9 +300,8 @@ const OnlyCrypto = props => {
       i => i?.symbol === tokenSymbol?.toUpperCase()
     )
     if (found) {
-      img = `/assets/cryptocurrency-icons/32/color/${
-        tokenSymbol?.toLowerCase() || 'eth'
-      }.png`
+      img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() ||
+        'eth'}.png`
       setIcon(img)
     }
   }, [tokenSymbol, icon])
@@ -824,15 +823,14 @@ const OnlyCrypto = props => {
             width: '100%'
           }}
         >
-          <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+          <Flex sx={{ flexDirection: 'column' }}>
             <Button
               onClick={() => confirmDonation(isLoggedIn && ready)}
               sx={{
                 variant: 'buttons.default',
                 padding: '1.063rem 7.375rem',
                 mt: 2,
-                textTransform: 'uppercase',
-                width: '100%'
+                textTransform: 'uppercase'
               }}
             >
               Donate
@@ -855,10 +853,12 @@ const OnlyCrypto = props => {
             )}
           </Flex>
 
-          <SVGLogo
+          <Flex
+            style={{ cursor: 'pointer', margin: '1em' }}
             onClick={() => setIsOpen(true)}
-            sx={{ cursor: 'pointer', ml: 3 }}
-          />
+          >
+            <SVGLogo />
+          </Flex>
         </Flex>
       </AmountSection>
     </Content>
