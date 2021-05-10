@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { Box, Button, Flex, Text } from 'theme-ui'
+import { Box, Button, Image, Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import Modal from './modal'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 import LoginModal from '../components/torus/loginModal'
@@ -99,7 +98,6 @@ function IncompleteProfilePopup({ close }) {
       sx={{
         alignItems: 'center',
         flexDirection: 'column',
-        px: '36px',
         py: 5,
         textAlign: 'center'
       }}
@@ -117,10 +115,11 @@ function IncompleteProfilePopup({ close }) {
           variant: 'text.default',
           color: 'secondary',
           my: 3,
-          width: '90%'
+          width: '60%'
         }}
       >
-        Please finish setting up your public profile before proceeding
+        Please finish setting up your public profile with at least your name and
+        e-mail before proceeding
       </Text>
       <Link href='/account'>
         <Button
