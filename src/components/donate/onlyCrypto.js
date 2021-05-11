@@ -815,50 +815,47 @@ const OnlyCrypto = props => {
             </Summary>
           )}
         </>
-        <Flex
-          sx={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            textAlign: 'center',
-            width: '100%'
-          }}
-        >
-          <Flex sx={{ flexDirection: 'column' }}>
+        <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+          <Flex
+            sx={{
+              width: '100%',
+              alignItems: 'center',
+              textAlign: 'center',
+              justifyContent: 'space-between'
+            }}
+          >
             <Button
               onClick={() => confirmDonation(isLoggedIn && ready)}
               sx={{
                 variant: 'buttons.default',
                 padding: '1.063rem 7.375rem',
                 mt: 2,
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                width: '90%'
               }}
             >
               Donate
             </Button>
-            {isLoggedIn && ready && !isXDAI && (
-              <Text
-                sx={{
-                  mt: 2,
-                  mx: 'auto',
-                  cursor: 'pointer',
-                  color: 'background',
-                  '&:hover': {
-                    color: 'accent'
-                  }
-                }}
-                onClick={() => confirmDonation(false)}
-              >
-                click here to use another wallet
-              </Text>
-            )}
+            <Flex sx={{ cursor: 'pointer' }} onClick={() => setIsOpen(true)}>
+              <SVGLogo />
+            </Flex>
           </Flex>
-
-          <Flex
-            style={{ cursor: 'pointer', margin: '1em' }}
-            onClick={() => setIsOpen(true)}
-          >
-            <SVGLogo />
-          </Flex>
+          {isLoggedIn && ready && !isXDAI && (
+            <Text
+              sx={{
+                mt: 2,
+                mx: 'auto',
+                cursor: 'pointer',
+                color: 'background',
+                '&:hover': {
+                  color: 'accent'
+                }
+              }}
+              onClick={() => confirmDonation(false)}
+            >
+              click here to use another wallet
+            </Text>
+          )}
         </Flex>
       </AmountSection>
     </Content>
