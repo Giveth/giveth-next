@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import dynamic from 'next/dynamic'
 import ReactQuill, { Quill } from 'react-quill'
 
 import * as Emoji from 'quill-emoji'
@@ -6,11 +7,16 @@ import * as Emoji from 'quill-emoji'
 import 'react-quill/dist/quill.snow.css'
 import 'quill-emoji/dist/quill-emoji.css'
 import QuillImageDropAndPaste from 'quill-image-drop-and-paste'
+import ImageUploader from './richImageUploader/imageUploader'
 
 window.Quill = Quill
 
 const ImageResize = require('quill-image-resize-module').default
+// const ImageUploader = dynamic(import('./richImageUploader/imageUploader'), {
+//   ssr: false
+// })
 
+Quill.register('modules/imageUploader', ImageUploader)
 Quill.register('modules/emoji', Emoji)
 Quill.register('modules/ImageResize', ImageResize)
 Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste)
@@ -85,7 +91,20 @@ const modules = {
     matchVisual: false
   },
   imageDropAndPaste: {},
-  ImageResize: {}
+  ImageResize: {},
+  imageUploader: {
+    // HERE: TODO ADD CUSTOM IMAGE UPLOADER
+    upload: file => {
+      console.log({ file })
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/480px-JavaScript-logo.png'
+          )
+        }, 3500)
+      })
+    }
+  }
 }
 
 const formats = [

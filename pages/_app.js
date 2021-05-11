@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "../src/components/richImageUploader/quill.imageUploader.css";
 import { DefaultSeo } from "next-seo";
 import { ApolloProvider } from "@apollo/client";
 import { Web3Provider } from "@ethersproject/providers";

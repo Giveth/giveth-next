@@ -157,7 +157,8 @@ const FilterBox = styled(Flex)`
 
 const MyDonations = props => {
   const router = useRouter()
-  const options = ['All Donations', 'Fiat', 'Crypto']
+  // const options = ['All Donations', 'Fiat', 'Crypto']
+  const options = ['All Donations', 'Crypto']
   // const { user } = useWallet()
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
@@ -432,17 +433,18 @@ const MyDonations = props => {
   return (
     <>
       <FilterBox sx={{ pt: 4, flexDirection: ['column-reverse', null, 'row'] }}>
-        <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
+        {/* Removing this as we don't have fiat donations yet */}
+        {/* <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
           <DropdownInput
             options={options}
             current={filter}
             setCurrent={i => setFilter(i)}
           />
-        </FilterInput>
-        <SearchInput sx={{ width: ['100%', null, '65%'] }}>
+        </FilterInput> */}
+        <SearchInput sx={{ width: ['100%', null, '100%'] }}>
           <Input
             defaultValue=''
-            placeholder='Search Donations'
+            placeholder='Search for donations'
             variant='forms.search'
             onChange={e => searching(e.target.value)}
           />

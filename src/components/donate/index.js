@@ -37,7 +37,7 @@ const ProjectContainer = styled(Flex)`
   flex-direction: column;
   margin: 0 3.125rem 0 0;
   align-items: center;
-  @media (max-width: 800px) {
+  @media (max-width: 1100px) {
     width: 100%;
   }
 `
@@ -52,7 +52,9 @@ const Payment = styled.div`
   }
 `
 
-const Share = styled.div``
+const Share = styled.div`
+  align-items: center;
+`
 
 const SocialIcons = styled.div`
   display: flex;
@@ -238,7 +240,7 @@ const DonateIndex = props => {
 
   if (isAfterPayment || hashSent) {
     return (
-      <>
+      <Flex sx={{ flexDirection: ['column', 'column', 'row'] }}>
         <ProjectContainer>
           <ProjectListing
             wholeClickable
@@ -258,7 +260,7 @@ const DonateIndex = props => {
             <ShareIcons message='Share this with your friends!' />
           </div>
         </Payment>
-      </>
+      </Flex>
     )
   }
 

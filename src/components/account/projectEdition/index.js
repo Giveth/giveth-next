@@ -444,6 +444,16 @@ function ProjectEdition(props) {
       const editProjectMutation = async () => {
         setLoading(true)
         try {
+          const contentSize =
+            encodeURI(project?.description).split(/%..|./).length - 1
+          console.log({ contentSize })
+          if (contentSize > 4000000) {
+            Toast({
+              content: `Content is too heavy, it shouldn't exceed 4Mb`,
+              type: 'error'
+            })
+            return false
+          }
           const edit = await client.mutate({
             mutation: EDIT_PROJECT,
             variables: {

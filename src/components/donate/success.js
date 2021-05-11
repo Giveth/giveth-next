@@ -10,7 +10,8 @@ import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
-const Content = styled.div`
+const Content = styled(Flex)`
+  flex-direction: column;
   z-index: 10;
   min-width: 32vw;
   word-wrap: break-word;

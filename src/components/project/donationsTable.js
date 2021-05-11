@@ -367,14 +367,15 @@ const DonationsTable = ({ donations }) => {
           flexDirection: ['column-reverse', 'column-reverse', 'row']
         }}
       >
-        <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
+        {/* Removing this as we don't have fiat donations yet */}
+        {/* <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
           <DropdownInput
             options={options}
             current={filter}
             setCurrent={i => setFilter(i)}
           />
-        </FilterInput>
-        <SearchInput sx={{ width: ['100%', null, '65%'], mb: [10, 10, 0] }}>
+        </FilterInput> */}
+        <SearchInput sx={{ width: ['100%', null, '100%'], mb: [10, 10, 0] }}>
           <Input
             defaultValue=''
             placeholder='Search Donations'
