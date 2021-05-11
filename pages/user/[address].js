@@ -17,9 +17,9 @@ const User = (props) => {
       {user ? (
         <PublicProfileView {...props} />
       ) : (
-        <Flex sx={{ m: "auto" }}>
+        <Flex sx={{ mx: 4 }}>
           <Text variant="headings.h3" color="secondary">
-            No user found
+            This user doesn't exist
           </Text>
         </Flex>
       )}
