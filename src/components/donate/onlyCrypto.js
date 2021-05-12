@@ -240,8 +240,8 @@ const OnlyCrypto = props => {
           }
         })
       : []
-    setSelectedToken(formattedTokenList[0]?.value)
-    setTokenSymbol(formattedTokenList[0]?.label)
+    setSelectedToken(currentMainToken)
+    setTokenSymbol(mainToken)
     setErc20List([
       ...formattedTokenList,
       {
@@ -300,9 +300,8 @@ const OnlyCrypto = props => {
       i => i?.symbol === tokenSymbol?.toUpperCase()
     )
     if (found) {
-      img = `/assets/cryptocurrency-icons/32/color/${
-        tokenSymbol?.toLowerCase() || 'eth'
-      }.png`
+      img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() ||
+        'eth'}.png`
       setIcon(img)
     }
   }, [tokenSymbol, icon])
@@ -816,15 +815,15 @@ const OnlyCrypto = props => {
             </Summary>
           )}
         </>
-        <Flex
-          sx={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            textAlign: 'center',
-            width: '100%'
-          }}
-        >
-          <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+        <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+          <Flex
+            sx={{
+              width: '100%',
+              alignItems: 'center',
+              textAlign: 'center',
+              justifyContent: 'space-between'
+            }}
+          >
             <Button
               onClick={() => confirmDonation(isLoggedIn && ready)}
               sx={{
@@ -832,33 +831,31 @@ const OnlyCrypto = props => {
                 padding: '1.063rem 7.375rem',
                 mt: 2,
                 textTransform: 'uppercase',
-                width: '100%'
+                width: '90%'
               }}
             >
               Donate
             </Button>
-            {isLoggedIn && ready && !isXDAI && (
-              <Text
-                sx={{
-                  mt: 2,
-                  mx: 'auto',
-                  cursor: 'pointer',
-                  color: 'background',
-                  '&:hover': {
-                    color: 'accent'
-                  }
-                }}
-                onClick={() => confirmDonation(false)}
-              >
-                click here to use another wallet
-              </Text>
-            )}
+            <Flex sx={{ cursor: 'pointer' }} onClick={() => setIsOpen(true)}>
+              <SVGLogo />
+            </Flex>
           </Flex>
-
-          <SVGLogo
-            onClick={() => setIsOpen(true)}
-            sx={{ cursor: 'pointer', ml: 3 }}
-          />
+          {isLoggedIn && ready && !isXDAI && (
+            <Text
+              sx={{
+                mt: 2,
+                mx: 'auto',
+                cursor: 'pointer',
+                color: 'background',
+                '&:hover': {
+                  color: 'accent'
+                }
+              }}
+              onClick={() => confirmDonation(false)}
+            >
+              click here to use another wallet
+            </Text>
+          )}
         </Flex>
       </AmountSection>
     </Content>
