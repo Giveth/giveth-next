@@ -9,7 +9,7 @@ import ProjectsList, {
   OrderByField,
 } from "../src/components/ProjectsList";
 
-import { FETCH_ALL_PROJECTS } from "../src/apollo/gql/projects";
+import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from "../src/apollo/gql/projects";
 
 const Project = (props) => {
   const { projects, categories, totalCount, errors } = props;
@@ -38,7 +38,8 @@ const Project = (props) => {
 
 export async function getServerSideProps(props) {
   // Fetch Project
-  let projects = null;
+  let projects,
+    categories = null;
   let errors = null;
   try {
     const { loading, error, data: fetchProject } = await client.query({
@@ -48,6 +49,12 @@ export async function getServerSideProps(props) {
     projects = Array.from(fetchProject?.projects).filter(
       (i) => i?.status?.id === "5"
     );
+
+    const { data: categoriesData } = await client.query({
+      query: GET_CATEGORIES,
+      fetchPolicy: "network-only",
+    });
+    categories = categoriesData?.categories;
     errors = error;
   } catch (error) {
     errors = error;
@@ -56,7 +63,7 @@ export async function getServerSideProps(props) {
   return {
     props: {
       projects,
-      categories: projects?.categories || null,
+      categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,
     },

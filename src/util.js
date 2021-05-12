@@ -42,3 +42,11 @@ export function formatEtherscanLink(type, data) {
  */
 export const parseBalance = (balance, decimals = 18, decimalsToDisplay = 3) =>
   Number(formatUnits(balance, decimals)).toFixed(decimalsToDisplay)
+
+export const toBase64 = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })

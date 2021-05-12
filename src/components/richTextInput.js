@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
-import dynamic from 'next/dynamic'
+import { client } from '../../src/apollo/client'
 import ReactQuill, { Quill } from 'react-quill'
+import Toast from '../components/toast'
 
 import * as Emoji from 'quill-emoji'
+
+import { UPLOAD_IMAGE } from '../../src/apollo/gql/projects'
 
 import 'react-quill/dist/quill.snow.css'
 import 'quill-emoji/dist/quill-emoji.css'
@@ -12,9 +15,6 @@ import ImageUploader from './richImageUploader/imageUploader'
 window.Quill = Quill
 
 const ImageResize = require('quill-image-resize-module').default
-// const ImageUploader = dynamic(import('./richImageUploader/imageUploader'), {
-//   ssr: false
-// })
 
 Quill.register('modules/imageUploader', ImageUploader)
 Quill.register('modules/emoji', Emoji)
@@ -94,15 +94,28 @@ const modules = {
   ImageResize: {},
   imageUploader: {
     // HERE: TODO ADD CUSTOM IMAGE UPLOADER
-    upload: file => {
-      console.log({ file })
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/480px-JavaScript-logo.png'
-          )
-        }, 3500)
-      })
+    upload: async file => {
+      try {
+        Toast({
+          content: 'Uploading image, please wait'
+        })
+        const { data: imageUploaded } = await client.mutate({
+          mutation: UPLOAD_IMAGE,
+          variables: { imageUpload: { image: file, projectId: 0 } }
+        })
+        return imageUploaded?.uploadImage
+      } catch (error) {
+        console.log({ error })
+        return null
+      }
+
+      // return new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve(
+      //       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/480px-JavaScript-logo.png'
+      //     )
+      //   }, 3500)
+      // })
     }
   }
 }

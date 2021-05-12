@@ -51,12 +51,13 @@ const CreateProject = props => {
         if (
           !!values.projectCategory &&
           !!values.projectCategory[category] &&
+          categories.find(i => i.name === category) &&
           values.projectCategory[category]?.length !== 0
         ) {
           projectCategories.push(category)
         }
       }
-      console.log({ projectCategories })
+      console.log({ projectCategories, categories })
       const getImageFile = async (base64Data, projectName) => {
         const imageFile = fetch(base64Data)
           .then(res => res.blob())
