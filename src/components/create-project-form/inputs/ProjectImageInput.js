@@ -100,6 +100,7 @@ export const ProjectImageInput = ({
           }}
           {...getRootProps()}
         >
+          <input {...getInputProps()} />
           <input
             id='projectImage'
             name='projectImage'
