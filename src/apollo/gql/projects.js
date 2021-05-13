@@ -472,7 +472,11 @@ const GET_CATEGORIES = gql`
 
 const UPLOAD_IMAGE = gql`
   mutation($imageUpload: ImageUpload!) {
-    uploadImage(imageUpload: $imageUpload)
+    uploadImage(imageUpload: $imageUpload) {
+      url
+      projectId
+      projectImageId
+    }
   }
 `
 

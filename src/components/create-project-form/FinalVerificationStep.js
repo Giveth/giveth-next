@@ -32,22 +32,19 @@ const FinalVerificationStep = ({
   // )
 
   const desc = formData?.projectDescription
-
+  const labelStyle = {
+    fontSize: 0,
+    textTransform: 'uppercase',
+    fontFamily: 'heading',
+    fontWeight: 'bold',
+    color: 'bodyLight',
+    mt: '18px'
+  }
   return (
     <animated.section style={{ ...animationStyle, marginTop: '35px' }}>
       <>
         <Flex>
-          <Text
-            sx={{
-              fontSize: 0,
-              textTransform: 'uppercase',
-              fontFamily: 'heading',
-              color: 'bodyLight',
-              mt: '18px'
-            }}
-          >
-            Project Name
-          </Text>
+          <Text sx={labelStyle}>Project Name</Text>
           <Button
             type='button'
             sx={{
@@ -78,17 +75,7 @@ const FinalVerificationStep = ({
       </>
       <>
         <Flex>
-          <Text
-            sx={{
-              fontSize: 0,
-              textTransform: 'uppercase',
-              fontFamily: 'heading',
-              color: 'bodyLight',
-              mt: '18px'
-            }}
-          >
-            Admin
-          </Text>
+          <Text sx={labelStyle}>Admin</Text>
           <Button
             type='button'
             sx={{
@@ -119,17 +106,7 @@ const FinalVerificationStep = ({
       </>
       <>
         <Flex>
-          <Text
-            sx={{
-              fontSize: 0,
-              textTransform: 'uppercase',
-              fontFamily: 'heading',
-              color: 'bodyLight',
-              mt: '16px'
-            }}
-          >
-            Description
-          </Text>
+          <Text sx={labelStyle}>Description</Text>
           <Button
             type='button'
             sx={{
@@ -164,17 +141,7 @@ const FinalVerificationStep = ({
       </>
       <>
         <Flex>
-          <Text
-            sx={{
-              fontSize: 0,
-              textTransform: 'uppercase',
-              fontFamily: 'heading',
-              color: 'bodyLight',
-              mt: '18px'
-            }}
-          >
-            Category
-          </Text>
+          <Text sx={labelStyle}>Category</Text>
           <Button
             type='button'
             sx={{
@@ -225,17 +192,7 @@ const FinalVerificationStep = ({
       </>
       <>
         <Flex>
-          <Text
-            sx={{
-              fontSize: 0,
-              textTransform: 'uppercase',
-              fontFamily: 'heading',
-              color: 'bodyLight',
-              mt: '18px'
-            }}
-          >
-            Impact
-          </Text>
+          <Text sx={labelStyle}>Impact Location</Text>
           <Button
             type='button'
             sx={{
@@ -307,48 +264,59 @@ const FinalVerificationStep = ({
         </Text>
       </>
       <>
-        {formData.projectImage?.startsWith('data:') ? (
-          <Image
-            src={formData.projectImage}
-            sx={{
-              objectFit: 'cover',
-              maxHeight: '200px',
-              maxWidth: '600px',
-              mt: '20px'
-            }}
-          />
-        ) : (
-          <Box sx={{ mt: '20px' }}>
-            {formData.projectImage === '1' && (
-              <ProjectImageGallery1 style={{ width: '40%', height: '40%' }} />
-            )}
-            {formData.projectImage === '2' && (
-              <ProjectImageGallery2 style={{ width: '40%', height: '40%' }} />
-            )}
-            {formData.projectImage === '3' && (
-              <ProjectImageGallery3 style={{ width: '40%', height: '40%' }} />
-            )}
-            {formData.projectImage === '4' && (
-              <ProjectImageGallery4 style={{ width: '40%', height: '40%' }} />
-            )}
-          </Box>
-        )}
-        <br />
-        <Button
-          type='button'
-          sx={{
-            color: 'primary',
-            border: 0,
-            background: 'unset',
-            fontSize: 1,
-            p: 0,
-            pl: 2,
-            cursor: 'pointer'
-          }}
-          onClick={() => setStep(5)}
-        >
-          Replace
-        </Button>
+        <Flex sx={{ flexDirection: 'column' }}>
+          <Flex>
+            <Text sx={labelStyle}>Image</Text>
+            <Button
+              type='button'
+              sx={{
+                color: 'primary',
+                border: 0,
+                background: 'unset',
+                fontSize: 1,
+                p: 0,
+                pl: 2,
+                mt: '16px',
+                cursor: 'pointer'
+              }}
+              onClick={() => setStep(5)}
+            >
+              Edit
+            </Button>
+          </Flex>
+
+          {formData.projectImage?.startsWith('data:') ? (
+            <Image
+              src={formData.projectImage}
+              sx={{
+                objectFit: 'cover',
+                maxHeight: '200px',
+                maxWidth: '600px',
+                mt: '20px'
+              }}
+            />
+          ) : (
+            <Box
+              sx={{
+                mt: '20px',
+                '*': { borderRadius: 10, p: 1 }
+              }}
+            >
+              {formData.projectImage === '1' && (
+                <ProjectImageGallery1 style={{ width: '40%', height: '40%' }} />
+              )}
+              {formData.projectImage === '2' && (
+                <ProjectImageGallery2 style={{ width: '40%', height: '40%' }} />
+              )}
+              {formData.projectImage === '3' && (
+                <ProjectImageGallery3 style={{ width: '40%', height: '40%' }} />
+              )}
+              {formData.projectImage === '4' && (
+                <ProjectImageGallery4 style={{ width: '40%', height: '40%' }} />
+              )}
+            </Box>
+          )}
+        </Flex>
         <br />
         <Button
           aria-label='Next'

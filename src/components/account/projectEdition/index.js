@@ -18,7 +18,8 @@ import {
   GET_LINK_BANK_CREATION,
   EDIT_PROJECT,
   GET_PROJECT_BY_ADDRESS,
-  FETCH_PROJECT_BY_SLUG
+  FETCH_PROJECT_BY_SLUG,
+  WALLET_ADDRESS_IS_VALID
 } from '../../../apollo/gql/projects'
 import { toggleProjectActivation } from '../../../services/project'
 import LoadingModal from '../../loadingModal'
@@ -38,7 +39,7 @@ import { getWallet } from '../../../wallets'
 //     ssr: false
 //   }
 // )
-// import RichTextInput from '../../richTextInput'
+
 let wallet = null
 let web3 = null
 
@@ -111,12 +112,11 @@ function ProjectEditionForm(props) {
   }
   const isSSR = typeof window === 'undefined'
 
-  console.log({ project, isActive })
   return (
     <>
       {loading && <LoadingModal isOpen={loading} />}
       <Flex sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }}>
-        <Flex>
+        <Flex sx={{ alignItems: 'center' }}>
           <BiArrowBack
             color={theme.colors.secondary}
             style={{ marginRight: 2 }}
@@ -481,31 +481,21 @@ function ProjectEdition(props) {
 
   async function updateProject(data) {
     try {
-      // Validate eth address
+      // Validate eth address if changed
       let ethAddress = data.editWalletAddress
-      if (project?.walletAddress !== data.editWalletAddress) {
-        // CHECK IF STRING IS ENS AND VALID
-        console.log({ wallet })
-        const ens = await wallet?.web3.eth.ens.getOwner(ethAddress)
-        if (ens !== '0x0000000000000000000000000000000000000000') {
-          ethAddress = ens
-        }
-        if (ethAddress.length !== 42 || !Web3.utils.isAddress(ethAddress)) {
-          return Toast({ content: 'Eth address not valid', type: 'error' })
-        }
-        // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
-        const res = await client.query({
-          query: GET_PROJECT_BY_ADDRESS,
+
+      if (ethAddress) {
+        const { data: addressValidation } = await client.query({
+          query: WALLET_ADDRESS_IS_VALID,
           variables: {
             address: ethAddress
           }
         })
-        console.log({ res })
-        if (res?.data?.projectByAddress) {
-          return Toast({
-            content: 'this eth address is already being used for a project',
-            type: 'error'
-          })
+
+        if (!addressValidation?.walletAddressIsValid?.isValid) {
+          const reason = addressValidation?.walletAddressIsValid?.reasons[0]
+          setLoading(false)
+          return Toast({ content: reason, type: 'error' })
         }
       }
 
@@ -523,7 +513,9 @@ function ProjectEdition(props) {
         admin: project.admin,
         impactLocation: mapLocation || project?.impactLocation,
         categories: projectCategories,
-        walletAddress: Web3.utils.toChecksumAddress(ethAddress)
+        walletAddress: ethAddress
+          ? Web3.utils.toChecksumAddress(ethAddress)
+          : project?.walletAddress
       }
 
       // Validate Image
@@ -541,6 +533,10 @@ function ProjectEdition(props) {
     } catch (error) {
       setLoading(false)
       console.log({ error })
+      return Toast({
+        content: error?.message || JSON.stringify(error),
+        type: 'error'
+      })
     }
   }
 

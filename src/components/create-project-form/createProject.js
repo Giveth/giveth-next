@@ -57,7 +57,6 @@ const CreateProject = props => {
           projectCategories.push(category)
         }
       }
-      console.log({ projectCategories, categories })
       const getImageFile = async (base64Data, projectName) => {
         const imageFile = fetch(base64Data)
           .then(res => res.blob())
@@ -79,6 +78,12 @@ const CreateProject = props => {
         )
       }
 
+      const projectDescImgs = window?.localStorage
+        .getItem('cached-uploaded-imgs')
+        .replace(/\[/g, '')
+        .replace(/\]/g, '')
+        .replace(/\s/g, '')
+
       const projectData = {
         title: values.projectName,
         description: values.projectDescription,
@@ -86,7 +91,10 @@ const CreateProject = props => {
         impactLocation: values.projectImpactLocation,
         categories: projectCategories,
         organisationId,
-        walletAddress: Web3.utils.toChecksumAddress(values.projectWalletAddress)
+        walletAddress: Web3.utils.toChecksumAddress(
+          values.projectWalletAddress
+        ),
+        projectImage: values.pro
       }
       if (values?.projectImage?.length === 1) {
         projectData.imageStatic = values.projectImage
@@ -97,7 +105,6 @@ const CreateProject = props => {
         )
         projectData.imageUpload = imageFile
       }
-
       try {
         const project = await addProjectQuery({
           variables: {
@@ -110,6 +117,7 @@ const CreateProject = props => {
           setAddedProject(project.data.addProject)
           setProjectAdded(true)
           window?.localStorage.removeItem('create-form')
+          window?.localStorage.removeItem('cached-uploaded-imgs')
         }
       } catch (error) {
         if (error.message === 'Access denied') {

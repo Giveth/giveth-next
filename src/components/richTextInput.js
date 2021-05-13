@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { client } from '../../src/apollo/client'
 import ReactQuill, { Quill } from 'react-quill'
 import Toast from '../components/toast'
@@ -68,54 +68,66 @@ Video.tagName = 'DIV'
 
 Quill.register(Video, true)
 
-const modules = {
-  toolbar: [
-    [{ header: '1' }, { header: '2' }],
-    [{ size: [] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [
-      { list: 'ordered' },
-      { list: 'bullet' },
-      { indent: '-1' },
-      { indent: '+1' }
+const modules = projectId => {
+  return {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }],
+      [{ size: [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' }
+      ],
+      ['link', 'image', 'video'],
+      // ['emoji'],
+      ['clean']
     ],
-    ['link', 'image', 'video'],
-    // ['emoji'],
-    ['clean']
-  ],
-  'emoji-toolbar': true,
-  'emoji-textarea': false,
-  'emoji-shortname': true,
-  clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
-    matchVisual: false
-  },
-  imageDropAndPaste: {},
-  ImageResize: {},
-  imageUploader: {
-    // HERE: TODO ADD CUSTOM IMAGE UPLOADER
-    upload: async file => {
-      try {
-        Toast({
-          content: 'Uploading image, please wait'
-        })
-        const { data: imageUploaded } = await client.mutate({
-          mutation: UPLOAD_IMAGE,
-          variables: { imageUpload: { image: file, projectId: 0 } }
-        })
-        return imageUploaded?.uploadImage
-      } catch (error) {
-        console.log({ error })
-        return null
-      }
+    'emoji-toolbar': true,
+    'emoji-textarea': false,
+    'emoji-shortname': true,
+    clipboard: {
+      // toggle to add extra line breaks when pasting HTML:
+      matchVisual: false
+    },
+    imageDropAndPaste: {},
+    ImageResize: {},
+    imageUploader: {
+      upload: async file => {
+        try {
+          Toast({
+            content: 'Uploading image, please wait'
+          })
+          const { data: imageUploaded, error } = await client.mutate({
+            mutation: UPLOAD_IMAGE,
+            variables: {
+              imageUpload: {
+                image: file,
+                projectId: projectId ? parseFloat(projectId) : null
+              }
+            }
+          })
+          let cachedImgs = JSON.parse(
+            window?.localStorage.getItem('cached-uploaded-imgs')
+          )
+          const cachedImgsArray = !!cachedImgs ? cachedImgs : []
+          cachedImgsArray.push(imageUploaded?.uploadImage?.projectImageId)
+          // TODO: THIS NEEDS TO HAPPEN FOR UPDATE ONLY
+          if (window.location.pathname.split('/')[1] === 'create') {
+            window?.localStorage.setItem(
+              'cached-uploaded-imgs',
+              JSON.stringify(cachedImgsArray)
+            )
+          }
 
-      // return new Promise((resolve, reject) => {
-      //   setTimeout(() => {
-      //     resolve(
-      //       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/480px-JavaScript-logo.png'
-      //     )
-      //   }, 3500)
-      // })
+          return imageUploaded?.uploadImage?.url
+        } catch (error) {
+          console.log({ error })
+          alert(JSON.stringify(error))
+          return null
+        }
+      }
     }
   }
 }
@@ -138,18 +150,36 @@ const formats = [
 ]
 
 function TextRichWithQuill(props) {
-  // console.log({ value })
+  const [content, setContent] = useState('')
+  const [mod, setMod] = useState(null)
+
+  const handleChange = html => {
+    setContent(html)
+    props?.onChange(html)
+  }
+
+  useEffect(() => {
+    !!props?.defaultValue && setContent(props?.defaultValue)
+    !mod && setMod(modules(props?.projectId))
+  }, [])
+
+  useEffect(() => {
+    !!props?.value && setContent(props?.value)
+  }, [props?.value])
+
+  if (!mod) return null
+
   return (
     <ReactQuill
-      modules={modules}
+      modules={mod}
       formats={formats}
       theme='snow'
       ref={props?.ref}
       id={props?.id}
       name={props?.name}
-      value={props?.value}
-      defaultValue={props?.defaultValue}
-      onChange={props?.onChange}
+      value={content}
+      // defaultValue={props?.defaultValue}
+      onChange={handleChange}
       style={props?.style}
     />
   )

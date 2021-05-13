@@ -26,6 +26,7 @@ const Selection = styled(Box)`
 export const ProjectImageInput = ({
   register,
   currentValue,
+  setValue,
   animationStyle,
   goBack
 }) => {
@@ -59,7 +60,7 @@ export const ProjectImageInput = ({
   }
 
   useEffect(() => {
-    setImage(displayImage)
+    !!displayImage && setValue('projectImage', displayImage)
   }, [displayImage])
 
   return (
@@ -99,7 +100,6 @@ export const ProjectImageInput = ({
           }}
           {...getRootProps()}
         >
-          <input {...getInputProps()} />
           <input
             id='projectImage'
             name='projectImage'
