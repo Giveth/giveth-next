@@ -19,7 +19,8 @@ export const ProjectDescriptionInput = ({
 
   useEffect(() => {
     register('projectDescription')
-  })
+    setValue('projectDescription', currentValue)
+  }, [])
 
   const getLength = e => {
     console.log({ e })
