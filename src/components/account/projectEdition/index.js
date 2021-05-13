@@ -230,7 +230,7 @@ function ProjectEditionForm(props) {
                   placeholder='Write your update...'
                   onChange={(newValue, delta, source) => {
                     try {
-                      console.log({ newValue })
+                      // console.log({ newValue })
                       setValue('editDescription', newValue)
                       setDesc(newValue)
                     } catch (error) {

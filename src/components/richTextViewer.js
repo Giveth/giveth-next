@@ -1,22 +1,17 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 
-const ReactQuill = React.lazy(() => import('react-quill'))
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 function RichTextViewer({ content }) {
-  const isSSR = typeof window === 'undefined'
-
   return (
     <div>
-      {!isSSR && (
-        <React.Suspense fallback={<div />}>
-          <ReactQuill
-            style={{ fontFamily: `Red Hat Text, sans serif` }}
-            value={content}
-            readOnly
-            theme={'bubble'}
-          />
-        </React.Suspense>
-      )}
+      <ReactQuill
+        style={{ fontFamily: `Red Hat Text, sans serif` }}
+        value={content}
+        readOnly
+        theme={'bubble'}
+      />
     </div>
     // <div
     //   style={{ fontFamily: `Red Hat Text, sans serif` }}
