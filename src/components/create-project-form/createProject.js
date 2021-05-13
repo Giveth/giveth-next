@@ -80,7 +80,7 @@ const CreateProject = props => {
 
       const projectDescImgs = window?.localStorage
         .getItem('cached-uploaded-imgs')
-        .replace(/\[/g, '')
+        ?.replace(/\[/g, '')
         .replace(/\]/g, '')
         .replace(/\s/g, '')
 
