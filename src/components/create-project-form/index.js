@@ -237,7 +237,6 @@ const CreateProjectForm = props => {
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
-      console.log({ project })
       setInputLoading(false)
       setFormData(project)
       doNextStep()

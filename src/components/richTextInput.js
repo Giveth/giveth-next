@@ -168,7 +168,6 @@ function TextRichWithQuill(props) {
   }, [props?.value])
 
   if (!mod) return null
-
   return (
     <ReactQuill
       modules={mod}

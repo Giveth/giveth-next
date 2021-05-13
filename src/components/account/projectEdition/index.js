@@ -212,6 +212,7 @@ function ProjectEditionForm(props) {
             {!isSSR && (
               <React.Suspense fallback={<div />}>
                 <RichTextInput
+                  projectId={project?.id}
                   style={{
                     width: '100%',
                     marginBottom: '20px',
