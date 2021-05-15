@@ -297,12 +297,6 @@ const Header = ({ siteTitle, isHomePage }) => {
               <Flex>
                 {pathname !== 'projects' && (
                   <CreateLink onClick={goCreate}>Create a project</CreateLink>
-                  // <NavLink
-                  //   href='/create'
-                  //   sx={{ color: 'secondary', textTransform: 'upperCase' }}
-                  // >
-                  //   Create a project
-                  // </NavLink>
                 )}
                 {projectSearch === 'true' && (
                   <IconButton>
@@ -311,7 +305,9 @@ const Header = ({ siteTitle, isHomePage }) => {
                 )}
               </Flex>
             )}
-            <img src={'/images/icon-vertical-line.svg'} alt='' />
+            {pathname !== 'projects' && (
+              <img src={'/images/icon-vertical-line.svg'} alt='' />
+            )}
             <Login />
           </UserSpan>
         </HeaderSpan>
