@@ -32,6 +32,13 @@ const RIGHT_BOX_STYLE = {
   borderBottomRightRadius: '0.2rem'
 }
 
+const Container = styled(Flex)`
+  flex-direction: row;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+`
+
 const ProjectContainer = styled(Flex)`
   width: 25vw;
   flex-direction: column;
@@ -265,7 +272,7 @@ const DonateIndex = props => {
   }
 
   return (
-    <Flex sx={{ flexDirection: 'row' }}>
+    <Container>
       <ProjectContainer>
         <ProjectListing
           wholeClickable
@@ -283,7 +290,7 @@ const DonateIndex = props => {
       <Payment>
         <PaymentOptions />
       </Payment>
-    </Flex>
+    </Container>
   )
 }
 

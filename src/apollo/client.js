@@ -1,10 +1,11 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import gql from 'graphql-tag'
 import {
   getLocalStorageUserLabel,
   getLocalStorageTokenLabel
 } from '../services/auth'
+import { createUploadLink } from 'apollo-upload-client'
 
 let apolloClient
 
@@ -14,7 +15,7 @@ function createApolloClient() {
 
   const appUser = getLocalStorageUserLabel()
 
-  const httpLink = createHttpLink({
+  const httpLink = createUploadLink({
     uri: process.env.NEXT_PUBLIC_APOLLO_SERVER
   })
 

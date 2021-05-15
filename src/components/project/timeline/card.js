@@ -172,7 +172,10 @@ const TimelineCard = props => {
             type='text'
             placeholder='Title'
             value={newTitle}
-            onChange={e => setNewTitle(e.target.value)}
+            onChange={e => {
+              e.preventDefault()
+              setNewTitle(e.target.value)
+            }}
           />
           {/* <Textarea
             variant='longInput'
@@ -195,6 +198,7 @@ const TimelineCard = props => {
           {!isSSR && (
             <React.Suspense fallback={<div />}>
               <RichTextInput
+                projectId={props?.projectId}
                 style={{
                   width: '100%',
                   height: '400px',

@@ -40,7 +40,6 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
         return Toast({ content: 'Fields should not be empty', type: 'error' })
       // check if file is too large, avg 4Mb
       const contentSize = encodeURI(content).split(/%..|./).length - 1
-      console.log({ contentSize })
       if (contentSize > 4000000) {
         Toast({
           content: `Content is too heavy, it shouldn't exceed 4Mb`,

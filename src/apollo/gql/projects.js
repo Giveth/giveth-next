@@ -465,6 +465,17 @@ const GET_CATEGORIES = gql`
   query GetCategories {
     categories {
       name
+      value
+    }
+  }
+`
+
+const UPLOAD_IMAGE = gql`
+  mutation($imageUpload: ImageUpload!) {
+    uploadImage(imageUpload: $imageUpload) {
+      url
+      projectId
+      projectImageId
     }
   }
 `
@@ -493,5 +504,6 @@ export {
   DEACTIVATE_PROJECT,
   FETCH_MY_PROJECTS,
   WALLET_ADDRESS_IS_VALID,
-  GET_CATEGORIES
+  GET_CATEGORIES,
+  UPLOAD_IMAGE
 }

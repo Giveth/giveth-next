@@ -27,6 +27,7 @@ export const logout = (callback = () => {}) => {
     window.localStorage.removeItem(getLocalStorageUserLabel())
     window.localStorage.removeItem(getLocalStorageTokenLabel())
     window.localStorage.removeItem('create-form')
+    window.localStorage.removeItem('cached-uploaded-imgs')
     // TODO: let's check if we should remove everything or just be careful
     // window.localStorage.clear()
   }
