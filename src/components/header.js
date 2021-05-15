@@ -166,7 +166,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = router.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -177,7 +177,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -298,12 +298,6 @@ const Header = ({ siteTitle, isHomePage }) => {
               <Flex>
                 {pathname !== 'projects' && (
                   <CreateLink onClick={goCreate}>Create a project</CreateLink>
-                  // <NavLink
-                  //   href='/create'
-                  //   sx={{ color: 'secondary', textTransform: 'upperCase' }}
-                  // >
-                  //   Create a project
-                  // </NavLink>
                 )}
                 {projectSearch === 'true' && (
                   <IconButton>
@@ -312,7 +306,9 @@ const Header = ({ siteTitle, isHomePage }) => {
                 )}
               </Flex>
             )}
-            <img src={'/images/icon-vertical-line.svg'} alt='' />
+            {pathname !== 'projects' && (
+              <img src={'/images/icon-vertical-line.svg'} alt='' />
+            )}
             <Login />
           </UserSpan>
         </HeaderSpan>
