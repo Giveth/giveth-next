@@ -2,8 +2,8 @@ import React from 'react'
 import { Flex, Text } from 'theme-ui'
 import Modal from 'react-modal'
 
-import decoratorClouds from '../images/decorator-clouds.svg'
-import metamaskLogo from '../images/logos/metamask-fox.svg'
+const decoratorClouds = '/images/decorator-clouds.svg'
+const metamaskLogo = '/images/logos/metamask-fox.svg'
 
 const customStyles = {
   overlay: {
@@ -29,7 +29,7 @@ const customStyles = {
   }
 }
 
-function LoginModal(props) {
+function LoginModal (props) {
   React.useEffect(() => {
     Modal.setAppElement('body')
   })
