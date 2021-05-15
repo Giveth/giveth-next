@@ -121,6 +121,7 @@ const CreateProjectForm = props => {
         animationStyle={animationStyle}
         currentValue={formData?.projectImage}
         register={register}
+        setValue={(ref, val) => setValue(ref, val)}
         goBack={goBack}
       />
     ),
@@ -155,7 +156,7 @@ const CreateProjectForm = props => {
   const onSubmit = (formData, submitCurrentStep, doNextStep) => async data => {
     let project = {}
     try {
-      console.log({ submitCurrentStep, data, formData })
+      // console.log({ submitCurrentStep, data, formData })
       if (isCategoryStep(submitCurrentStep)) {
         project = {
           ...formData,
@@ -236,7 +237,6 @@ const CreateProjectForm = props => {
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
-      console.log({ project })
       setInputLoading(false)
       setFormData(project)
       doNextStep()

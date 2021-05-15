@@ -29,7 +29,6 @@ export async function getServerSideProps(props) {
       fetchPolicy: "network-only",
     });
     project = fetchProject?.projectBySlug;
-    console.log({ error });
     if (error) errors = JSON.stringify(error);
   } catch (e) {
     console.log({ e });

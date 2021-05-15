@@ -130,31 +130,35 @@ const HighFive = ({
               Add another project
             </Text>
           </Link> */}
-          <Link href={`/project/${addedProject?.slug}`}>
-            <Text
-              sx={{
-                fontSize: 3,
-                fontFamily: 'body',
-                color: 'secondary',
-                mt: '16px'
-              }}
-            >
-              View my project
-            </Text>
-          </Link>
-          <Link href='/'>
-            <Text
-              sx={{
-                fontSize: 3,
-                fontFamily: 'body',
-                color: 'secondary',
-                mt: '16px'
-              }}
-            >
-              {' '}
-              Go to Homepage
-            </Text>
-          </Link>
+          <Flex sx={{ flexDirection: 'column' }}>
+            <Link href={`/project/${addedProject?.slug}`}>
+              <Text
+                sx={{
+                  cursor: 'pointer',
+                  fontSize: 3,
+                  fontFamily: 'body',
+                  color: 'secondary',
+                  mt: '16px'
+                }}
+              >
+                View my project
+              </Text>
+            </Link>
+            <Link href='/'>
+              <Text
+                sx={{
+                  cursor: 'pointer',
+                  fontSize: 3,
+                  fontFamily: 'body',
+                  color: 'secondary',
+                  mt: '16px'
+                }}
+              >
+                {' '}
+                Go to Homepage
+              </Text>
+            </Link>
+          </Flex>
         </Box>
       </Flex>
     </Flex>

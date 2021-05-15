@@ -1,7 +1,3 @@
-// --------------------------------------------------
-// THIS IS A WIP TO CHECKOUT RICH TEXT IMPLEMENTATION
-// --------------------------------------------------
-
 import React, { useEffect, useState } from 'react'
 import { Label, Textarea, Button, Text, Flex } from 'theme-ui'
 import { animated } from 'react-spring'
@@ -23,7 +19,8 @@ export const ProjectDescriptionInput = ({
 
   useEffect(() => {
     register('projectDescription')
-  })
+    setValue('projectDescription', currentValue)
+  }, [])
 
   const getLength = e => {
     console.log({ e })
@@ -119,6 +116,7 @@ export const ProjectDescriptionInput = ({
       </Flex>
       <Flex
         sx={{
+          zIndex: 100,
           alignItems: 'flex-end',
           justifyContent: 'flex-end',
           flexDirection: 'row-reverse'

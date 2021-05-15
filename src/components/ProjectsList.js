@@ -189,7 +189,7 @@ const ProjectsList = props => {
     const categoryName = categoryList[category].toLowerCase()
 
     return searchedResults.filter(
-      o => o.categories.filter(c => c.name === categoryName).length > 0
+      o => o?.categories?.filter(c => c.name === categoryName).length > 0
     )
   }
 

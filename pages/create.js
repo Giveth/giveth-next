@@ -7,7 +7,7 @@ function CreateIndex({ categories }) {
 }
 
 export async function getServerSideProps() {
-  const { loading, error = null, data: response } = await client.query({
+  const { loading, error, data: response } = await client.query({
     query: GET_CATEGORIES,
   });
   return {

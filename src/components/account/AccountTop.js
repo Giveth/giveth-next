@@ -1,17 +1,26 @@
-import { jsx, Text, Flex, Box } from 'theme-ui'
+import { Text, Flex } from 'theme-ui'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'
-import iconVerticalLine from '../../images/icon-vertical-line.svg'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../../utils/theme-ui/index'
+
+const Login = dynamic(() => import('../torus/login'))
 
 const UserSpan = styled.span`
   position: relative;
   display: grid;
+  grid-gap: 1.2em !important;
   grid-template-columns: repeat(4, auto);
   align-items: center;
   justify-self: end;
+  @media (max-width: 1030px) {
+    justify-items: end;
+    grid-gap: 0;
+    grid-row: 1;
+    grid-column: 3;
+  }
 `
 const CreateLink = styled.div`
   text-decoration: none;
@@ -24,6 +33,7 @@ const CreateLink = styled.div`
     color: ${theme.colors.accent};
   }
 `
+
 const AccountTop = props => {
   const isDonation = (props?.query?.view || '') === 'donations'
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
@@ -59,29 +69,27 @@ const AccountTop = props => {
           </Text>
         </span>
       </Link>
-      <Flex>
-        <UserSpan>
-          {isMobile ? null : (
-            <Link href={isDonation ? '/projects' : '/create'}>
-              <CreateLink>
-                <Text
-                  sx={{
-                    color: 'primary',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      color: 'accent'
-                    }
-                  }}
-                >
-                  {isDonation ? 'Donate' : 'Create a project'}
-                </Text>
-              </CreateLink>
-            </Link>
-          )}
-          <img src={iconVerticalLine} alt='' />
-          {/* <Login onLogin={onLogin} balance={balance} /> */}
-        </UserSpan>
-      </Flex>
+      <UserSpan>
+        {isMobile ? null : (
+          <Link href={isDonation ? '/projects' : '/create'}>
+            <CreateLink>
+              <Text
+                sx={{
+                  color: 'primary',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    color: 'accent'
+                  }
+                }}
+              >
+                {isDonation ? 'Donate' : 'Create a project'}
+              </Text>
+            </CreateLink>
+          </Link>
+        )}
+        <img src={'/images/icon-vertical-line.svg'} alt='' />
+        <Login />
+      </UserSpan>
     </Flex>
   )
 }

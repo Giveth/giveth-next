@@ -82,7 +82,7 @@ const Timeline = ({
           </LeftInfo>
           {!isSSR && (
             <React.Suspense fallback={<div />}>
-              <Card newUpdateOption={addUpdate} />
+              <Card newUpdateOption={addUpdate} projectId={project?.id} />
             </React.Suspense>
           )}
         </Container>
