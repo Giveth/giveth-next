@@ -217,12 +217,12 @@ const MyDonations = props => {
   )
 
   const populateIcons = async item => {
-    let img = ''
     const found = iconManifest?.find(
-      i => i?.symbol === item?.symbol?.toUpperCase()
+      i => i?.symbol === item?.currency?.toUpperCase()
     )
+    console.log('lolo1', item)
     let icon = found
-      ? `/assets/cryptocurrency-icons/32/color/${item?.symbol?.toLowerCase() ||
+      ? `/assets/cryptocurrency-icons/32/color/${item?.currency?.toLowerCase() ||
           'eth'}.png`
       : `/assets/tokens/${item?.symbol?.toUpperCase()}.png`
     return { ...item, icon }
@@ -292,6 +292,7 @@ const MyDonations = props => {
               ?.slice()
               .sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
               .map((i, key) => {
+                console.log('lolo', i)
                 return (
                   <tr key={key}>
                     <td
@@ -331,7 +332,7 @@ const MyDonations = props => {
                       <img
                         src={
                           i?.icon ||
-                          `/assets/tokens/${i.currency.toUpperCase()}.png`
+                          `/assets/tokens/${i?.currency?.toUpperCase()}.png`
                         }
                         alt={i.currency}
                         onError={ev => {
@@ -359,7 +360,7 @@ const MyDonations = props => {
                           ? `${
                               i?.amount ? `${i?.amount} ETH` : ''
                             } \n ~ USD $${i?.valueUsd?.toFixed(2)}`
-                          : i?.amount}
+                          : `${i?.amount} ${i?.currency}`}
                       </Text>
                     </td>
                     <td
