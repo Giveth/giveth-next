@@ -22,14 +22,16 @@ const Selection = styled(Box)`
   background-color: ${theme.colors.background};
 `
 
-function ImageSection({ image, register }) {
+function ImageSection({ image, register, setValue }) {
   const [displayImage, setDisplayImage] = useState(null)
+  const [fullImage, setFullImage] = useState(null)
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
     onDrop: async acceptedFile => {
       try {
+        setFullImage(acceptedFile)
         setDisplayImage(await toBase64(acceptedFile[0]))
       } catch (error) {
         console.log({ error })
@@ -40,6 +42,10 @@ function ImageSection({ image, register }) {
   useEffect(() => {
     setDisplayImage(image)
   }, [image])
+
+  useEffect(() => {
+    !!displayImage && setValue('editImage', displayImage)
+  }, [displayImage])
 
   const ProjectImage = type => {
     return (
