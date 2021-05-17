@@ -36,6 +36,9 @@ class Video extends BlockEmbed {
   }
 
   static formats(domNode) {
+    if (typeof window === 'undefined') {
+      return
+    }
     const iframe = domNode.getElementsByTagName('iframe')[0]
     return VIDEO_ATTRIBUTES.reduce(function (formats, attribute) {
       if (iframe.hasAttribute(attribute)) {
@@ -46,6 +49,9 @@ class Video extends BlockEmbed {
   }
 
   static value(domNode) {
+    if (typeof window === 'undefined') {
+      return
+    }
     return domNode.getElementsByTagName('iframe')[0].getAttribute('src')
   }
 
