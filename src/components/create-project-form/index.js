@@ -69,7 +69,10 @@ const CreateProjectForm = props => {
       }
 
       // usePopup?.triggerPopup('WelcomeLoggedOut')
-      // router.push('/', { state: { welcome: true } })
+      router.push({
+        pathname: '/',
+        query: { welcome: true }
+      })
     }
   }, [])
 

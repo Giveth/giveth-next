@@ -48,6 +48,7 @@
     "lodash": "^4.17.21",
     "next": "10.2.0",
     "next-seo": "^4.24.0",
+    "nextjs-progressbar": "^0.0.9",
     "prop-types": "^15.6.2",
     "qrcode.react": "^1.0.1",
     "query-string": "^7.0.0",
