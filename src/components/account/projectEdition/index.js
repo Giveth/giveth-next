@@ -509,7 +509,7 @@ function ProjectEdition(props) {
       }
 
       const projectData = {
-        title: data.editTitle,
+        title: data.editTitle || project?.title,
         description: data.desc || data.editDescription,
         admin: project.admin,
         impactLocation: mapLocation || project?.impactLocation,
