@@ -10,6 +10,7 @@ import {
   Link,
   Text
 } from 'theme-ui'
+import _ from 'lodash'
 import { useRouter } from 'next/router'
 import {
   GET_PROJECT_BY_ADDRESS,
@@ -66,13 +67,12 @@ const CreateProjectForm = props => {
       setFlashMessage('Your session has expired')
       if (!isValid) {
         await logout()
+        // usePopup?.triggerPopup('WelcomeLoggedOut')
+        router.push({
+          pathname: '/',
+          query: { welcome: true }
+        })
       }
-
-      // usePopup?.triggerPopup('WelcomeLoggedOut')
-      router.push({
-        pathname: '/',
-        query: { welcome: true }
-      })
     }
   }, [])
 

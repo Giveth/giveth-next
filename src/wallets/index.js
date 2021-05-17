@@ -112,7 +112,7 @@ export const wallets = {
     },
     logout: async () => {
       try {
-        wallets.torus.torus.logout()
+        if (wallets?.torus?.isLoggedIn) wallets?.torus?.torus?.logout()
       } catch (error) {
         console.log({ error })
       }
