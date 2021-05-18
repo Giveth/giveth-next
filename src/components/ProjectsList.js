@@ -448,12 +448,7 @@ const ProjectsList = props => {
               </InfiniteScroll>
               {fromHomePage && (
                 <Flex style={{ justifyContent: 'center' }}>
-                  <Link
-                    href='/projects'
-                    sx={{
-                      textAlign: 'center'
-                    }}
-                  >
+                  <Link href='/projects'>
                     <Button
                       sx={{
                         variant: 'buttons.nofillGray',
@@ -461,7 +456,6 @@ const ProjectsList = props => {
                         fontSize: 14,
                         mb: '3rem'
                       }}
-                      onClick={() => loadMore()}
                     >
                       Show more Projects
                     </Button>

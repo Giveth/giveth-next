@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { IconButton, Text, Link, Flex } from 'theme-ui'
+import Link from 'next/link'
+import { Box, IconButton, Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../utils/theme-ui'
@@ -65,6 +66,7 @@ const HeaderSpan = styled.nav`
 `
 
 const LogoSpan = styled.span`
+  cursor: pointer;
   display: grid;
   grid-template-columns: repeat(2, auto);
   align-items: center;
@@ -115,7 +117,7 @@ const UserSpan = styled.span`
   }
 `
 
-const NavLink = styled(Link)`
+const NavLink = styled(Box)`
   font-family: ${theme.fonts.heading}, sans-serif;
   font-weight: 500;
   line-height: 21px;
@@ -165,7 +167,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = router.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -176,7 +178,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -223,12 +225,7 @@ const Header = ({ siteTitle, isHomePage }) => {
               />
             </Decorator>
           ) : null}
-          <Link
-            href='/'
-            sx={{
-              textDecoration: 'none'
-            }}
-          >
+          <Link href='/'>
             {isMobile ? (
               <Logo
                 siteId={process.env.NEXT_PUBLIC_SITE_ID}
@@ -255,7 +252,9 @@ const Header = ({ siteTitle, isHomePage }) => {
                       fontWeight: 'medium',
                       textDecoration: 'none',
                       lineHeights: 'tallest',
-                      letterSpacing: '0.32px'
+                      letterSpacing: '0.32px',
+                      cursor: 'pointer',
+                      zIndex: 3
                     }}
                   >
                     GIVETH
@@ -269,26 +268,23 @@ const Header = ({ siteTitle, isHomePage }) => {
 
           <MiddleSpan>
             <NavLink
-              href='/'
               sx={{
                 display: ['none', 'block', 'block'],
                 color: isHomePage ? 'primary' : 'secondary'
               }}
             >
-              Home
+              <Link href='/'>Home</Link>
             </NavLink>
             <NavLink
-              href='/join'
               sx={{ color: pathname === 'join' ? 'primary' : 'secondary' }}
             >
-              Community
+              <Link href='/join'>Community</Link>
             </NavLink>
             {/* <NavLink href='/causes'>Causes</NavLink> */}
             <NavLink
-              href='/projects'
               sx={{ color: pathname === 'projects' ? 'primary' : 'secondary' }}
             >
-              Projects
+              <Link href='/projects'>Projects</Link>
             </NavLink>
           </MiddleSpan>
 

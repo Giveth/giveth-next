@@ -67,7 +67,6 @@ function ProjectEditionForm(props) {
   const [isActive, setIsActive] = useState(null)
 
   const { register, handleSubmit, setValue, errors } = useForm() // initialize the hook
-
   useEffect(() => {
     setCategories(project?.categories)
     setDesc(project?.description || '')
@@ -131,7 +130,7 @@ function ProjectEditionForm(props) {
 
         <form
           onSubmit={handleSubmit((data, e) => {
-            const res = toggleProjectActivation(data, isActive, msg =>
+            const res = toggleProjectActivation(project?.id, isActive, msg =>
               Toast({ content: msg, type: 'success' })
             )
             if (res) {
@@ -183,7 +182,11 @@ function ProjectEditionForm(props) {
         })}
       >
         <>
-          <ImageSection image={project?.image} register={register} />
+          <ImageSection
+            image={project?.image}
+            register={register}
+            setValue={(ref, val) => setValue(ref, val)}
+          />
           <Flex sx={{ width: '70%', flexDirection: 'column' }}>
             <CustomLabel title='Project Name' htmlFor='editTitle' />
             <CustomInput
@@ -509,7 +512,7 @@ function ProjectEdition(props) {
       }
 
       const projectData = {
-        title: data.editTitle,
+        title: data.editTitle || project?.title,
         description: data.desc || data.editDescription,
         admin: project.admin,
         impactLocation: mapLocation || project?.impactLocation,
@@ -521,14 +524,17 @@ function ProjectEdition(props) {
 
       // Validate Image
       if (data?.editImage && project?.image !== data?.editImage) {
-        if (data?.editImage.length === 1) {
-          projectData.imageStatic = data.editImage
-        } else {
+        if (data?.editImage?.length > 2) {
           // Download image to send
-          const imageFile = await getImageFile(data.editImage, data?.editTitle)
+          const imageFile = await getImageFile(data.editImage, project?.slug)
           projectData.imageUpload = imageFile
+        } else {
+          if (data?.editImage.length === 1) {
+            projectData.imageStatic = data.editImage
+          }
         }
       }
+
       setUpdateProjectOnServer(true)
       setProject(projectData)
     } catch (error) {

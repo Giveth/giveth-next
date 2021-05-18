@@ -18,9 +18,9 @@ export async function deactivateProject(data, onSuccess) {
   }
 }
 
-export async function toggleProjectActivation(data, isActive, onSuccess) {
+export async function toggleProjectActivation(projectId, isActive, onSuccess) {
   try {
-    const { projectId } = data
+    console.log({ projectId })
     const edit = await client.mutate({
       mutation: !isActive ? ACTIVATE_PROJECT : DEACTIVATE_PROJECT,
       variables: {

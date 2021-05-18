@@ -83,13 +83,7 @@ const JoinChatCard = ({ data }) => (
                 </Text>
               </CardContent>
               <Link href={join.onboardingLink}>
-                <Button
-                  mt={2}
-                  mb={'2rem'}
-                  ml={'1rem'}
-                  sx={{
-                    variant: 'buttons.default'
-                  }}
+                <a
                   style={{
                     alignSelf: 'center',
                     minHeight: '28px',
@@ -97,8 +91,17 @@ const JoinChatCard = ({ data }) => (
                     position: 'relative'
                   }}
                 >
-                  Join us on {join.platformTitle}
-                </Button>
+                  <Button
+                    mt={2}
+                    mb={'2rem'}
+                    ml={'1rem'}
+                    sx={{
+                      variant: 'buttons.default'
+                    }}
+                  >
+                    Join us on {join.platformTitle}
+                  </Button>
+                </a>
               </Link>
             </div>
             <Logo

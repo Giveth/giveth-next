@@ -194,30 +194,27 @@ const ProjectCard = props => {
           boxShadow: altStyle ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
         }}
       >
-        <div
-          key={props.listingId || project?.title + '_div'}
-          src={image}
-          onClick={() =>
-            (window.location.href = `/project/${
-              props?.slug || project?.slug || ''
-            }`)
-          }
-          style={{
-            width: '100%',
-            height: '186px',
-            margin: '0 auto',
-            cursor: 'pointer',
-            borderRadius: '12px 12px 0px 0px',
-            backgroundImage: /^\d+$/.test(image)
-              ? `url('/assets/create/projectImageGallery${image.toString()}.svg')`
-              : `url(${image})`,
-            backgroundColor: '#cccccc',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            position: 'relative'
-          }}
-          alt={props.name || project?.title}
-        />
+        <Link href={`/project/${props?.slug || project?.slug || ''}`}>
+          <div
+            key={props.listingId || project?.title + '_div'}
+            src={image}
+            style={{
+              width: '100%',
+              height: '186px',
+              margin: '0 auto',
+              cursor: 'pointer',
+              borderRadius: '12px 12px 0px 0px',
+              backgroundImage: /^\d+$/.test(image)
+                ? `url('/assets/create/projectImageGallery${image.toString()}.svg')`
+                : `url(${image})`,
+              backgroundColor: '#cccccc',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              position: 'relative'
+            }}
+            alt={props.name || project?.title}
+          />
+        </Link>
         <div style={{ position: 'relative' }}>
           <Dot
             key={props.listingId + '_card'}
@@ -313,10 +310,7 @@ const ProjectCard = props => {
               {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
               <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
             </Givers>
-            <Link
-              onClick={() => !props.disabled}
-              href={`/project/${props?.slug || ''}`}
-            >
+            <Link href={`/project/${props?.slug || ''}`}>
               <Button sx={{ variant: 'buttons.default', mt: 2 }}>
                 Learn More
               </Button>

@@ -277,7 +277,7 @@ const ProjectListing = props => {
                   color: 'primary'
                 }}
                 onClick={() => {
-                  !props.disabled && navigate(`/project/${props?.slug}`)
+                  !props.disabled && router.push(`/project/${props?.slug}`)
                 }}
               >
                 Learn more{' '}
