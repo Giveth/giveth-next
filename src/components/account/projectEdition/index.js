@@ -130,7 +130,7 @@ function ProjectEditionForm(props) {
 
         <form
           onSubmit={handleSubmit((data, e) => {
-            const res = toggleProjectActivation(data, isActive, msg =>
+            const res = toggleProjectActivation(project?.id, isActive, msg =>
               Toast({ content: msg, type: 'success' })
             )
             if (res) {
