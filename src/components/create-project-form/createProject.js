@@ -267,7 +267,21 @@ const CreateProject = props => {
 
             {errorMessage}
 
-            <Text sx={{ variant: 'headings.h4', color: 'secondary', mb: 3 }}>
+            <Text
+              onClick={() => (
+                typeof window !== 'undefined' &&
+                  window?.open(
+                    'https://github.com/Giveth/giveth-2/issues/new/choose'
+                  ),
+                '_blank'
+              )}
+              sx={{
+                variant: 'headings.h4',
+                color: 'secondary',
+                cursor: 'pointer',
+                mb: 3
+              }}
+            >
               Please report this issue
             </Text>
             <GithubIssue />
