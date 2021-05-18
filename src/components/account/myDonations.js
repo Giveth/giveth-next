@@ -178,7 +178,7 @@ const MyDonations = props => {
     }
 
     setup()
-  })
+  }, [])
 
   const searching = search => {
     const donations = currentDonations
@@ -220,7 +220,6 @@ const MyDonations = props => {
     const found = iconManifest?.find(
       i => i?.symbol === item?.currency?.toUpperCase()
     )
-    console.log('lolo1', item)
     let icon = found
       ? `/assets/cryptocurrency-icons/32/color/${item?.currency?.toLowerCase() ||
           'eth'}.png`
@@ -231,7 +230,7 @@ const MyDonations = props => {
   const TableToShow = () => {
     const paginationItems = filteredDonations
     const [activeItem, setCurrentItem] = React.useState(1)
-    const [currentItems, setCurrenItems] = React.useState([])
+    const [currentItems, setCurrentItems] = React.useState([])
 
     useEffect(() => {
       const getItems = async () => {
@@ -250,7 +249,7 @@ const MyDonations = props => {
           tmpItems.map(item => populateIcons(item))
         )
 
-        setCurrenItems(items)
+        setCurrentItems(items)
       }
       getItems()
     }, [activeItem, paginationItems])
@@ -292,7 +291,6 @@ const MyDonations = props => {
               ?.slice()
               .sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
               .map((i, key) => {
-                console.log('lolo', i)
                 return (
                   <tr key={key}>
                     <td
