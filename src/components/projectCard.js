@@ -310,7 +310,7 @@ const ProjectCard = props => {
               {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
               <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
             </Givers>
-            <Link href={`/project/${props?.slug || ''}`}>
+            <Link href={`/project/${props?.slug || project?.slug || ''}`}>
               <Button sx={{ variant: 'buttons.default', mt: 2 }}>
                 Learn More
               </Button>
@@ -324,7 +324,8 @@ const ProjectCard = props => {
                 color: theme.colors.primary
               }}
               onClick={() => {
-                !props.disabled && router.push(`/donate/${props?.slug}`)
+                !props.disabled &&
+                  router.push(`/donate/${props?.slug || project?.slug}`)
               }}
             >
               Donate

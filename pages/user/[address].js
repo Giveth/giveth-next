@@ -41,12 +41,11 @@ export async function getServerSideProps(props) {
   // GET PROJECTS
   const { data: userProjects } = await client.query({
     query: FETCH_USER_PROJECTS,
-    variables: { admin: parseFloat(user?.id || -1) },
+    variables: { admin: parseFloat(user?.id) || -1 },
     fetchPolicy: "network-only",
   });
-
   const projects = userProjects?.projects?.filter(
-    (i) => i?.admin === userData?.id
+    (i) => parseFloat(i?.admin) === parseFloat(user?.id)
   );
 
   // GET DONATIONS
