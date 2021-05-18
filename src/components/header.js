@@ -66,6 +66,7 @@ const HeaderSpan = styled.nav`
 `
 
 const LogoSpan = styled.span`
+  cursor: pointer;
   display: grid;
   grid-template-columns: repeat(2, auto);
   align-items: center;
@@ -224,12 +225,7 @@ const Header = ({ siteTitle, isHomePage }) => {
               />
             </Decorator>
           ) : null}
-          <Link
-            href='/'
-            style={{
-              textDecoration: 'none'
-            }}
-          >
+          <Link href='/'>
             {isMobile ? (
               <Logo
                 siteId={process.env.NEXT_PUBLIC_SITE_ID}
@@ -256,7 +252,9 @@ const Header = ({ siteTitle, isHomePage }) => {
                       fontWeight: 'medium',
                       textDecoration: 'none',
                       lineHeights: 'tallest',
-                      letterSpacing: '0.32px'
+                      letterSpacing: '0.32px',
+                      cursor: 'pointer',
+                      zIndex: 3
                     }}
                   >
                     GIVETH
