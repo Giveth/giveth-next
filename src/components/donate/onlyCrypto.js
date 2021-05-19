@@ -177,7 +177,11 @@ const OnlyCrypto = props => {
   useEffect(() => {
     const init = async () => {
       fetch(
-        `https://min-api.cryptocompare.com/data/price?fsym=${tokenSymbol}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.NEXT_PUBLIC_CRYPTOCOMPARE_KEY}`
+        `https://min-api.cryptocompare.com/data/price?fsym=${
+          tokenSymbol === 'XDAI' ? 'DAI' : tokenSymbol
+        }&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${
+          process.env.NEXT_PUBLIC_CRYPTOCOMPARE_KEY
+        }`
       )
         .then(response => response.json())
         .then(data => setTokenPrice(data.USD))
