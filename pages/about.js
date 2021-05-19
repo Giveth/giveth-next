@@ -15,7 +15,8 @@ const Faq = ({ faqs }) => {
     <Layout>
       <Seo title="FAQ" />
       <Main>
-        <ContentFaq faqs={faqs} isopen />
+        <Text sx={{ variant: "headings.h2", textAlign: "center" }}>About</Text>
+        {/* <ContentFaq data={faqs} isopen /> */}
       </Main>
     </Layout>
   );
@@ -24,9 +25,9 @@ const Faq = ({ faqs }) => {
 export async function getServerSideProps() {
   // contentful
   const faqReq = await fetchEntries({
-    contentType: "faqEntry",
+    contentType: "allContentfulFaqEntry",
   });
-
+  console.log({ faqReq });
   const faqs = await faqReq?.map((f) => {
     return f.fields;
   });
