@@ -178,7 +178,7 @@ const MyDonations = props => {
     }
 
     setup()
-  })
+  }, [])
 
   const searching = search => {
     const donations = currentDonations
@@ -230,7 +230,7 @@ const MyDonations = props => {
   const TableToShow = () => {
     const paginationItems = filteredDonations
     const [activeItem, setCurrentItem] = React.useState(1)
-    const [currentItems, setCurrenItems] = React.useState([])
+    const [currentItems, setCurrentItems] = React.useState([])
 
     useEffect(() => {
       const getItems = async () => {
@@ -249,7 +249,7 @@ const MyDonations = props => {
           tmpItems.map(item => populateIcons(item))
         )
 
-        setCurrenItems(items)
+        setCurrentItems(items)
       }
       getItems()
     }, [activeItem, paginationItems])
