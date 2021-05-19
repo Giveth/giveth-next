@@ -28,6 +28,7 @@ const ProjectCard = styled(Flex)`
   border-radius: 12px;
   background-color: ${theme.colors.background};
   margin-bottom: 30px;
+  z-index: 0;
 `
 
 const CardContent = styled.span`
@@ -68,7 +69,6 @@ const AltCardContent = styled.span`
   bottom: 0;
   display: flex;
   flex: 1;
-  z-index: 5;
   width: 100%;
   flex-direction: column;
   position: absolute;
@@ -135,6 +135,7 @@ const ProjectListing = props => {
         <ProjectCard
           key={props.listingId + '_card'}
           onClick={() => {
+            if (props.withEditHover) return
             if (props.wholeClickable)
               return router.push(
                 `/project/${props?.project?.slug || props?.slug}`
@@ -148,7 +149,7 @@ const ProjectListing = props => {
           style={{
             cursor: props.wholeClickable
               ? 'pointer'
-              : props.disabled || hoverStyle
+              : props.disabled || hoverStyle || props.withEditHover
               ? 'default'
               : 'pointer',
             border:
@@ -263,7 +264,8 @@ const ProjectListing = props => {
                   variant: 'buttons.nofill',
                   backgroundColor: 'secondary',
                   color: 'background',
-                  mt: 2
+                  mt: 2,
+                  zIndex: 100
                 }}
                 onClick={() => {
                   props?.action()
@@ -272,7 +274,7 @@ const ProjectListing = props => {
                 EDIT
               </Button>
               <Link href={!props.disabled && `/project/${props?.slug}`}>
-                <a style={{ margin: 'auto' }}>
+                <a style={{ margin: 'auto', zIndex: 10 }}>
                   <Text
                     sx={{
                       variant: 'text.default',
