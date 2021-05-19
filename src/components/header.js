@@ -11,6 +11,12 @@ import Logo from './content/Logo'
 import Headroom from 'react-headroom'
 import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
+import ProjectNav from './ProjectNav'
+import useComponentVisible from '../utils/useComponentVisible'
+
+import { client } from '../../src/apollo/client'
+import { GET_CATEGORIES } from '../../src/apollo/gql/projects'
+import { getNullableType } from 'graphql'
 
 const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;
@@ -164,10 +170,18 @@ const Header = ({ siteTitle, isHomePage }) => {
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
+  const [categories, setCategories] = useState([])
+  const [errors, setErrors] = useState(getNullableType)
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = router.pathname?.split('/')[1]
+  const {
+    ref,
+    isComponentVisible,
+    setIsComponentVisible
+  } = useComponentVisible(false)
+
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -178,9 +192,25 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
+  }, [])
+
+  useEffect(() => {
+    async function getCategories () {
+      try {
+        const { data } = await client.query({
+          query: GET_CATEGORIES,
+          fetchPolicy: 'network-only'
+        })
+        console.log('lololo', data)
+        setCategories(data?.categories)
+      } catch (error) {
+        setErrors(error)
+      }
+    }
+    getCategories()
   }, [])
 
   const goCreate = async () => {
@@ -281,10 +311,29 @@ const Header = ({ siteTitle, isHomePage }) => {
               <Link href='/join'>Community</Link>
             </NavLink>
             {/* <NavLink href='/causes'>Causes</NavLink> */}
+            {/* <NavLink
+              sx={{ color: pathname === 'projects' ? 'primary' : 'secondary' }}
+              >
+              <Link href='/projects'>Projects</Link>
+            </NavLink> */}
             <NavLink
               sx={{ color: pathname === 'projects' ? 'primary' : 'secondary' }}
             >
-              <Link href='/projects'>Projects</Link>
+              {categories && !errors ? (
+                <>
+                  <a
+                    ref={ref}
+                    onClick={() => setIsComponentVisible(!isComponentVisible)}
+                  >
+                    Projects
+                  </a>
+                  {isComponentVisible ? (
+                    <ProjectNav categories={categories} />
+                  ) : null}
+                </>
+              ) : (
+                <Link href='/projects'>Projects</Link>
+              )}
             </NavLink>
           </MiddleSpan>
 
@@ -318,6 +367,29 @@ Header.propTypes = {
 
 Header.defaultProps = {
   siteTitle: ''
+}
+
+export async function getServerSideProps (props) {
+  let categories = null
+  let errors = null
+  try {
+    const { data } = await client.query({
+      query: GET_CATEGORIES,
+      fetchPolicy: 'network-only'
+    })
+    console.log('lololo', data)
+    categories = data?.categories
+    errors = error
+  } catch (error) {
+    errors = error
+  }
+
+  return {
+    props: {
+      categories: categories || null,
+      errors: JSON.stringify(errors) || null
+    }
+  }
 }
 
 export default Header

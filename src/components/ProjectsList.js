@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Flex,
-  Spinner,
-  jsx,
-  Text,
-  Input,
-  Select
-} from 'theme-ui'
+import { Box, Button, Grid, Flex, Spinner, Text, Input, Select } from 'theme-ui'
 import React, { useState } from 'react'
 import ProjectCard from './projectCard'
 import SearchIcon from '../images/svg/general/search-icon.svg'
@@ -132,15 +122,21 @@ const ProjectsList = props => {
     totalCount,
     maxLimit,
     fromHomePage,
-    selectOrderByField
+    selectOrderByField,
+    categoryChoice
   } = props
+
+  console.log('lolo1', categories)
+  console.log('lolo2', categoryChoice)
+  console.log('lolo3', categoryChoice || 0)
+  console.log('lolo4', 0 || 0)
 
   const [search, setSearch] = useState()
   const [limit, setLimit] = useState(maxLimit)
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState()
   const [searchResults, setSearchResults] = useState(projects)
-  const [category, setCategory] = useState(0)
+  const [category, setCategory] = useState(categoryChoice || 0)
   const [sortBy, setSortBy] = useState(0)
   const categoryList = Array.isArray(categories)
     ? ['All'].concat(categories.map(o => o.name))
@@ -151,7 +147,7 @@ const ProjectsList = props => {
     rebuildIndex()
   }, [])
 
-  function searchProjects(e) {
+  function searchProjects (e) {
     const queryResult = search.search(e.target.value)
     setSearchQuery(e.target.value)
     setSearchResults(queryResult)
@@ -159,7 +155,7 @@ const ProjectsList = props => {
   // handleSubmit = e => {
   //   e.preventDefault()
   // }
-  function rebuildIndex() {
+  function rebuildIndex () {
     const dataToSearch = new JsSearch.Search('id')
     /**
      *  defines a indexing strategy for the data
@@ -185,7 +181,7 @@ const ProjectsList = props => {
     setIsLoading(false)
   }
 
-  function filterCategory(searchedResults) {
+  function filterCategory (searchedResults) {
     const categoryName = categoryList[category].toLowerCase()
 
     return searchedResults.filter(
@@ -197,20 +193,20 @@ const ProjectsList = props => {
   const projectsFiltered =
     category === 0 ? searchedResults : filterCategory(searchedResults)
 
-  function sum(items, prop) {
+  function sum (items, prop) {
     return items.reduce(function (a, b) {
       return a + b[prop]
     }, 0)
   }
   //['Quality score', 'Amount raised', 'Hearts']
   const sortFunctions = [
-    function qualityScore(a, b) {
+    function qualityScore (a, b) {
       return b.qualityScore - a.qualityScore
     },
-    function amountRaised(a, b) {
+    function amountRaised (a, b) {
       return b.totalDonations - a.totalDonations
     },
-    function hearts(a, b) {
+    function hearts (a, b) {
       return b.totalHearts - a.totalHearts
     }
   ]
