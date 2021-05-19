@@ -1,4 +1,4 @@
-import { jsx, Flex, Text, Box } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
