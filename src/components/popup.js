@@ -231,7 +231,7 @@ function SharePopup() {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
   const { title, description, slug } = value?.extra
-  const shareTitle = `Make a donation today to ${title}!`
+  const shareTitle = `Check out on @Givethio`
   const url = `${window.location.origin}/project/${slug}`
 
   return (

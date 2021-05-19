@@ -21,7 +21,7 @@ const HighFive = ({
   projectDescription,
   newProject
 }) => {
-  const shareTitle = `Make a donation today to ${project?.title}!`
+  const shareTitle = `Check out on @Givethio`
   const url = `${window.location.origin}/project/${addedProject?.slug}`
 
   return (
