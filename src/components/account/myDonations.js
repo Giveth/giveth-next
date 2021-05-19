@@ -220,7 +220,6 @@ const MyDonations = props => {
     const found = iconManifest?.find(
       i => i?.symbol === item?.currency?.toUpperCase()
     )
-    console.log('lolo1', item)
     let icon = found
       ? `/assets/cryptocurrency-icons/32/color/${item?.currency?.toLowerCase() ||
           'eth'}.png`
@@ -292,7 +291,6 @@ const MyDonations = props => {
               ?.slice()
               .sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
               .map((i, key) => {
-                console.log('lolo', i)
                 return (
                   <tr key={key}>
                     <td

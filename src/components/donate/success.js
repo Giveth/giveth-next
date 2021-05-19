@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Box, Link, Flex, Text, jsx } from 'theme-ui'
+import { Box, Link, Flex, Text } from 'theme-ui'
 import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive'
-import { client } from '../../apollo/client'
 import { base64ToBlob, getEtherscanPrefix } from '../../utils'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../animations/confetti'
@@ -39,7 +38,7 @@ const DownloadReceipt = styled(Box)`
 const Success = props => {
   const router = useRouter()
   const { isLoggedIn, login } = useWallet()
-  const { project, sessionId, hash } = props
+  const { project, sessionId, hash, currentChainId } = props
   const [pdfBase64, setPdfBase64] = useState(null)
 
   const downloadPDF = () => {
@@ -86,7 +85,7 @@ const Success = props => {
           <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong>{' '}
           contribution goes a long way!
         </Text>
-        {hash ? (
+        {hash?.transactionHash ? (
           <Receipt sx={{ my: 4 }}>
             <div style={{ flex: 1 }}>
               <Link
@@ -96,7 +95,11 @@ const Success = props => {
                   cursor: 'pointer'
                 }}
                 target='_blank'
-                href={`https://${etherscanPrefix}etherscan.io/tx/${hash?.transactionHash}`}
+                href={
+                  currentChainId === 100
+                    ? `https://blockscout.com/xdai/mainnet/tx/${hash?.transactionHash}`
+                    : `https://${etherscanPrefix}etherscan.io/tx/${hash?.transactionHash}`
+                }
               >
                 View transaction details
               </Link>

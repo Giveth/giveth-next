@@ -1,11 +1,12 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
-import { Flex, Text, jsx } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
 import OnlyFiat from './onlyFiat'
 import Success from './success'
 import ProjectListing from '../projectListing'
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 import {
   FacebookShareButton,
@@ -114,6 +115,7 @@ const DonateIndex = props => {
   const [isAfterPayment, setIsAfterPayment] = React.useState(null)
   const [paymentSessionId, setPaymentSessionId] = React.useState(null)
   const [isCancelled, setIsCancelled] = React.useState(null)
+  const { currentChainId } = useWallet()
 
   React.useEffect(() => {
     if (project?.status?.id !== '5') {
@@ -125,7 +127,7 @@ const DonateIndex = props => {
   }, [])
 
   // TODO: Implement this on a utils file
-  function getUrlParams(search) {
+  function getUrlParams (search) {
     const hashes = search?.slice(search.indexOf('?') + 1).split('&')
     return hashes?.reduce((params, hash) => {
       const [key, val] = hash.split('=')
@@ -133,7 +135,7 @@ const DonateIndex = props => {
     }, {})
   }
 
-  function PaymentOptions() {
+  function PaymentOptions () {
     const isSSR = typeof window === 'undefined'
 
     const ShowPaymentOption = () => {
@@ -262,7 +264,11 @@ const DonateIndex = props => {
           />
         </ProjectContainer>
         <Payment>
-          <Success sessionId={paymentSessionId} hash={hashSent} />
+          <Success
+            sessionId={paymentSessionId}
+            hash={hashSent}
+            currentChainId={currentChainId}
+          />
           <div style={{ margin: '3rem 0', zIndex: 2 }}>
             <ShareIcons message='Share this with your friends!' />
           </div>
