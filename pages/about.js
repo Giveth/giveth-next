@@ -5,63 +5,81 @@ import Seo from "../src/components/seo";
 import styled from "@emotion/styled";
 
 import Layout from "../src/components/layout";
-import ContentFaq from "../src/components/content/ContentFaq";
+import AboutPage from "../src/components/content/AboutPage";
 
 const Main = styled(Box)``;
 
-const Faq = ({ faqs }) => {
+const About = (props) => {
   // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
-    <Layout>
+    <>
       <Seo title="FAQ" />
       <Main>
-        <Text sx={{ variant: "headings.h2", textAlign: "center" }}>About</Text>
-        {/* <ContentFaq data={faqs} isopen /> */}
+        <AboutPage {...props} />
       </Main>
-    </Layout>
+    </>
   );
 };
 
 export async function getServerSideProps() {
   // contentful
-  const faqReq = await fetchEntries({
-    contentType: "allContentfulFaqEntry",
+  const teamReq = await fetchEntries({
+    contentType: "contentTeam",
   });
-  console.log({ faqReq });
-  const faqs = await faqReq?.map((f) => {
-    return f.fields;
+  const aboutReq = await fetchEntries({
+    contentType: "contentAbout",
   });
 
+  const team = await teamReq?.map((f) => {
+    return f.fields;
+  });
+  const about = await aboutReq?.map((f) => {
+    return f.fields;
+  });
+  console.log({ team: JSON.stringify(team) });
   return {
     props: {
-      faqs: faqs || {},
+      team: team || {},
+      about: about || {},
     },
   };
 }
 
-export default Faq;
+export default About;
 
 // export const query = graphql`
-//   query Faq {
-//     faqA: allContentfulFaqEntry(
-//       sort: { fields: [createdAt], order: ASC }
-//       filter: { category: { category: { eq: "General" } } }
-//     ) {
+//   query AboutQuery {
+//     contentTeam: allContentfulContentTeam {
 //       edges {
 //         node {
-//           id
-//           linkId
-//           createdAt
-//           question
-//           answer {
+//           portrait {
+//             id
+//             file {
+//               url
+//               fileName
+//               contentType
+//             }
+//           }
+//           headline1
+//           headline2
+//           shortBio
+//           socialMedium
+//           socialTwitter
+//         }
+//       }
+//     }
+//     contentAboutUs: allContentfulContentAbout {
+//       edges {
+//         node {
+//           title
+//           subtitle
+//           missionandvision {
 //             json
 //           }
-//           category {
-//             id
-//             category
+//           history {
+//             json
 //           }
 //         }
 //       }
 //     }
 //   }
-// `
