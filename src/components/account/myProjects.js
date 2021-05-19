@@ -71,6 +71,7 @@ const MyProjects = props => {
           return (
             <ProjectCard
               withEditHover
+              wholeClickable
               action={() => setProject(item)}
               name={item?.title}
               description={item?.description}

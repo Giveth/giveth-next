@@ -39,10 +39,10 @@ class Video extends BlockEmbed {
     if (typeof window === 'undefined') {
       return
     }
-    const iframe = domNode.getElementsByTagName('iframe')[0]
+    const iframe = domNode?.getElementsByTagName('iframe')[0]
     return VIDEO_ATTRIBUTES.reduce(function (formats, attribute) {
       if (iframe.hasAttribute(attribute)) {
-        formats[attribute] = iframe.getAttribute(attribute)
+        formats[attribute] = iframe?.getAttribute(attribute)
       }
       return formats
     }, {})
@@ -52,7 +52,7 @@ class Video extends BlockEmbed {
     if (typeof window === 'undefined') {
       return
     }
-    return domNode.getElementsByTagName('iframe')[0].getAttribute('src')
+    return domNode?.getElementsByTagName('iframe')[0]?.getAttribute('src')
   }
 
   format(name, value) {

@@ -253,6 +253,7 @@ const DonateIndex = props => {
         <ProjectContainer>
           <ProjectListing
             wholeClickable
+            transparentBorders
             project={project}
             name={project?.title}
             description={project?.description}
@@ -282,6 +283,7 @@ const DonateIndex = props => {
       <ProjectContainer>
         <ProjectListing
           wholeClickable
+          transparentBorders
           name={project?.title}
           project={project}
           description={project?.description}

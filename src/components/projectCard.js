@@ -195,25 +195,27 @@ const ProjectCard = props => {
         }}
       >
         <Link href={`/project/${props?.slug || project?.slug || ''}`}>
-          <div
-            key={props.listingId || project?.title + '_div'}
-            src={image}
-            style={{
-              width: '100%',
-              height: '186px',
-              margin: '0 auto',
-              cursor: 'pointer',
-              borderRadius: '12px 12px 0px 0px',
-              backgroundImage: /^\d+$/.test(image)
-                ? `url('/assets/create/projectImageGallery${image.toString()}.svg')`
-                : `url(${image})`,
-              backgroundColor: '#cccccc',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              position: 'relative'
-            }}
-            alt={props.name || project?.title}
-          />
+          <a>
+            <div
+              key={props.listingId || project?.title + '_div'}
+              src={image}
+              style={{
+                width: '100%',
+                height: '186px',
+                margin: '0 auto',
+                cursor: 'pointer',
+                borderRadius: '12px 12px 0px 0px',
+                backgroundImage: /^\d+$/.test(image)
+                  ? `url('/assets/create/projectImageGallery${image.toString()}.svg')`
+                  : `url(${image})`,
+                backgroundColor: '#cccccc',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                position: 'relative'
+              }}
+              alt={props.name || project?.title}
+            />
+          </a>
         </Link>
         <div style={{ position: 'relative' }}>
           <Dot
@@ -311,25 +313,33 @@ const ProjectCard = props => {
               <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
             </Givers>
             <Link href={`/project/${props?.slug || project?.slug || ''}`}>
-              <Button sx={{ variant: 'buttons.default', mt: 2 }}>
-                Learn More
-              </Button>
+              <a>
+                <Button
+                  sx={{ width: '100%', variant: 'buttons.default', mt: 2 }}
+                >
+                  Learn More
+                </Button>
+              </a>
             </Link>
-            <Text
-              sx={{
-                variant: 'links.default',
-                my: 2,
-                mx: 'auto',
-                cursor: 'pointer',
-                color: theme.colors.primary
-              }}
-              onClick={() => {
-                !props.disabled &&
-                  router.push(`/donate/${props?.slug || project?.slug}`)
-              }}
+            <Link
+              href={
+                !props.disabled && `/donate/${props?.slug || project?.slug}`
+              }
             >
-              Donate
-            </Text>
+              <a style={{ marginTop: 2, marginBottom: 2 }}>
+                <Text
+                  sx={{
+                    variant: 'links.default',
+                    my: 2,
+                    mx: 'auto',
+                    cursor: 'pointer',
+                    color: theme.colors.primary
+                  }}
+                >
+                  Donate
+                </Text>
+              </a>
+            </Link>
           </AltCardContent>
         )}
         <CardContent>

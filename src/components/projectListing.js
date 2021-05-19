@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import Link from 'next/link'
 import { Heading, Box, Card, Flex, Button, Text } from 'theme-ui'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
@@ -67,7 +68,7 @@ const AltCardContent = styled.span`
   bottom: 0;
   display: flex;
   flex: 1;
-  z-index: 2;
+  z-index: 5;
   width: 100%;
   flex-direction: column;
   position: absolute;
@@ -135,7 +136,9 @@ const ProjectListing = props => {
           key={props.listingId + '_card'}
           onClick={() => {
             if (props.wholeClickable)
-              return router.push(`/project/${props?.project?.slug}`)
+              return router.push(
+                `/project/${props?.project?.slug || props?.slug}`
+              )
             if (hoverStyle) return
             !props.disabled &&
               (props?.action
@@ -149,7 +152,7 @@ const ProjectListing = props => {
               ? 'default'
               : 'pointer',
             border:
-              props.disabled || props.wholeClickable
+              props.disabled || props.transparentBorders
                 ? null
                 : `1px solid ${theme.colors.muted}`,
             boxShadow:
@@ -268,20 +271,22 @@ const ProjectListing = props => {
               >
                 EDIT
               </Button>
-              <Text
-                sx={{
-                  variant: 'text.default',
-                  my: 2,
-                  mx: 'auto',
-                  cursor: 'pointer',
-                  color: 'primary'
-                }}
-                onClick={() => {
-                  !props.disabled && router.push(`/project/${props?.slug}`)
-                }}
-              >
-                Learn more{' '}
-              </Text>
+              <Link href={!props.disabled && `/project/${props?.slug}`}>
+                <a style={{ margin: 'auto' }}>
+                  <Text
+                    sx={{
+                      variant: 'text.default',
+                      cursor: 'pointer',
+                      color: 'primary'
+                    }}
+                    // onClick={() => {
+                    //   !props.disabled && router.push(`/project/${props?.slug}`)
+                    // }}
+                  >
+                    View Project{' '}
+                  </Text>
+                </a>
+              </Link>
             </AltCardContent>
           )}
           <CardContent>
