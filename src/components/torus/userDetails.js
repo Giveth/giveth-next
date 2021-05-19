@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Button, Image, Text, jsx } from 'theme-ui'
+import { Image, Text } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
