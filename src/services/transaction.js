@@ -34,7 +34,7 @@ export async function send(
         contractAddress,
         signer
       )
-
+      console.log('look here', { signerTransaction })
       hash = signerTransaction?.hash
     }
     if (!hash) throw new Error('Transaction failed')
@@ -116,6 +116,7 @@ export async function confirmEtherTransaction(
   const MAX_INTENTS = 20 // one every second
   web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
     if (err) {
+      console.log({ err })
       throw Error(err)
     }
 

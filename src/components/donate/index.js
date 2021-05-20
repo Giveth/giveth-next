@@ -271,7 +271,7 @@ const DonateIndex = props => {
             currentChainId={currentChainId}
           />
           <div style={{ margin: '3rem 0', zIndex: 2 }}>
-            <ShareIcons message='Share this with your friends!' />
+            <ShareIcons message='Share this with your friends!' centered />
           </div>
         </Payment>
       </Flex>

@@ -374,7 +374,7 @@ function WalletProvider(props) {
           : new web3Provider.Contract(tokenAbi, contractAddress)
         if (fromSigner) {
           txn = await instance.transfer(params?.to, params?.value)
-          txCallbacks?.onTransactionHash(txn?.hash)
+          txCallbacks?.onTransactionHash(txn?.hash, txn?.from)
           return txn
         }
         const from = await web3Provider.getAccounts()
@@ -395,7 +395,7 @@ function WalletProvider(props) {
       if (!txCallbacks || fromSigner) {
         // gets hash and checks until it's mined
         txn = await web3Provider.sendTransaction(txParams)
-        txCallbacks?.onTransactionHash(txn?.hash)
+        txCallbacks?.onTransactionHash(txn?.hash, txn?.from)
       } else {
         // using the event emitter
         return web3Provider

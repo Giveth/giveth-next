@@ -177,8 +177,10 @@ function InsufficientFundsPopup({ close }) {
       >
         Close
       </Text>
-      <Box
+      <Flex
         sx={{
+          flexDirection: 'column',
+          alignItems: 'center',
           position: 'absolute',
           textAlign: 'center',
           top: '5%',
@@ -212,7 +214,7 @@ function InsufficientFundsPopup({ close }) {
         >
           Ok
         </Button>
-      </Box>
+      </Flex>
       <Image
         src={'/images/no_funds.png'}
         style={{

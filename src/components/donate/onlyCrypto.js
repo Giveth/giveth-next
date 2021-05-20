@@ -300,8 +300,9 @@ const OnlyCrypto = props => {
       i => i?.symbol === tokenSymbol?.toUpperCase()
     )
     if (found) {
-      img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() ||
-        'eth'}.png`
+      img = `/assets/cryptocurrency-icons/32/color/${
+        tokenSymbol?.toLowerCase() || 'eth'
+      }.png`
       setIcon(img)
     }
   }, [tokenSymbol, icon])
@@ -456,7 +457,7 @@ const OnlyCrypto = props => {
         sendTransaction,
         provider,
         {
-          onTransactionHash: async transactionHash => {
+          onTransactionHash: async (transactionHash, extraFromAddress) => {
             const instantReceipt = await transaction.getTxFromHash(
               transactionHash,
               isXDAI // isXDAI
@@ -468,7 +469,7 @@ const OnlyCrypto = props => {
               savedDonation,
               saveDonationErrors
             } = await saveDonation(
-              fromAddress || instantReceipt?.from,
+              fromAddress || instantReceipt?.from || extraFromAddress,
               toAddress,
               transactionHash,
               currentChainId,
@@ -494,6 +495,7 @@ const OnlyCrypto = props => {
                   setInProgress(true)
                 } else if (res?.status) {
                   // Tx was successful
+                  toast.dismiss()
                   props.setHashSent({ transactionHash, tokenSymbol, subtotal })
                 } else {
                   // EVM reverted the transaction, it failed
@@ -516,6 +518,7 @@ const OnlyCrypto = props => {
             })
           },
           onError: _error => {
+            toast.dismiss()
             // the outside catch handles any error here
             // Toast({
             //   content: error?.error?.message || error?.message || error,
@@ -830,8 +833,9 @@ const OnlyCrypto = props => {
                 variant: 'buttons.default',
                 padding: '1.063rem 7.375rem',
                 mt: 2,
+                mx: 1,
                 textTransform: 'uppercase',
-                width: '90%'
+                width: '100%'
               }}
             >
               Donate
