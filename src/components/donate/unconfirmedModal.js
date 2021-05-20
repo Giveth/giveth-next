@@ -48,7 +48,7 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
       </Button>
       <Spinner size={120} strokeWidth={2} />
       <Text sx={{ mt: 4, color: 'secondary', variant: 'headings.h4' }}>
-        Donation is still in progress...
+        Donation is in progress...
       </Text>
       <Text
         sx={{
@@ -59,9 +59,11 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
           variant: 'text.default'
         }}
       >
-        Transaction has been submitted and is waiting for confirmation.
+        Transaction has been submitted but we can't get a confirmation at the
+        moment.
         <Link href={`https://${etherscanPrefix}etherscan.io/tx/${txHash}`}>
           <a style={{ textDecoration: 'none', color: theme.colors.primary }}>
+            {' '}
             View on Etherscan
           </a>
         </Link>

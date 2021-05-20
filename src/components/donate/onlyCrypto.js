@@ -28,11 +28,12 @@ import tokenAbi from 'human-standard-token-abi'
 import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
 import { toast } from 'react-toastify'
-import InProgressModal from './inProgressModal'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import * as transaction from '../../services/transaction'
 import { saveDonation, saveDonationTransaction } from '../../services/donation'
 import { ethers } from 'ethers'
+import InProgressModal from './inProgressModal'
+import UnconfirmedModal from './unconfirmedModal'
 
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
@@ -151,6 +152,7 @@ const OnlyCrypto = props => {
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [inProgress, setInProgress] = useState(false)
+  const [unconfirmed, setUnconfirmed] = useState(false)
   const [txHash, setTxHash] = useState(null)
   const [erc20List, setErc20List] = useState([])
   const [anonymous, setAnonymous] = useState(false)
@@ -486,23 +488,42 @@ const OnlyCrypto = props => {
             transaction.confirmEtherTransaction(
               transactionHash,
               res => {
-                if (!res) return
-                toast.dismiss()
-                if (res?.tooSlow) {
-                  // Tx is being too slow
+                try {
+                  if (!res) return
                   toast.dismiss()
-                  setTxHash(transactionHash)
-                  setInProgress(true)
-                } else if (res?.status) {
-                  // Tx was successful
+                  if (res?.tooSlow) {
+                    // Tx is being too slow
+                    toast.dismiss()
+                    setTxHash(transactionHash)
+                    setInProgress(true)
+                  } else if (res?.status) {
+                    // Tx was successful
+                    toast.dismiss()
+                    props.setHashSent({
+                      transactionHash,
+                      tokenSymbol,
+                      subtotal
+                    })
+                    setUnconfirmed(false)
+                  } else {
+                    // EVM reverted the transaction, it failed
+                    setTxHash(transactionHash)
+                    setUnconfirmed(true)
+                    if (res?.error) {
+                      Toast({
+                        content: res?.error?.message,
+                        type: 'error'
+                      })
+                    } else {
+                      Toast({
+                        content: `Transaction couldn't be confirmed or it failed`,
+                        type: 'error'
+                      })
+                    }
+                  }
+                } catch (error) {
+                  console.log({ error })
                   toast.dismiss()
-                  props.setHashSent({ transactionHash, tokenSymbol, subtotal })
-                } else {
-                  // EVM reverted the transaction, it failed
-                  Toast({
-                    content: 'Transaction failed',
-                    type: 'error'
-                  })
                 }
               },
               0,
@@ -554,176 +575,184 @@ const OnlyCrypto = props => {
   const isXDAI = currentChainId === 100
 
   return (
-    <Content ref={ref}>
-      <InProgressModal
-        showModal={inProgress}
-        setShowModal={val => setInProgress(val)}
-        txHash={txHash}
-      />
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setIsOpen(false)}
-        contentLabel='QR Modal'
-      >
-        <Flex
-          sx={{
-            flexDirection: 'column',
-            alignItems: 'center',
-            py: 5,
-            px: 4,
-            maxWidth: ['85vw', '60vw', '60vw'],
-            textAlign: 'center'
-          }}
+    <>
+      <Content ref={ref}>
+        <InProgressModal
+          showModal={inProgress}
+          setShowModal={val => setInProgress(val)}
+          txHash={txHash}
+        />
+        <UnconfirmedModal
+          showModal={unconfirmed}
+          setShowModal={val => setUnconfirmed(val)}
+          txHash={txHash}
+        />
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setIsOpen(false)}
+          contentLabel='QR Modal'
         >
-          <Text
-            sx={{
-              color: 'secondary',
-              variant: ['headings.h4', 'headings.h4'],
-              mt: 2,
-              mb: 4
-            }}
-          >
-            Support {project?.title}
-          </Text>
-          <QRCode value={project?.walletAddress} size={250} />
-          <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
-            Please send ETH or ERC20 tokens using this address
-          </Text>
           <Flex
             sx={{
-              backgroundColor: 'lightGray',
+              flexDirection: 'column',
               alignItems: 'center',
-              px: 3,
-              mt: 3
+              py: 5,
+              px: 4,
+              maxWidth: ['85vw', '60vw', '60vw'],
+              textAlign: 'center'
             }}
           >
             <Text
               sx={{
-                variant: 'text.default',
                 color: 'secondary',
-                py: 2
+                variant: ['headings.h4', 'headings.h4'],
+                mt: 2,
+                mb: 4
               }}
             >
-              {project?.walletAddress}
+              Support {project?.title}
             </Text>
-            <CopyToClipboard size='18px' text={project?.walletAddress} />
-          </Flex>
-        </Flex>
-        <Text
-          onClick={() => setIsOpen(false)}
-          sx={{
-            cursor: 'pointer',
-            color: 'secondary',
-            position: 'absolute',
-            top: '20px',
-            right: '24px',
-            variant: 'text.default'
-          }}
-        >
-          Close
-        </Text>
-      </Modal>
-      <AmountSection>
-        <AmountContainer sx={{ width: ['100%', '100%'] }}>
-          {/* <Text sx={{ variant: 'text.large', mb: 3, color: 'background' }}>
-            Enter your {tokenSymbol} amount
-          </Text> */}
-          {isMainnet && (
-            <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
-              {tokenPrice &&
-                tokenSymbol &&
-                `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
+            <QRCode value={project?.walletAddress} size={250} />
+            <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
+              Please send ETH or ERC20 tokens using this address
             </Text>
-          )}
-          <Text
-            sx={{
-              variant: 'text.small',
-              float: 'right',
-              color: 'anotherGrey',
-              mb: 1
-            }}
-          >
-            Available:{' '}
-            {parseFloat(selectedTokenBalance).toLocaleString('en-US', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 6
-            })}{' '}
-            {tokenSymbol}
-          </Text>
-          <OpenAmount>
-            {isComponentVisible && (
-              <Flex
+            <Flex
+              sx={{
+                backgroundColor: 'lightGray',
+                alignItems: 'center',
+                px: 3,
+                mt: 3
+              }}
+            >
+              <Text
                 sx={{
-                  position: 'absolute',
-                  backgroundColor: 'background',
-                  marginTop: '100px',
-                  right: '0'
+                  variant: 'text.default',
+                  color: 'secondary',
+                  py: 2
                 }}
               >
-                <Select
-                  width='250px'
-                  content={erc20List}
-                  isTokenList
-                  menuIsOpen
-                  onSelect={i => {
-                    setSelectedToken(i?.value || selectedToken)
-                    setTokenSymbol(i?.label || tokenSymbol)
-                    setIsComponentVisible(false)
-                  }}
-                  placeholder='search for a token'
-                />
-              </Flex>
+                {project?.walletAddress}
+              </Text>
+              <CopyToClipboard size='18px' text={project?.walletAddress} />
+            </Flex>
+          </Flex>
+          <Text
+            onClick={() => setIsOpen(false)}
+            sx={{
+              cursor: 'pointer',
+              color: 'secondary',
+              position: 'absolute',
+              top: '20px',
+              right: '24px',
+              variant: 'text.default'
+            }}
+          >
+            Close
+          </Text>
+        </Modal>
+        <AmountSection>
+          <AmountContainer sx={{ width: ['100%', '100%'] }}>
+            {/* <Text sx={{ variant: 'text.large', mb: 3, color: 'background' }}>
+            Enter your {tokenSymbol} amount
+          </Text> */}
+            {isMainnet && (
+              <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
+                {tokenPrice &&
+                  tokenSymbol &&
+                  `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
+              </Text>
             )}
-            <InputComponent
+            <Text
               sx={{
-                variant: 'text.large',
-                color: 'secondary',
-                '::placeholder': {
-                  color: 'anotherGrey'
-                }
-              }}
-              placeholder='Amount'
-              type='number'
-              value={amountTyped}
-              onChange={e => {
-                e.preventDefault()
-                if (
-                  parseFloat(e.target.value) !== 0 &&
-                  parseFloat(e.target.value) < 0.001
-                ) {
-                  return
-                }
-                setAmountTyped(e.target.value)
-              }}
-            />
-            <Flex
-              onClick={() => setIsComponentVisible(!isComponentVisible)}
-              sx={{
-                alignItems: 'center',
-                position: 'absolute',
-                cursor: 'pointer',
-                right: '20px',
-                ml: 3
+                variant: 'text.small',
+                float: 'right',
+                color: 'anotherGrey',
+                mb: 1
               }}
             >
-              <Image
-                src={icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
-                alt={tokenSymbol}
-                onError={ev => {
-                  ev.target.src = ETHIcon
-                  ev.target.onerror = null
+              Available:{' '}
+              {parseFloat(selectedTokenBalance).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 6
+              })}{' '}
+              {tokenSymbol}
+            </Text>
+            <OpenAmount>
+              {isComponentVisible && (
+                <Flex
+                  sx={{
+                    position: 'absolute',
+                    backgroundColor: 'background',
+                    marginTop: '100px',
+                    right: '0'
+                  }}
+                >
+                  <Select
+                    width='250px'
+                    content={erc20List}
+                    isTokenList
+                    menuIsOpen
+                    onSelect={i => {
+                      setSelectedToken(i?.value || selectedToken)
+                      setTokenSymbol(i?.label || tokenSymbol)
+                      setIsComponentVisible(false)
+                    }}
+                    placeholder='search for a token'
+                  />
+                </Flex>
+              )}
+              <InputComponent
+                sx={{
+                  variant: 'text.large',
+                  color: 'secondary',
+                  '::placeholder': {
+                    color: 'anotherGrey'
+                  }
                 }}
-                width={'32px'}
-                height={'32px'}
-                style={{ width: '32px', height: '32px' }}
+                placeholder='Amount'
+                type='number'
+                value={amountTyped}
+                onChange={e => {
+                  e.preventDefault()
+                  if (
+                    parseFloat(e.target.value) !== 0 &&
+                    parseFloat(e.target.value) < 0.001
+                  ) {
+                    return
+                  }
+                  setAmountTyped(e.target.value)
+                }}
               />
-              <Text sx={{ ml: 2, mr: 3 }}>{tokenSymbol}</Text>
-              <BsCaretDownFill size='12px' color={theme.colors.secondary} />
-            </Flex>
-          </OpenAmount>
-        </AmountContainer>
-        <>
-          {/* <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
+              <Flex
+                onClick={() => setIsComponentVisible(!isComponentVisible)}
+                sx={{
+                  alignItems: 'center',
+                  position: 'absolute',
+                  cursor: 'pointer',
+                  right: '20px',
+                  ml: 3
+                }}
+              >
+                <Image
+                  src={
+                    icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`
+                  }
+                  alt={tokenSymbol}
+                  onError={ev => {
+                    ev.target.src = ETHIcon
+                    ev.target.onerror = null
+                  }}
+                  width={'32px'}
+                  height={'32px'}
+                  style={{ width: '32px', height: '32px' }}
+                />
+                <Text sx={{ ml: 2, mr: 3 }}>{tokenSymbol}</Text>
+                <BsCaretDownFill size='12px' color={theme.colors.secondary} />
+              </Flex>
+            </OpenAmount>
+          </AmountContainer>
+          <>
+            {/* <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
             <>
               <Checkbox
                 defaultChecked={donateToGiveth}
@@ -741,7 +770,7 @@ const OnlyCrypto = props => {
             </>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
           </CheckboxLabel> */}
-          {/* <CheckboxLabel
+            {/* <CheckboxLabel
             sx={{ mb: '12px', alignItems: 'center', color: 'background' }}
           >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -755,114 +784,122 @@ const OnlyCrypto = props => {
             </div>
             <Tooltip content='When you donate anonymously, your name will never appear in public as a donor. But, your name will be recorded so that we can send a tax donation receipt.' />
           </CheckboxLabel> */}
-          {/* <Label sx={{ mb: '10px', alignItems: 'center' }}>
+            {/* <Label sx={{ mb: '10px', alignItems: 'center' }}>
             <Checkbox defaultChecked={false} />
             <Text sx={{ variant: 'text.medium' }}>Dedicate this donation</Text>
           </Label> */}
-          {amountTyped && (
-            <Summary>
-              {donateToGiveth && (
-                <SummaryRow
-                  title='Support Giveth'
-                  amount={[
-                    `$${GIVETH_DONATION_AMOUNT}`,
-                    `≈ ${selectedToken?.symbol} ${(
-                      GIVETH_DONATION_AMOUNT / tokenPrice
-                    ).toFixed(2)}`
-                  ]}
-                />
-              )}
-              <SummaryRow
-                title='Donation amount'
-                isLarge
-                amount={[
-                  `${donationTokenToUSD(donation)}`,
-                  `${parseFloat(donation)} ${selectedToken?.symbol}`
-                ]}
-              />
-              {gasPrice && (
-                <SummaryRow
-                  title='Network fee'
-                  logo={iconQuestionMark}
-                  amount={[
-                    `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(
-                      gasPrice
-                    )} GWEI`,
-                    `${parseFloat(gasETHPrice).toLocaleString('en-US', {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 6
-                    })} ${mainToken}`
-                  ]}
-                />
-              )}
-              {!isXDAI && (
-                <SaveGasMessage>
-                  <Image
-                    src={'/images/icon-streamline-gas.svg'}
-                    height='18px'
-                    width='18px'
-                    alt=''
+            {amountTyped && (
+              <Summary>
+                {donateToGiveth && (
+                  <SummaryRow
+                    title='Support Giveth'
+                    amount={[
+                      `$${GIVETH_DONATION_AMOUNT}`,
+                      `≈ ${selectedToken?.symbol} ${(
+                        GIVETH_DONATION_AMOUNT / tokenPrice
+                      ).toFixed(2)}`
+                    ]}
                   />
-                  <Text
-                    sx={{
-                      variant: 'text.medium',
-                      textAlign: 'left',
-                      color: 'background',
-                      marginLeft: '12px'
-                    }}
-                  >
-                    Save on gas fees, switch to xDAI network.
-                  </Text>
-                </SaveGasMessage>
-              )}
-            </Summary>
-          )}
-        </>
-        <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-          <Flex
-            sx={{
-              width: '100%',
-              alignItems: 'center',
-              textAlign: 'center',
-              justifyContent: 'space-between'
-            }}
-          >
-            <Button
-              onClick={() => confirmDonation(isLoggedIn && ready)}
+                )}
+                <SummaryRow
+                  title='Donation amount'
+                  isLarge
+                  amount={[
+                    `${donationTokenToUSD(donation)}`,
+                    `${parseFloat(donation)} ${selectedToken?.symbol}`
+                  ]}
+                />
+                {gasPrice && (
+                  <SummaryRow
+                    title='Network fee'
+                    logo={iconQuestionMark}
+                    amount={[
+                      `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(
+                        gasPrice
+                      )} GWEI`,
+                      `${parseFloat(gasETHPrice).toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 6
+                      })} ${mainToken}`
+                    ]}
+                  />
+                )}
+                {!isXDAI && (
+                  <SaveGasMessage>
+                    <Image
+                      src={'/images/icon-streamline-gas.svg'}
+                      height='18px'
+                      width='18px'
+                      alt=''
+                    />
+                    <Text
+                      sx={{
+                        variant: 'text.medium',
+                        textAlign: 'left',
+                        color: 'background',
+                        marginLeft: '12px'
+                      }}
+                    >
+                      Save on gas fees, switch to xDAI network.
+                    </Text>
+                  </SaveGasMessage>
+                )}
+              </Summary>
+            )}
+          </>
+          <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+            <Flex
               sx={{
-                variant: 'buttons.default',
-                padding: '1.063rem 7.375rem',
-                mt: 2,
-                mx: 1,
-                textTransform: 'uppercase',
-                width: '100%'
+                width: '100%',
+                alignItems: 'center',
+                textAlign: 'center',
+                justifyContent: 'space-between'
               }}
             >
-              Donate
-            </Button>
-            <Flex sx={{ cursor: 'pointer' }} onClick={() => setIsOpen(true)}>
-              <SVGLogo />
+              <Button
+                onClick={() => confirmDonation(isLoggedIn && ready)}
+                sx={{
+                  flex: 0.8,
+                  variant: 'buttons.default',
+                  padding: '1.063rem 7.375rem',
+                  mt: 2,
+                  textTransform: 'uppercase',
+                  width: '100%'
+                }}
+              >
+                Donate
+              </Button>
+              <Flex
+                sx={{
+                  flex: 0.2,
+                  cursor: 'pointer',
+                  justifyContent: 'flex-end'
+                }}
+                onClick={() => setIsOpen(true)}
+              >
+                <SVGLogo />
+              </Flex>
             </Flex>
+            {isLoggedIn && ready && !isXDAI && (
+              <Text
+                sx={{
+                  mt: 2,
+                  mx: 'auto',
+                  cursor: 'pointer',
+                  color: 'background',
+                  '&:hover': {
+                    color: 'accent'
+                  }
+                }}
+                onClick={() => confirmDonation(false)}
+              >
+                click here to use another wallet
+              </Text>
+            )}
           </Flex>
-          {isLoggedIn && ready && !isXDAI && (
-            <Text
-              sx={{
-                mt: 2,
-                mx: 'auto',
-                cursor: 'pointer',
-                color: 'background',
-                '&:hover': {
-                  color: 'accent'
-                }
-              }}
-              onClick={() => confirmDonation(false)}
-            >
-              click here to use another wallet
-            </Text>
-          )}
-        </Flex>
-      </AmountSection>
-    </Content>
+        </AmountSection>
+      </Content>
+    </>
   )
 }
 

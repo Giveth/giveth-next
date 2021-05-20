@@ -108,35 +108,38 @@ export async function confirmEtherTransaction(
   count = 0,
   isXDAI
 ) {
-  const web3 = new Web3(
-    isXDAI
-      ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
-      : process.env.NEXT_PUBLIC_ETHEREUM_NODE
-  )
-  const MAX_INTENTS = 20 // one every second
-  web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
-    if (err) {
-      console.log({ err })
-      throw Error(err)
-    }
-
-    if (receipt !== null) {
-      // Transaction went through
-      if (callbackFunction) {
-        callbackFunction({ ...receipt, tooSlow: false })
+  try {
+    const web3 = new Web3(
+      isXDAI
+        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
+    )
+    const MAX_INTENTS = 20 // one every second
+    web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
+      if (err) {
+        return callbackFunction({ ...receipt, error: err })
       }
-    } else if (count >= MAX_INTENTS) {
-      callbackFunction({ tooSlow: true })
-    } else {
-      // Try again in 1 second
-      setTimeout(function () {
-        confirmEtherTransaction(
-          transactionHash,
-          callbackFunction,
-          ++count,
-          isXDAI
-        )
-      }, 1000)
-    }
-  })
+
+      if (receipt !== null) {
+        // Transaction went through
+        if (callbackFunction) {
+          callbackFunction({ ...receipt, tooSlow: false })
+        }
+      } else if (count >= MAX_INTENTS) {
+        callbackFunction({ tooSlow: true })
+      } else {
+        // Try again in 1 second
+        setTimeout(function () {
+          confirmEtherTransaction(
+            transactionHash,
+            callbackFunction,
+            ++count,
+            isXDAI
+          )
+        }, 1000)
+      }
+    })
+  } catch (error) {
+    return callbackFunction({ error })
+  }
 }
