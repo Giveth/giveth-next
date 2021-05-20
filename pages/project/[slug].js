@@ -66,6 +66,7 @@ export async function getServerSideProps(props) {
         take: 100,
         skip: 0,
       },
+      fetchPolicy: "network-only",
     });
     updates = updatesOfProject?.getProjectUpdates;
 
@@ -75,6 +76,7 @@ export async function getServerSideProps(props) {
       variables: {
         projectId: parseInt(project?.id),
       },
+      fetchPolicy: "network-only",
     });
     reactions = reactionsFetch?.getProjectReactions;
 

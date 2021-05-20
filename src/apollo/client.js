@@ -50,6 +50,15 @@ function createApolloClient() {
     ssrMode: typeof window === 'undefined',
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network'
+      },
+      query: {
+        fetchPolicy: 'network-only',
+        nextFetchPolicy: 'network-only'
+      }
+    },
     typeDefs: gql`
       enum OrderField {
         CreationDate
