@@ -15,13 +15,12 @@ const Project = props => {
   const { projects, categories, totalCount, errors, categoryChoice } = props
   const [limit, setLimit] = useState(12)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
-  console.log('lolo0', categoryChoice)
   return (
     <Layout>
       <Seo title='Projects' />
       {projects && !errors ? (
         <ProjectsList
-          categoryChoice={categoryChoice || 0}
+          categoryChoice={categoryChoice}
           projects={projects}
           categories={categories}
           totalCount={totalCount}
@@ -66,6 +65,7 @@ export async function getServerSideProps (props) {
   return {
     props: {
       projects,
+      categoryChoice: props?.query?.categoryChoice || null,
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null
