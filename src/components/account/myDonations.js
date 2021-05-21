@@ -220,7 +220,6 @@ const MyDonations = props => {
     const found = iconManifest?.find(
       i => i?.symbol === item?.currency?.toUpperCase()
     )
-    console.log('lolo1', item)
     let icon = found
       ? `/assets/cryptocurrency-icons/32/color/${item?.currency?.toLowerCase() ||
           'eth'}.png`

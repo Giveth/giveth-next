@@ -126,11 +126,6 @@ const ProjectsList = props => {
     categoryChoice
   } = props
 
-  console.log('lolo1', categories)
-  console.log('lolo2', categoryChoice)
-  console.log('lolo3', categoryChoice || 0)
-  console.log('lolo4', 0 || 0)
-
   const [search, setSearch] = useState()
   const [limit, setLimit] = useState(maxLimit)
   const [isLoading, setIsLoading] = useState(false)
