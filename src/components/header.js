@@ -170,7 +170,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState(null)
   const [errors, setErrors] = useState(getNullableType)
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = router.pathname?.split('/')[1]
@@ -204,8 +204,15 @@ const Header = ({ siteTitle, isHomePage }) => {
           query: GET_CATEGORIES,
           fetchPolicy: 'network-only'
         })
-        console.log('lololo', data)
-        setCategories(data?.categories)
+        if (data?.categories)
+          setCategories(
+            [
+              {
+                name: 'all',
+                value: 'All'
+              }
+            ].concat(data?.categories)
+          )
       } catch (error) {
         setErrors(error)
       }
@@ -367,29 +374,6 @@ Header.propTypes = {
 
 Header.defaultProps = {
   siteTitle: ''
-}
-
-export async function getServerSideProps (props) {
-  let categories = null
-  let errors = null
-  try {
-    const { data } = await client.query({
-      query: GET_CATEGORIES,
-      fetchPolicy: 'network-only'
-    })
-    console.log('lololo', data)
-    categories = data?.categories
-    errors = error
-  } catch (error) {
-    errors = error
-  }
-
-  return {
-    props: {
-      categories: categories || null,
-      errors: JSON.stringify(errors) || null
-    }
-  }
 }
 
 export default Header

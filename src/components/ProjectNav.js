@@ -30,32 +30,15 @@ const ProjectCategories = styled.div`
 `
 
 const ProjectNav = ({ categories }) => {
-  console.log('lololala2', categories)
   return (
     <ProjectCategories>
       {categories ? (
-        <Flex sx={{ flexDirection: 'column', maxWidth: '80%' }}>
+        <Flex sx={{ flexDirection: 'column', pr: '8%' }}>
           {categories.map((category, index) => {
             return (
-              //   <a
-              //     key={index}
-              //     style={{ textDecoration: 'none', cursor: 'pointer' }}
-              //     onClick={() => {}}
-              //   >
-              //     <Text
-              //       sx={{
-              //         mb: '8px',
-              //         color:
-              //           query?.view === i.route ||
-              //           (!query?.view && i.route === 'account')
-              //             ? 'primary'
-              //             : 'secondary'
-              //       }}
-              //     >
-              //       {formatTitle(i.name, projectsList, userDonations)}
-              //     </Text>
-              //   </a>
-              <Text>{category?.value}</Text>
+              <Link href={`/projects?categoryChoice=${index}`}>
+                {category?.value}
+              </Link>
             )
           })}
         </Flex>
