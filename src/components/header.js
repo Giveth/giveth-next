@@ -331,6 +331,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                   <a
                     ref={ref}
                     onClick={() => setIsComponentVisible(!isComponentVisible)}
+                    style={{ cursor: 'pointer' }}
                   >
                     Projects
                   </a>
