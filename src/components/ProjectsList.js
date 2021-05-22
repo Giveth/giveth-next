@@ -131,7 +131,7 @@ const ProjectsList = props => {
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState()
   const [searchResults, setSearchResults] = useState(projects)
-  const [category, setCategory] = useState(categoryChoice || 0)
+  const [category, setCategory] = useState(parseInt(categoryChoice))
   const [sortBy, setSortBy] = useState(0)
   const categoryList = Array.isArray(categories)
     ? ['All'].concat(categories.map(o => o.name))

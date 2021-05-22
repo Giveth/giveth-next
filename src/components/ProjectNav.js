@@ -1,4 +1,4 @@
-import { Flex, Text, Link } from 'theme-ui'
+import { Text, Link } from 'theme-ui'
 import theme from '../utils/theme-ui'
 import styled from '@emotion/styled'
 
