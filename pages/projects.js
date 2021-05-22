@@ -38,7 +38,6 @@ const Project = props => {
 }
 
 export async function getServerSideProps (props) {
-  console.log('lolo01', props)
   // Fetch Project
   let projects,
     categories = null

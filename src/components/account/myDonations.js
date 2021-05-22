@@ -291,7 +291,6 @@ const MyDonations = props => {
               ?.slice()
               .sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
               .map((i, key) => {
-                console.log('lolo', i)
                 return (
                   <tr key={key}>
                     <td
