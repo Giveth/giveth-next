@@ -17,8 +17,9 @@ const ProjectCategories = styled.div`
 `
 
 const Nav = styled.div`
-  width: 150px;
+  width: 160px;
   .shadow {
+    max-width: 140px;
     box-shadow: 0px 1px 0px #f5f5f5;
   }
   .shadow.first:last-child {
