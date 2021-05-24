@@ -351,7 +351,7 @@ const TimelineCard = props => {
         <CardFooter>
           <IconButton onClick={react} sx={{ cursor: 'pointer' }}>
             <img
-              src={iconHeart}
+              src={'/images/icon-heart.svg'}
               alt=''
               style={{
                 '-webkit-filter': likedByUser
