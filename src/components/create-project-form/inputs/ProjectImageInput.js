@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Label, Grid, Box, Image, Text, Flex, Button } from 'theme-ui'
+import NextImage from 'next/image'
 import { animated } from 'react-spring'
 import { useDropzone } from 'react-dropzone'
-import theme from '../../../gatsby-plugin-theme-ui'
+import theme from '../../../utils/theme-ui'
 import styled from '@emotion/styled'
 
 import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
-import placeHolder from '../../../images/placeholder.png'
 import { toBase64 } from '../../../utils'
 
 const Selection = styled(Box)`
@@ -26,6 +26,7 @@ const Selection = styled(Box)`
 export const ProjectImageInput = ({
   register,
   currentValue,
+  setValue,
   animationStyle,
   goBack
 }) => {
@@ -59,7 +60,7 @@ export const ProjectImageInput = ({
   }
 
   useEffect(() => {
-    setImage(displayImage)
+    !!displayImage && setValue('projectImage', displayImage)
   }, [displayImage])
 
   return (
@@ -105,12 +106,14 @@ export const ProjectImageInput = ({
             name='projectImage'
             type='hidden'
             value={image}
-            ref={register}
+            {...register('projectImage')}
           />
           {displayImage === undefined ? (
-            <Image
-              src={placeHolder}
-              sx={{ objectFit: 'cover', maxHeight: '150px' }}
+            <NextImage
+              src={'/placeholder.png'}
+              width='100%'
+              height='100%'
+              objectFit='cover'
             />
           ) : displayImage?.startsWith('data:') ? (
             <Image

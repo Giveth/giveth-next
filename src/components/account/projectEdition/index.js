@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Flex,
@@ -12,13 +12,14 @@ import {
 } from 'theme-ui'
 import Web3 from 'web3'
 import { BiArrowBack } from 'react-icons/bi'
-import theme from '../../../gatsby-plugin-theme-ui/index'
+import theme from '../../../utils/theme-ui/index'
 import { useApolloClient, useQuery } from '@apollo/client'
 import {
   GET_LINK_BANK_CREATION,
   EDIT_PROJECT,
   GET_PROJECT_BY_ADDRESS,
-  FETCH_PROJECT_BY_SLUG
+  FETCH_PROJECT_BY_SLUG,
+  WALLET_ADDRESS_IS_VALID
 } from '../../../apollo/gql/projects'
 import { toggleProjectActivation } from '../../../services/project'
 import LoadingModal from '../../loadingModal'
@@ -29,15 +30,26 @@ import { useWallet } from '../../../contextProvider/WalletProvider'
 import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 import Toast from '../../toast'
+// import dynamic from 'next/dynamic'
 import { getWallet } from '../../../wallets'
+
+// const getWallet = dynamic(
+//   () => import('../../../wallets').then(md => md.getWallet),
+//   {
+//     ssr: false
+//   }
+// )
+
 let wallet = null
 let web3 = null
+
+const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
 const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEditionForm (props) {
+function ProjectEditionForm(props) {
   const {
     goBack,
     setCancelModal,
@@ -51,12 +63,13 @@ function ProjectEditionForm (props) {
 
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState(null)
+  const [desc, setDesc] = useState(null)
   const [isActive, setIsActive] = useState(null)
 
-  const { register, handleSubmit, errors } = useForm() // initialize the hook
-
+  const { register, handleSubmit, setValue, errors } = useForm() // initialize the hook
   useEffect(() => {
     setCategories(project?.categories)
+    setDesc(project?.description || '')
     setIsActive(project?.status?.id === '5')
   }, [project])
 
@@ -96,12 +109,13 @@ function ProjectEditionForm (props) {
       </Label>
     )
   }
-  console.log({ project, isActive })
+  const isSSR = typeof window === 'undefined'
+
   return (
     <>
       {loading && <LoadingModal isOpen={loading} />}
       <Flex sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }}>
-        <Flex>
+        <Flex sx={{ alignItems: 'center' }}>
           <BiArrowBack
             color={theme.colors.secondary}
             style={{ marginRight: 2 }}
@@ -116,7 +130,7 @@ function ProjectEditionForm (props) {
 
         <form
           onSubmit={handleSubmit((data, e) => {
-            const res = toggleProjectActivation(data, isActive, msg =>
+            const res = toggleProjectActivation(project?.id, isActive, msg =>
               Toast({ content: msg, type: 'success' })
             )
             if (res) {
@@ -127,7 +141,8 @@ function ProjectEditionForm (props) {
           <input
             type='hidden'
             name='projectId'
-            ref={register}
+            // ref={register}
+            {...register('projectId')}
             value={project.id}
           />
           {project?.status && (
@@ -160,14 +175,23 @@ function ProjectEditionForm (props) {
           )}
         </form>
       </Flex>
-      <form onSubmit={handleSubmit(updateProject)}>
+      <form
+        onSubmit={handleSubmit((data, e) => {
+          console.log({ data, desc })
+          updateProject({ ...data, desc })
+        })}
+      >
         <>
-          <ImageSection image={project?.image} register={register} />
+          <ImageSection
+            image={project?.image}
+            register={register}
+            setValue={(ref, val) => setValue(ref, val)}
+          />
           <Flex sx={{ width: '70%', flexDirection: 'column' }}>
             <CustomLabel title='Project Name' htmlFor='editTitle' />
             <CustomInput
               name='editTitle'
-              ref={register}
+              {...register('editTitle')}
               defaultValue={project?.title}
             />{' '}
             {/* <CustomLabel title='Project Admin' htmlFor='editAdmin' />
@@ -176,7 +200,7 @@ function ProjectEditionForm (props) {
               title='Project Description'
               htmlFor='editDescription'
             />
-            <Textarea
+            {/* <Textarea
               sx={{
                 resize: 'none',
                 fontFamily: 'body',
@@ -187,7 +211,38 @@ function ProjectEditionForm (props) {
               defaultValue={project?.description}
               ref={register}
               rows={12}
-            />
+            /> */}
+            {!isSSR && (
+              <React.Suspense fallback={<div />}>
+                <RichTextInput
+                  projectId={project?.id}
+                  style={{
+                    width: '100%',
+                    marginBottom: '20px',
+                    height: '400px',
+                    fontFamily: 'body',
+                    padding: '1.125rem 1rem',
+                    borderRadius: '12px',
+                    resize: 'none',
+                    '&::placeholder': {
+                      variant: 'body',
+                      color: 'bodyLight'
+                    }
+                  }}
+                  value={desc}
+                  placeholder='Write your update...'
+                  onChange={(newValue, delta, source) => {
+                    try {
+                      // console.log({ newValue })
+                      setValue('editDescription', newValue)
+                      setDesc(newValue)
+                    } catch (error) {
+                      console.log({ error })
+                    }
+                  }}
+                />
+              </React.Suspense>
+            )}
             <CustomLabel title='Category' htmlFor='editCategory' />
             <Box sx={{ height: '320px', overflow: 'scroll' }}>
               {categories &&
@@ -204,7 +259,8 @@ function ProjectEditionForm (props) {
                         key={`${category.name}-checkbox`}
                         id={category.name}
                         name={category.name}
-                        ref={register}
+                        // ref={register}
+                        {...register(category.name)}
                         onClick={() => {
                           categoryFound
                             ? setCategories(
@@ -295,7 +351,7 @@ function ProjectEditionForm (props) {
             <CustomLabel title='Donation Address' htmlFor='editWalletAddress' />
             <CustomInput
               name='editWalletAddress'
-              ref={register}
+              {...register('editWalletAddress')}
               defaultValue={project?.walletAddress}
             />
             <CustomLabel
@@ -350,7 +406,7 @@ function ProjectEditionForm (props) {
   )
 }
 
-function ProjectEdition (props) {
+function ProjectEdition(props) {
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const [showModal, setShowModal] = useState(false)
@@ -392,6 +448,16 @@ function ProjectEdition (props) {
       const editProjectMutation = async () => {
         setLoading(true)
         try {
+          const contentSize =
+            encodeURI(project?.description).split(/%..|./).length - 1
+          console.log({ contentSize })
+          if (contentSize > 4000000) {
+            Toast({
+              content: `Content is too heavy, it shouldn't exceed 4Mb`,
+              type: 'error'
+            })
+            return false
+          }
           const edit = await client.mutate({
             mutation: EDIT_PROJECT,
             variables: {
@@ -417,33 +483,23 @@ function ProjectEdition (props) {
     }
   }, [project])
 
-  async function updateProject (data) {
+  async function updateProject(data) {
     try {
-      // Validate eth address
+      // Validate eth address if changed
       let ethAddress = data.editWalletAddress
-      if (project?.walletAddress !== data.editWalletAddress) {
-        // CHECK IF STRING IS ENS AND VALID
-        console.log({ wallet })
-        const ens = await wallet?.web3.eth.ens.getOwner(ethAddress)
-        if (ens !== '0x0000000000000000000000000000000000000000') {
-          ethAddress = ens
-        }
-        if (ethAddress.length !== 42 || !Web3.utils.isAddress(ethAddress)) {
-          return Toast({ content: 'Eth address not valid', type: 'error' })
-        }
-        // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
-        const res = await client.query({
-          query: GET_PROJECT_BY_ADDRESS,
+
+      if (ethAddress) {
+        const { data: addressValidation } = await client.query({
+          query: WALLET_ADDRESS_IS_VALID,
           variables: {
             address: ethAddress
           }
         })
-        console.log({ res })
-        if (res?.data?.projectByAddress) {
-          return Toast({
-            content: 'this eth address is already being used for a project',
-            type: 'error'
-          })
+
+        if (!addressValidation?.walletAddressIsValid?.isValid) {
+          const reason = addressValidation?.walletAddressIsValid?.reasons[0]
+          setLoading(false)
+          return Toast({ content: reason, type: 'error' })
         }
       }
 
@@ -456,30 +512,38 @@ function ProjectEdition (props) {
       }
 
       const projectData = {
-        title: data.editTitle,
-        description: data.editDescription,
+        title: data.editTitle || project?.title,
+        description: data.desc || data.editDescription,
         admin: project.admin,
         impactLocation: mapLocation || project?.impactLocation,
         categories: projectCategories,
-        walletAddress: Web3.utils.toChecksumAddress(ethAddress)
+        walletAddress: ethAddress
+          ? Web3.utils.toChecksumAddress(ethAddress)
+          : project?.walletAddress
       }
 
       // Validate Image
-      console.log({ data })
       if (data?.editImage && project?.image !== data?.editImage) {
-        if (data?.editImage.length === 1) {
-          projectData.imageStatic = data.editImage
-        } else {
+        if (data?.editImage?.length > 2) {
           // Download image to send
-          const imageFile = await getImageFile(data.editImage, data?.editTitle)
+          const imageFile = await getImageFile(data.editImage, project?.slug)
           projectData.imageUpload = imageFile
+        } else {
+          if (data?.editImage.length === 1) {
+            projectData.imageStatic = data.editImage
+          }
         }
       }
+
       setUpdateProjectOnServer(true)
       setProject(projectData)
     } catch (error) {
       setLoading(false)
       console.log({ error })
+      return Toast({
+        content: error?.message || JSON.stringify(error),
+        type: 'error'
+      })
     }
   }
 

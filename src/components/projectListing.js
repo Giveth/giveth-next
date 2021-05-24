@@ -1,18 +1,15 @@
 import React, { useContext } from 'react'
+import Link from 'next/link'
 import { Heading, Box, Card, Flex, Button, Text } from 'theme-ui'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 
-import theme from '../gatsby-plugin-theme-ui/index'
+import RichTextViewer from './richTextViewer'
+import theme from '../utils/theme-ui/index'
 // import Donate from '../components/donateForm'
 
 // import iconShare from '../images/icon-share.svg'
 // import iconHeart from '../images/icon-heart.svg'
-
-import ProjectImageGallery1 from '../images/svg/create/projectImageGallery1.svg'
-import ProjectImageGallery2 from '../images/svg/create/projectImageGallery2.svg'
-import ProjectImageGallery3 from '../images/svg/create/projectImageGallery3.svg'
-import ProjectImageGallery4 from '../images/svg/create/projectImageGallery4.svg'
 
 const CardContainer = styled(Card)`
   position: relative;
@@ -31,6 +28,7 @@ const ProjectCard = styled(Flex)`
   border-radius: 12px;
   background-color: ${theme.colors.background};
   margin-bottom: 30px;
+  z-index: 0;
 `
 
 const CardContent = styled.span`
@@ -120,6 +118,7 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectListing = props => {
+  const router = useRouter()
   const [hoverStyle, setHoverStyle] = React.useState(false)
   return (
     <Box
@@ -136,22 +135,25 @@ const ProjectListing = props => {
         <ProjectCard
           key={props.listingId + '_card'}
           onClick={() => {
+            if (props.withEditHover) return
             if (props.wholeClickable)
-              return navigate(`/project/${props?.project?.slug}`)
+              return router.push(
+                `/project/${props?.project?.slug || props?.slug}`
+              )
             if (hoverStyle) return
             !props.disabled &&
               (props?.action
                 ? props.action()
-                : navigate(`/donate/${props?.id}`))
+                : router.push(`/donate/${props?.id}`))
           }}
           style={{
             cursor: props.wholeClickable
               ? 'pointer'
-              : props.disabled || hoverStyle
+              : props.disabled || hoverStyle || props.withEditHover
               ? 'default'
               : 'pointer',
             border:
-              props.disabled || props.wholeClickable
+              props.disabled || props.transparentBorders
                 ? null
                 : `1px solid ${theme.colors.muted}`,
             boxShadow:
@@ -262,7 +264,8 @@ const ProjectListing = props => {
                   variant: 'buttons.nofill',
                   backgroundColor: 'secondary',
                   color: 'background',
-                  mt: 2
+                  mt: 2,
+                  zIndex: 100
                 }}
                 onClick={() => {
                   props?.action()
@@ -270,20 +273,22 @@ const ProjectListing = props => {
               >
                 EDIT
               </Button>
-              <Text
-                sx={{
-                  variant: 'text.default',
-                  my: 2,
-                  mx: 'auto',
-                  cursor: 'pointer',
-                  color: 'primary'
-                }}
-                onClick={() => {
-                  !props.disabled && navigate(`/project/${props?.slug}`)
-                }}
-              >
-                Learn more{' '}
-              </Text>
+              <Link href={!props.disabled && `/project/${props?.slug}`}>
+                <a style={{ margin: 'auto', zIndex: 10 }}>
+                  <Text
+                    sx={{
+                      variant: 'text.default',
+                      cursor: 'pointer',
+                      color: 'primary'
+                    }}
+                    // onClick={() => {
+                    //   !props.disabled && router.push(`/project/${props?.slug}`)
+                    // }}
+                  >
+                    View Project{' '}
+                  </Text>
+                </a>
+              </Link>
             </AltCardContent>
           )}
           <CardContent>
@@ -303,10 +308,14 @@ const ProjectListing = props => {
                 WebkitBoxOrient: 'vertical'
               }}
             >
+              <RichTextViewer
+                content={props?.description
+                  ?.replace(/<img .*?>/g, '')
+                  .replace(/<iframe .*?>/g, '')}
+              />
               {
                 /* Description String */
-
-                props?.description
+                // props?.description
               }
             </Text>
           </CardContent>

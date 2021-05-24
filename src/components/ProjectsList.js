@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import {
   Box,
   Button,
@@ -12,13 +11,11 @@ import {
 } from 'theme-ui'
 import React, { useState } from 'react'
 import ProjectCard from './projectCard'
-import NoImage from '../images/no-image-available.jpg'
 import SearchIcon from '../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
-import PropTypes from 'prop-types'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import DropdownInput from '../components/dropdownInput'
-import theme from '../gatsby-plugin-theme-ui'
+import theme from '../utils/theme-ui'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import * as JsSearch from 'js-search'
 import DropIcon from '../images/svg/general/dropdown-arrow.svg'
@@ -35,7 +32,8 @@ export const OrderByDirection = {
   DESC: 'DESC'
 }
 
-const CreateLink = styled(Link)`
+const CreateLink = styled.a`
+  cursor: pointer;
   text-align: right;
   text-decoration: none;
   font-family: 'Red Hat Display', sans-serif;
@@ -191,7 +189,7 @@ const ProjectsList = props => {
     const categoryName = categoryList[category].toLowerCase()
 
     return searchedResults.filter(
-      o => o.categories.filter(c => c.name === categoryName).length > 0
+      o => o?.categories?.filter(c => c.name === categoryName).length > 0
     )
   }
 
@@ -217,13 +215,14 @@ const ProjectsList = props => {
     }
   ]
   const projectsFilteredSorted = projectsFiltered
+    ?.slice()
     ?.sort(sortFunctions[sortBy])
     ?.slice(0, limit)
 
   const loadMore = () => {
     setLimit(limit + 3)
   }
-  const hasMore = limit < projectsFiltered.length
+  const hasMore = limit < projectsFiltered?.length
 
   return (
     <>
@@ -234,12 +233,13 @@ const ProjectsList = props => {
           margin: '1.5em 0'
         }}
       >
-        <Text
-          style={{
-            width: '50%'
+        <Flex
+          sx={{
+            flexDirection: 'row',
+            alignItems: 'flex-end'
           }}
         >
-          <span
+          <Box
             sx={{
               variant: 'headings.h1',
               width: ['100%', null, null],
@@ -249,17 +249,19 @@ const ProjectsList = props => {
             }}
           >
             Projects{' '}
-          </span>
+          </Box>
           {totalCount && (
-            <span
+            <Text
               sx={{
-                variant: 'headings.h5',
+                variant: 'headings.h4',
                 color: 'bodyLight'
               }}
-            >{`(${totalCount})`}</span>
+            >{`(${totalCount})`}</Text>
           )}
-        </Text>
-        <CreateLink to='/create'>Create a project</CreateLink>
+        </Flex>
+        <Link href='/create'>
+          <CreateLink>Create a project</CreateLink>
+        </Link>
       </Flex>
       <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
@@ -366,7 +368,7 @@ const ProjectsList = props => {
               }}
             >
               <InfiniteScroll
-                dataLength={projectsFilteredSorted?.length} //This is important field to render the next data
+                dataLength={projectsFilteredSorted?.length || 0} //This is important field to render the next data
                 next={loadMore}
                 hasMore={hasMore}
                 loader={
@@ -434,7 +436,9 @@ const ProjectsList = props => {
                             name={project.title}
                             slug={project.slug}
                             donateAddress={project.donateAddress}
-                            image={project.image || NoImage}
+                            image={
+                              project.image || '/images/no-image-available.jpg'
+                            }
                             raised={project.balance}
                             project={project}
                           />
@@ -444,12 +448,7 @@ const ProjectsList = props => {
               </InfiniteScroll>
               {fromHomePage && (
                 <Flex style={{ justifyContent: 'center' }}>
-                  <Link
-                    to='/projects'
-                    sx={{
-                      textAlign: 'center'
-                    }}
-                  >
+                  <Link href='/projects'>
                     <Button
                       sx={{
                         variant: 'buttons.nofillGray',
@@ -457,7 +456,6 @@ const ProjectsList = props => {
                         fontSize: 14,
                         mb: '3rem'
                       }}
-                      onClick={() => loadMore()}
                     >
                       Show more Projects
                     </Button>
@@ -472,10 +470,4 @@ const ProjectsList = props => {
   )
 }
 
-ProjectsList.propTypes = {
-  projects: PropTypes.array.isRequired,
-  categories: PropTypes.array.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  selectOrderByField: PropTypes.func.isRequired
-}
 export default ProjectsList

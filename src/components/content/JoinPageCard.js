@@ -1,9 +1,9 @@
 import React from 'react'
 import { Heading, Grid, Button, Card, Text } from 'theme-ui'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import styled from '@emotion/styled'
 
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui/index'
 
 const CardContainer = styled(Card)`
   background-color: ${theme.colors.background};
@@ -38,12 +38,12 @@ const Logo = styled.img`
 
 const JoinChatCard = ({ data }) => (
   <>
-    {data.map(edges => {
+    {data?.map(join => {
       return (
-        <CardContainer key={edges.node.id + '_card'}>
+        <CardContainer key={join.platformLogo.sys.id + '_card'}>
           <Background
-            key={edges.node.id + '_div'}
-            src={edges.node.cardBackgroundImage.file.url}
+            key={join.platformLogo.sys.id + '_div'}
+            src={join.cardBackgroundImage.fields.file.url}
             style={{ width: '70%' }}
             alt=''
           />
@@ -59,9 +59,9 @@ const JoinChatCard = ({ data }) => (
                   background: 'none',
                   position: 'relative'
                 }}
-                key={edges.node.id + '_heading'}
+                key={join.platformLogo.sys.id + '_heading'}
               >
-                {edges.node.platformTitle}
+                {join.platformTitle}
               </Heading>
 
               <CardContent>
@@ -78,18 +78,12 @@ const JoinChatCard = ({ data }) => (
                   {
                     /* Description String */
 
-                    edges.node.descriptionText
+                    join.descriptionText
                   }
                 </Text>
               </CardContent>
-              <Link to={edges.node.onboardingLink}>
-                <Button
-                  mt={2}
-                  mb={'2rem'}
-                  ml={'1rem'}
-                  sx={{
-                    variant: 'buttons.default'
-                  }}
+              <Link href={join.onboardingLink}>
+                <a
                   style={{
                     alignSelf: 'center',
                     minHeight: '28px',
@@ -97,13 +91,22 @@ const JoinChatCard = ({ data }) => (
                     position: 'relative'
                   }}
                 >
-                  Join us on {edges.node.platformTitle}
-                </Button>
+                  <Button
+                    mt={2}
+                    mb={'2rem'}
+                    ml={'1rem'}
+                    sx={{
+                      variant: 'buttons.default'
+                    }}
+                  >
+                    Join us on {join.platformTitle}
+                  </Button>
+                </a>
               </Link>
             </div>
             <Logo
-              src={edges.node.platformLogo.file.url}
-              alt={edges.node.platformTitle + ' logo'}
+              src={join.platformLogo.fields.file.url}
+              alt={join.platformTitle + ' logo'}
               width='90px'
             />
           </Grid>

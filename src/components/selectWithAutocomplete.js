@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import Select from 'react-select'
-import { Text, Flex } from 'theme-ui'
+import { Image, Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../gatsby-plugin-theme-ui/index'
-import iconManifest from '../../node_modules/cryptocurrency-icons/manifest.json'
-import ETHIcon from '../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
+import theme from '../utils/theme-ui/index'
+
+// TODO: FIX ICONS
+import iconManifest from '../../public/assets/cryptocurrency-icons/manifest.json'
+const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 const SelectWithAutocomplete = ({
   content,
@@ -40,26 +42,24 @@ const SelectWithAutocomplete = ({
       const found = iconManifest?.find(
         i => i?.symbol === value?.symbol?.toUpperCase()
       )
-      if (found) {
-        import(
-          `../../node_modules/cryptocurrency-icons/32/color/${value?.symbol?.toLowerCase() ||
-            'eth'}.png`
-        ).then(importedImg => {
-          img = importedImg?.default
-          setIcon(img)
-        })
-      }
 
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <img
-            src={icon || `/assets/tokens/${value?.symbol?.toUpperCase()}.png`}
+          <Image
+            src={
+              found
+                ? `/assets/cryptocurrency-icons/32/color/${
+                    value?.symbol?.toLowerCase() || 'eth'
+                  }.png`
+                : `/assets/tokens/${value?.symbol?.toUpperCase()}.png`
+            }
             alt={value?.symbol}
             onError={ev => {
               ev.target.src = ETHIcon
               ev.target.onerror = null
             }}
-            style={{ width: '32px', height: '32px' }}
+            width={'32px'}
+            height={'32px'}
           />
           <Text variant='text.default' color='secondary' sx={{ pl: 2 }}>
             {`${value?.symbol}`}

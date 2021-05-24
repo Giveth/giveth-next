@@ -1,23 +1,16 @@
-/** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { navigate, Link } from 'gatsby'
-import Loadable from '@loadable/component'
-import { IconButton, Text, jsx, Flex } from 'theme-ui'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { Box, IconButton, Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui'
 import Logo from './content/Logo'
-import { useLocation } from '@reach/router'
 import Headroom from 'react-headroom'
 import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
-
-// import graphics
-import iconVerticalLine from '../images/icon-vertical-line.svg'
-import iconSearch from '../images/icon-search.svg'
-import decoratorCloud1 from '../images/decorator-cloud1.svg'
-import decoratorCloud2 from '../images/decorator-cloud2.svg'
 
 const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;
@@ -73,6 +66,7 @@ const HeaderSpan = styled.nav`
 `
 
 const LogoSpan = styled.span`
+  cursor: pointer;
   display: grid;
   grid-template-columns: repeat(2, auto);
   align-items: center;
@@ -123,7 +117,7 @@ const UserSpan = styled.span`
   }
 `
 
-const NavLink = styled(Link)`
+const NavLink = styled(Box)`
   font-family: ${theme.fonts.heading}, sans-serif;
   font-weight: 500;
   line-height: 21px;
@@ -158,21 +152,22 @@ const Decorator = styled.div`
   position: absolute;
 `
 
-const Login = Loadable(() => import('./torus/login'))
-const siteId = process.env.GATSBY_SITE_ID
+const Login = dynamic(() => import('./torus/login'))
+
+const siteId = process.env.NEXT_PUBLIC_SITE_ID
 const projectSearch = process.env.PROJECT_SEARCH
 
 const Header = ({ siteTitle, isHomePage }) => {
-  const location = useLocation()
+  const router = useRouter()
   const { isLoggedIn, user } = useWallet()
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
   const [navHidden, setHideNavbar] = useState(false)
-  const pathname = location?.pathname?.split('/')[1]
+  const pathname = router.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -183,7 +178,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -193,7 +188,7 @@ const Header = ({ siteTitle, isHomePage }) => {
     if (!user?.name || !user?.email || user.email === '') {
       return triggerPopup('IncompleteProfile')
     }
-    navigate('/create')
+    router.push('/create')
   }
 
   return (
@@ -209,7 +204,7 @@ const Header = ({ siteTitle, isHomePage }) => {
           {!isMobile ? (
             <Decorator>
               <img
-                src={decoratorCloud1}
+                src={'/images/decorator-cloud1.svg'}
                 alt=''
                 sx={{
                   position: 'absolute',
@@ -219,7 +214,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                 className='hide'
               />
               <img
-                src={decoratorCloud2}
+                src={'/images/decorator-cloud2.svg'}
                 alt=''
                 sx={{
                   position: 'absolute',
@@ -230,19 +225,14 @@ const Header = ({ siteTitle, isHomePage }) => {
               />
             </Decorator>
           ) : null}
-          <Link
-            to='/'
-            sx={{
-              textDecoration: 'none'
-            }}
-          >
+          <Link href='/'>
             {isMobile ? (
               <Logo
-                siteId={process.env.GATSBY_SITE_ID}
+                siteId={process.env.NEXT_PUBLIC_SITE_ID}
                 alt=''
                 width='40px'
                 height='40px'
-                sx={{ mr: 3 }}
+                style={{ mr: 3 }}
               />
             ) : (
               <LogoSpan
@@ -250,7 +240,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                   hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''
                 }
               >
-                <Logo alt='' />
+                <Logo alt='' width='100px' height='100px' />
                 {siteId === 'giveth' ? (
                   <Text
                     pl={3}
@@ -262,7 +252,9 @@ const Header = ({ siteTitle, isHomePage }) => {
                       fontWeight: 'medium',
                       textDecoration: 'none',
                       lineHeights: 'tallest',
-                      letterSpacing: '0.32px'
+                      letterSpacing: '0.32px',
+                      cursor: 'pointer',
+                      zIndex: 3
                     }}
                   >
                     GIVETH
@@ -276,26 +268,23 @@ const Header = ({ siteTitle, isHomePage }) => {
 
           <MiddleSpan>
             <NavLink
-              to='/'
               sx={{
                 display: ['none', 'block', 'block'],
                 color: isHomePage ? 'primary' : 'secondary'
               }}
             >
-              Home
+              <Link href='/'>Home</Link>
             </NavLink>
             <NavLink
-              to='/join'
               sx={{ color: pathname === 'join' ? 'primary' : 'secondary' }}
             >
-              Community
+              <Link href='/join'>Community</Link>
             </NavLink>
-            {/* <NavLink to='/causes'>Causes</NavLink> */}
+            {/* <NavLink href='/causes'>Causes</NavLink> */}
             <NavLink
-              to='/projects'
               sx={{ color: pathname === 'projects' ? 'primary' : 'secondary' }}
             >
-              Projects
+              <Link href='/projects'>Projects</Link>
             </NavLink>
           </MiddleSpan>
 
@@ -304,21 +293,17 @@ const Header = ({ siteTitle, isHomePage }) => {
               <Flex>
                 {pathname !== 'projects' && (
                   <CreateLink onClick={goCreate}>Create a project</CreateLink>
-                  // <NavLink
-                  //   to='/create'
-                  //   sx={{ color: 'secondary', textTransform: 'upperCase' }}
-                  // >
-                  //   Create a project
-                  // </NavLink>
                 )}
                 {projectSearch === 'true' && (
                   <IconButton>
-                    <img src={iconSearch} alt='' />
+                    <img src={'/images/icon-search.svg'} alt='' />
                   </IconButton>
                 )}
               </Flex>
             )}
-            <img src={iconVerticalLine} alt='' />
+            {pathname !== 'projects' && (
+              <img src={'/images/icon-vertical-line.svg'} alt='' />
+            )}
             <Login />
           </UserSpan>
         </HeaderSpan>

@@ -1,7 +1,6 @@
-/** @jsx jsx */
-import { jsx, Text, Flex, Box } from 'theme-ui'
+import { jsx, Flex } from 'theme-ui'
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'
 import MyProjects from './myProjects'
@@ -58,8 +57,9 @@ const AccountBody = props => {
   const { query, setQuery, projectsList, isSSR, userDonations } = props
 
   return (
-    <Box
+    <Flex
       sx={{
+        flexDirection: 'column',
         width: ['100%', null, '70%'],
         mt: ['100px', '140px', '140px']
       }}
@@ -70,7 +70,7 @@ const AccountBody = props => {
         isSSR={isSSR}
         userDonations={userDonations}
       />
-    </Box>
+    </Flex>
   )
 }
 export default AccountBody

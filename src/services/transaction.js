@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 import Web3 from 'web3'
 import getSigner from './ethersSigner'
 
-export async function send (
+export async function send(
   toAddress,
   contractAddress, // if none is set, it defaults to ETH
   subtotal,
@@ -34,7 +34,7 @@ export async function send (
         contractAddress,
         signer
       )
-
+      console.log('look here', { signerTransaction })
       hash = signerTransaction?.hash
     }
     if (!hash) throw new Error('Transaction failed')
@@ -47,8 +47,8 @@ export async function send (
   }
 }
 
-export function notify (hash) {
-  if (process.env.GATSBY_NETWORK === 'ropsten') return
+export function notify(hash) {
+  if (process.env.NEXT_PUBLIC_NETWORK === 'ropsten') return
 
   notify.config({ desktopPosition: 'topRight' })
   const { emitter } = notify.hash(hash)
@@ -72,12 +72,12 @@ export function notify (hash) {
   })
 }
 
-export async function getHashInfo (txHash, isXDAI) {
+export async function getHashInfo(txHash, isXDAI) {
   try {
     const web3 = new Web3(
       isXDAI
-        ? process.env.GATSBY_XDAI_NODE_HTTP_URL
-        : process.env.GATSBY_ETHEREUM_NODE
+        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
     const txInfo = await web3.eth.getTransaction(txHash)
     console.log({ txInfo })
@@ -88,56 +88,58 @@ export async function getHashInfo (txHash, isXDAI) {
   }
 }
 
-export async function getTxFromHash (transactionHash, isXDAI) {
+export async function getTxFromHash(transactionHash, isXDAI) {
   try {
     const web3 = new Web3(
       isXDAI
-        ? process.env.GATSBY_XDAI_NODE_HTTP_URL
-        : process.env.GATSBY_ETHEREUM_NODE
+        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
-    console.log({ web3 })
     const tx = await web3.eth.getTransaction(transactionHash)
     return tx
   } catch (error) {
-    console.log({ error })
     return false
   }
 }
 
-export async function confirmEtherTransaction (
+export async function confirmEtherTransaction(
   transactionHash,
   callbackFunction,
   count = 0,
   isXDAI
 ) {
-  const web3 = new Web3(
-    isXDAI
-      ? process.env.GATSBY_XDAI_NODE_HTTP_URL
-      : process.env.GATSBY_ETHEREUM_NODE
-  )
-  const MAX_INTENTS = 20 // one every second
-  web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
-    if (err) {
-      throw Error(err)
-    }
-
-    if (receipt !== null) {
-      // Transaction went through
-      if (callbackFunction) {
-        callbackFunction({ ...receipt, tooSlow: false })
+  try {
+    const web3 = new Web3(
+      isXDAI
+        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
+    )
+    const MAX_INTENTS = 20 // one every second
+    web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
+      if (err) {
+        return callbackFunction({ ...receipt, error: err })
       }
-    } else if (count >= MAX_INTENTS) {
-      callbackFunction({ tooSlow: true })
-    } else {
-      // Try again in 1 second
-      setTimeout(function () {
-        confirmEtherTransaction(
-          transactionHash,
-          callbackFunction,
-          ++count,
-          isXDAI
-        )
-      }, 1000)
-    }
-  })
+
+      if (receipt !== null) {
+        // Transaction went through
+        if (callbackFunction) {
+          callbackFunction({ ...receipt, tooSlow: false })
+        }
+      } else if (count >= MAX_INTENTS) {
+        callbackFunction({ tooSlow: true })
+      } else {
+        // Try again in 1 second
+        setTimeout(function () {
+          confirmEtherTransaction(
+            transactionHash,
+            callbackFunction,
+            ++count,
+            isXDAI
+          )
+        }, 1000)
+      }
+    })
+  } catch (error) {
+    return callbackFunction({ error })
+  }
 }

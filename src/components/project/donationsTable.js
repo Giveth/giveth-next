@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import React from 'react'
 import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
@@ -7,7 +6,7 @@ import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
-import theme from '../../gatsby-plugin-theme-ui'
+import theme from '../../utils/theme-ui'
 import {
   Avatar,
   Badge,
@@ -368,14 +367,15 @@ const DonationsTable = ({ donations }) => {
           flexDirection: ['column-reverse', 'column-reverse', 'row']
         }}
       >
-        <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
+        {/* Removing this as we don't have fiat donations yet */}
+        {/* <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
           <DropdownInput
             options={options}
             current={filter}
             setCurrent={i => setFilter(i)}
           />
-        </FilterInput>
-        <SearchInput sx={{ width: ['100%', null, '65%'], mb: [10, 10, 0] }}>
+        </FilterInput> */}
+        <SearchInput sx={{ width: ['100%', null, '100%'], mb: [10, 10, 0] }}>
           <Input
             defaultValue=''
             placeholder='Search Donations'

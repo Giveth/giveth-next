@@ -1,6 +1,5 @@
-/** @jsx jsx */
 import { jsx, Flex, Image, Grid, Text, Box, Button, Heading } from 'theme-ui'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui/index'
 import React, { useState, useEffect } from 'react'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
@@ -107,13 +106,13 @@ const ArrowUp = styled(AiOutlineDown)`
   padding: 0.1rem;
 `
 
-const ContentFaq = ({ data, isopen }) => {
+const ContentFaq = ({ faqs, isopen }) => {
   const [hash, setHash] = useState('')
-
+  console.log({ faqs })
   const richTextOptions = {
     renderNode: {
       [BLOCKS.EMBEDDED_ASSET]: node => {
-        const { title, description, file } = node.data.target.fields
+        const { title, description, file } = node.fields
         const mimeType = file['en-US'].contentType
         const mimeGroup = mimeType.split('/')[0]
 
@@ -149,39 +148,40 @@ const ContentFaq = ({ data, isopen }) => {
 
   useEffect(() => {
     setHash((typeof window !== 'undefined' && window.location.hash) || '')
-    console.log(hash)
   }, [hash])
+
+  const categories = faqs?.map(i => i?.category?.fields)
 
   return (
     <ContentContainer>
       <Collapsible
         trigger={
           <QuestionSpan>
-            <Category>{data[0].node.category.category}</Category>
+            <Category>{categories[0].category}</Category>
             <ArrowDown />
           </QuestionSpan>
         }
         triggerWhenOpen={
           <QuestionSpan>
-            <Category>{data[0].node.category.category}</Category>
+            <Category>{categories[0].category}</Category>
             <ArrowUp />
           </QuestionSpan>
         }
         open={isopen}
       >
-        {data.map(edges => (
-          <ContentItem id={edges.node.linkId} key={edges.node.id}>
-            {hash === `#${edges.node.linkId}` ? (
+        {faqs.map(edges => (
+          <ContentItem id={edges.linkId} key={edges.linkId}>
+            {hash === `#${edges.linkId}` ? (
               <Collapsible
                 trigger={
                   <QuestionSpan>
-                    <Question>{edges.node.question}</Question>
+                    <Question>{edges.question}</Question>
                     <ArrowDown />
                   </QuestionSpan>
                 }
                 triggerWhenOpen={
                   <QuestionSpan>
-                    <Question>{edges.node.question}</Question>
+                    <Question>{edges.question}</Question>
                     <ArrowUp />
                   </QuestionSpan>
                 }
@@ -190,20 +190,20 @@ const ContentFaq = ({ data, isopen }) => {
                 <LongDescription
                   sx={{ variant: 'text.default', color: 'colors.secondary' }}
                 >
-                  {documentToReactComponents(edges.node.answer.json)}
+                  {documentToReactComponents(edges?.answer.content[0])}
                 </LongDescription>
               </Collapsible>
             ) : (
               <Collapsible
                 trigger={
                   <QuestionSpan>
-                    <Question>{edges.node.question}</Question>
+                    <Question>{edges.question}</Question>
                     <ArrowDown />
                   </QuestionSpan>
                 }
                 triggerWhenOpen={
                   <QuestionSpan>
-                    <Question>{edges.node.question}</Question>
+                    <Question>{edges.question}</Question>
                     <ArrowUp />
                   </QuestionSpan>
                 }
@@ -213,7 +213,7 @@ const ContentFaq = ({ data, isopen }) => {
                   sx={{ variant: 'text.default', color: 'colors.secondary' }}
                 >
                   {documentToReactComponents(
-                    edges.node.answer.json,
+                    edges?.answer.content[0],
                     richTextOptions
                   )}
                 </LongDescription>

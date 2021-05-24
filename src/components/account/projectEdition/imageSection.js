@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Grid, Box, Image, Text } from 'theme-ui'
+import NextImage from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { toBase64 } from '../../../utils'
 import styled from '@emotion/styled'
-import theme from '../../../gatsby-plugin-theme-ui'
+import theme from '../../../utils/theme-ui'
 
 import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
-import placeHolder from '../../../images/placeholder.png'
 
 const Selection = styled(Box)`
   cursor: pointer;
@@ -22,14 +22,16 @@ const Selection = styled(Box)`
   background-color: ${theme.colors.background};
 `
 
-function ImageSection({ image, register }) {
+function ImageSection({ image, register, setValue }) {
   const [displayImage, setDisplayImage] = useState(null)
+  const [fullImage, setFullImage] = useState(null)
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
     onDrop: async acceptedFile => {
       try {
+        setFullImage(acceptedFile)
         setDisplayImage(await toBase64(acceptedFile[0]))
       } catch (error) {
         console.log({ error })
@@ -40,6 +42,10 @@ function ImageSection({ image, register }) {
   useEffect(() => {
     setDisplayImage(image)
   }, [image])
+
+  useEffect(() => {
+    !!displayImage && setValue('editImage', displayImage)
+  }, [displayImage])
 
   const ProjectImage = type => {
     return (
@@ -87,12 +93,16 @@ function ImageSection({ image, register }) {
             name='editImage'
             type='hidden'
             value={displayImage}
-            ref={register}
+            {...register('editImage')}
+            // ref={register}
           />
           {displayImage === undefined ? (
-            <Image
-              src={placeHolder}
-              sx={{ objectFit: 'cover', maxHeight: '150px' }}
+            <NextImage
+              src={'/images/placeholder.png'}
+              width='100%'
+              height='100%'
+              objectFit='cover'
+              // sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
           ) : displayImage?.startsWith('data:') ||
             displayImage?.startsWith('http') ? (

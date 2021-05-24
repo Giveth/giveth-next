@@ -1,14 +1,12 @@
-/** @jsx jsx */
 import React from 'react'
-import { Flex, Box, Text, jsx } from 'theme-ui'
+import dynamic from 'next/dynamic'
+import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui'
 import OnlyFiat from './onlyFiat'
 import Success from './success'
 import ProjectListing from '../projectListing'
-
-import { useApolloClient } from '@apollo/client'
-import { FETCH_PROJECT } from '../../apollo/gql/projects'
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 import {
   FacebookShareButton,
@@ -18,9 +16,8 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
-import testImg from '../../images/logos/giveth-logo.jpg'
 
-const OnlyCrypto = React.lazy(() => import('./onlyCrypto'))
+const OnlyCrypto = dynamic(() => import('./onlyCrypto'), { ssr: false })
 
 // CONSTANTS
 
@@ -36,10 +33,19 @@ const RIGHT_BOX_STYLE = {
   borderBottomRightRadius: '0.2rem'
 }
 
-const ProjectContainer = styled.div`
+const Container = styled(Flex)`
+  flex-direction: row;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+`
+
+const ProjectContainer = styled(Flex)`
   width: 25vw;
+  flex-direction: column;
   margin: 0 3.125rem 0 0;
-  @media (max-width: 800px) {
+  align-items: center;
+  @media (max-width: 1100px) {
     width: 100%;
   }
 `
@@ -54,11 +60,14 @@ const Payment = styled.div`
   }
 `
 
-const Share = styled.div``
+const Share = styled.div`
+  align-items: center;
+`
 
 const SocialIcons = styled.div`
   display: flex;
   margin: 1rem 0;
+  justify-content: center;
   * {
     margin: 0 0.3rem;
   }
@@ -86,7 +95,8 @@ const Options = styled.div`
   }
 `
 
-const OptionTypesBox = styled(Box)`
+const OptionTypesBox = styled(Flex)`
+  flex-direction: column;
   cursor: pointer;
   width: 50%;
   align-items: center;
@@ -105,25 +115,12 @@ const DonateIndex = props => {
   const [isAfterPayment, setIsAfterPayment] = React.useState(null)
   const [paymentSessionId, setPaymentSessionId] = React.useState(null)
   const [isCancelled, setIsCancelled] = React.useState(null)
-  const client = useApolloClient()
+  const { currentChainId } = useWallet()
 
   React.useEffect(() => {
-    const checkProject = async () => {
-      // GET PROJECT -- mainly to check status client side
-      const { data: projectReFetched } = await client.query({
-        query: FETCH_PROJECT,
-        variables: { id: project?.id },
-        fetchPolicy: 'network-only'
-      })
-      if (
-        projectReFetched?.project?.length > 0 &&
-        projectReFetched.project[0].status?.id !== '5'
-      ) {
-        setIsCancelled(true)
-      }
+    if (project?.status?.id !== '5') {
+      setIsCancelled(true)
     }
-    // Check type
-    checkProject()
     const search = getUrlParams(props?.location?.search)
     setIsAfterPayment(search?.success === 'true')
     if (search?.sessionId) setPaymentSessionId(search?.sessionId)
@@ -131,8 +128,8 @@ const DonateIndex = props => {
 
   // TODO: Implement this on a utils file
   function getUrlParams(search) {
-    const hashes = search.slice(search.indexOf('?') + 1).split('&')
-    return hashes.reduce((params, hash) => {
+    const hashes = search?.slice(search.indexOf('?') + 1).split('&')
+    return hashes?.reduce((params, hash) => {
       const [key, val] = hash.split('=')
       return Object.assign(params, { [key]: decodeURIComponent(val) })
     }, {})
@@ -143,9 +140,7 @@ const DonateIndex = props => {
 
     const ShowPaymentOption = () => {
       return paymentType === CRYPTO && !isSSR ? (
-        <React.Suspense fallback={<div />}>
-          <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
-        </React.Suspense>
+        <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
       ) : (
         <OnlyFiat project={project} />
       )
@@ -202,8 +197,8 @@ const DonateIndex = props => {
   }
 
   const ShareIcons = ({ message, centered }) => {
-    const shareTitle = `Make a donation today to ${project?.title}!`
-    const url = location.href
+    const shareTitle = `Check out on @Givethio`
+    const url = location?.href
 
     return (
       <Share
@@ -254,14 +249,15 @@ const DonateIndex = props => {
 
   if (isAfterPayment || hashSent) {
     return (
-      <>
+      <Flex sx={{ flexDirection: ['column', 'column', 'row'] }}>
         <ProjectContainer>
           <ProjectListing
             wholeClickable
+            transparentBorders
             project={project}
             name={project?.title}
             description={project?.description}
-            image={project?.image || testImg}
+            image={project?.image || '/images/logos/giveth-logo.jpg'}
             raised={1223}
             category={project?.categories || 'Blockchain 4 Good'}
             listingId='key1'
@@ -269,24 +265,29 @@ const DonateIndex = props => {
           />
         </ProjectContainer>
         <Payment>
-          <Success sessionId={paymentSessionId} hash={hashSent} />
+          <Success
+            sessionId={paymentSessionId}
+            hash={hashSent}
+            currentChainId={currentChainId}
+          />
           <div style={{ margin: '3rem 0', zIndex: 2 }}>
-            <ShareIcons message='Share this with your friends!' />
+            <ShareIcons message='Share this with your friends!' centered />
           </div>
         </Payment>
-      </>
+      </Flex>
     )
   }
 
   return (
-    <Flex sx={{ flexDirection: 'row' }}>
+    <Container>
       <ProjectContainer>
         <ProjectListing
           wholeClickable
+          transparentBorders
           name={project?.title}
           project={project}
           description={project?.description}
-          image={project?.image || testImg}
+          image={project?.image || '/images/logos/giveth-logo.jpg'}
           raised={1223}
           categories={project?.categories}
           listingId='key1'
@@ -297,7 +298,7 @@ const DonateIndex = props => {
       <Payment>
         <PaymentOptions />
       </Payment>
-    </Flex>
+    </Container>
   )
 }
 

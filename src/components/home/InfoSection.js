@@ -1,18 +1,9 @@
-/** @jsx jsx */
-import { Link } from 'gatsby'
+import Link from 'next/link'
+import NextImage from 'next/image'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Button, Image, Text, jsx } from 'theme-ui'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import { Grid, Box, Flex, Image, Button, Text, jsx } from 'theme-ui'
+import theme from '../../utils/theme-ui'
 import styled from '@emotion/styled'
-
-// import graphics
-import decoratorCloud1 from '../../images/decorator-cloud1.svg'
-import decoratorCloud2 from '../../images/decorator-cloud2.svg'
-import decoratorFizzysquare from '../../images/decorator-fizzy-square-rotated.svg'
-import DecoratorAltruistic from '../../images/svg/general/decorators/a.svg'
-import DecoratorDecentralized from '../../images/svg/general/decorators/b.svg'
-import DecoratorCommunity from '../../images/svg/general/decorators/c.svg'
-import decoratorPuzzleguy from '../../images/people-puzzle.svg'
 
 const Main = styled(Grid)`
   position: relative;
@@ -49,8 +40,9 @@ const InfoSection = ({ content }) => {
         mb: ['2rem', 0, 0]
       }}
     >
-      <Box
+      <Flex
         sx={{
+          flexDirection: 'column',
           justifySelf: 'center',
           textAlign: 'center',
           pt: '100px',
@@ -59,7 +51,7 @@ const InfoSection = ({ content }) => {
         }}
       >
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
-          {content.infoHead}
+          {content?.infoHead}
         </Text>
         <Text
           pb={5}
@@ -68,7 +60,7 @@ const InfoSection = ({ content }) => {
             color: 'background'
           }}
         >
-          {content.infoSubtitle}
+          {content?.infoSubtitle}
         </Text>
         <a
           href='https://medium.com/giveth/the-future-of-giving-is-crowdfunding-the-commons-ac265e3010b8'
@@ -83,19 +75,26 @@ const InfoSection = ({ content }) => {
               background: 'unset',
               px: '3rem',
               py: '0.875rem',
-              mb: '6rem'
+              mb: '6rem',
+              borderSize: '2px',
+              borderStyle: 'solid',
+              borderColor: 'colors.bodyLight'
             }}
           >
-            {content.infoButtonText}
+            {content?.infoButtonText}
           </Button>
         </a>
-      </Box>
+      </Flex>
       <Grid
         columns={[1, 3, 3]}
         sx={{ justifyItems: 'center', textAlign: 'center' }}
       >
-        <Box sx={{ maxWidth: '320px' }}>
-          <DecoratorDecentralized />
+        <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
+          <NextImage
+            src='/images/svg/general/decorators/b.svg'
+            width='100%'
+            height='100%'
+          />
           <Text
             sx={{
               variant: 'headings.h4',
@@ -103,14 +102,18 @@ const InfoSection = ({ content }) => {
               py: '1.5rem'
             }}
           >
-            {content.feature2}
+            {content?.feature2}
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            {content.feature2Text}
+            {content?.feature2Text}
           </Text>
-        </Box>
-        <Box sx={{ maxWidth: '320px' }}>
-          <DecoratorAltruistic />
+        </Flex>
+        <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
+          <NextImage
+            src='/images/svg/general/decorators/a.svg'
+            width='100%'
+            height='100%'
+          />
           <Text
             sx={{
               variant: 'headings.h4',
@@ -118,7 +121,7 @@ const InfoSection = ({ content }) => {
               py: '1.5rem'
             }}
           >
-            {content.feature1}
+            {content?.feature1}
           </Text>
           <Text
             sx={{
@@ -126,11 +129,15 @@ const InfoSection = ({ content }) => {
               color: 'background'
             }}
           >
-            {content.feature1Text}
+            {content?.feature1Text}
           </Text>
-        </Box>
-        <Box sx={{ maxWidth: '320px' }}>
-          <DecoratorCommunity />
+        </Flex>
+        <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
+          <NextImage
+            src='/images/svg/general/decorators/c.svg'
+            width='100%'
+            height='100%'
+          />
           <Text
             sx={{
               variant: 'headings.h4',
@@ -138,14 +145,22 @@ const InfoSection = ({ content }) => {
               py: '1.5rem'
             }}
           >
-            {content.feature3}
+            {content?.feature3}
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            {content.feature3Text}
+            {content?.feature3Text}
           </Text>
-        </Box>
+        </Flex>
       </Grid>
-      <Box pt={4} pb={6} sx={{ justifySelf: 'center', textAlign: 'center' }}>
+      <Flex
+        pt={4}
+        pb={6}
+        sx={{
+          flexDirection: 'column',
+          justifySelf: 'center',
+          textAlign: 'center'
+        }}
+      >
         <a
           href='https://giveth.io/join'
           target='_blank'
@@ -158,21 +173,27 @@ const InfoSection = ({ content }) => {
               letterSpacing: 'more'
             }}
           >
-            {content.featureCta}
+            {content?.featureCta}
           </Button>
         </a>
-      </Box>
-      <Box sx={{ justifySelf: 'center', textAlign: 'center' }}>
+      </Flex>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          justifySelf: 'center',
+          textAlign: 'center'
+        }}
+      >
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
-          {content.infoHead2}
+          {content?.infoHead2}
         </Text>
         <Text
           pb={5}
           sx={{ variant: 'text.large', maxWidth: '580px', color: 'background' }}
         >
-          {content.infoSubtitle2}
+          {content?.infoSubtitle2}
         </Text>
-      </Box>
+      </Flex>
       <Grid gap={1} columns={[1, 3, 3]} sx={{ justifyItems: 'center' }}>
         <Grid
           p={2}
@@ -186,16 +207,16 @@ const InfoSection = ({ content }) => {
           }}
         >
           <Text sx={{ variant: 'headings.h4', color: 'background' }}>
-            {content.userType1Title}
+            {content?.userType1Title}
           </Text>
           <Text pb={3} sx={{ variant: 'text.paragraph', color: 'background' }}>
             Create a project and get donations in crypto.{' '}
-            <Link to='/create' className='intextlink'>
+            <Link href='/create' className='intextlink'>
               Create your project
             </Link>{' '}
             and start raising funds.
           </Text>
-          <Link to='/create'>
+          <Link href='/create'>
             <Button
               sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}
             >
@@ -207,7 +228,7 @@ const InfoSection = ({ content }) => {
           {isMobile ? (
             <div sx={{ height: '20px' }} />
           ) : (
-            <Image src={decoratorPuzzleguy} alt='' />
+            <Image src={'/images/people-puzzle.svg'} alt='' />
           )}
         </Box>
         <Grid
@@ -226,12 +247,12 @@ const InfoSection = ({ content }) => {
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
             Use our platform to give donations to a cause or a project. Easily
             donate to the{' '}
-            <Link to='/projects' className='intextlink'>
+            <Link href='/projects' className='intextlink'>
               project
             </Link>{' '}
             you most care about.
           </Text>
-          <Link to='/projects'>
+          <Link href='/projects'>
             <Button
               sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}
             >
@@ -243,7 +264,7 @@ const InfoSection = ({ content }) => {
       {!isMobile ? (
         <Decorator>
           <img
-            src={decoratorCloud1}
+            src={'/images/decorator-cloud1.svg'}
             alt=''
             sx={{
               position: 'absolute',
@@ -253,7 +274,7 @@ const InfoSection = ({ content }) => {
             className='semitransparent'
           />
           <img
-            src={decoratorCloud2}
+            src={'/images/decorator-cloud2.svg'}
             alt=''
             sx={{
               position: 'absolute',
@@ -263,7 +284,7 @@ const InfoSection = ({ content }) => {
             className='semitransparent'
           />
           <img
-            src={decoratorCloud2}
+            src={'/images/decorator-cloud2.svg'}
             alt=''
             sx={{
               position: 'absolute',
@@ -273,7 +294,7 @@ const InfoSection = ({ content }) => {
             className='semitransparent'
           />
           <img
-            src={decoratorFizzysquare}
+            src={'/images/decorator-fizzy-square-rotated.svg'}
             alt=''
             sx={{
               position: 'relative',

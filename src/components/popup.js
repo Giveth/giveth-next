@@ -1,18 +1,12 @@
-import React from 'react'
-import { Box, Image, Button, Flex, Text } from 'theme-ui'
+import React, { useState } from 'react'
+import { Box, Button, Image, Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import Modal from './modal'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 import LoginModal from '../components/torus/loginModal'
 import CopyToClipboard from '../components/copyToClipboard'
-import decoratorClouds from '../images/decorator-clouds.svg'
-import exclamationIcon from '../images/exclamation.png'
-import ExclamationIcon from '../images/decorator-exclamation.png'
-import WorriedWoman from '../images/worried_woman.png'
-import noFundsBg from '../images/no_funds.png'
-import IncompleteProfileImg from '../images/incomplete_profile.png'
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -21,19 +15,6 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
-import metamaskLogo from '../images/logos/metamask-fox.svg'
-import torusLogo from '../images/logos/torus.svg'
-
-const LongBtn = styled(Flex)`
-  flex-direction: row;
-  cursor: pointer;
-  justify-content: space-evenly;
-  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
-  align-items: center;
-  width: 80%;
-  padding: 15px;
-  margin: 20px 0;
-`
 
 function ChangeNetworkPopup({ close }) {
   return (
@@ -58,7 +39,10 @@ function ChangeNetworkPopup({ close }) {
       >
         Close
       </Text>
-      <Image src={ExclamationIcon} sx={{ alignSelf: 'center' }} />
+      <Image
+        src={'/images/decorator-exclamation.png'}
+        style={{ alignSelf: 'center' }}
+      />
       <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
         <Text color='secondary' variant='headings.h4' sx={{ mx: 4, pt: 4 }}>
           Please change the Network
@@ -90,21 +74,22 @@ function ChangeNetworkPopup({ close }) {
         Ok, try again
       </Button>
       <Image
-        src={WorriedWoman}
-        sx={{ position: 'absolute', left: -4, bottom: 0 }}
+        src={'/images/worried_woman.png'}
+        style={{ position: 'absolute', left: -4, bottom: 0 }}
       />
     </Flex>
   )
 }
 
-function WelcomeLoggedOutPopup({ close }) {
+function WelcomeLoggedOutPopup(props) {
+  const { value, clearPopup } = props
   const { isLoggedIn, login } = useWallet()
-
   if (isLoggedIn) {
-    close()
     return null
   }
-  return <LoginModal isOpen={true} close={close} login={login} />
+  return (
+    <LoginModal isOpen={value} close={() => clearPopup(false)} login={login} />
+  )
 }
 
 function IncompleteProfilePopup({ close }) {
@@ -113,13 +98,12 @@ function IncompleteProfilePopup({ close }) {
       sx={{
         alignItems: 'center',
         flexDirection: 'column',
-        px: '36px',
         py: 5,
         textAlign: 'center'
       }}
     >
-      <img
-        src={IncompleteProfileImg}
+      <Image
+        src={'/images/incomplete_profile.png'}
         style={{ width: '157px' }}
         alt='no-profile-bg'
       />
@@ -131,12 +115,13 @@ function IncompleteProfilePopup({ close }) {
           variant: 'text.default',
           color: 'secondary',
           my: 3,
-          width: '90%'
+          width: '60%'
         }}
       >
-        Please finish setting up your public profile before proceeding
+        Please finish setting up your public profile with at least your name and
+        e-mail before proceeding
       </Text>
-      <Link to='/account'>
+      <Link href='/account'>
         <Button
           mt={4}
           sx={{
@@ -192,8 +177,10 @@ function InsufficientFundsPopup({ close }) {
       >
         Close
       </Text>
-      <Box
+      <Flex
         sx={{
+          flexDirection: 'column',
+          alignItems: 'center',
           position: 'absolute',
           textAlign: 'center',
           top: '5%',
@@ -203,8 +190,8 @@ function InsufficientFundsPopup({ close }) {
           mb: 6
         }}
       >
-        <img
-          src={exclamationIcon}
+        <Image
+          src={'/images/exclamation.png'}
           alt='exclamation'
           style={{
             width: '110px'
@@ -227,9 +214,9 @@ function InsufficientFundsPopup({ close }) {
         >
           Ok
         </Button>
-      </Box>
-      <img
-        src={noFundsBg}
+      </Flex>
+      <Image
+        src={'/images/no_funds.png'}
         style={{
           width: '50%',
           position: 'absolute',
@@ -246,7 +233,7 @@ function SharePopup() {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
   const { title, description, slug } = value?.extra
-  const shareTitle = `Make a donation today to ${title}!`
+  const shareTitle = `Check out on @Givethio`
   const url = `${window.location.origin}/project/${slug}`
 
   return (
@@ -292,10 +279,9 @@ function SharePopup() {
 function Popup() {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
+
   const setView = () => {
     switch (value?.type) {
-      case 'WelcomeLoggedOut':
-        return <WelcomeLoggedOutPopup close={clearPopup} />
       case 'IncompleteProfile':
         return <IncompleteProfilePopup close={clearPopup} />
       case 'InsufficientFunds':
@@ -313,6 +299,11 @@ function Popup() {
         return null
     }
   }
+  // special case that is already a modal
+  if (value?.type === 'WelcomeLoggedOut') {
+    return <WelcomeLoggedOutPopup {...usePopup} />
+  }
+
   return value ? (
     <Modal isOpen={value} onRequestClose={() => clearPopup()}>
       {setView()}

@@ -1,13 +1,12 @@
-/** @jsx jsx */
-import { Link } from 'gatsby'
-import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Heading, Text, jsx } from 'theme-ui'
+import Link from 'next/link'
+import { useMediaQuery } from 'react-responsive'
 import styled from '@emotion/styled'
 import HeroImage from '../content/HeroImage'
 import HeroSideImage from '../content/HeroSideImage'
-import givethHeroMain from '../../images/people-header.svg'
-import co2kenHeroMain from '../../images/tree-planting.jpg'
-// const siteId = process.env.GATSBY_SITE_ID
+// import givethHeroMain from '../../images/people-header.svg'
+// import co2kenHeroMain from '../../images/tree-planting.jpg'
+// const siteId = process.env.NEXT_PUBLIC_SITE_ID
 
 // console.log(`HeroImages : ${JSON.stringify(HeroImages, null, 2)}`)
 // let heroMain
@@ -17,13 +16,14 @@ import co2kenHeroMain from '../../images/tree-planting.jpg'
 //   heroMain = co2kenHeroMain
 // }
 // import decorative graphics
-import decoratorLeaf from '../../images/decorator-leaf.svg'
+// import decoratorLeaf from '../../images/decorator-leaf.svg'
 // import imgPeopleHeader from '../../images/people-header.svg'
 
 const HeroSection = styled(Grid)`
+  min-height: 100vh;
   grid-template-columns: 1fr auto;
   position: relative;
-  @media (max-width: '850px') {
+  @media (max-width: 850px) {
     grid-template-columns: 1fr;
     min-height: 100vh;
   }
@@ -31,8 +31,11 @@ const HeroSection = styled(Grid)`
 
 const HeroText = styled(Box)`
   position: absolute;
-  @media (max-width: '850px') {
+  @media (max-width: 850px) {
     position: static;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
   }
 `
 const Hero = ({ content }) => {
@@ -40,7 +43,7 @@ const Hero = ({ content }) => {
 
   return (
     <HeroSection>
-      <HeroSideImage></HeroSideImage>
+      {isMobile ? null : <HeroSideImage />}
       <div id='placeholder' />
       <HeroText p={['10px', null, '80px']}>
         {' '}
@@ -53,7 +56,7 @@ const Hero = ({ content }) => {
             color: 'secondaryDark'
           }}
         >
-          {content.mainHead}
+          {content?.mainHead || 'Waiting for content'}
         </Heading>
         <Heading
           sx={{
@@ -64,56 +67,50 @@ const Hero = ({ content }) => {
             color: 'secondaryDark'
           }}
         >
-          {content.headBold}
+          {content?.headBold || 'Waiting for content'}
         </Heading>
         <Text
           pt={4}
           pb={2}
           sx={{
             variant: 'text.large',
-            width: ['95%', '60%', '70%'],
+            width: ['100%', '60%', '70%'],
             color: 'secondary',
             lineHeight: 'taller'
           }}
         >
-          {content.mainText}
+          {content?.mainText || 'Waiting for content'}
         </Text>
         <Grid
           rows={2}
           sx={{
-            width: '290px'
+            justifyContent: ['center', 'start', 'start']
           }}
         >
-          <Link to='/projects'>
+          <Link href='/projects'>
             <Button
-              mt={4}
-              p={4}
+              mt={[4, 5, 5]}
               sx={{
                 width: '290px',
                 variant: 'buttons.big'
               }}
             >
-              {content.mainButton}
+              {content?.mainButton || 'Waiting for content'}
             </Button>
           </Link>
-          <Link
-            to='/create'
-            sx={{
-              variant: 'links.nav',
-              justifySelf: 'center'
-            }}
-          >
+          <Link href='/create'>
             <Text
               sx={{
-                justifySelf: 'center'
+                variant: 'links.nav',
+                justifySelf: ['center']
               }}
             >
-              {content.mainButtonText}
+              {content?.mainButtonText || 'Waiting for content'}
             </Text>
           </Link>
         </Grid>
       </HeroText>
-      <Box sx={{ minHeight: '100vh' }}>
+      <Box sx={{ minHeight: [null, '100vh', '100vh'] }}>
         {isMobile ? null : <HeroImage alt='' />}
       </Box>
     </HeroSection>

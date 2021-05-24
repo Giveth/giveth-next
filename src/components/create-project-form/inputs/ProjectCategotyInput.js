@@ -5,7 +5,7 @@ import { animated } from 'react-spring'
 export const ProjectCategoryInput = ({
   register,
   currentValue,
-  categoryList,
+  categoryList = [],
   animationStyle,
   goBack
 }) => {
@@ -16,7 +16,7 @@ export const ProjectCategoryInput = ({
           fontSize: 8,
           fontFamily: 'heading'
         }}
-        htmlFor='projectDescription'
+        htmlFor='projectCategory'
       >
         Please select a category
       </Label>
@@ -48,13 +48,9 @@ export const ProjectCategoryInput = ({
                 key={`${category.name}-checkbox`}
                 id={category.name}
                 name={category.name}
-                ref={register}
+                {...register(category.name)}
                 defaultChecked={
-                  currentValue
-                    ? currentValue[category.name][0] === 'on'
-                      ? 1
-                      : 0
-                    : 0
+                  currentValue ? (!!currentValue[category.name] ? 1 : 0) : 0
                 }
               />
               <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>

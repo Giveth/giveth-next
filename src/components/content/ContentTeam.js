@@ -1,6 +1,5 @@
-/** @jsx jsx */
-import { jsx, Text } from 'theme-ui'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import { Text } from 'theme-ui'
+import theme from '../../utils/theme-ui/index'
 import React from 'react'
 import styled from '@emotion/styled'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
@@ -113,20 +112,20 @@ const ContentTeam = ({ headerdata }) => (
     <ContentContainer>
       <Content>
         {headerdata.map(edges => (
-          <ContentItem key={edges.node.id}>
+          <ContentItem key={edges?.portrait?.sys?.id}>
             <PortraitHelper>
-              <Portrait src={edges.node.portrait.file.url} />
+              <Portrait src={edges?.portrait?.fields?.file.url} />
             </PortraitHelper>
             <ContentFooter className='placeholder'>
               <Headline1
                 pt={1}
                 sx={{ variant: 'headings.h6', color: 'secondary' }}
               >
-                {edges.node.headline1}
+                {edges.headline1}
               </Headline1>
 
               <Badge sx={{ variant: 'text.overlineSmall' }}>
-                {edges.node.headline2}
+                {edges.headline2}
               </Badge>
 
               {/** Hide short bio
@@ -142,14 +141,14 @@ const ContentTeam = ({ headerdata }) => (
             */}
 
               <Social1
-                href={edges.node.socialTwitter}
+                href={edges.socialTwitter}
                 className='social'
                 target='blank'
               >
                 <FaTwitter size='24px' />
               </Social1>
               <Social2
-                href={edges.node.socialMedium}
+                href={edges.socialMedium}
                 className='social'
                 target='blank'
               >

@@ -1,12 +1,12 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { Button, Flex, Text, Spinner } from 'theme-ui'
 import { getEtherscanPrefix } from '../../utils'
 import { useWallet } from '../../contextProvider/WalletProvider'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui/index'
 
 const etherscanPrefix = getEtherscanPrefix()
-const InProgressModal = ({ showModal, setShowModal, txHash }) => {
+const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
   const { isLoggedIn } = useWallet()
   if (!showModal) return null
   return (
@@ -60,12 +60,10 @@ const InProgressModal = ({ showModal, setShowModal, txHash }) => {
         }}
       >
         Transaction has been submitted and is waiting for confirmation.
-        <Link
-          style={{ textDecoration: 'none', color: theme.colors.primary }}
-          href={`https://${etherscanPrefix}etherscan.io/tx/${txHash}`}
-        >
-          {' '}
-          View on Etherscan
+        <Link href={`https://${etherscanPrefix}etherscan.io/tx/${txHash}`}>
+          <a style={{ textDecoration: 'none', color: theme.colors.primary }}>
+            View on Etherscan
+          </a>
         </Link>
       </Text>
       <Text sx={{ mt: 2, mx: 5, textAlign: 'center', variant: 'text.default' }}>
@@ -74,11 +72,10 @@ const InProgressModal = ({ showModal, setShowModal, txHash }) => {
           `Your
           transaction will show in ${' '}`}
         {isLoggedIn && (
-          <Link
-            style={{ textDecoration: 'none', color: theme.colors.primary }}
-            to='/account?view=donations'
-          >
-            My Account.
+          <Link href='/account?view=donations'>
+            <a style={{ textDecoration: 'none', color: theme.colors.primary }}>
+              My Account.
+            </a>
           </Link>
         )}
       </Text>
@@ -101,4 +98,4 @@ const InProgressModal = ({ showModal, setShowModal, txHash }) => {
   )
 }
 
-export default InProgressModal
+export default UnconfirmedModal

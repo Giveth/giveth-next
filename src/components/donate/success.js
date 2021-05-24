@@ -1,9 +1,7 @@
-/** @jsx jsx */
-import React, { useContext, useState, useEffect } from 'react'
-import { Box, Link, Flex, Text, jsx } from 'theme-ui'
-import { navigate } from 'gatsby'
+import React, { useState } from 'react'
+import { Box, Link, Flex, Text } from 'theme-ui'
+import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive'
-import { useApolloClient } from '@apollo/client'
 import { base64ToBlob, getEtherscanPrefix } from '../../utils'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../animations/confetti'
@@ -11,7 +9,8 @@ import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
-const Content = styled.div`
+const Content = styled(Flex)`
+  flex-direction: column;
   z-index: 10;
   min-width: 32vw;
   word-wrap: break-word;
@@ -37,11 +36,10 @@ const DownloadReceipt = styled(Box)`
 `
 
 const Success = props => {
+  const router = useRouter()
   const { isLoggedIn, login } = useWallet()
-  const { project, sessionId, hash } = props
+  const { project, sessionId, hash, currentChainId } = props
   const [pdfBase64, setPdfBase64] = useState(null)
-
-  const client = useApolloClient()
 
   const downloadPDF = () => {
     const blob = base64ToBlob(pdfBase64)
@@ -87,7 +85,7 @@ const Success = props => {
           <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong>{' '}
           contribution goes a long way!
         </Text>
-        {hash ? (
+        {hash?.transactionHash ? (
           <Receipt sx={{ my: 4 }}>
             <div style={{ flex: 1 }}>
               <Link
@@ -97,7 +95,11 @@ const Success = props => {
                   cursor: 'pointer'
                 }}
                 target='_blank'
-                href={`https://${etherscanPrefix}etherscan.io/tx/${hash?.transactionHash}`}
+                href={
+                  currentChainId === 100
+                    ? `https://blockscout.com/xdai/mainnet/tx/${hash?.transactionHash}`
+                    : `https://${etherscanPrefix}etherscan.io/tx/${hash?.transactionHash}`
+                }
               >
                 View transaction details
               </Link>
@@ -135,7 +137,7 @@ const Success = props => {
             Thank you for your support{' '}
             <span
               sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
-              onClick={() => navigate('/account?view=donations')}
+              onClick={() => router.push('/account?view=donations')}
             >
               View your donations
             </span>

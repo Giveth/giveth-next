@@ -1,18 +1,20 @@
-/** @jsx jsx */
 import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { getEtherscanPrefix, titleCase } from '../../utils'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
-import theme from '../../gatsby-plugin-theme-ui'
-import { Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
+import theme from '../../utils/theme-ui'
+import { Input, Flex, Spinner, Text, jsx } from 'theme-ui'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
+
+import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
+const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 dayjs.extend(localizedFormat)
 
@@ -152,7 +154,9 @@ const FilterBox = styled(Flex)`
 `
 
 const MyDonations = props => {
-  const options = ['All Donations', 'Fiat', 'Crypto']
+  const router = useRouter()
+  // const options = ['All Donations', 'Fiat', 'Crypto']
+  const options = ['All Donations', 'Crypto']
   // const { user } = useWallet()
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
@@ -174,7 +178,7 @@ const MyDonations = props => {
     }
 
     setup()
-  }, [currentProjectView])
+  }, [])
 
   const searching = search => {
     const donations = currentDonations
@@ -198,31 +202,57 @@ const MyDonations = props => {
       case 'All Donations':
         return items
       case 'Fiat':
-        return items?.filter(item => item.currency === 'USD')
+        return items?.filter(item => !item.transactionId)
       case 'Crypto':
-        return items?.filter(item => item.currency === 'ETH')
+        return items?.filter(item => !!item.transactionId)
       default:
         return items
     }
   }
 
-  const filteredDonations = filterDonations(currentDonations)
+  const filteredDonations = [...filterDonations(currentDonations)].sort(
+    (a, b) => {
+      return new Date(b?.createdAt) - new Date(a?.createdAt)
+    }
+  )
+
+  const populateIcons = async item => {
+    const found = iconManifest?.find(
+      i => i?.symbol === item?.currency?.toUpperCase()
+    )
+    let icon = found
+      ? `/assets/cryptocurrency-icons/32/color/${item?.currency?.toLowerCase() ||
+          'eth'}.png`
+      : `/assets/tokens/${item?.symbol?.toUpperCase()}.png`
+    return { ...item, icon }
+  }
 
   const TableToShow = () => {
     const paginationItems = filteredDonations
-
     const [activeItem, setCurrentItem] = React.useState(1)
+    const [currentItems, setCurrentItems] = React.useState([])
 
-    // Data to be rendered using pagination.
-    const itemsPerPage = 6
+    useEffect(() => {
+      const getItems = async () => {
+        // Data to be rendered using pagination.
+        const itemsPerPage = 6
 
-    // Logic for displaying current items
-    const indexOfLastItem = activeItem * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = paginationItems?.slice(
-      indexOfFirstItem,
-      indexOfLastItem
-    )
+        // Logic for displaying current items
+        const indexOfLastItem = activeItem * itemsPerPage
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage
+        const tmpItems = paginationItems?.slice(
+          indexOfFirstItem,
+          indexOfLastItem
+        )
+
+        const items = await Promise.all(
+          tmpItems.map(item => populateIcons(item))
+        )
+
+        setCurrentItems(items)
+      }
+      getItems()
+    }, [activeItem, paginationItems])
 
     const handlePageChange = pageNumber => {
       setCurrentItem(pageNumber)
@@ -283,16 +313,36 @@ const MyDonations = props => {
                           color: 'primary',
                           cursor: 'pointer'
                         }}
-                        onClick={() => navigate(`/project/${i?.project?.slug}`)}
+                        onClick={() =>
+                          router.push(`/project/${i?.project?.slug}`)
+                        }
                       >
                         {titleCase(i?.project?.title) || i?.donor}
                       </Text>
                     </td>
                     <td
                       data-label='Currency'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
+                      sx={{
+                        variant: 'text.small',
+                        color: 'secondary'
+                      }}
                     >
-                      <Badge variant='green'>{i.currency}</Badge>
+                      <img
+                        src={
+                          i?.icon ||
+                          `/assets/tokens/${i?.currency?.toUpperCase()}.png`
+                        }
+                        alt={i.currency}
+                        onError={ev => {
+                          ev.target.src = ETHIcon
+                          ev.target.onerror = null
+                        }}
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          marginLeft: '1rem'
+                        }}
+                      />
                     </td>
                     <td
                       data-label='Amount'
@@ -307,8 +357,8 @@ const MyDonations = props => {
                         {i?.currency === 'ETH' && i?.valueUsd
                           ? `${
                               i?.amount ? `${i?.amount} ETH` : ''
-                            } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
-                          : i?.amount}
+                            } \n ~ USD $${i?.valueUsd?.toFixed(2)}`
+                          : `${i?.amount} ${i?.currency}`}
                       </Text>
                     </td>
                     <td
@@ -378,17 +428,18 @@ const MyDonations = props => {
   return (
     <>
       <FilterBox sx={{ pt: 4, flexDirection: ['column-reverse', null, 'row'] }}>
-        <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
+        {/* Removing this as we don't have fiat donations yet */}
+        {/* <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
           <DropdownInput
             options={options}
             current={filter}
             setCurrent={i => setFilter(i)}
           />
-        </FilterInput>
-        <SearchInput sx={{ width: ['100%', null, '65%'] }}>
+        </FilterInput> */}
+        <SearchInput sx={{ width: ['100%', null, '100%'] }}>
           <Input
             defaultValue=''
-            placeholder='Search Donations'
+            placeholder='Search for donations'
             variant='forms.search'
             onChange={e => searching(e.target.value)}
           />

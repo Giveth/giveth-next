@@ -2,8 +2,7 @@ import React from 'react'
 import { Flex, Text, Button, Image } from 'theme-ui'
 import { FaGithub } from 'react-icons/fa'
 import { IoMdClose } from 'react-icons/io'
-import CornerLeave from '../images/corner-leave.png'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui'
 
 const GithubIssue = props => {
   const { fixed } = props
@@ -110,7 +109,7 @@ const GithubIssue = props => {
         </Button>
       </Flex>
       <Image
-        src={CornerLeave}
+        src={'/images/corner-leave.png'}
         width={[60, 80, 80]}
         sx={{
           position: 'absolute',

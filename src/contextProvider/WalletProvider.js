@@ -1,25 +1,28 @@
 import detectEthereumProvider from '@metamask/detect-provider'
 import React, { useState, useEffect, useContext } from 'react'
 import { keccak256 } from 'ethers/lib/utils'
+import { client } from '../apollo/client'
 import { promisify } from 'util'
 import { ethers } from 'ethers'
+import dynamic from 'next/dynamic'
 import Web3 from 'web3'
-
+import _ from 'lodash'
 import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import { PopupContext } from '../contextProvider/popupProvider'
 import LoadingModal from '../components/loadingModal'
+import SignInMetamaskModal from '../components/signInMetamaskModal'
 import getSigner from '../services/ethersSigner'
 import tokenAbi from 'human-standard-token-abi'
-import { useApolloClient } from '@apollo/client'
 import * as Auth from '../services/auth'
 import Toast from '../components/toast'
-import { getWallet } from '../wallets'
 import User from '../entities/user'
 
+import { getWallet } from '../wallets'
+
 const WalletContext = React.createContext()
-const network = process.env.GATSBY_NETWORK
-const networkId = process.env.GATSBY_NETWORK_ID
+const network = process.env.NEXT_PUBLIC_NETWORK
+const networkId = process.env.NEXT_PUBLIC_NETWORK_ID
 
 let EVENT_SETUP_DONE = false
 let wallet = {}
@@ -44,9 +47,10 @@ function WalletProvider(props) {
   const [currentNetwork, setCurrentNetwork] = useState(null)
   const [currentChainId, setCurrentChainId] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [signInMetamask, setSignInMetamask] = useState(false)
+  const [isComponentVisible, setIsComponentVisible] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
   const usePopup = useContext(PopupContext)
-  const client = useApolloClient()
 
   const initWallet = async walletProvider => {
     const provider = await detectEthereumProvider()
@@ -58,7 +62,7 @@ function WalletProvider(props) {
     }
     console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
 
-    await wallet.init('production', network)
+    await wallet.init(process.env.NEXT_PUBLIC_ENVIRONMENT, network)
     const networkName = await wallet?.web3.eth.net.getNetworkType()
     const currentChainId = await wallet?.web3.eth.net.getId()
 
@@ -73,6 +77,9 @@ function WalletProvider(props) {
     setCurrentNetwork(networkName)
     setCurrentChainId(currentChainId)
     setReady(true)
+
+    // TESTS ONLY --------------
+    if (provider?.isTest) return
 
     // EVENTS ONLY --------------
 
@@ -102,10 +109,17 @@ function WalletProvider(props) {
   }
 
   useEffect(() => {
-    initWallet(localStorageUser?.walletType)
+    const start = () => {
+      if (typeof window === 'undefined') {
+        return
+      }
+      initWallet(localStorageUser?.walletType)
+    }
+    start()
   }, [])
 
   async function logout(walletLoggedOut) {
+    if (_.isEmpty(wallet)) return
     !walletLoggedOut && wallet?.logout()
     setLoading(true)
     Auth.handleLogout()
@@ -116,7 +130,7 @@ function WalletProvider(props) {
   async function signMessage(message, publicAddress, loginFromXDAI) {
     try {
       await checkNetwork()
-      console.log({ loginFromXDAI })
+      console.log({ loginFromXDAI }, process.env.NEXT_PUBLIC_NETWORK_ID)
       let signedMessage = null
       const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
       const prefixWithLength = Buffer.from(
@@ -146,7 +160,7 @@ function WalletProvider(props) {
           name: 'Giveth Login',
           chainId: loginFromXDAI
             ? 100
-            : parseInt(process.env.GATSBY_NETWORK_ID),
+            : parseInt(process.env.NEXT_PUBLIC_NETWORK_ID),
           version: '1'
         },
         message: {
@@ -156,7 +170,6 @@ function WalletProvider(props) {
           }
         }
       })
-
       const { result } = await send({
         method: 'eth_signTypedData_v4',
         params: [publicAddress, msgParams],
@@ -219,11 +232,11 @@ function WalletProvider(props) {
     const loginFromXDAI = !wallet?.isTorus && currentChainId === 100
 
     const signedMessage = await signMessage(
-      process.env.GATSBY_OUR_SECRET,
+      process.env.NEXT_PUBLIC_OUR_SECRET,
       publicAddress,
       loginFromXDAI
     )
-
+    console.log('secret', process.env.NEXT_PUBLIC_OUR_SECRET)
     if (!signedMessage) return
 
     const { userIDFromDB, token, dbUser } = await getToken(
@@ -238,6 +251,7 @@ function WalletProvider(props) {
 
     Auth.setUser(user)
     setIsLoggedIn(true)
+    setSignInMetamask(false)
     setUser(user)
   }
 
@@ -250,6 +264,10 @@ function WalletProvider(props) {
     try {
       wallet = getWallet(walletProvider)
       setLoading(true)
+      if (walletProvider === 'metamask') {
+        setSignInMetamask(true)
+        setIsComponentVisible(true)
+      } else setLoading(true)
       await initWallet(walletProvider)
       console.log(`torus: login WalletProvider.login`, {
         wallet,
@@ -356,7 +374,7 @@ function WalletProvider(props) {
           : new web3Provider.Contract(tokenAbi, contractAddress)
         if (fromSigner) {
           txn = await instance.transfer(params?.to, params?.value)
-          txCallbacks?.onTransactionHash(txn?.hash)
+          txCallbacks?.onTransactionHash(txn?.hash, txn?.from)
           return txn
         }
         const from = await web3Provider.getAccounts()
@@ -377,7 +395,7 @@ function WalletProvider(props) {
       if (!txCallbacks || fromSigner) {
         // gets hash and checks until it's mined
         txn = await web3Provider.sendTransaction(txParams)
-        txCallbacks?.onTransactionHash(txn?.hash)
+        txCallbacks?.onTransactionHash(txn?.hash, txn?.from)
       } else {
         // using the event emitter
         return web3Provider
@@ -452,6 +470,12 @@ function WalletProvider(props) {
   return (
     <WalletContext.Provider value={value} {...props}>
       {loading && <LoadingModal isOpen={loading} />}
+      {signInMetamask && (
+        <SignInMetamaskModal
+          isOpen={signInMetamask && isComponentVisible}
+          close={() => setIsComponentVisible(false)}
+        />
+      )}
       {props.children}
     </WalletContext.Provider>
   )

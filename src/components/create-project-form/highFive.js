@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { Text, Flex, Box } from 'theme-ui'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
@@ -21,7 +21,7 @@ const HighFive = ({
   projectDescription,
   newProject
 }) => {
-  const shareTitle = `Make a donation today to ${project?.title}!`
+  const shareTitle = `Check out on @Givethio`
   const url = `${window.location.origin}/project/${addedProject?.slug}`
 
   return (
@@ -130,31 +130,35 @@ const HighFive = ({
               Add another project
             </Text>
           </Link> */}
-          <Link to={`/project/${addedProject?.slug}`}>
-            <Text
-              sx={{
-                fontSize: 3,
-                fontFamily: 'body',
-                color: 'secondary',
-                mt: '16px'
-              }}
-            >
-              View my project
-            </Text>
-          </Link>
-          <Link to='/'>
-            <Text
-              sx={{
-                fontSize: 3,
-                fontFamily: 'body',
-                color: 'secondary',
-                mt: '16px'
-              }}
-            >
-              {' '}
-              Go to Homepage
-            </Text>
-          </Link>
+          <Flex sx={{ flexDirection: 'column' }}>
+            <Link href={`/project/${addedProject?.slug}`}>
+              <Text
+                sx={{
+                  cursor: 'pointer',
+                  fontSize: 3,
+                  fontFamily: 'body',
+                  color: 'secondary',
+                  mt: '16px'
+                }}
+              >
+                View my project
+              </Text>
+            </Link>
+            <Link href='/'>
+              <Text
+                sx={{
+                  cursor: 'pointer',
+                  fontSize: 3,
+                  fontFamily: 'body',
+                  color: 'secondary',
+                  mt: '16px'
+                }}
+              >
+                {' '}
+                Go to Homepage
+              </Text>
+            </Link>
+          </Flex>
         </Box>
       </Flex>
     </Flex>

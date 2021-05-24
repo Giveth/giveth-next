@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-// import ReactQuill from 'react-quill'
+import RichTextViewer from '../richTextViewer'
 
-import testImg from '../../images/giveth_bg.jpg'
 import CancelledModal from './cancelledModal'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
@@ -16,19 +15,14 @@ import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
 import { BsHeartFill } from 'react-icons/bs'
 
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { useQuery, useApolloClient } from '@apollo/client'
-import {
-  TOGGLE_PROJECT_REACTION,
-  GET_PROJECT_UPDATES,
-  FETCH_PROJECT,
-  GET_PROJECT_REACTIONS
-} from '../../apollo/gql/projects'
-import { PROJECT_DONATIONS } from '../../apollo/gql/donations'
-import { GET_USER } from '../../apollo/gql/auth'
+import { TOGGLE_PROJECT_REACTION } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
-import theme from '../../gatsby-plugin-theme-ui'
+import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
+
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
@@ -41,7 +35,13 @@ const FloatingDonateView = styled(Flex)`
   }
 `
 
-export const ProjectDonatorView = ({ pageContext }) => {
+const ProjectDonatorView = ({
+  project,
+  donations: projectDonations,
+  updates: projectUpdates,
+  reactions: projectReactions,
+  admin: projectAdmin
+}) => {
   const { user } = useWallet()
   const [ready, setReady] = useState(false)
   const [currentTab, setCurrentTab] = useState('description')
@@ -53,12 +53,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const usePopup = React.useContext(PopupContext)
   const isSSR = typeof window === 'undefined'
   const client = useApolloClient()
-
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
-
-  const project = pageContext?.project
   const reactions = totalReactions || project?.reactions
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
@@ -88,84 +85,33 @@ export const ProjectDonatorView = ({ pageContext }) => {
   }
 
   useEffect(() => {
-    const firstFetch = async () => {
+    const setup = async () => {
       try {
-        // Add donations to current project store
-        if (!project.walletAddress) return
-        // Etherscan not used anymore front side
-        // const cryptoTxs = await getEtherscanTxs(
-        //   project.walletAddress,
-        //   client,
-        //   true
-        // )
-
-        // GET PROJECT -- mainly to check status client side
-        const { data: projectReFetched } = await client.query({
-          query: FETCH_PROJECT,
-          variables: { id: project?.id },
-          fetchPolicy: 'network-only'
-        })
-        if (
-          projectReFetched?.project?.length > 0 &&
-          projectReFetched.project[0].status?.id !== '5'
-        ) {
+        if (project?.status?.id !== '5') {
           setIsCancelled(true)
           return
         }
-
-        const { data: donationsToProject } = await client.query({
-          query: PROJECT_DONATIONS,
-          variables: { toWalletAddresses: [project.walletAddress] },
-          fetchPolicy: 'network-only'
-        })
-        const donations = donationsToProject?.donationsToWallets
-
-        const ethBalance = donations?.reduce(
+        const ethBalance = projectDonations?.reduce(
           (prev, current) => prev + current?.amount,
           0
         )
-        // Get Updates
-        const updates = await client?.query({
-          query: GET_PROJECT_UPDATES,
-          variables: {
-            projectId: parseInt(project?.id),
-            take: 100,
-            skip: 0
-          }
-        })
-        // Get Reactions
-        const reactionsFetch = await client?.query({
-          query: GET_PROJECT_REACTIONS,
-          variables: {
-            projectId: parseInt(project?.id)
-          }
-        })
-        const reactions = reactionsFetch?.data?.getProjectReactions
-        setTotalReactions(reactions)
-        setHeartedCount(reactions?.length)
-        setHearted(reactions?.find(o => o.userId === user?.id))
+        setTotalReactions(projectReactions)
+        setHeartedCount(projectReactions?.length)
+        setHearted(projectReactions?.find(o => o.userId === user?.id))
 
-        // Get project admin Info
-        const admin = /^\d+$/.test(project?.admin)
-          ? await client?.query({
-              query: GET_USER,
-              variables: {
-                userId: parseInt(project?.admin)
-              }
-            })
-          : null
         setCurrentProjectView({
           ...currentProjectView,
+          project,
           ethBalance,
-          donations,
-          admin: admin?.data?.user,
-          updates: updates?.data?.getProjectUpdates
+          donations: projectDonations,
+          admin: projectAdmin,
+          updates: projectUpdates
         })
 
         setTotalGivers(
           [...new Set(donations?.map(data => data?.fromWalletAddress))].length
         )
-        setIsOwner(pageContext?.project?.admin === user.id)
+        setIsOwner(project?.admin === user.id)
 
         setReady(true)
       } catch (error) {
@@ -173,8 +119,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
         setReady(true)
       }
     }
-
-    firstFetch()
+    setup()
   }, [])
 
   const showMap = process.env.OPEN_FOREST_MAP
@@ -212,14 +157,13 @@ export const ProjectDonatorView = ({ pageContext }) => {
       return false
     }
   }
-
   return (
     <>
       <CancelledModal isOpen={isCancelled} />
       <Flex>
         {setImage(project?.image) || (
           <Image
-            src={project?.image ? project?.image : testImg}
+            src={project?.image ? project?.image : '/images/giveth_bg.jpg'}
             onError={ev =>
               (ev.target.src =
                 'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
@@ -261,7 +205,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   wordBreak: 'break-word'
                 }}
               >
-                {pageContext?.project?.title}
+                {currentProjectView?.project?.title || project?.title}
               </Text>
               <Flex
                 sx={{
@@ -273,7 +217,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 {currentProjectView?.admin?.name && (
                   <Link
                     style={{ textDecoration: 'none' }}
-                    to={`/user/${currentProjectView.admin?.walletAddress}`}
+                    href={`/user/${currentProjectView.admin?.walletAddress}`}
                   >
                     <Text
                       sx={{
@@ -289,7 +233,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   </Link>
                 )}
 
-                {pageContext?.project?.impactLocation && (
+                {(currentProjectView?.project?.impactLocation ||
+                  project?.impactLocation) && (
                   <Flex>
                     <ImLocation size='24px' color={theme.colors.secondary} />
                     <Text
@@ -300,7 +245,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                         px: 2
                       }}
                     >
-                      {pageContext?.project?.impactLocation}
+                      {currentProjectView?.project?.impactLocation ||
+                        project?.impactLocation}
                     </Text>
                   </Flex>
                 )}
@@ -441,13 +387,13 @@ export const ProjectDonatorView = ({ pageContext }) => {
                     color: 'black'
                   }}
                 >
-                  {/* <ReactQuill
-                    style={{ fontFamily: `Red Hat Text, sans serif` }}
-                    value={pageContext?.project?.description}
-                    readOnly={true}
-                    theme={'bubble'}
-                  /> */}
-                  {pageContext?.project?.description}
+                  <RichTextViewer
+                    content={
+                      currentProjectView?.project?.description ||
+                      project?.description
+                    }
+                  />
+                  {/* {project?.description} */}
                 </Text>
               </>
             ) : currentTab === 'updates' && !isSSR ? (
@@ -459,7 +405,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 <React.Suspense fallback={<div />}>
                   <DonationsTab
                     project={project}
-                    donations={currentProjectView.donations}
+                    donations={currentProjectView?.donations}
                   />
                 </React.Suspense>
               )
@@ -514,7 +460,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
             {project?.categories?.length > 0 &&
-              project?.categories?.map((category, index) => {
+              project?.categories.map((category, index) => {
                 return (
                   <Text
                     key={index}
@@ -541,7 +487,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
 
           {/* <Flex sx={{ justifyContent: 'center', mt: 2 }}>
-            <Link to='/projects' style={{ textDecoration: 'none' }}>
+            <Link href='/projects' style={{ textDecoration: 'none' }}>
               <Text
                 sx={{
                   variant: 'text.medium',
@@ -622,3 +568,5 @@ export const ProjectDonatorView = ({ pageContext }) => {
     </>
   )
 }
+
+export default ProjectDonatorView

@@ -1,5 +1,4 @@
-/** @jsx jsx */
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
@@ -10,7 +9,7 @@ import heroImage from '../../images/people-highfive.svg'
 const HeroSection = styled(Grid)`
   grid-template-columns: 1fr auto;
   align-items: end;
-  @media (max-width: '850px') {
+  @media (max-width: 850px) {
     grid-template-columns: 1fr;
   }
 `
@@ -22,7 +21,7 @@ const HeroImage = styled.img`
 const HeroText = styled(Grid)`
   grid-template-rows: auto;
   justify-self: center;
-  @media (max-width: '850px') {
+  @media (max-width: 850px) {
   }
 `
 

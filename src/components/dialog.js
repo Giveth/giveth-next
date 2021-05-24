@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, NavLink, Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui'
 
 import LeftArrow from '../images/svg/general/left-arrow.svg'
 import Confetti from '../images/svg/donation/confetti.svg'
@@ -34,8 +34,9 @@ const LeftConfetti = styled(Confetti)`
 `
 
 const BackButton = styled(NavLink)`
-  display: flex;
-  flex-direction: row;
+  && {
+    display: flex;
+  }
   width: 100%;
   max-width: 7rem;
   position: absolute;

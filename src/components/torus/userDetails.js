@@ -1,11 +1,9 @@
-/** @jsx jsx */
-import { Button, Text, jsx } from 'theme-ui'
-import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import { Button, Image, Text, jsx } from 'theme-ui'
+import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
 import { FiExternalLink } from 'react-icons/fi'
@@ -68,7 +66,13 @@ const Dot = styled.div`
   display: inline-block;
   margin: 0 4px 0 0;
 `
-
+const StyledButton = styled.a`
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+  padding: 0.5rem;
+`
 const UserDetails = () => {
   const {
     ref,
@@ -93,7 +97,6 @@ const UserDetails = () => {
 
   const parseNetwork = () => {
     let dotColor
-    console.log({ currentNetwork })
     switch (currentNetwork) {
       case 'main':
         dotColor = 'greenishBlue'
@@ -137,23 +140,17 @@ const UserDetails = () => {
   const handleLogout = () => {
     logout()
   }
+
   return (
     <div ref={ref}>
-      <Button
+      <StyledButton
         sx={{ variant: 'buttons.nofill' }}
-        style={{
-          display: 'flex',
-          cursor: 'pointer',
-          alignItems: 'center',
-          padding: '0.5rem',
-          border: '0'
-        }}
         onClick={() => setIsComponentVisible(!isComponentVisible)}
       >
         {user?.avatar ? (
-          <img
+          <Image
             alt=''
-            style={{
+            sx={{
               width: '30px',
               height: '30px',
               borderRadius: '15px'
@@ -178,7 +175,7 @@ const UserDetails = () => {
         >
           {user.getName()}
         </Text>
-      </Button>
+      </StyledButton>
       {isComponentVisible ? (
         <AccountDetails>
           <MenuTitle
@@ -218,7 +215,7 @@ const UserDetails = () => {
           </MenuTitle>
           {parseNetwork()}
           <Link
-            to='/account'
+            href='/account'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
           >
             <MenuItem
@@ -250,7 +247,7 @@ const UserDetails = () => {
             </MenuItem>
           </a>
           <Link
-            to='/account?data=all&view=projects'
+            href='/account?data=all&view=projects'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
           >
             <MenuItem

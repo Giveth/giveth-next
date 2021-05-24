@@ -5,7 +5,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 
 import { ProjectContext } from '../../../contextProvider/projectProvider'
 import { Button, Flex, Text } from 'theme-ui'
-import theme from '../../../gatsby-plugin-theme-ui'
+import theme from '../../../utils/theme-ui'
 
 const Card = React.lazy(() => import('./card'))
 
@@ -82,7 +82,7 @@ const Timeline = ({
           </LeftInfo>
           {!isSSR && (
             <React.Suspense fallback={<div />}>
-              <Card newUpdateOption={addUpdate} />
+              <Card newUpdateOption={addUpdate} projectId={project?.id} />
             </React.Suspense>
           )}
         </Container>

@@ -1,10 +1,10 @@
 import Notify from 'bnc-notify'
 import Onboard from 'bnc-onboard'
 
-const networkId = process.env.GATSBY_NETWORK_ID
-const rpcUrl = process.env.GATSBY_ETHEREUM_NODE
-const dappId = process.env.GATSBY_BLOCK_NATIVE_DAPP_ID
-const portisKey = process.env.GATSBY_PORTIS_KEY
+const networkId = process.env.NEXT_PUBLIC_NETWORK_ID
+const rpcUrl = process.env.NEXT_PUBLIC_ETHEREUM_NODE
+const dappId = process.env.NEXT_PUBLIC_BLOCK_NATIVE_DAPP_ID
+const portisKey = process.env.NEXT_PUBLIC_PORTIS_KEY
 export function initOnboard(subscriptions, currentChainId) {
   return Onboard({
     dappId,
@@ -44,10 +44,10 @@ export function initOnboard(subscriptions, currentChainId) {
         // { walletName: 'squarelink', apiKey: '87288b677f8cfb09a986' },
         { walletName: 'authereum', disableNotifications: true },
         // { walletName: 'trust', rpcUrl },
-        // {
-        //   walletName: 'walletConnect',
-        //   infuraKey: 'd5e29c9b9a9d4116a7348113f57770a8'
-        // },
+        {
+          walletName: 'walletConnect',
+          infuraKey: process.env.NEXT_PUBLIC_INFURA_ID
+        },
         { walletName: 'opera' },
         { walletName: 'operaTouch' },
         { walletName: 'imToken', rpcUrl },

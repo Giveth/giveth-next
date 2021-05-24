@@ -5,14 +5,14 @@ export const getUser = () =>
     ? JSON.parse(window.localStorage.getItem(getLocalStorageUserLabel()))
     : {}
 
-export function setUser (user) {
+export function setUser(user) {
   return window.localStorage.setItem(
     getLocalStorageUserLabel(),
     JSON.stringify(user)
   )
 }
 
-export function handleLogout () {
+export function handleLogout() {
   logout()
 }
 
@@ -27,27 +27,28 @@ export const logout = (callback = () => {}) => {
     window.localStorage.removeItem(getLocalStorageUserLabel())
     window.localStorage.removeItem(getLocalStorageTokenLabel())
     window.localStorage.removeItem('create-form')
+    window.localStorage.removeItem('cached-uploaded-imgs')
     // TODO: let's check if we should remove everything or just be careful
     // window.localStorage.clear()
   }
   callback()
 }
 
-export function getLocalStorageUserLabel () {
-  const gatsbyUser = process.env.GATSBY_LOCAL_USER_LABEL
-    ? process.env.GATSBY_LOCAL_USER_LABEL + '_' + process.env.ENVIRONMENT
-    : 'gatsbyUser' + '_' + process.env.ENVIRONMENT
+export function getLocalStorageUserLabel() {
+  const nextUser = process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
+    ? process.env.NEXT_PUBLIC_LOCAL_USER_LABEL + '_' + process.env.ENVIRONMENT
+    : 'nextUser' + '_' + process.env.ENVIRONMENT
 
-  return gatsbyUser
+  return nextUser
 }
 
-export function getLocalStorageTokenLabel () {
+export function getLocalStorageTokenLabel() {
   const tokenLabel = getLocalStorageUserLabel() + '_token'
 
   return tokenLabel
 }
 
-export function getUserToken () {
+export function getUserToken() {
   const userToken = window.localStorage.getItem(getLocalStorageTokenLabel())
   return userToken || ''
 }

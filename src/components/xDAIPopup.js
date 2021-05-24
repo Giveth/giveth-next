@@ -1,10 +1,5 @@
 import React from 'react'
 import { Flex, Text, Button, Image } from 'theme-ui'
-import { IoMdClose } from 'react-icons/io'
-import iconStreamlineGas from '../images/icon-streamline-gas.svg'
-import iconBgGas from '../images/background-gas.png'
-import xDAIcon from '../images/xDAI_ETH_icon.png'
-import theme from '../gatsby-plugin-theme-ui/index'
 
 const XDAIPopupClosed = props => {
   const { fixed } = props
@@ -52,7 +47,7 @@ const XDAIPopupClosed = props => {
         }}
       >
         <Image
-          src={xDAIcon}
+          src={'/images/xDAI_ETH_icon.png'}
           sx={{
             display: ['none', 'block', 'block'],
             objectFit: 'contain',
@@ -74,18 +69,16 @@ const XDAIPopupClosed = props => {
           Giveth supports donations in most popular Cryptocurrencies.
         </Text>
         <Flex sx={{ flexDirection: 'row', alignItems: 'center' }}>
-          <img
-            src={iconBgGas}
+          <Image
+            src={'/images/background-gas.png'}
             style={{ position: 'absolute', marginLeft: '-32px' }}
             height='64px'
             width='64px'
             alt=''
           />
-          <img
-            src={iconStreamlineGas}
-            style={{ marginRight: '12px' }}
-            height='18px'
-            width='18px'
+          <Image
+            src={'/images/icon-streamline-gas.svg'}
+            style={{ height: '18px', width: '18px', marginRight: '12px' }}
             alt=''
           />
           <Text color='background'>Save on gas fees, use xDAI network!</Text>
