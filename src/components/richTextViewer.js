@@ -1,7 +1,22 @@
 import React from 'react'
-import dynamic from 'next/dynamic'
+import ReactQuill, { Quill } from 'react-quill'
 
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+window.Quill = Quill
+
+const Link = Quill?.import('formats/link')
+
+class linkType extends Link {
+  static create(value) {
+    let node = super.create(value)
+    value = this.sanitize(value)
+    node.target = '_blank'
+    node.href = /^(?:f|ht)tps?\:\/\//.test(value) ? value : `//${value}`
+    node.removeAttribute('rel')
+    return node
+  }
+}
+
+Quill.register(linkType)
 
 function RichTextViewer({ content }) {
   return (

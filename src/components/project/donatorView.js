@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-import RichTextViewer from '../richTextViewer'
+// import RichTextViewer from '../richTextViewer'
 
 import CancelledModal from './cancelledModal'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
@@ -24,6 +25,10 @@ import FirstGiveBadge from './firstGiveBadge'
 
 import { useWallet } from '../../contextProvider/WalletProvider'
 
+const RichTextViewer = dynamic(() => import('../richTextViewer'), {
+  ssr: false
+})
+
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
 const FloatingDonateView = styled(Flex)`
@@ -42,6 +47,7 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
+  const router = useRouter()
   const { user } = useWallet()
   const [ready, setReady] = useState(false)
   const [currentTab, setCurrentTab] = useState('description')
@@ -437,10 +443,8 @@ const ProjectDonatorView = ({
             }}
             onClick={() =>
               isOwner
-                ? window.location.replace(
-                    `/account?data=${project?.slug}&view=projects`
-                  )
-                : window.location.replace(`/donate/${project?.slug}`)
+                ? router.push(`/account?data=${project?.slug}&view=projects`)
+                : router.push(`/donate/${project?.slug}`)
             }
           >
             {isOwner ? 'Edit' : 'Donate'}

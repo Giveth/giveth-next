@@ -1,11 +1,15 @@
 import React from 'react'
 import { Text, Button, Flex, Image, Grid, Box } from 'theme-ui'
+import dynamic from 'next/dynamic'
 import { animated } from 'react-spring'
-import RichTextViewer from '../richTextViewer'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
+
+const RichTextViewer = dynamic(() => import('../richTextViewer'), {
+  ssr: false
+})
 
 const FinalVerificationStep = ({
   formData,

@@ -1,15 +1,19 @@
 import React, { useContext } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { Heading, Box, Card, Flex, Button, Text } from 'theme-ui'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 
-import RichTextViewer from './richTextViewer'
 import theme from '../utils/theme-ui/index'
 // import Donate from '../components/donateForm'
 
 // import iconShare from '../images/icon-share.svg'
 // import iconHeart from '../images/icon-heart.svg'
+
+const RichTextViewer = dynamic(() => import('./richTextViewer'), {
+  ssr: false
+})
 
 const CardContainer = styled(Card)`
   position: relative;
