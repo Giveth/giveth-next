@@ -181,17 +181,17 @@ const MyDonations = props => {
   }, [])
 
   const searching = search => {
-    const donations = currentDonations
+    const donations = props.donations
     if (!search || search === '') {
-      return setCurrentDonations(props?.donations)
+      return setCurrentDonations(donations)
     }
-    const some = donations.filter(donation => {
-      if (!donation?.project.title) return null
+    const some = donations?.filter(donation => {
+      const val = donation?.project?.title
       return (
-        donation?.project.title
+        val
           ?.toString()
-          ?.toLowerCase()
-          .indexOf(search?.toString().toLowerCase()) === 0
+          .toLowerCase()
+          .indexOf(search.toString().toLowerCase()) === 0
       )
     })
     setCurrentDonations(some)
@@ -220,10 +220,15 @@ const MyDonations = props => {
     const found = iconManifest?.find(
       i => i?.symbol === item?.currency?.toUpperCase()
     )
-    let icon = found
-      ? `/assets/cryptocurrency-icons/32/color/${item?.currency?.toLowerCase() ||
-          'eth'}.png`
-      : `/assets/tokens/${item?.symbol?.toUpperCase()}.png`
+
+    let icon = `/assets/cryptocurrency-icons/32/color/${
+      item?.currency?.toLowerCase() || 'eth'
+    }.png`
+    // let icon = found
+    //   ? `/assets/cryptocurrency-icons/32/color/${
+    //       item?.currency?.toLowerCase() || 'eth'
+    //     }.png`
+    //   : `/assets/tokens/${item?.symbol?.toUpperCase()}.png`
     return { ...item, icon }
   }
 
@@ -439,7 +444,7 @@ const MyDonations = props => {
         <SearchInput sx={{ width: ['100%', null, '100%'] }}>
           <Input
             defaultValue=''
-            placeholder='Search for donations'
+            placeholder='Search for projects'
             variant='forms.search'
             onChange={e => searching(e.target.value)}
           />
