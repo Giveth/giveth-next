@@ -55,6 +55,7 @@
     "quill-emoji": "^0.2.0",
     "quill-image-drop-and-paste": "^1.1.1",
     "quill-image-resize-module": "^3.0.0",
+    "quill-magic-url": "^3.0.2",
     "raw-loader": "^4.0.2",
     "react": "17.0.2",
     "react-alert": "^7.0.2",
