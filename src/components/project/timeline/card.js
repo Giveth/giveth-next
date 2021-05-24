@@ -11,6 +11,7 @@ import {
   Flex,
   Text
 } from 'theme-ui'
+import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
 import { GET_USER } from '../../../apollo/gql/auth'
 import {
@@ -28,8 +29,11 @@ import iconShare from '../../../images/icon-share.svg'
 import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 
-import RichTextViewer from '../../richTextViewer'
+// import RichTextViewer from '../../richTextViewer'
 
+const RichTextViewer = dynamic(() => import('../../richTextViewer'), {
+  ssr: false
+})
 const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
 dayjs.extend(localizedFormat)

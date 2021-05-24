@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
-import RichTextViewer from './richTextViewer'
 import theme from '../utils/theme-ui/index'
 // import Donate from '../components/donateForm'
 import {
@@ -15,6 +15,10 @@ import { BsHeartFill } from 'react-icons/bs'
 import { FaShareAlt } from 'react-icons/fa'
 import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
+
+const RichTextViewer = dynamic(() => import('./richTextViewer'), {
+  ssr: false
+})
 
 const CardContainer = styled(Card)`
   position: relative;

@@ -4,7 +4,7 @@ import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-import RichTextViewer from '../richTextViewer'
+// import RichTextViewer from '../richTextViewer'
 
 import CancelledModal from './cancelledModal'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
@@ -23,6 +23,10 @@ import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
 
 import { useWallet } from '../../contextProvider/WalletProvider'
+
+const RichTextViewer = dynamic(() => import('../richTextViewer'), {
+  ssr: false
+})
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
