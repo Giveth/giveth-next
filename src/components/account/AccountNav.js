@@ -1,6 +1,7 @@
 import { jsx, Flex, Text, Box } from 'theme-ui'
 import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
+import { formatEtherscanLink } from '../../util'
 
 import { FiExternalLink } from 'react-icons/fi'
 
@@ -25,7 +26,7 @@ const options = [
 ]
 const AccountNav = props => {
   const { setQuery, query, projectsList, userDonations } = props
-  const { logout, wallet, user } = useWallet()
+  const { logout, user, currentChainId } = useWallet()
   const handleLogout = () => {
     logout()
   }
@@ -83,7 +84,10 @@ const AccountNav = props => {
         }}
       >
         <Link
-          href={`${wallet?.supportLink}/${user.getWalletAddress()}`}
+          href={formatEtherscanLink('Account', [
+            currentChainId,
+            user.getWalletAddress()
+          ])}
           target='_blank'
           rel='noopener noreferrer'
           sx={{ textDecoration: 'none' }}
