@@ -45,7 +45,7 @@ export async function getServerSideProps(props) {
     const { data: fetchProject } = await client.query({
       query: FETCH_PROJECT_BY_SLUG,
       variables: { slug: query?.slug },
-      fetchPolicy: "network-only",
+      fetchPolicy: "no-cache",
     });
     project = fetchProject?.projectBySlug;
     // Fetch Donations
@@ -54,7 +54,7 @@ export async function getServerSideProps(props) {
       variables: {
         toWalletAddresses: [fetchProject?.projectBySlug?.walletAddress],
       },
-      fetchPolicy: "network-only",
+      fetchPolicy: "no-cache",
     });
     donations = donationsToProject?.donationsToWallets;
 
@@ -66,7 +66,7 @@ export async function getServerSideProps(props) {
         take: 100,
         skip: 0,
       },
-      fetchPolicy: "network-only",
+      fetchPolicy: "no-cache",
     });
     updates = updatesOfProject?.getProjectUpdates;
 
@@ -76,7 +76,7 @@ export async function getServerSideProps(props) {
       variables: {
         projectId: parseInt(project?.id),
       },
-      fetchPolicy: "network-only",
+      fetchPolicy: "no-cache",
     });
     reactions = reactionsFetch?.getProjectReactions;
 

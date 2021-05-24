@@ -24,6 +24,11 @@ a {
 }
 
 
+/* quill view */
+.quill a {
+  text-decoration: underline;
+}
+
 
 /* quill editor styles */
 .ql-editor {

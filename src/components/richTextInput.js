@@ -10,6 +10,7 @@ import { UPLOAD_IMAGE } from '../../src/apollo/gql/projects'
 import 'react-quill/dist/quill.snow.css'
 import 'quill-emoji/dist/quill-emoji.css'
 import QuillImageDropAndPaste from 'quill-image-drop-and-paste'
+import MagicUrl from 'quill-magic-url'
 import ImageUploader from './richImageUploader/imageUploader'
 
 window.Quill = Quill
@@ -20,6 +21,7 @@ Quill.register('modules/imageUploader', ImageUploader)
 Quill.register('modules/emoji', Emoji)
 Quill.register('modules/ImageResize', ImageResize)
 Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste)
+Quill.register('modules/magicUrl', MagicUrl)
 
 const QuillVideo = Quill.import('formats/video')
 const BlockEmbed = Quill.import('blots/block/embed')
@@ -87,12 +89,13 @@ const modules = projectId => {
         { indent: '+1' }
       ],
       ['link', 'image', 'video'],
-      // ['emoji'],
+      ['emoji'],
       ['clean']
     ],
     'emoji-toolbar': true,
-    'emoji-textarea': false,
+    'emoji-textarea': true,
     'emoji-shortname': true,
+    magicUrl: true,
     clipboard: {
       // toggle to add extra line breaks when pasting HTML:
       matchVisual: false
@@ -152,7 +155,8 @@ const formats = [
   'indent',
   'link',
   'image',
-  'video'
+  'video',
+  'emoji'
 ]
 
 function TextRichWithQuill(props) {
