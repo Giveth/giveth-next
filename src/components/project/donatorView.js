@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
@@ -46,6 +47,7 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
+  const router = useRouter()
   const { user } = useWallet()
   const [ready, setReady] = useState(false)
   const [currentTab, setCurrentTab] = useState('description')
@@ -441,10 +443,8 @@ const ProjectDonatorView = ({
             }}
             onClick={() =>
               isOwner
-                ? window.location.replace(
-                    `/account?data=${project?.slug}&view=projects`
-                  )
-                : window.location.replace(`/donate/${project?.slug}`)
+                ? router.push(`/account?data=${project?.slug}&view=projects`)
+                : router.push(`/donate/${project?.slug}`)
             }
           >
             {isOwner ? 'Edit' : 'Donate'}
