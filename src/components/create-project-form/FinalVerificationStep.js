@@ -159,10 +159,10 @@ const FinalVerificationStep = ({
             Edit
           </Button>
         </Flex>
-        <Grid
+        <Flex
           sx={{
-            gridTemplateColumns: '75px 75px 75px 75px',
-            gap: '5px'
+            maxWidth: '450px',
+            flexWrap: 'wrap'
           }}
         >
           {chosenCategories
@@ -176,6 +176,7 @@ const FinalVerificationStep = ({
                     fontSize: 1,
                     fontFamily: 'body',
                     mt: '9px',
+                    marginRight: '8px',
                     backgroundColor: 'primary',
                     borderRadius: '18px',
                     paddingY: 1,
@@ -188,7 +189,7 @@ const FinalVerificationStep = ({
                 </Text>
               )
             })}
-        </Grid>
+        </Flex>
       </>
       <>
         <Flex>
