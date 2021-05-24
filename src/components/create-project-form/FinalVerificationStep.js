@@ -338,7 +338,8 @@ const FinalVerificationStep = ({
               letterSpacing: '4%',
               textTransform: 'uppercase',
               textAlign: 'center',
-              color: 'background'
+              color: 'background',
+              marginBottom: '88px'
             }}
           >
             Start raising funds
