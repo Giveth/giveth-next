@@ -326,7 +326,8 @@ const FinalVerificationStep = ({
             width: '240px',
             height: '52px',
             borderRadius: '48px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            marginBottom: '88px'
           }}
           type='submit'
         >
@@ -338,8 +339,7 @@ const FinalVerificationStep = ({
               letterSpacing: '4%',
               textTransform: 'uppercase',
               textAlign: 'center',
-              color: 'background',
-              marginBottom: '88px'
+              color: 'background'
             }}
           >
             Start raising funds
