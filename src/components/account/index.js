@@ -28,7 +28,6 @@ const UserSpan = styled.span`
 const AccountPage = props => {
   const router = useRouter()
   const { user, isLoggedIn } = useWallet()
-  const fromWalletAddress = user.getWalletAddress()
   const userWallets = user.walletAddresses
   const { data: donations, loading: dataLoading } = useQuery(USERS_DONATIONS, {
     fetchPolicy: 'network-only'

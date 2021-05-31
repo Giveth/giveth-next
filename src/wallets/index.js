@@ -1,7 +1,4 @@
-// import dynamic from 'next/dynamic'
-
 import Web3 from 'web3'
-import dynamic from 'next/dynamic'
 import detectEthereumProvider from '@metamask/detect-provider'
 
 // TODO: SET wallet address to this link
@@ -123,6 +120,6 @@ export const wallets = {
   }
 }
 
-export function getWallet(wallet) {
+export function getWallet (wallet) {
   return wallets[wallet]
 }
