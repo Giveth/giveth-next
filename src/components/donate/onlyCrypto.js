@@ -306,9 +306,8 @@ const OnlyCrypto = props => {
       i => i?.symbol === tokenSymbol?.toUpperCase()
     )
     if (found) {
-      img = `/assets/cryptocurrency-icons/32/color/${
-        tokenSymbol?.toLowerCase() || 'eth'
-      }.png`
+      img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() ||
+        'eth'}.png`
       setIcon(img)
     }
   }, [tokenSymbol, icon])
@@ -413,10 +412,6 @@ const OnlyCrypto = props => {
   const confirmDonation = async isFromOwnProvider => {
     try {
       let fromOwnProvider = isFromOwnProvider
-      // Until we accept every other network we will offer xDAI if detected only through metamask
-      if (isXDAI) {
-        fromOwnProvider = true
-      }
 
       if (!project?.walletAddress) {
         return Toast({
@@ -884,7 +879,7 @@ const OnlyCrypto = props => {
                 <SVGLogo />
               </Flex>
             </Flex>
-            {isLoggedIn && ready && !isXDAI && (
+            {isLoggedIn && ready && (
               <Text
                 sx={{
                   mt: 2,

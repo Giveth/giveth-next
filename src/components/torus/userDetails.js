@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
-import { Button, Image, Text, jsx } from 'theme-ui'
+import { Image, Text } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
 import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
+import { formatEtherscanLink } from '../../util'
 
 import { FiExternalLink } from 'react-icons/fi'
 
@@ -228,11 +229,10 @@ const UserDetails = () => {
             </MenuItem>
           </Link>
           <a
-            href={
-              wallet?.isTorus
-                ? wallet?.supportLink
-                : `${wallet?.supportLink}${address}`
-            }
+            href={formatEtherscanLink('Account', [
+              currentChainId,
+              user.getWalletAddress()
+            ])}
             target='_blank'
             rel='noopener noreferrer'
             sx={{ textDecoration: 'none' }}
