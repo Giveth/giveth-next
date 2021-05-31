@@ -218,17 +218,20 @@ const OnlyFiat = props => {
           sx={{
             variant: 'headings.h5',
             color: 'background',
-            mb: -4,
+            mb: 2,
             mt: 4
           }}
         >
           Coming Soon
         </Text>
         <Flex>
-          <img src={'/images/coming-soon-gear.png'} sx={{ ml: -6 }} />
+          <img
+            src={'/images/coming-soon-gear.png'}
+            style={{ marginLeft: -6 }}
+          />
           <img
             src={'/images/coming-soon.png'}
-            sx={{ position: 'absolute', mt: 5, ml: 4 }}
+            style={{ position: 'absolute', marginTop: 5, marginLeft: 4 }}
           />
         </Flex>
       </Flex>
