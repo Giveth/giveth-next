@@ -18,6 +18,7 @@ export default {
     bodyLight: '#AAAFCA',
     lightGray: '#F3F5FB',
     softGray: '#F4F6FC',
+    backgroundGray: '#F7F8FB',
     anotherGrey: '#C9D0E8',
     blue: '#3F91E4',
     lightBlue: '#F0F6FC',
