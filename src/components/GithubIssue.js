@@ -100,7 +100,7 @@ const GithubIssue = props => {
               pl={2}
               sx={{ fontSize: '14px', fontWeight: 700 }}
             >
-              GIVE FEEDBACK
+              Get Support
             </Text>
           </Flex>
         </Button>
