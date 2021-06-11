@@ -180,32 +180,6 @@ const FETCH_PROJECT_BY_SLUG = gql`
         name
         description
       }
-      reactions {
-        reaction
-        userId
-      }
-      donations {
-        transactionId
-        transactionNetworkId
-        toWalletAddress
-        fromWalletAddress
-        anonymous
-        amount
-        valueUsd
-        user {
-          id
-          name
-          firstName
-          lastName
-          avatar
-          walletAddress
-        }
-        project {
-          title
-        }
-        createdAt
-        currency
-      }
     }
   }
 `

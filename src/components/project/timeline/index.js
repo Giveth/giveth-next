@@ -91,7 +91,7 @@ const Timeline = ({
         ?.slice(0)
         .reverse()
         .map((i, index) => {
-          const date = dayjs(i.createdAt)
+          const date = dayjs(i?.projectUpdate?.createdAt)
           return (
             <Container key={index}>
               <LeftInfo sx={{ left: '-13px' }}>
