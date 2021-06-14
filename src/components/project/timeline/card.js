@@ -13,13 +13,16 @@ import {
 } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
+import ConfirmationModal from '../../confirmationModal'
 import { GET_USER } from '../../../apollo/gql/auth'
 import {
   TOGGLE_UPDATE_REACTION,
-  GET_PROJECT_UPDATES
+  EDIT_PROJECT_UPDATE,
+  DELETE_PROJECT_UPDATE
 } from '../../../apollo/gql/projects'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { useApolloClient } from '@apollo/client'
+import Toast from '../../../components/toast'
 import styled from '@emotion/styled'
 
 import theme from '../../../utils/theme-ui'
@@ -34,7 +37,9 @@ import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 const RichTextViewer = dynamic(() => import('../../richTextViewer'), {
   ssr: false
 })
-const RichTextInput = React.lazy(() => import('../../richTextInput'))
+const RichTextInput = dynamic(() => import('../../richTextInput'), {
+  ssr: false
+})
 
 dayjs.extend(localizedFormat)
 
@@ -72,7 +77,7 @@ const CardFooter = styled.span`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin: -0.5rem 0 0.5rem 0;
   padding: 0rem 1rem;
 `
@@ -106,10 +111,14 @@ const RaisedHandsImg = styled.img`
 `
 
 const TimelineCard = props => {
+  const [currentContent, setCurrentContent] = useState(null)
   const [newTitle, setNewTitle] = useState(null)
   const [newInput, setNewInput] = useState(null)
+  const [editInput, setEditInput] = useState(null)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
   const [user, setUser] = useState(null)
-  const { content, reactions, number } = props
+  const { content, reactions, number, isOwner } = props
   const client = useApolloClient()
   const isSSR = typeof window === 'undefined'
 
@@ -138,7 +147,67 @@ const TimelineCard = props => {
       console.log({ error })
     }
   }
+
   const likedByUser = reactions?.find(r => r?.userId === user?.id)
+
+  const editUpdate = async () => {
+    try {
+      if (editInput === props?.content?.content) return setOpenEdit(false)
+      await client?.mutate({
+        mutation: EDIT_PROJECT_UPDATE,
+        variables: {
+          content: editInput,
+          title: props?.content?.title,
+          updateId: parseFloat(props?.content?.id)
+        }
+      })
+      setOpenEdit(false)
+      setCurrentContent(editInput)
+      return Toast({
+        content: 'Project update successfully edited',
+        type: 'success'
+      })
+    } catch (error) {
+      console.log({ error })
+      return Toast({
+        content: JSON.stringify(error),
+        type: 'error'
+      })
+    }
+  }
+
+  const deleteUpdate = async () => {
+    try {
+      await client?.mutate({
+        mutation: DELETE_PROJECT_UPDATE,
+        variables: {
+          updateId: parseFloat(props?.content?.id)
+        },
+        refetchQueries: [
+          {
+            query: props?.refreshQuery,
+            variables: {
+              projectId: parseFloat(props?.project?.id),
+              take: 100,
+              skip: 0
+            }
+          }
+        ]
+      })
+      setConfirmDelete(false)
+      return Toast({
+        content: 'Project update deleted successfully',
+        type: 'success'
+      })
+    } catch (error) {
+      console.log({ error })
+      return Toast({
+        content: JSON.stringify(error),
+        type: 'error'
+      })
+    }
+  }
+
   useEffect(() => {
     const setup = async () => {
       if (props?.specialContent || !props?.content) return
@@ -150,12 +219,17 @@ const TimelineCard = props => {
           }
         })
         setUser(userInfo?.data?.user)
+        setEditInput(props?.content?.content)
       } catch (error) {
         console.log({ error })
       }
     }
     setup()
   }, [])
+
+  useEffect(() => {
+    setCurrentContent(props?.content?.content)
+  }, [props])
 
   if (props.newUpdateOption) {
     return (
@@ -240,13 +314,24 @@ const TimelineCard = props => {
                 zIndex: 5
               }}
               onClick={async () => {
-                const res = await props.newUpdateOption({
-                  title: newTitle,
-                  content: newInput
-                })
-                if (res !== false) {
-                  setNewTitle('')
-                  setNewInput('')
+                try {
+                  const res = await props.newUpdateOption({
+                    title: newTitle,
+                    content: newInput
+                  })
+                  if (res?.addProjectUpdate !== false) {
+                    setNewTitle('')
+                    setNewInput('')
+                    Toast({
+                      content: 'Project update added successfully',
+                      type: 'success'
+                    })
+                  }
+                } catch (error) {
+                  Toast({
+                    content: JSON.stringify(error),
+                    type: 'error'
+                  })
                 }
               }}
             >
@@ -294,6 +379,19 @@ const TimelineCard = props => {
   }
   return (
     <Box style={{ width: '100%' }}>
+      {confirmDelete && (
+        <div style={{ position: 'absolute', zIndex: 100 }}>
+          <ConfirmationModal
+            showModal={confirmDelete}
+            setShowModal={() => setConfirmDelete(false)}
+            title='Are you sure you want to delete this update?'
+            confirmation={{
+              do: () => deleteUpdate(),
+              title: 'Yes'
+            }}
+          />
+        </div>
+      )}
       <CardContainer>
         <Heading
           sx={{ variant: 'headings.h4' }}
@@ -343,30 +441,105 @@ const TimelineCard = props => {
               </Badge>
             </Creator>
           )}
-          <RichTextViewer content={content?.content} />
+          {openEdit ? (
+            <RichTextInput
+              projectId={props?.projectId}
+              style={{
+                width: '100%',
+                height: '300px',
+                fontFamily: 'body',
+                padding: '1.125rem 1rem',
+                borderRadius: '12px',
+                marginBottom: '80px',
+                resize: 'none',
+                '&::placeholder': {
+                  variant: 'body',
+                  color: 'bodyLight'
+                }
+              }}
+              value={editInput}
+              placeholder='Write your update...'
+              onChange={(newValue, delta, source) => {
+                try {
+                  setEditInput(newValue)
+                } catch (error) {
+                  console.log({ error })
+                }
+              }}
+              // onChange={e => getLength(e)}
+              // maxLength={2000}
+            />
+          ) : (
+            <RichTextViewer content={currentContent} />
+          )}
           {
             // <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
           }
         </CardContent>
         <CardFooter>
-          <IconButton onClick={react} sx={{ cursor: 'pointer' }}>
-            <img
-              src={'/images/icon-heart.svg'}
-              alt=''
-              style={{
-                '-webkit-filter': likedByUser
-                  ? 'invert(40%) grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(400%) contrast(2)'
-                  : null
-              }}
-            />
-          </IconButton>
-          <Text sx={{ variant: 'text.default', ml: -2 }}>
-            {' '}
-            {reactions?.length > 0 ? reactions?.length : ''}{' '}
-          </Text>
-          {/* <IconButton>
-            <img src={iconShare} alt='' />
-          </IconButton> */}
+          <div>
+            <IconButton onClick={react} sx={{ cursor: 'pointer' }}>
+              <img
+                src={'/images/icon-heart.svg'}
+                alt=''
+                style={{
+                  '-webkit-filter': likedByUser
+                    ? 'invert(40%) grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(400%) contrast(2)'
+                    : null
+                }}
+              />
+            </IconButton>
+            <Text sx={{ variant: 'text.default', ml: -2 }}>
+              {' '}
+              {reactions?.length > 0 ? reactions?.length : ''}{' '}
+            </Text>
+          </div>
+          {isOwner && (
+            <Flex>
+              <Button
+                sx={{
+                  cursor: 'pointer',
+                  variant: 'buttons.small',
+                  background: 'none',
+                  color: 'red',
+                  zIndex: 5,
+                  marginRight: 2
+                }}
+                onClick={async () => {
+                  if (openEdit) {
+                    setEditInput(currentContent)
+                    return setOpenEdit(false)
+                  } else {
+                    setConfirmDelete(true)
+                  }
+                }}
+              >
+                <Text variant='text.bold'>
+                  {openEdit ? 'CANCEL' : 'DELETE'}
+                </Text>
+              </Button>
+              <Button
+                sx={{
+                  cursor: 'pointer',
+                  variant: 'buttons.small',
+                  background: 'none',
+                  color: 'primary',
+                  zIndex: 5
+                }}
+                onClick={async () => {
+                  if (!openEdit) {
+                    return setOpenEdit(true)
+                  } else {
+                    editUpdate()
+                  }
+                }}
+              >
+                <Text variant='text.bold'>
+                  {openEdit ? 'COMPLETE EDITION' : 'EDIT'}
+                </Text>
+              </Button>
+            </Flex>
+          )}
         </CardFooter>
       </CardContainer>
       {

@@ -11,7 +11,9 @@ module.exports = {
       test: /\.md$/,
       use: "raw-loader",
     });
-
     return config;
+  },
+  images: {
+    domains: ["gateway.pinata.cloud"],
   },
 };

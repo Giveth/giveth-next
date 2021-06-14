@@ -79,10 +79,7 @@ const GithubIssue = props => {
           type='button'
           aria-label='edit project name'
           variant='nofill'
-          onClick={() => (
-            window.open('https://github.com/Giveth/giveth-2/issues/new/choose'),
-            '_blank'
-          )}
+          onClick={() => (window.open('/support'), '_blank')}
           sx={{
             backgroundColor: 'secondary',
             alignItems: 'center'
@@ -103,7 +100,7 @@ const GithubIssue = props => {
               pl={2}
               sx={{ fontSize: '14px', fontWeight: 700 }}
             >
-              GIVE FEEDBACK
+              Get Support
             </Text>
           </Flex>
         </Button>

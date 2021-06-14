@@ -9,15 +9,17 @@ const ConfirmationModal = ({
   noMsg
 }) => (
   <div
-    css={{
+    style={{
       display: showModal ? 'flex' : 'none',
-      position: 'absolute',
+      position: 'fixed',
+      alignSelf: 'center',
       right: '25%',
       top: '20%',
       flexDirection: 'column',
       alignItems: 'center',
       width: '600px',
-      height: '308px',
+      minHeight: '308px',
+      padding: '5%',
       backgroundColor: 'white',
       boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)',
       borderRadius: '2px'
