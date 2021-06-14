@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactQuill, { Quill } from 'react-quill'
 
 window.Quill = Quill
@@ -18,7 +18,13 @@ class linkType extends Link {
 
 Quill.register(linkType)
 
-function RichTextViewer({ content }) {
+function RichTextViewer(props) {
+  const [content, setContent] = useState(null)
+
+  useEffect(() => {
+    setContent(props?.content)
+  }, [props])
+
   return (
     <div>
       <ReactQuill

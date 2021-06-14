@@ -344,6 +344,30 @@ const GET_PROJECT_UPDATES = gql`
   }
 `
 
+const EDIT_PROJECT_UPDATE = gql`
+  mutation EditProjectUpdate(
+    $content: String!
+    $title: String!
+    $updateId: Float!
+  ) {
+    editProjectUpdate(content: $content, title: $title, updateId: $updateId) {
+      id
+      title
+      projectId
+      userId
+      content
+      createdAt
+      isMain
+    }
+  }
+`
+
+const DELETE_PROJECT_UPDATE = gql`
+  mutation DeleteProjectUpdate($updateId: Float!) {
+    deleteProjectUpdate(updateId: $updateId)
+  }
+`
+
 const TOGGLE_UPDATE_REACTION = gql`
   mutation ToggleReaction($reaction: String!, $updateId: Float!) {
     toggleReaction(reaction: $reaction, updateId: $updateId)
@@ -468,6 +492,8 @@ export {
   GET_STRIPE_PROJECT_DONATIONS,
   ADD_PROJECT_UPDATE,
   GET_PROJECT_UPDATES,
+  EDIT_PROJECT_UPDATE,
+  DELETE_PROJECT_UPDATE,
   TOGGLE_PROJECT_REACTION,
   TOGGLE_UPDATE_REACTION,
   GET_PROJECT_REACTIONS,

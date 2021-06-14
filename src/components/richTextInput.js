@@ -174,7 +174,7 @@ function TextRichWithQuill(props) {
   }, [])
 
   useEffect(() => {
-    !!props?.value && setContent(props?.value)
+    setContent(props?.value)
   }, [props?.value])
 
   if (!mod) return null

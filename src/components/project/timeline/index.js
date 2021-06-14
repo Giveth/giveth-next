@@ -82,7 +82,11 @@ const Timeline = ({
           </LeftInfo>
           {!isSSR && (
             <React.Suspense fallback={<div />}>
-              <Card newUpdateOption={addUpdate} projectId={project?.id} />
+              <Card
+                newUpdateOption={addUpdate}
+                projectId={project?.id}
+                isOwner={isOwner}
+              />
             </React.Suspense>
           )}
         </Container>
@@ -114,6 +118,7 @@ const Timeline = ({
                     number={content.length - index}
                     project={project}
                     refreshQuery={refreshQuery}
+                    isOwner={isOwner}
                   />
                 </React.Suspense>
               )}
