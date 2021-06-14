@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
 import Link from 'next/link'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
@@ -113,6 +114,12 @@ const IconBtn = styled(IconButton)`
   cursor: pointer;
 `
 
+const StyledImage = styled(Image)`
+  cursor: pointer;
+  border-radius: 12px 12px 0px 0px;
+  object-fit: cover;
+`
+
 const Categories = ({ categories }) => {
   const BadgeContent = ({ index, name }) => {
     return (
@@ -186,210 +193,231 @@ const ProjectCard = props => {
   const image = props.image || project?.image
 
   return (
-    <Box
-      key={props.listingId + '_box'}
-      style={{ width: '100%' }}
-      onMouseOver={() => setAltStyle(true)}
-      onMouseLeave={() => setAltStyle(false)}
-    >
-      <CardContainer
-        key={props.listingId || project?.title + '_card'}
-        sx={{
-          boxShadow: altStyle ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
-        }}
+    <>
+      <Box
+        key={props.listingId + '_box'}
+        style={{ width: '100%' }}
+        onMouseOver={() => setAltStyle(true)}
+        onMouseLeave={() => setAltStyle(false)}
       >
-        <Link href={`/project/${props?.slug || project?.slug || ''}`}>
-          <a>
-            <div
-              key={props.listingId || project?.title + '_div'}
-              src={image}
-              style={{
-                width: '100%',
-                height: '186px',
-                margin: '0 auto',
-                cursor: 'pointer',
-                borderRadius: '12px 12px 0px 0px',
-                backgroundImage: /^\d+$/.test(image)
-                  ? `url('/assets/create/projectImageGallery${image.toString()}.svg')`
-                  : `url(${image})`,
-                backgroundColor: '#cccccc',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                position: 'relative'
-              }}
-              alt={props.name || project?.title}
-            />
-          </a>
-        </Link>
-        <div style={{ position: 'relative' }}>
-          <Dot
-            key={props.listingId + '_card'}
-            style={{
-              backgroundColor:
-                props.raised === 0
-                  ? theme.colors.attention
-                  : theme.colors.secondary
-            }}
-          >
-            {props.raised === 0 ? (
-              <DotInner>
-                <Text
-                  sx={{ variant: 'text.overlineSmall', color: 'background' }}
-                >
-                  NEW
-                </Text>
-              </DotInner>
-            ) : (
-              <DotInner>
-                <Text
-                  sx={{ variant: 'text.overlineSmall', color: 'background' }}
-                >
-                  RAISED
-                </Text>
-                <Text sx={{ variant: 'text.microbold', color: 'background' }}>
-                  ${props.raised}
-                </Text>
-              </DotInner>
-            )}
-          </Dot>
-          <Options>
-            <Flex sx={{ alignItems: 'center' }}>
-              <BsHeartFill
-                style={{ cursor: 'pointer' }}
-                size='18px'
-                color={heartedByUser ? theme.colors.red : theme.colors.muted}
-                onClick={() => reactToProject()}
-              />
-              {heartedCount && (
-                <Text sx={{ variant: 'text.default', ml: 2 }}>
-                  {heartedCount}
-                </Text>
-              )}
-            </Flex>
-
-            <Flex sx={{ alignItems: 'center', ml: 3 }}>
-              <FaShareAlt
-                style={{ cursor: 'pointer' }}
-                onClick={() =>
-                  usePopup?.triggerPopup('share', {
-                    title: project?.title,
-                    description: project?.description,
-                    slug: project?.slug
-                  })
-                }
-                size='18px'
-                color={theme.colors.muted}
-              />
-            </Flex>
-          </Options>
-        </div>
-
-        <Heading
-          sx={{ variant: 'headings.h6' }}
-          style={{
-            padding: '2.5rem 1rem 0 1rem',
-            width: '260',
-            height: '100%',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            color: theme.colors.secondary
+        <CardContainer
+          key={props.listingId || project?.title + '_card'}
+          sx={{
+            boxShadow: altStyle ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
           }}
-          key={props.listingId + '_heading'}
         >
-          {props.name || project?.title}
-          <Text
-            sx={{ variant: 'text.default' }}
-            style={{
-              color: theme.colors.primary,
-              alignSelf: 'center',
-              minHeight: '28px',
-              lineHeight: '150%',
-              paddingTop: '4px'
-            }}
-          >
-            {''}
-          </Text>
-        </Heading>
-        {altStyle && (
-          <AltCardContent>
-            <Givers>
-              {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
-              <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
-            </Givers>
-            <Link href={`/project/${props?.slug || project?.slug || ''}`}>
-              <a>
-                <Button
-                  sx={{ width: '100%', variant: 'buttons.default', mt: 2 }}
-                >
-                  Learn More
-                </Button>
-              </a>
-            </Link>
-            <Link
-              href={
-                !props.disabled && `/donate/${props?.slug || project?.slug}`
-              }
-            >
-              <a style={{ marginTop: 2, marginBottom: 2 }}>
-                <Text
-                  sx={{
-                    variant: 'links.default',
-                    my: 2,
-                    mx: 'auto',
+          <Link href={`/project/${props?.slug || project?.slug || ''}`}>
+            <a>
+              {/^\d+$/.test(image) ? (
+                <div
+                  key={props.listingId || project?.title + '_div'}
+                  src={image}
+                  style={{
+                    width: '100%',
+                    height: '186px',
+                    margin: '0 auto',
                     cursor: 'pointer',
-                    color: theme.colors.primary
+                    borderRadius: '12px 12px 0px 0px',
+                    // backgroundImage: /^\d+$/.test(image)
+                    //   ? `url('/assets/create/projectImageGallery${image.toString()}.svg')`
+                    //   : `${image}`,
+                    backgroundImage: `url('/assets/create/projectImageGallery${image.toString()}.svg')`,
+                    backgroundColor: '#cccccc',
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    position: 'relative'
+                  }}
+                  alt={props.name || project?.title}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: '100%',
+                    height: '186px',
+                    margin: '0 auto',
+                    cursor: 'pointer',
+                    borderRadius: '12px 12px 0px 0px',
+                    backgroundColor: '#cccccc',
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    position: 'relative'
                   }}
                 >
-                  Donate
-                </Text>
-              </a>
-            </Link>
-          </AltCardContent>
-        )}
-        <CardContent>
-          <Text
-            sx={{ variant: 'text.default' }}
-            style={{
-              fontSize: '16px',
-              color: theme.colors.bodyDark,
-              // textOverflow: 'ellipsis',
-              // wordWrap: 'break-word',
-              // whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              height: '5rem',
-              lineHeight: '1.2rem',
-              display: '-webkit-box',
-              WebkitLineClamp: '3',
-              WebkitBoxOrient: 'vertical'
-            }}
-          >
-            {fromViewStyle ? (
-              project?.description
-            ) : (
-              <RichTextViewer
-                content={project?.description
-                  ?.replace(/<img .*?>/g, '')
-                  .replace(/<iframe .*?>/g, '')}
-              />
-            )}
+                  <StyledImage src={image} layout='fill' />
+                </div>
+              )}
+            </a>
+          </Link>
+          <div style={{ position: 'relative' }}>
+            <Dot
+              key={props.listingId + '_card'}
+              style={{
+                backgroundColor:
+                  props.raised === 0
+                    ? theme.colors.attention
+                    : theme.colors.secondary
+              }}
+            >
+              {props.raised === 0 ? (
+                <DotInner>
+                  <Text
+                    sx={{ variant: 'text.overlineSmall', color: 'background' }}
+                  >
+                    NEW
+                  </Text>
+                </DotInner>
+              ) : (
+                <DotInner>
+                  <Text
+                    sx={{ variant: 'text.overlineSmall', color: 'background' }}
+                  >
+                    RAISED
+                  </Text>
+                  <Text sx={{ variant: 'text.microbold', color: 'background' }}>
+                    ${props.raised}
+                  </Text>
+                </DotInner>
+              )}
+            </Dot>
+            <Options>
+              <Flex sx={{ alignItems: 'center' }}>
+                <BsHeartFill
+                  style={{ cursor: 'pointer' }}
+                  size='18px'
+                  color={heartedByUser ? theme.colors.red : theme.colors.muted}
+                  onClick={() => reactToProject()}
+                />
+                {heartedCount && (
+                  <Text sx={{ variant: 'text.default', ml: 2 }}>
+                    {heartedCount}
+                  </Text>
+                )}
+              </Flex>
 
-            {
-              /* Description String */
-              // project?.description
-            }
-          </Text>
-          <CardFooter>
-            <Categories categories={project?.categories} />
-          </CardFooter>
-        </CardContent>
-      </CardContainer>
-      {
-        // <Donate
-        //   maxAmount={balance}
-        //   doDonate={values => alert('donating' + values.amount)}
-        // />
-      }
-    </Box>
+              <Flex sx={{ alignItems: 'center', ml: 3 }}>
+                <FaShareAlt
+                  style={{ cursor: 'pointer' }}
+                  onClick={() =>
+                    usePopup?.triggerPopup('share', {
+                      title: project?.title,
+                      description: project?.description,
+                      slug: project?.slug
+                    })
+                  }
+                  size='18px'
+                  color={theme.colors.muted}
+                />
+              </Flex>
+            </Options>
+          </div>
+
+          <Heading
+            sx={{ variant: 'headings.h6' }}
+            style={{
+              padding: '2.5rem 1rem 0 1rem',
+              width: '260',
+              height: '100%',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              color: theme.colors.secondary
+            }}
+            key={props.listingId + '_heading'}
+          >
+            {props.name || project?.title}
+            <Text
+              sx={{ variant: 'text.default' }}
+              style={{
+                color: theme.colors.primary,
+                alignSelf: 'center',
+                minHeight: '28px',
+                lineHeight: '150%',
+                paddingTop: '4px'
+              }}
+            >
+              {''}
+            </Text>
+          </Heading>
+          {altStyle && (
+            <AltCardContent>
+              <Givers>
+                {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
+              <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
+              </Givers>
+              <Link href={`/project/${props?.slug || project?.slug || ''}`}>
+                <a>
+                  <Button
+                    sx={{ width: '100%', variant: 'buttons.default', mt: 2 }}
+                  >
+                    Learn More
+                  </Button>
+                </a>
+              </Link>
+              <Link
+                href={
+                  !props.disabled && `/donate/${props?.slug || project?.slug}`
+                }
+              >
+                <a style={{ marginTop: 2, marginBottom: 2 }}>
+                  <Text
+                    sx={{
+                      variant: 'links.default',
+                      my: 2,
+                      mx: 'auto',
+                      cursor: 'pointer',
+                      color: theme.colors.primary
+                    }}
+                  >
+                    Donate
+                  </Text>
+                </a>
+              </Link>
+            </AltCardContent>
+          )}
+          <CardContent>
+            <Text
+              sx={{ variant: 'text.default' }}
+              style={{
+                fontSize: '16px',
+                color: theme.colors.bodyDark,
+                // textOverflow: 'ellipsis',
+                // wordWrap: 'break-word',
+                // whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                height: '5rem',
+                lineHeight: '1.2rem',
+                display: '-webkit-box',
+                WebkitLineClamp: '3',
+                WebkitBoxOrient: 'vertical'
+              }}
+            >
+              {fromViewStyle ? (
+                project?.description
+              ) : (
+                <RichTextViewer
+                  content={project?.description
+                    ?.replace(/<img .*?>/g, '')
+                    .replace(/<iframe .*?>/g, '')}
+                />
+              )}
+
+              {
+                /* Description String */
+                // project?.description
+              }
+            </Text>
+            <CardFooter>
+              <Categories categories={project?.categories} />
+            </CardFooter>
+          </CardContent>
+        </CardContainer>
+        {
+          // <Donate
+          //   maxAmount={balance}
+          //   doDonate={values => alert('donating' + values.amount)}
+          // />
+        }
+      </Box>
+    </>
   )
 }
 
