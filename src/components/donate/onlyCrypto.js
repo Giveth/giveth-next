@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import fetch from 'isomorphic-fetch'
 import _ from 'lodash'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
-import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
-import { client } from '../../apollo/client'
 import { PopupContext } from '../../contextProvider/popupProvider'
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
-import { SAVE_DONATION } from '../../apollo/gql/donations'
+import { FETCH_ETH_PRICE, FETCH_TOKEN_PRICE } from '../../apollo/gql/donations'
 
 import Modal from '../modal'
 // import Select from '../selectWithAutocomplete'
@@ -45,6 +45,10 @@ const Select = dynamic(() => import('../selectWithAutocomplete'), {
 let provider
 
 const GIVETH_DONATION_AMOUNT = 5
+const client = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+  cache: new InMemoryCache()
+})
 
 const Content = styled.div`
   max-width: 41.25rem;
@@ -142,6 +146,7 @@ const OnlyCrypto = props => {
   const [mainToken, setMainToken] = useState(null)
   const [selectedToken, setSelectedToken] = useState(null)
   const [tokenSymbol, setTokenSymbol] = useState(null)
+  const [tokenAddress, setTokenAddress] = useState(null)
   const [selectedTokenBalance, setSelectedTokenBalance] = useState(0)
   const [notify, setNotify] = useState(null)
   const { project } = props
@@ -149,6 +154,7 @@ const OnlyCrypto = props => {
   const [mainTokenPrice, setMainTokenPrice] = useState(1)
   const [gasPrice, setGasPrice] = useState(null)
   const [gasETHPrice, setGasETHPrice] = useState(null)
+  const [ETHPrice, setETHPrice] = useState(0)
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [inProgress, setInProgress] = useState(false)
@@ -178,15 +184,7 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     const init = async () => {
-      fetch(
-        `https://min-api.cryptocompare.com/data/price?fsym=${
-          tokenSymbol === 'XDAI' ? 'DAI' : tokenSymbol
-        }&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${
-          process.env.NEXT_PUBLIC_CRYPTOCOMPARE_KEY
-        }`
-      )
-        .then(response => response.json())
-        .then(data => setTokenPrice(data.USD))
+      setTokenPrice(ETHPrice)
       setOnboard(
         initOnboard(
           {
@@ -213,6 +211,38 @@ const OnlyCrypto = props => {
   }, [tokenSymbol, currentChainId])
 
   useEffect(() => {
+    if (selectedToken?.address)
+      client
+        .query({
+          query: FETCH_TOKEN_PRICE,
+          variables: { id: selectedToken?.address }
+        })
+        .then(data => {
+          const derivedETH = data?.data?.tokens[0]?.derivedETH
+          setTokenPrice(ETHPrice * derivedETH)
+        })
+        .catch(err => {
+          console.log('Error fetching data: ', err)
+          setTokenPrice(0)
+        })
+    setTokenPrice(ETHPrice)
+  }, [selectedToken])
+
+  useEffect(() => {
+    client
+      .query({
+        query: FETCH_ETH_PRICE
+      })
+      .then(data => {
+        const { ethPrice } = data?.data?.bundle
+        setETHPrice(ethPrice)
+      })
+      .catch(err => {
+        console.log('Error fetching data: ', err)
+      })
+  }, [])
+
+  useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem(
       'selectedWallet'
     )
@@ -225,19 +255,16 @@ const OnlyCrypto = props => {
       name: null
     }
     setMainToken(mainToken)
+    const tokenList = getERC20List(currentChainId)
 
     if (mainToken === 'ETH') {
-      fetch(
-        `https://min-api.cryptocompare.com/data/price?fsym=${mainToken}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
-      )
-        .then(response => response.json())
-        .then(data => {
-          setMainTokenPrice(data.USD)
-        })
-      // On xDAI the API does not work so we set the XDAI value to one dollar
-    } else setMainTokenPrice(1)
+      setMainTokenPrice(ETHPrice)
+    } else {
+      getTokenPrice(
+        tokenList.find(token => token.symbol === mainToken)?.address
+      ).then(tokenPrice => setMainTokenPrice(tokenPrice))
+    }
 
-    const tokenList = getERC20List(currentChainId)
     const formattedTokenList = tokenList?.tokens
       ? Array.from(tokenList?.tokens, token => {
           return {
@@ -429,7 +456,6 @@ const OnlyCrypto = props => {
       }
 
       // Check amount if own provider
-      console.log({ selectedTokenBalance, subtotal })
       if (isFromOwnProvider && selectedTokenBalance < subtotal) {
         return triggerPopup('InsufficientFunds')
       }
@@ -463,7 +489,6 @@ const OnlyCrypto = props => {
               transactionHash,
               isXDAI // isXDAI
             )
-            console.log({ fromAddress, instantReceipt })
             // Save initial txn details to db
             const {
               donationId,
