@@ -110,10 +110,30 @@ const USERS_DONATIONS = gql`
     }
   }
 `
+
+const FETCH_TOKEN_PRICE = gql`
+  query($id: String) {
+    tokens(where: { id: $id }) {
+      id
+      derivedETH
+    }
+  }
+`
+
+const FETCH_ETH_PRICE = gql`
+  query {
+    bundle(id: "1") {
+      ethPrice
+    }
+  }
+`
+
 export {
   SAVE_DONATION,
   USERS_DONATIONS,
   WALLET_DONATIONS,
   PROJECT_DONATIONS,
-  SAVE_DONATION_TRANSACTION
+  SAVE_DONATION_TRANSACTION,
+  FETCH_ETH_PRICE,
+  FETCH_TOKEN_PRICE
 }
