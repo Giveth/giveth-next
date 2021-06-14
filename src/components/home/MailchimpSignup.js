@@ -1,4 +1,4 @@
-import { Grid, Button, Input, jsx, Text, theme } from 'theme-ui'
+import { Grid, Button, Input, Flex, Text, theme } from 'theme-ui'
 import React, { useState } from 'react'
 import { useAlert } from 'react-alert'
 // import addToMailchimp from 'gatsby-plugin-mailchimp'
@@ -9,13 +9,28 @@ const MailchimpSignup = () => {
   const alert = useAlert()
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
+
   const handleSubmit = async e => {
     if (email !== '') {
       e.preventDefault()
-      // TODO: ADD MAILCHIMP FOR NEXTJS
+      console.log({ email })
+      // TODO: ADD MAILCHIMP FOR NEXTJS / AUTOPILOT
       // const result = await addToMailchimp(email)
       //   .then(console.log(email))
       //   .then(setSubscribed(true))
+      console.log({ window })
+      if (typeof window !== 'undefined') {
+        try {
+          const sub = window.Autopilot.run('associate', {
+            _simpleAssociate: true,
+            Email: email
+          })
+          console.log({ sub })
+        } catch (error) {
+          console.log({ error })
+        }
+        setSubscribed(true)
+      }
       return false
     } else {
       alert.show('Please enter a valid email address')
@@ -80,7 +95,7 @@ const MailchimpSignup = () => {
           pt='30px'
           pb='100px'
         >
-          <div>
+          <Flex sx={{ flexDirection: 'column' }}>
             <Text
               sx={{
                 variant: 'headings.h4',
@@ -98,7 +113,7 @@ const MailchimpSignup = () => {
             >
               You will receive updates straight to your inbox.
             </Text>
-          </div>
+          </Flex>
           <SubscribedAnimation size={isMobile ? 350 : 600} />
         </Grid>
       )}
@@ -113,7 +128,7 @@ const MailchimpSignup = () => {
           pt='30px'
           pb='100px'
         >
-          <div sx={{ gridRow: 2 }}>
+          <Flex sx={{ flexDirection: 'column' }}>
             <Text
               sx={{
                 variant: 'headings.h5',
@@ -132,7 +147,7 @@ const MailchimpSignup = () => {
             >
               You will receive updates straight to your inbox.
             </Text>
-          </div>
+          </Flex>
           <SubscribedAnimation size={isMobile ? 350 : 600} />
         </Grid>
       )}

@@ -181,7 +181,7 @@ const Footer = () => {
             >
               Blog <ExtIcon />
             </FooterExternalLink>
-            <FooterLink href='/contact'>Contact</FooterLink>
+            <FooterLink href='/support'>Support</FooterLink>
             <FooterLink href='/tos'>Terms of Use</FooterLink>
           </LinkBox>
           <LinkBox>
