@@ -14,6 +14,6 @@ module.exports = {
     return config;
   },
   images: {
-    domains: ["gateway.pinata.cloud"],
+    domains: ["gateway.pinata.cloud", "imgur.com", "i.imgur.com"],
   },
 };
