@@ -184,6 +184,7 @@ const ProjectCard = props => {
   }, [project])
 
   const image = props.image || project?.image
+
   return (
     <Box
       key={props.listingId + '_box'}
@@ -199,50 +200,25 @@ const ProjectCard = props => {
       >
         <Link href={`/project/${props?.slug || project?.slug || ''}`}>
           <a>
-            {/^\d+$/.test(image) ? (
-              <div
-                key={props.listingId || project?.title + '_div'}
-                src={image}
-                style={{
-                  width: '100%',
-                  height: '186px',
-                  margin: '0 auto',
-                  cursor: 'pointer',
-                  borderRadius: '12px 12px 0px 0px',
-                  // backgroundImage: /^\d+$/.test(image)
-                  //   ? `url('/assets/create/projectImageGallery${image.toString()}.svg')`
-                  //   : `url(${image})`,
-                  backgroundImage: `url('/assets/create/projectImageGallery${image.toString()}.svg')`,
-                  backgroundColor: '#cccccc',
-                  backgroundSize: 'cover',
-                  backgroundRepeat: 'no-repeat',
-                  position: 'relative'
-                }}
-                alt={props.name || project?.title}
-              />
-            ) : (
-              <div
-                style={{
-                  width: '100%',
-                  height: '186px',
-                  margin: '0 auto',
-                  cursor: 'pointer',
-                  backgroundRepeat: 'no-repeat',
-                  position: 'relative'
-                }}
-              >
-                <img
-                  src={image}
-                  width='100%'
-                  height='100%'
-                  style={{
-                    borderRadius: '12px 12px 0px 0px',
-                    backgroundColor: 'transparent',
-                    objectFit: 'cover'
-                  }}
-                />
-              </div>
-            )}
+            <div
+              key={props.listingId || project?.title + '_div'}
+              src={image}
+              style={{
+                width: '100%',
+                height: '186px',
+                margin: '0 auto',
+                cursor: 'pointer',
+                borderRadius: '12px 12px 0px 0px',
+                backgroundImage: /^\d+$/.test(image)
+                  ? `url('/assets/create/projectImageGallery${image.toString()}.svg')`
+                  : `url(${image})`,
+                backgroundColor: '#cccccc',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                position: 'relative'
+              }}
+              alt={props.name || project?.title}
+            />
           </a>
         </Link>
         <div style={{ position: 'relative' }}>
