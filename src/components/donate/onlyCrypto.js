@@ -173,7 +173,6 @@ const OnlyCrypto = props => {
   const {
     isLoggedIn,
     currentChainId,
-    currentNetwork,
     sendTransaction,
     user,
     ready,
@@ -208,7 +207,7 @@ const OnlyCrypto = props => {
       setNotify(initNotify())
     }
     init()
-  }, [tokenSymbol, currentChainId])
+  }, [tokenSymbol, currentChainId, ETHPrice])
 
   useEffect(() => {
     if (selectedToken?.address)
