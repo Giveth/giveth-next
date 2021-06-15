@@ -183,6 +183,17 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     const init = async () => {
+      client
+        .query({
+          query: FETCH_ETH_PRICE
+        })
+        .then(data => {
+          const { ethPrice } = data?.data?.bundle
+          setETHPrice(ethPrice)
+        })
+        .catch(err => {
+          console.log('Error fetching data: ', err)
+        })
       setTokenPrice(ETHPrice)
       setOnboard(
         initOnboard(
@@ -224,22 +235,7 @@ const OnlyCrypto = props => {
           console.log('Error fetching data: ', err)
           setTokenPrice(0)
         })
-    setTokenPrice(ETHPrice)
   }, [selectedToken])
-
-  useEffect(() => {
-    client
-      .query({
-        query: FETCH_ETH_PRICE
-      })
-      .then(data => {
-        const { ethPrice } = data?.data?.bundle
-        setETHPrice(ethPrice)
-      })
-      .catch(err => {
-        console.log('Error fetching data: ', err)
-      })
-  }, [])
 
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem(
