@@ -6,8 +6,9 @@
   "private": false,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run clean && next build",
     "start": "next start",
+    "clean": "npx rimraf .next",
     "cy:open": "npx cypress open",
     "cy:e2e": "npx cypress run --spec cypress/integration/e2e/**/*.spec.js",
     "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js",
