@@ -16,4 +16,6 @@ module.exports = {
   images: {
     domains: ["gateway.pinata.cloud", "imgur.com", "i.imgur.com"],
   },
+  cleanDistDir: false,
+  webpack5: false,
 };
