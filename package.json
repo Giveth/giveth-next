@@ -6,8 +6,10 @@
   "private": false,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run clean && next build",
     "start": "next start",
+    "clean": "npx rimraf .next",
+    
     "cy:open": "npx cypress open",
     "cy:e2e": "npx cypress run --spec cypress/integration/e2e/**/*.spec.js",
     "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js",
@@ -46,7 +48,7 @@
     "isomorphic-fetch": "^3.0.0",
     "js-search": "^2.0.0",
     "lodash": "^4.17.21",
-    "next": "10.2.0",
+    "next": "^11.0.0",
     "next-seo": "^4.24.0",
     "nextjs-progressbar": "^0.0.9",
     "prop-types": "^15.6.2",
@@ -57,11 +59,11 @@
     "quill-image-resize-module": "^3.0.0",
     "quill-magic-url": "^3.0.2",
     "raw-loader": "^4.0.2",
-    "react": "17.0.2",
+    "react": "^17.0.2",
     "react-alert": "^7.0.2",
     "react-alert-template-mui": "^1.0.7",
     "react-collapsible": "^2.8.3",
-    "react-dom": "17.0.2",
+    "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.2",
     "react-headroom": "^3.1.1",
     "react-hook-form": "^7.3.6",
@@ -98,7 +100,7 @@
     "ganache-cli": "^6.12.2",
     "netlify-plugin-cypress": "^2.2.0",
     "prettier": "^2.2.1",
-    "typescript": "^4.2.4"
+    "typescript": "^4.3.2"
   },
   "repository": {
     "type": "git",

@@ -35,8 +35,10 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
 
   const addUpdate = async ({ title, content }) => {
     try {
-      if (!title || !content)
-        return Toast({ content: 'Fields should not be empty', type: 'error' })
+      if (!title || !content) {
+        Toast({ content: 'Fields should not be empty', type: 'error' })
+        return false
+      }
       // check if file is too large, avg 4Mb
       const contentSize = encodeURI(content).split(/%..|./)?.length - 1
       if (contentSize > 4000000) {

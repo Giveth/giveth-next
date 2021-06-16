@@ -1,9 +1,16 @@
-import { Grid, Button, Input, Flex, Text, theme } from 'theme-ui'
+import { Grid, Button, Input, Flex, Text } from 'theme-ui'
 import React, { useState } from 'react'
 import { useAlert } from 'react-alert'
+import Toast from '../../components/toast'
+
 // import addToMailchimp from 'gatsby-plugin-mailchimp'
 import SubscribedAnimation from '../animations/subscribed'
 import { useMediaQuery } from 'react-responsive'
+
+function validateEmail(email) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
+}
 
 const MailchimpSignup = () => {
   const alert = useAlert()
@@ -11,21 +18,20 @@ const MailchimpSignup = () => {
   const [subscribed, setSubscribed] = useState(false)
 
   const handleSubmit = async e => {
+    e?.preventDefault()
     if (email !== '') {
-      e.preventDefault()
-      console.log({ email })
-      // TODO: ADD MAILCHIMP FOR NEXTJS / AUTOPILOT
-      // const result = await addToMailchimp(email)
-      //   .then(console.log(email))
-      //   .then(setSubscribed(true))
-      console.log({ window })
+      if (!validateEmail(email))
+        return Toast({
+          content: `Please type a valid email`,
+          type: 'error'
+        })
+
       if (typeof window !== 'undefined') {
         try {
-          const sub = window.Autopilot.run('associate', {
+          await window.Autopilot.run('associate', {
             _simpleAssociate: true,
             Email: email
           })
-          console.log({ sub })
         } catch (error) {
           console.log({ error })
         }
@@ -33,7 +39,10 @@ const MailchimpSignup = () => {
       }
       return false
     } else {
-      alert.show('Please enter a valid email address')
+      return Toast({
+        content: `Please type a valid email`,
+        type: 'error'
+      })
     }
   }
 

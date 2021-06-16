@@ -319,7 +319,7 @@ const TimelineCard = props => {
                     title: newTitle,
                     content: newInput
                   })
-                  if (res?.addProjectUpdate !== false) {
+                  if (res && res?.addProjectUpdate !== false) {
                     setNewTitle('')
                     setNewInput('')
                     Toast({
@@ -534,9 +534,7 @@ const TimelineCard = props => {
                   }
                 }}
               >
-                <Text variant='text.bold'>
-                  {openEdit ? 'COMPLETE EDITION' : 'EDIT'}
-                </Text>
+                <Text variant='text.bold'>{openEdit ? 'SAVE' : 'EDIT'}</Text>
               </Button>
             </Flex>
           )}
