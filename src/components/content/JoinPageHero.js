@@ -3,9 +3,6 @@ import { useMediaQuery } from 'react-responsive'
 import { Grid, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 
-// import decorative graphics
-import heroImage from '../../images/people-highfive.svg'
-
 const HeroSection = styled(Grid)`
   grid-template-columns: 1fr auto;
   align-items: end;
@@ -67,7 +64,9 @@ const Hero = () => {
           forward to welcoming you!
         </Text>
       </HeroText>
-      {isMobile ? null : <HeroImage src={heroImage} alt='' />}
+      {isMobile ? null : (
+        <HeroImage src={'../../images/people-highfive.svg'} alt='' />
+      )}
     </HeroSection>
   )
 }
