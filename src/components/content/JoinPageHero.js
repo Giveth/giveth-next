@@ -53,17 +53,18 @@ const Hero = () => {
             lineHeight: 'taller'
           }}
         >
-          Community of Makers, Building the Future of Giving
+          Building the Future of Giving
         </Text>
         <Text pt={4} sx={{ variant: 'text.default' }}>
-          Giveth is first and foremost a community. We are people working to
-          build and give well the future we made together. Our project is
-          open-source, decentralized, altruistic, and community-led. As you've
-          made it this far, you are probably a Giver and a Maker too.
+          Giveth is first and foremost a community of givers and changemakers.
+          We are passionate people working together to build a crypto-economic
+          system that can reward giving to good causes. Our project is
+          open-source, decentralized, altruistic, and community-led. Want to get
+          more involved?
           <br />
           <br />
-          Join one of our platforms below and introduce yourself, so we can
-          welcome you!
+          Follow our social media and come say hello in a channel below, we look
+          forward to welcoming you!
         </Text>
       </HeroText>
       {isMobile ? null : <HeroImage src={heroImage} alt='' />}
