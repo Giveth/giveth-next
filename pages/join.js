@@ -1,43 +1,85 @@
-import { jsx, Flex, Grid } from "theme-ui";
-import { fetchEntries } from "../src/utils/contentfulPosts";
-import Layout from "../src/components/layout";
-import Seo from "../src/components/seo";
-import Hero from "../src/components/content/JoinPageHero";
-import JoinChatCard from "../src/components/content/JoinPageCard";
+import { jsx, Flex, Grid, Text } from 'theme-ui'
+import { fetchEntries } from '../src/utils/contentfulPosts'
+import Layout from '../src/components/layout'
+import Seo from '../src/components/seo'
+import Hero from '../src/components/content/JoinPageHero'
+import JoinChatCard from '../src/components/content/JoinPageCard'
 
-const JoinPage = ({ joinChat }) => {
+const JoinPage = ({ joinChat, joinConsume }) => {
   return (
     <Layout>
-      <Seo title="Join our community" />
+      <Seo title='Join our community' />
       <Hero />
-      <Flex sx={{ justifyContent: "center", backgroundColor: "lightestBlue" }}>
+      <Grid
+        rows={2}
+        sx={{ justifyContent: 'center', backgroundColor: 'lightestBlue' }}
+      >
+        <Text
+          sx={{
+            variant: 'headings.h4',
+            textAlign: 'center',
+            paddingTop: '2rem',
+            color: 'primary'
+          }}
+        >
+          Engage
+        </Text>
         <Grid
-          mt="2rem"
-          p={[1, 2, 6]}
+          p={[1, 2, 2]}
           columns={[1, 1, 2]}
-          sx={{ maxWidth: "80vw" }}
+          sx={{ paddingLeft: '10vw', paddingRight: '10vw' }}
         >
           <JoinChatCard data={joinChat} />
         </Grid>
-      </Flex>
+      </Grid>
+      <div style={{ height: '10vh' }} />
+      <Grid
+        rows={2}
+        sx={{ justifyContent: 'center', backgroundColor: 'lightestBlue' }}
+      >
+        <Text
+          sx={{
+            variant: 'headings.h4',
+            textAlign: 'center',
+            paddingTop: '2rem',
+            color: 'primary'
+          }}
+        >
+          Consume
+        </Text>
+        <Grid
+          p={[1, 2, 2]}
+          columns={[1, 1, 2]}
+          sx={{ paddingLeft: '10vw', paddingRight: '10vw' }}
+        >
+          <JoinChatCard data={joinConsume} />
+        </Grid>
+      </Grid>
     </Layout>
-  );
-};
+  )
+}
 
-export async function getServerSideProps() {
+export async function getServerSideProps () {
   // contentful
   const joinReq = await fetchEntries({
-    contentType: "contentJoinChatprovider",
-  });
-  const joinChat = await joinReq.map((j) => {
-    return j.fields;
-  });
+    contentType: 'contentJoinChatprovider'
+  })
+  const joinConsumeReq = await fetchEntries({
+    contentType: 'contentJoinConsumeProvider'
+  })
+  const joinChat = await joinReq.map(j => {
+    return j.fields
+  })
+  const joinConsume = await joinConsumeReq.map(j => {
+    return j.fields
+  })
 
   return {
     props: {
       joinChat: joinChat || {},
-    },
-  };
+      joinConsume: joinConsume || {}
+    }
+  }
 }
 
-export default JoinPage;
+export default JoinPage
