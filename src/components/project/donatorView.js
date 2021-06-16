@@ -113,9 +113,9 @@ const ProjectDonatorView = ({
           admin: projectAdmin,
           updates: projectUpdates
         })
-
         setTotalGivers(
-          [...new Set(donations?.map(data => data?.fromWalletAddress))].length
+          [...new Set(projectDonations?.map(data => data?.fromWalletAddress))]
+            .length
         )
         setIsOwner(project?.admin === user.id)
 
@@ -126,7 +126,7 @@ const ProjectDonatorView = ({
       }
     }
     setup()
-  }, [])
+  }, [project])
 
   const showMap = process.env.OPEN_FOREST_MAP
     ? process.env.OPEN_FOREST_MAP

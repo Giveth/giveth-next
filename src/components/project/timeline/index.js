@@ -93,7 +93,11 @@ const Timeline = ({
       )}
       {content
         ?.slice(0)
-        .reverse()
+        ?.sort((a, b) => {
+          return (b?.projectUpdate?.createdAt).localeCompare(
+            a?.projectUpdate?.createdAt
+          )
+        })
         .map((i, index) => {
           const date = dayjs(i?.projectUpdate?.createdAt)
           return (
