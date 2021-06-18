@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 const HeroSection = styled(Grid)`
   grid-template-columns: 1fr auto;
   align-items: end;
-  &:nth-child(1) {
+  &:nth-of-type(1) {
     text-align: center;
   }
   @media (max-width: 850px) {

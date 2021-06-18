@@ -67,6 +67,14 @@ export const wallets = {
         network: { host: network },
         showTorusButton: false,
         whiteLabel: true,
+        loginConfig: {
+          reddit: {
+            jwtParameters: {
+              client_id: 'yDIt8Lde-RoHqQ',
+              redirect_uri: 'http://giveth.io/'
+            }
+          }
+        },
         paymentProviders: {
           moonpay: {
             minOrderValue: 24.99,
@@ -120,6 +128,6 @@ export const wallets = {
   }
 }
 
-export function getWallet (wallet) {
+export function getWallet(wallet) {
   return wallets[wallet]
 }
