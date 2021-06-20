@@ -189,7 +189,7 @@ const OnlyCrypto = props => {
         })
         .then(data => {
           const { ethPrice } = data?.data?.bundle
-          setETHPrice(ethPrice)
+          setETHPrice(parseFloat(ethPrice)?.toFixed(2))
         })
         .catch(err => {
           console.log('Error fetching data: ', err)
@@ -229,7 +229,7 @@ const OnlyCrypto = props => {
         })
         .then(data => {
           const derivedETH = data?.data?.tokens[0]?.derivedETH
-          setTokenPrice(ETHPrice * derivedETH)
+          setTokenPrice(parseFloat(ETHPrice * derivedETH)?.toFixed(2))
         })
         .catch(err => {
           console.log('Error fetching data: ', err)
@@ -255,9 +255,9 @@ const OnlyCrypto = props => {
     if (mainToken === 'ETH') {
       setMainTokenPrice(ETHPrice)
     } else {
-      getTokenPrice(
-        tokenList.find(token => token.symbol === mainToken)?.address
-      ).then(tokenPrice => setMainTokenPrice(tokenPrice))
+      // getTokenPrice(
+      //   tokenList.find(token => token.symbol === mainToken)?.address
+      // ).then(tokenPrice => setMainTokenPrice(tokenPrice))
     }
 
     const formattedTokenList = tokenList?.tokens
@@ -351,6 +351,7 @@ const OnlyCrypto = props => {
 
   const donationTokenToUSD = amountOfToken => {
     const USDValue = (amountOfToken * tokenPrice).toFixed(2)
+    if (currentChainId == 100) return ''
     if (USDValue > 0) {
       return `$${USDValue}`
     }

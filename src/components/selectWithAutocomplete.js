@@ -42,25 +42,33 @@ const SelectWithAutocomplete = ({
       const found = iconManifest?.find(
         i => i?.symbol === value?.symbol?.toUpperCase()
       )
-
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image
-            src={
-              found
-                ? `/assets/cryptocurrency-icons/32/color/${
-                    value?.symbol?.toLowerCase() || 'eth'
-                  }.png`
-                : `/assets/tokens/${value?.symbol?.toUpperCase()}.png`
-            }
-            alt={value?.symbol}
-            onError={ev => {
-              ev.target.src = ETHIcon
-              ev.target.onerror = null
-            }}
-            width={'32px'}
-            height={'32px'}
-          />
+          {found ? (
+            <Image
+              src={
+                found
+                  ? `/assets/cryptocurrency-icons/32/color/${
+                      value?.symbol?.toLowerCase() || 'eth'
+                    }.png`
+                  : `/assets/tokens/${value?.symbol?.toUpperCase()}.png`
+              }
+              alt={value?.symbol}
+              onError={ev => {
+                ev.target.src = ETHIcon
+                ev.target.onerror = null
+              }}
+              width={'32px'}
+              height={'32px'}
+            />
+          ) : (
+            <Image
+              src={`/assets/cryptocurrency-icons/32/color/eth.png`}
+              width={'32px'}
+              height={'32px'}
+            />
+          )}
+
           <Text variant='text.default' color='secondary' sx={{ pl: 2 }}>
             {`${value?.symbol}`}
           </Text>
