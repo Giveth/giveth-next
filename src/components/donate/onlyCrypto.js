@@ -189,7 +189,7 @@ const OnlyCrypto = props => {
         })
         .then(data => {
           const { ethPrice } = data?.data?.bundle
-          setETHPrice(ethPrice)
+          setETHPrice(parseFloat(ethPrice)?.toFixed(2))
         })
         .catch(err => {
           console.log('Error fetching data: ', err)
@@ -275,7 +275,6 @@ const OnlyCrypto = props => {
           }
         })
       : []
-    console.log('lolo', formattedTokenList)
 
     if (mainToken === 'ETH') {
       setMainTokenPrice(ETHPrice)

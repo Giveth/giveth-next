@@ -1,24 +1,48 @@
-import { Grid, Button, Input, jsx, Text, theme } from 'theme-ui'
+import { Grid, Button, Input, Flex, Text } from 'theme-ui'
 import React, { useState } from 'react'
 import { useAlert } from 'react-alert'
+import Toast from '../../components/toast'
+
 // import addToMailchimp from 'gatsby-plugin-mailchimp'
 import SubscribedAnimation from '../animations/subscribed'
 import { useMediaQuery } from 'react-responsive'
+
+function validateEmail(email) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
+}
 
 const MailchimpSignup = () => {
   const alert = useAlert()
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
+
   const handleSubmit = async e => {
+    e?.preventDefault()
     if (email !== '') {
-      e.preventDefault()
-      // TODO: ADD MAILCHIMP FOR NEXTJS
-      // const result = await addToMailchimp(email)
-      //   .then(console.log(email))
-      //   .then(setSubscribed(true))
+      if (!validateEmail(email))
+        return Toast({
+          content: `Please type a valid email`,
+          type: 'error'
+        })
+
+      if (typeof window !== 'undefined') {
+        try {
+          await window.Autopilot.run('associate', {
+            _simpleAssociate: true,
+            Email: email
+          })
+        } catch (error) {
+          console.log({ error })
+        }
+        setSubscribed(true)
+      }
       return false
     } else {
-      alert.show('Please enter a valid email address')
+      return Toast({
+        content: `Please type a valid email`,
+        type: 'error'
+      })
     }
   }
 
@@ -80,7 +104,7 @@ const MailchimpSignup = () => {
           pt='30px'
           pb='100px'
         >
-          <div>
+          <Flex sx={{ flexDirection: 'column' }}>
             <Text
               sx={{
                 variant: 'headings.h4',
@@ -98,7 +122,7 @@ const MailchimpSignup = () => {
             >
               You will receive updates straight to your inbox.
             </Text>
-          </div>
+          </Flex>
           <SubscribedAnimation size={isMobile ? 350 : 600} />
         </Grid>
       )}
@@ -113,7 +137,7 @@ const MailchimpSignup = () => {
           pt='30px'
           pb='100px'
         >
-          <div sx={{ gridRow: 2 }}>
+          <Flex sx={{ flexDirection: 'column' }}>
             <Text
               sx={{
                 variant: 'headings.h5',
@@ -132,7 +156,7 @@ const MailchimpSignup = () => {
             >
               You will receive updates straight to your inbox.
             </Text>
-          </div>
+          </Flex>
           <SubscribedAnimation size={isMobile ? 350 : 600} />
         </Grid>
       )}

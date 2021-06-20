@@ -82,14 +82,22 @@ const Timeline = ({
           </LeftInfo>
           {!isSSR && (
             <React.Suspense fallback={<div />}>
-              <Card newUpdateOption={addUpdate} projectId={project?.id} />
+              <Card
+                newUpdateOption={addUpdate}
+                projectId={project?.id}
+                isOwner={isOwner}
+              />
             </React.Suspense>
           )}
         </Container>
       )}
       {content
         ?.slice(0)
-        .reverse()
+        ?.sort((a, b) => {
+          return (b?.projectUpdate?.createdAt).localeCompare(
+            a?.projectUpdate?.createdAt
+          )
+        })
         .map((i, index) => {
           const date = dayjs(i?.projectUpdate?.createdAt)
           return (
@@ -114,6 +122,7 @@ const Timeline = ({
                     number={content.length - index}
                     project={project}
                     refreshQuery={refreshQuery}
+                    isOwner={isOwner}
                   />
                 </React.Suspense>
               )}
