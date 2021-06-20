@@ -221,20 +221,36 @@ const OnlyCrypto = props => {
   }, [tokenSymbol, currentChainId, ETHPrice])
 
   useEffect(() => {
-    if (selectedToken?.address)
-      client
-        .query({
-          query: FETCH_TOKEN_PRICE,
-          variables: { id: selectedToken?.address }
-        })
-        .then(data => {
+    client
+      .query({
+        query: FETCH_TOKEN_PRICE,
+        variables: {
+          id: selectedToken?.mainnetAddress || selectedToken?.address || ''
+        }
+      })
+      .then(data => {
+        if (data?.data?.tokens.length > 0) {
           const derivedETH = data?.data?.tokens[0]?.derivedETH
           setTokenPrice(ETHPrice * derivedETH)
-        })
-        .catch(err => {
-          console.log('Error fetching data: ', err)
-          setTokenPrice(0)
-        })
+        } else {
+          fetch(
+            `https://min-api.cryptocompare.com/data/price?fsym=${
+              tokenSymbol === 'XDAI' ? 'DAI' : tokenSymbol
+            }&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${
+              process.env.NEXT_PUBLIC_CRYPTOCOMPARE_KEY
+            }`
+          )
+            .then(response => response.json())
+            .then(data => {
+              if (data.USD) setTokenPrice(data.USD)
+              else setTokenPrice(0)
+            })
+        }
+      })
+      .catch(err => {
+        console.log('Error fetching data: ', err)
+        setTokenPrice(0)
+      })
   }, [selectedToken])
 
   useEffect(() => {
@@ -251,15 +267,6 @@ const OnlyCrypto = props => {
     }
     setMainToken(mainToken)
     const tokenList = getERC20List(currentChainId)
-
-    if (mainToken === 'ETH') {
-      setMainTokenPrice(ETHPrice)
-    } else {
-      getTokenPrice(
-        tokenList.find(token => token.symbol === mainToken)?.address
-      ).then(tokenPrice => setMainTokenPrice(tokenPrice))
-    }
-
     const formattedTokenList = tokenList?.tokens
       ? Array.from(tokenList?.tokens, token => {
           return {
@@ -268,6 +275,40 @@ const OnlyCrypto = props => {
           }
         })
       : []
+    console.log('lolo', formattedTokenList)
+
+    if (mainToken === 'ETH') {
+      setMainTokenPrice(ETHPrice)
+    } else {
+      const token = formattedTokenList.find(token => token.label === mainToken)
+      client
+        .query({
+          query: FETCH_TOKEN_PRICE,
+          variables: {
+            id: token?.value?.mainnetAddress || token?.value?.address || ''
+          }
+        })
+        .then(data => {
+          if (data?.data?.tokens.length > 0) {
+            const derivedETH = data?.data?.tokens[0]?.derivedETH
+            setMainTokenPrice(ETHPrice * derivedETH)
+          } else {
+            fetch(
+              `https://min-api.cryptocompare.com/data/price?fsym=${mainToken}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
+            )
+              .then(response => response.json())
+              .then(data => {
+                if (data.USD) setMainTokenPrice(data.USD)
+                else setMainTokenPrice(0)
+              })
+          }
+        })
+        .catch(err => {
+          console.log('Error fetching data: ', err)
+          setMainTokenPrice(0)
+        })
+    }
+
     setSelectedToken(currentMainToken)
     setTokenSymbol(mainToken)
     setErc20List([
