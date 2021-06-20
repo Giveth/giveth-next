@@ -512,6 +512,7 @@ const ropstenTokens = {
     {
       chainId: 3,
       address: '0xad6d458402f60fd3bd25163575031acdce07538d',
+      mainnetAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
       symbol: 'DAI',
       name: 'DAI Ropsten',
       decimals: 18
@@ -526,6 +527,7 @@ const ropstenTokens = {
     {
       chainId: 3,
       address: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+      mainnetAddress: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
       symbol: 'UNI',
       name: 'UNI Ropsten'
     }
@@ -540,6 +542,7 @@ const xDaiTokens = {
     {
       chainId: 100,
       address: '0x981fb9ba94078a2275a8fc906898ea107b9462a8',
+      mainnetAddress: '0xd56dac73a4d6766464b38ec6d91eb45ce7457c44',
       symbol: 'PAN',
       name: 'Panvala',
       decimals: 18
@@ -547,6 +550,7 @@ const xDaiTokens = {
     {
       chainId: 100,
       address: '0x71850b7E9Ee3f13Ab46d67167341E4bDc905Eef9',
+      mainnetAddress: '0xc3589f56b6869824804a5ea29f2c9886af1b0fce',
       symbol: 'HNY',
       name: 'Honey',
       decimals: 18
@@ -554,6 +558,7 @@ const xDaiTokens = {
     {
       chainId: 100,
       address: '0xb7D311E2Eb55F2f68a9440da38e7989210b9A05e',
+      mainnetAddress: '0x0Ae055097C6d159879521C384F1D2123D1f195e6',
       symbol: 'STAKE',
       name: 'STAKE on xDai'
       // decimals: 18
@@ -561,6 +566,7 @@ const xDaiTokens = {
     {
       chainId: 100,
       address: '0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83',
+      mainnetAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
       symbol: 'USDC',
       name: 'USDC on xDai'
       // decimals: 18
@@ -575,6 +581,7 @@ const xDaiTokens = {
     {
       chainId: 100,
       address: '0xE2e73A1c69ecF83F464EFCE6A5be353a37cA09b2',
+      mainnetAddress: '0x514910771af9ca656af840dff83e8264ecf986ca',
       symbol: 'LINK',
       name: 'ChainLink Token on xDai'
       // decimals: 18
@@ -589,6 +596,7 @@ const xDaiTokens = {
     {
       chainId: 100,
       address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
+      mainnetAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
       symbol: 'WXDAI',
       name: 'Wrapped XDAI'
       // decimals: 18
@@ -596,6 +604,7 @@ const xDaiTokens = {
     {
       chainId: 100,
       address: '0x4ECaBa5870353805a9F068101A40E0f32ed605C6',
+      mainnetAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
       symbol: 'USDT',
       name: 'Tether USD on xDai'
       // decimals: 18
@@ -603,6 +612,7 @@ const xDaiTokens = {
     {
       chainId: 100,
       address: '0x8e5bBbb09Ed1ebdE8674Cda39A0c169401db4252',
+      mainnetAddress: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
       symbol: 'WBTC',
       name: 'Wrapped BTC on xDai'
       // decimals: 18
