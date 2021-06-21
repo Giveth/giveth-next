@@ -54,7 +54,7 @@ const customStyles = {
   }
 }
 
-function SupportCard ({ data }) {
+function SupportCard({ data }) {
   const [showModal, toggleModal] = useState(false)
   return (
     <>
@@ -103,7 +103,10 @@ function SupportCard ({ data }) {
                   sx={{
                     variant: 'buttons.default'
                   }}
-                  onClick={() => toggleModal(true)}
+                  onClick={() => {
+                    // toggleModal(true)
+                    window?.open(support.onboardingLink), '_blank'
+                  }}
                 >
                   {support.platformTitle}
                 </Button>
@@ -114,7 +117,11 @@ function SupportCard ({ data }) {
                 >
                   <iframe
                     title='Give feedback'
-                    src={support.onboardingLink}
+                    src={
+                      `${support.onboardingLink}/?random=` +
+                      new Date().getTime() +
+                      Math.floor(Math.random() * 1000000)
+                    }
                     style={{
                       height: '70%',
                       width: '100%',
