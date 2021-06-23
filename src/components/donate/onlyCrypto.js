@@ -56,6 +56,8 @@ const Content = styled.div`
 `
 
 const AmountSection = styled.div`
+  display: flex;
+  flex-direction: column;
   margin: 1.3rem 0 0 0;
   @media (max-width: 800px) {
     display: flex;
@@ -67,6 +69,10 @@ const AmountSection = styled.div`
 `
 
 const AmountContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   margin: 2rem 0;
   @media (max-width: 800px) {
     display: flex;
@@ -194,7 +200,7 @@ const OnlyCrypto = props => {
         .catch(err => {
           console.log('Error fetching data: ', err)
         })
-      setTokenPrice(ETHPrice)
+      setTokenPrice(currentChainId === 100 ? 1 : ETHPrice)
       setOnboard(
         initOnboard(
           {
@@ -222,19 +228,41 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     if (selectedToken?.address)
-      client
-        .query({
-          query: FETCH_TOKEN_PRICE,
-          variables: { id: selectedToken?.address }
-        })
-        .then(data => {
-          const derivedETH = data?.data?.tokens[0]?.derivedETH
-          setTokenPrice(parseFloat(ETHPrice * derivedETH)?.toFixed(2))
-        })
-        .catch(err => {
-          console.log('Error fetching data: ', err)
-          setTokenPrice(0)
-        })
+      if (currentChainId === 100) {
+        // isXDAI
+        let chain = 'xdai'
+        let tokenAddress = selectedToken?.address
+        // Workaround to show proper PAN price
+        if (selectedToken?.symbol === 'PAN') {
+          tokenAddress = '0xd56dac73a4d6766464b38ec6d91eb45ce7457c44'
+          chain = 'ethereum'
+        }
+        fetch(
+          `https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`
+        )
+          .then(response => response.json())
+          .then(data => {
+            console.log({ data })
+            const price = parseFloat(
+              data[Object.keys(data)[0]]?.usd?.toFixed(2)
+            )
+            setTokenPrice(price)
+          })
+      } else {
+        client
+          .query({
+            query: FETCH_TOKEN_PRICE,
+            variables: { id: selectedToken?.address }
+          })
+          .then(data => {
+            const derivedETH = data?.data?.tokens[0]?.derivedETH
+            setTokenPrice(parseFloat(ETHPrice * derivedETH)?.toFixed(2))
+          })
+          .catch(err => {
+            console.log('Error fetching data: ', err)
+            setTokenPrice(0)
+          })
+      }
   }, [selectedToken])
 
   useEffect(() => {
@@ -254,10 +282,6 @@ const OnlyCrypto = props => {
 
     if (mainToken === 'ETH') {
       setMainTokenPrice(ETHPrice)
-    } else {
-      // getTokenPrice(
-      //   tokenList.find(token => token.symbol === mainToken)?.address
-      // ).then(tokenPrice => setMainTokenPrice(tokenPrice))
     }
 
     const formattedTokenList = tokenList?.tokens
@@ -672,32 +696,44 @@ const OnlyCrypto = props => {
           </Text>
         </Modal>
         <AmountSection>
-          <AmountContainer sx={{ width: ['100%', '100%'] }}>
+          <AmountContainer>
             {/* <Text sx={{ variant: 'text.large', mb: 3, color: 'background' }}>
             Enter your {tokenSymbol} amount
           </Text> */}
-            {isMainnet && (
-              <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
-                {tokenPrice &&
-                  tokenSymbol &&
-                  `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
-              </Text>
-            )}
-            <Text
+            <Flex
               sx={{
-                variant: 'text.small',
-                float: 'right',
-                color: 'anotherGrey',
-                mb: 1
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                mb: 2
               }}
             >
-              Available:{' '}
-              {parseFloat(selectedTokenBalance).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 6
-              })}{' '}
-              {tokenSymbol}
-            </Text>
+              <Text
+                sx={{
+                  variant: 'text.large',
+                  color: 'anotherGrey'
+                }}
+              >
+                {!isNaN(tokenPrice) && !!tokenSymbol
+                  ? `1 ${tokenSymbol} ≈ USD $${tokenPrice}`
+                  : ''}
+              </Text>
+
+              <Text
+                sx={{
+                  variant: 'text.small',
+                  color: 'anotherGrey'
+                }}
+              >
+                Available:{' '}
+                {parseFloat(selectedTokenBalance).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 6
+                })}{' '}
+                {tokenSymbol}
+              </Text>
+            </Flex>
             <OpenAmount>
               {isComponentVisible && (
                 <Flex
