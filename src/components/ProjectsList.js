@@ -147,6 +147,7 @@ const ProjectsList = props => {
     : ['All']
   const sortBys = [
     'Default',
+    'Verified',
     'Amount raised',
     'Hearts',
     'New Projects',
@@ -213,6 +214,7 @@ const ProjectsList = props => {
     function qualityScore(a, b) {
       return b.qualityScore - a.qualityScore
     },
+    a => a,
     function amountRaised(a, b) {
       return b.totalDonations - a.totalDonations
     },
@@ -232,15 +234,29 @@ const ProjectsList = props => {
       )
     }
   ]
+  const filterFunctions = [
+    a => a,
+    function verified(a) {
+      return !!a?.verified
+    },
+    a => a,
+    a => a,
+    a => a,
+    a => a
+  ]
+
   const projectsFilteredSorted = projectsFiltered
     ?.slice()
     ?.sort(sortFunctions[sortBy])
+    ?.filter(filterFunctions[sortBy])
     ?.slice(0, limit)
 
   const loadMore = () => {
-    setLimit(limit + 3)
+    setLimit(limit + 10)
   }
-  const hasMore = limit < projectsFiltered?.length
+  // const hasMore = limit < projectsFiltered?.length
+  const hasMore =
+    limit < projectsFiltered?.length || projectsFilteredSorted?.length > limit
 
   return (
     <>

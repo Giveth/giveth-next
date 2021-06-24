@@ -12,6 +12,7 @@ import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.s
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
+import { GoVerified } from 'react-icons/go'
 import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
 import { BsHeartFill } from 'react-icons/bs'
@@ -449,6 +450,20 @@ const ProjectDonatorView = ({
           >
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
+          {project?.verified && (
+            <Flex
+              sx={{
+                cursor: 'pointer',
+                alignSelf: 'center',
+                my: 2,
+                alignItems: 'center'
+              }}
+            >
+              <GoVerified color={theme.colors.blue} />
+              <Text sx={{ variant: 'text.default', ml: 2 }}>verified</Text>
+            </Flex>
+          )}
+          <Text></Text>
           <Flex
             sx={{
               flexDirection: ['row', 'column', 'row'],
@@ -459,8 +474,12 @@ const ProjectDonatorView = ({
               my: '20px'
             }}
           >
-            <Text>Givers: {totalGivers || 0}</Text>
-            <Text>Donations: {donations?.length || 0}</Text>
+            <Text sx={{ variant: 'text.default' }}>
+              Givers: {totalGivers || 0}
+            </Text>
+            <Text sx={{ variant: 'text.default' }}>
+              Donations: {donations?.length || 0}
+            </Text>
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
             {project?.categories?.length > 0 &&
