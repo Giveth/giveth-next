@@ -330,10 +330,13 @@ const CreateProjectForm = props => {
   //     </Flex>
   //   )
   // }
+  const progressPercentage = Object.keys(formData).filter(v =>
+    v.startsWith('proj')
+  )?.length
 
   return (
     <>
-      <Progress max={steps.length} value={currentStep}>
+      <Progress max={steps.length} value={progressPercentage}>
         <Text>Progress bar test text</Text>
       </Progress>
       <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
