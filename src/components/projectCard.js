@@ -190,8 +190,7 @@ const ProjectCard = props => {
     checkUser()
   }, [project])
 
-  const image = props.image || project?.image
-
+  const image = props?.image || project?.image
   return (
     <>
       <Box
@@ -243,7 +242,14 @@ const ProjectCard = props => {
                     position: 'relative'
                   }}
                 >
-                  <StyledImage src={image} layout='fill' />
+                  <StyledImage
+                    src={image}
+                    layout='fill'
+                    priority={true}
+                    quality={40}
+                    // placeholder='blur'
+                    // blurDataURL='/images/giveth_bg.jpg'
+                  />
                 </div>
               )}
             </a>

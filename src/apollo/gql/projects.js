@@ -14,6 +14,7 @@ const FETCH_ALL_PROJECTS = gql`
       walletAddress
       impactLocation
       qualityScore
+      verified
       status {
         id
         symbol
@@ -171,6 +172,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
       qualityScore
       totalDonations
       totalHearts
+      verified
       categories {
         name
       }

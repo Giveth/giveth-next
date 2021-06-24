@@ -145,7 +145,14 @@ const ProjectsList = props => {
   const categoryList = Array.isArray(categories)
     ? ['All'].concat(categories.map(o => o.name))
     : ['All']
-  const sortBys = ['Default', 'Amount raised', 'Hearts']
+  const sortBys = [
+    'Default',
+    'Verified',
+    'Amount raised',
+    'Hearts',
+    'New Projects',
+    'Early Projects'
+  ]
 
   React.useEffect(() => {
     rebuildIndex()
@@ -202,27 +209,54 @@ const ProjectsList = props => {
       return a + b[prop]
     }, 0)
   }
-  //['Quality score', 'Amount raised', 'Hearts']
+  //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Early Projects']
   const sortFunctions = [
     function qualityScore(a, b) {
       return b.qualityScore - a.qualityScore
     },
+    a => a,
     function amountRaised(a, b) {
       return b.totalDonations - a.totalDonations
     },
     function hearts(a, b) {
       return b.totalHearts - a.totalHearts
+    },
+    function recentlyAdded(a, b) {
+      return (
+        new Date(b?.creationDate)?.valueOf() -
+        new Date(a?.creationDate)?.valueOf()
+      )
+    },
+    function earlyAdded(a, b) {
+      return (
+        new Date(a?.creationDate)?.valueOf() -
+        new Date(b?.creationDate)?.valueOf()
+      )
     }
   ]
+  const filterFunctions = [
+    a => a,
+    function verified(a) {
+      return !!a?.verified
+    },
+    a => a,
+    a => a,
+    a => a,
+    a => a
+  ]
+
   const projectsFilteredSorted = projectsFiltered
     ?.slice()
     ?.sort(sortFunctions[sortBy])
+    ?.filter(filterFunctions[sortBy])
     ?.slice(0, limit)
 
   const loadMore = () => {
-    setLimit(limit + 3)
+    setLimit(limit + 10)
   }
-  const hasMore = limit < projectsFiltered?.length
+  // const hasMore = limit < projectsFiltered?.length
+  const hasMore =
+    limit < projectsFiltered?.length || projectsFilteredSorted?.length > limit
 
   return (
     <>
