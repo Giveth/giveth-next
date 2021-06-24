@@ -190,7 +190,7 @@ const ProjectCard = props => {
     checkUser()
   }, [project])
 
-  const image = project?.image
+  const image = props?.image || project?.image
   return (
     <>
       <Box
