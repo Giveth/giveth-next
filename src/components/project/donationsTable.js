@@ -211,7 +211,6 @@ const DonationsTable = ({ donations }) => {
 
   const TableToShow = () => {
     const paginationItems = filteredDonations
-
     const [activeItem, setCurrentItem] = React.useState(1)
 
     // Data to be rendered using pagination.
@@ -221,10 +220,12 @@ const DonationsTable = ({ donations }) => {
     const indexOfLastItem = activeItem * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
 
-    const currentItems = paginationItems?.slice(
-      indexOfFirstItem,
-      indexOfLastItem
-    )
+    const currentItems = paginationItems
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt)?.valueOf() - new Date(a.createdAt)?.valueOf()
+      )
+      ?.slice(indexOfFirstItem, indexOfLastItem)
 
     const handlePageChange = pageNumber => {
       setCurrentItem(pageNumber)
@@ -268,77 +269,72 @@ const DonationsTable = ({ donations }) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems
-              ?.slice()
-              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-              .map((i, key) => {
-                if (!i) return null
-                return (
-                  <tr key={key}>
-                    <td
-                      data-label='Account'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
-                      <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                        {i?.createdAt
-                          ? dayjs(i.createdAt).format('ll')
-                          : 'null'}
-                      </Text>
-                    </td>
-                    <DonorBox
-                      data-label='Donor'
+            {currentItems?.slice().map((i, key) => {
+              if (!i) return null
+              return (
+                <tr key={key}>
+                  <td
+                    data-label='Account'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                      {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
+                    </Text>
+                  </td>
+                  <DonorBox
+                    data-label='Donor'
+                    sx={{
+                      variant: 'text.small',
+                      color: 'secondary',
+                      svg: { borderRadius: '50%' }
+                    }}
+                  >
+                    {i?.user?.avatar ? (
+                      <Avatar src={i?.user?.avatar} />
+                    ) : (
+                      <Jdenticon size='32' value={i?.fromWalletAddress} />
+                    )}
+                    <Text
                       sx={{
                         variant: 'text.small',
                         color: 'secondary',
-                        svg: { borderRadius: '50%' }
+                        ml: 2
                       }}
                     >
-                      {i?.user?.avatar ? (
-                        <Avatar src={i?.user?.avatar} />
-                      ) : (
-                        <Jdenticon size='32' value={i?.fromWalletAddress} />
-                      )}
-                      <Text
-                        sx={{
-                          variant: 'text.small',
-                          color: 'secondary',
-                          ml: 2
-                        }}
-                      >
-                        {i?.user?.name
-                          ? i.user.name
-                          : i?.user?.firstName && i?.user?.lastName
-                          ? `${i.user.firstName} ${i.user.lastName}`
-                          : i?.user?.walletAddress || i?.fromWalletAddress}
-                      </Text>
-                    </DonorBox>
-                    <td
-                      data-label='Currency'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
+                      {i?.user?.name
+                        ? i.user.name
+                        : i?.user?.firstName && i?.user?.lastName
+                        ? `${i.user.firstName} ${i.user.lastName}`
+                        : i?.user?.walletAddress || i?.fromWalletAddress}
+                    </Text>
+                  </DonorBox>
+                  <td
+                    data-label='Currency'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Badge variant='green'>{i?.currency}</Badge>
+                  </td>
+                  <td
+                    data-label='Amount'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Text
+                      sx={{
+                        variant: 'text.small',
+                        // whiteSpace: 'pre-wrap',
+                        color: 'secondary'
+                      }}
                     >
-                      <Badge variant='green'>{i?.currency}</Badge>
-                    </td>
-                    <td
-                      data-label='Amount'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
-                      <Text
-                        sx={{
-                          variant: 'text.small',
-                          // whiteSpace: 'pre-wrap',
-                          color: 'secondary'
-                        }}
-                      >
-                        {i?.currency === 'ETH' && i?.valueUsd
-                          ? `${
-                              i?.amount ? `${i?.amount} ETH` : ''
-                            } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
-                          : i?.amount}
-                      </Text>
-                    </td>
-                  </tr>
-                )
-              })}
+                      {i?.currency === 'ETH' && i?.valueUsd
+                        ? `${
+                            i?.amount ? `${i?.amount} ETH` : ''
+                          } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
+                        : i?.amount}
+                    </Text>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </Table>
         <PagesStyle>
@@ -346,7 +342,7 @@ const DonationsTable = ({ donations }) => {
             hideNavigation
             hideFirstLastPages
             activePage={activeItem}
-            itemsCountPerPage={6}
+            itemsCountPerPage={itemsPerPage}
             totalItemsCount={paginationItems.length}
             pageRangeDisplayed={3}
             onChange={handlePageChange}

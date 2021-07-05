@@ -292,9 +292,9 @@ const ProjectDonatorView = ({
           </Flex> */}
           <Flex
             sx={{
-              width: ['100%', null, '60%'],
-              alignItems: 'flex-start',
-              justifyContent: 'space-between',
+              // width: ['100%', '60%', '100%'],
+              // alignItems: 'flex-start',
+              // justifyContent: 'flex-start',
               height: '60px',
               mt: '20px'
             }}
@@ -302,7 +302,7 @@ const ProjectDonatorView = ({
             <Button
               variant='nofill'
               type='button'
-              sx={{ width: ['25%', '100%'] }}
+              sx={{ textAlign: 'left' }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('description')
@@ -324,7 +324,7 @@ const ProjectDonatorView = ({
             <Button
               variant='nofill'
               type='button'
-              sx={{ width: ['25%', '100%'] }}
+              sx={{ textAlign: 'left' }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('updates')
@@ -341,12 +341,17 @@ const ProjectDonatorView = ({
               >
                 Updates
                 {currentProjectView?.updates ? (
-                  <Badge
-                    variant='blueDot'
-                    sx={{ ml: [-2, 2], textAlign: 'center' }}
-                  >
-                    <Text sx={{ color: 'white', mt: '-2px', fontSize: '15px' }}>
-                      {currentProjectView?.updates?.length}{' '}
+                  <Badge variant='blueDot' sx={{ ml: 2, textAlign: 'center' }}>
+                    <Text
+                      sx={{
+                        color: 'white',
+                        mt: '-2px',
+                        fontSize: '15px'
+                      }}
+                    >
+                      {currentProjectView?.updates?.length < 100
+                        ? currentProjectView?.updates?.length
+                        : '++'}
                     </Text>
                   </Badge>
                 ) : (
@@ -357,7 +362,7 @@ const ProjectDonatorView = ({
             <Button
               variant='nofill'
               type='button'
-              sx={{ width: ['25%', '100%'] }}
+              sx={{ textAlign: 'left' }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('donation')
@@ -453,7 +458,7 @@ const ProjectDonatorView = ({
           {project?.verified && (
             <Flex
               sx={{
-                cursor: 'pointer',
+                // cursor: 'pointer',
                 alignSelf: 'center',
                 my: 2,
                 alignItems: 'center'
