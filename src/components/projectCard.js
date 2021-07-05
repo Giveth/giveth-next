@@ -191,6 +191,10 @@ const ProjectCard = props => {
   }, [project])
 
   const image = props?.image || project?.image
+  const currentTime = new Date()
+  const twoWeeksAgo = currentTime.setDate(currentTime.getDate() - 14)
+  const isNewProject = new Date(project?.creationDate)?.valueOf() > twoWeeksAgo
+
   return (
     <>
       <Box
@@ -205,8 +209,17 @@ const ProjectCard = props => {
             boxShadow: altStyle ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
           }}
         >
-          <Link href={`/project/${props?.slug || project?.slug || ''}`}>
-            <a>
+          <Link
+            href={
+              project?.fromTrace
+                ? `https://trace.giveth.io/campaign/${project?.slug}`
+                : `/project/${props?.slug || project?.slug || ''}`
+            }
+          >
+            <a
+              target={project?.fromTrace ? '_blank' : null}
+              rel={project?.fromTrace ? 'noopener noreferrer' : null}
+            >
               {/^\d+$/.test(image) ? (
                 <div
                   key={props.listingId || project?.title + '_div'}
@@ -255,66 +268,95 @@ const ProjectCard = props => {
             </a>
           </Link>
           <div style={{ position: 'relative' }}>
-            <Dot
-              key={props.listingId + '_card'}
-              style={{
-                backgroundColor:
-                  props.raised === 0
-                    ? theme.colors.attention
-                    : theme.colors.secondary
-              }}
-            >
-              {props.raised === 0 ? (
+            {project?.fromTrace ? (
+              <Dot
+                style={{
+                  backgroundColor: theme.colors.secondary
+                }}
+                key={props.listingId + '_card'}
+              >
                 <DotInner>
                   <Text
-                    sx={{ variant: 'text.overlineSmall', color: 'background' }}
+                    sx={{
+                      variant: 'text.overlineSmall',
+                      color: 'background'
+                    }}
+                  >
+                    TRACE
+                  </Text>
+                </DotInner>
+              </Dot>
+            ) : isNewProject ? (
+              <Dot
+                style={{
+                  backgroundColor: theme.colors.primary
+                }}
+                key={props.listingId + '_card'}
+              >
+                <DotInner>
+                  <Text
+                    sx={{
+                      variant: 'text.overlineSmall',
+                      color: 'background'
+                    }}
                   >
                     NEW
                   </Text>
                 </DotInner>
-              ) : (
+              </Dot>
+            ) : project?.verified ? (
+              <Dot
+                style={{
+                  backgroundColor: theme.colors.blue
+                }}
+                key={props.listingId + '_card'}
+              >
                 <DotInner>
                   <Text
-                    sx={{ variant: 'text.overlineSmall', color: 'background' }}
+                    sx={{
+                      variant: 'text.overlineSmall',
+                      color: 'background'
+                    }}
                   >
-                    RAISED
-                  </Text>
-                  <Text sx={{ variant: 'text.microbold', color: 'background' }}>
-                    ${props.raised}
+                    VERIFIED
                   </Text>
                 </DotInner>
-              )}
-            </Dot>
-            <Options>
-              <Flex sx={{ alignItems: 'center' }}>
-                <BsHeartFill
-                  style={{ cursor: 'pointer' }}
-                  size='18px'
-                  color={heartedByUser ? theme.colors.red : theme.colors.muted}
-                  onClick={() => reactToProject()}
-                />
-                {heartedCount && (
-                  <Text sx={{ variant: 'text.default', ml: 2 }}>
-                    {heartedCount}
-                  </Text>
-                )}
-              </Flex>
+              </Dot>
+            ) : null}
+            {!project?.fromTrace ? (
+              <Options>
+                <Flex sx={{ alignItems: 'center' }}>
+                  <BsHeartFill
+                    style={{ cursor: 'pointer' }}
+                    size='18px'
+                    color={
+                      heartedByUser ? theme.colors.red : theme.colors.muted
+                    }
+                    onClick={() => reactToProject()}
+                  />
+                  {heartedCount && (
+                    <Text sx={{ variant: 'text.default', ml: 2 }}>
+                      {heartedCount}
+                    </Text>
+                  )}
+                </Flex>
 
-              <Flex sx={{ alignItems: 'center', ml: 3 }}>
-                <FaShareAlt
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    usePopup?.triggerPopup('share', {
-                      title: project?.title,
-                      description: project?.description,
-                      slug: project?.slug
-                    })
-                  }
-                  size='18px'
-                  color={theme.colors.muted}
-                />
-              </Flex>
-            </Options>
+                <Flex sx={{ alignItems: 'center', ml: 3 }}>
+                  <FaShareAlt
+                    style={{ cursor: 'pointer' }}
+                    onClick={() =>
+                      usePopup?.triggerPopup('share', {
+                        title: project?.title,
+                        description: project?.description,
+                        slug: project?.slug
+                      })
+                    }
+                    size='18px'
+                    color={theme.colors.muted}
+                  />
+                </Flex>
+              </Options>
+            ) : null}
           </div>
 
           <Heading
@@ -349,8 +391,17 @@ const ProjectCard = props => {
                 {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
               <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
               </Givers>
-              <Link href={`/project/${props?.slug || project?.slug || ''}`}>
-                <a>
+              <Link
+                href={
+                  project?.fromTrace
+                    ? `https://trace.giveth.io/campaign/${project?.slug}`
+                    : `/project/${props?.slug || project?.slug || ''}`
+                }
+              >
+                <a
+                  target={project?.fromTrace ? '_blank' : null}
+                  rel={project?.fromTrace ? 'noopener noreferrer' : null}
+                >
                   <Button
                     sx={{ width: '100%', variant: 'buttons.default', mt: 2 }}
                   >
@@ -358,25 +409,29 @@ const ProjectCard = props => {
                   </Button>
                 </a>
               </Link>
-              <Link
-                href={
-                  !props.disabled && `/donate/${props?.slug || project?.slug}`
-                }
-              >
-                <a style={{ marginTop: 2, marginBottom: 2 }}>
-                  <Text
-                    sx={{
-                      variant: 'links.default',
-                      my: 2,
-                      mx: 'auto',
-                      cursor: 'pointer',
-                      color: theme.colors.primary
-                    }}
-                  >
-                    Donate
-                  </Text>
-                </a>
-              </Link>
+              {!project?.fromTrace ? (
+                <Link
+                  href={
+                    !props.disabled && `/donate/${props?.slug || project?.slug}`
+                  }
+                >
+                  <a style={{ marginTop: 2, marginBottom: 2 }}>
+                    <Text
+                      sx={{
+                        variant: 'links.default',
+                        my: 2,
+                        mx: 'auto',
+                        cursor: 'pointer',
+                        color: theme.colors.primary
+                      }}
+                    >
+                      Donate
+                    </Text>
+                  </a>
+                </Link>
+              ) : (
+                <span style={{ margin: '5px 0' }} />
+              )}
             </AltCardContent>
           )}
           <CardContent>

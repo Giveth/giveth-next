@@ -12,7 +12,7 @@ import ProjectsList, {
 import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from "../src/apollo/gql/projects";
 
 const Project = (props) => {
-  const { projects, categories, totalCount, errors } = props;
+  const { projects, traceProjects, categories, totalCount, errors } = props;
   const [limit, setLimit] = useState(12);
   const [orderByField, setOrderByField] = useState(OrderByField.Balance);
   return (
@@ -20,7 +20,8 @@ const Project = (props) => {
       <Seo title="Projects" />
       {projects && !errors ? (
         <ProjectsList
-          projects={projects}
+          projects={[...projects, ...traceProjects]}
+          // projects={[...traceProjects]}
           categories={categories}
           totalCount={totalCount}
           maxLimit={limit}
@@ -39,6 +40,7 @@ const Project = (props) => {
 export async function getServerSideProps(props) {
   // Fetch Project
   let projects,
+    traceProjects,
     categories = null;
   let errors = null;
   try {
@@ -55,6 +57,20 @@ export async function getServerSideProps(props) {
       fetchPolicy: "network-only",
     });
     categories = categoriesData?.categories;
+
+    if (!!process.env.NEXT_PUBLIC_FEATHERS) {
+      // only fetch if there's a orute
+      // https://feathers.beta.giveth.io/campaigns?verified=true
+      traceProjects = await fetch(
+        `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?verified=true`
+      ).then(function (response) {
+        if (response.status >= 400) {
+          errors = new Error("Bad response from server");
+        }
+        return response.json();
+      });
+    }
+
     errors = error;
   } catch (error) {
     errors = error;
@@ -62,7 +78,9 @@ export async function getServerSideProps(props) {
 
   return {
     props: {
-      projects,
+      projects: projects || [],
+      traceProjects:
+        traceProjects?.data?.map((i) => ({ ...i, fromTrace: true })) || [],
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,

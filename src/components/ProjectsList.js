@@ -148,10 +148,10 @@ const ProjectsList = props => {
   const sortBys = [
     'Default',
     'Verified',
-    'Amount raised',
+    'Amount Raised',
     'Hearts',
-    'New Projects',
-    'Early Projects'
+    'Recently Added',
+    'Old Projects'
   ]
 
   React.useEffect(() => {
@@ -209,7 +209,7 @@ const ProjectsList = props => {
       return a + b[prop]
     }, 0)
   }
-  //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Early Projects']
+  //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Old Projects']
   const sortFunctions = [
     function qualityScore(a, b) {
       return b.qualityScore - a.qualityScore

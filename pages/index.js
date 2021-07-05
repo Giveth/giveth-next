@@ -112,7 +112,7 @@ const IndexPage = (props) => {
   return (
     <Layout isHomePage="true">
       <Seo title="Home" />
-      <button onClick={() => ceramicTest()}> idx test </button>
+      {/* <button onClick={() => ceramicTest()}> idx test </button> */}
       <IndexContent
         hideInfo={hideInfo}
         content={content}
