@@ -155,38 +155,38 @@ const Footer = () => {
             <FooterLink href='/'>Home</FooterLink>
             {/* <FooterLink href='/causes'>Causes</FooterLink> */}
             <FooterLink href='/projects'>Projects</FooterLink>
-          </LinkBox>
-          <LinkBox>
             <FooterLink href='/about'>About Us</FooterLink>
             <FooterLink href='/faq'>FAQ</FooterLink>
-            <FooterLink href='/partnerships'>Partnerships</FooterLink>
-            <FooterExternalLink
-              href='https://docs.giveth.io'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Docs <ExtIcon />
-            </FooterExternalLink>
-            <FooterExternalLink
-              href='https://wiki.giveth.io'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Wiki <ExtIcon />
-            </FooterExternalLink>
-            <FooterExternalLink
-              href='https://medium.com/giveth'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Blog <ExtIcon />
-            </FooterExternalLink>
             <FooterLink href='/support'>Support</FooterLink>
+          </LinkBox>
+          <LinkBox>
+            <FooterLink href='/join'>Join Our Community</FooterLink>
+            <FooterExternalLink
+              href='https://docs.giveth.io/whatisgiveth/'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              What is Giveth? <ExtIcon />
+            </FooterExternalLink>
+            <FooterExternalLink
+              href='https://docs.giveth.io/dapps/'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              User Guides <ExtIcon />
+            </FooterExternalLink>
+            <FooterExternalLink
+              href='https://docs.giveth.io/dapps/givethioinstallation'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              Developer Docs <ExtIcon />
+            </FooterExternalLink>
             <FooterLink href='/tos'>Terms of Use</FooterLink>
           </LinkBox>
           <LinkBox>
             <FooterExternalLink
-              href='https://beta.giveth.io'
+              href='https://trace.giveth.io'
               target='_blank'
               rel='noopener noreferrer'
             >
@@ -199,28 +199,14 @@ const Footer = () => {
             >
               Commons Stack <ExtIcon />
             </FooterExternalLink>
+            <FooterLink href='/partnerships'>Partnerships</FooterLink>
             <FooterExternalLink
-              href='https://wiki.giveth.io/governance/'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Governance <ExtIcon />
+            href='https://docs.giveth.io/jobs/'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            We're Hiring! <ExtIcon />
             </FooterExternalLink>
-            <FooterExternalLink
-              href='https://galaxy.giveth.io/'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Galaxy Projects <ExtIcon />
-            </FooterExternalLink>
-            <FooterExternalLink
-              href='https://galaxy.giveth.io/#socialcoding'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Social Coding <ExtIcon />
-            </FooterExternalLink>
-            <FooterLink href='/join'>Join Our Community</FooterLink>
           </LinkBox>
         </InnerGrid>
         <DonateSection
