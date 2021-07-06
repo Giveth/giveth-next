@@ -242,7 +242,6 @@ const OnlyCrypto = props => {
         )
           .then(response => response.json())
           .then(data => {
-            console.log({ data })
             const price = parseFloat(
               data[Object.keys(data)[0]]?.usd?.toFixed(2)
             )
@@ -356,6 +355,8 @@ const OnlyCrypto = props => {
         tokenSymbol?.toLowerCase() || 'eth'
       }.png`
       setIcon(img)
+    } else {
+      setIcon(`/assets/cryptocurrency-icons/32/color/eth.png`)
     }
   }, [tokenSymbol, icon])
 
