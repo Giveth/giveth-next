@@ -232,19 +232,22 @@ const ProjectDonatorView = ({
                 {currentProjectView?.admin?.name && (
                   <Link
                     style={{ textDecoration: 'none' }}
-                    href={`/user/${currentProjectView.admin?.walletAddress}`}
+                    href={`/user/${currentProjectView?.admin?.walletAddress}`}
+                    passHref
                   >
-                    <Text
-                      sx={{
-                        fontSize: 4,
-                        fontFamily: 'body',
-                        fontWeight: 'body',
-                        color: 'primary',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {`by ${currentProjectView.admin.name}`}
-                    </Text>
+                    <a>
+                      <Text
+                        sx={{
+                          fontSize: 4,
+                          fontFamily: 'body',
+                          fontWeight: 'body',
+                          color: 'primary',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {`by ${currentProjectView?.admin?.name}`}
+                      </Text>
+                    </a>
                   </Link>
                 )}
 

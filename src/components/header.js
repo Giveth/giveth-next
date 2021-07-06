@@ -117,13 +117,14 @@ const UserSpan = styled.span`
   }
 `
 
-const NavLink = styled(Box)`
+const NavLink = styled.a`
+  cursor: pointer;
   font-family: ${theme.fonts.heading}, sans-serif;
   font-weight: 500;
   line-height: 21px;
   text-decoration: none;
   :hover {
-    color: ${theme.colors.hover};
+    color: ${theme.colors.hover} !important;
   }
   :active {
     color: ${theme.colors.secondary};
@@ -166,6 +167,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [hasScrolled, setScrollState] = useState(false)
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = router.pathname?.split('/')[1]
+
   useEffect(() => {
     function handleScroll() {
       const scrollTop = window.pageYOffset
@@ -190,6 +192,10 @@ const Header = ({ siteTitle, isHomePage }) => {
     }
     router.push('/create')
   }
+
+  useEffect(() => {
+    router?.prefetch('/create')
+  }, [])
 
   return (
     <Headroom>
@@ -267,25 +273,44 @@ const Header = ({ siteTitle, isHomePage }) => {
           </Link>
 
           <MiddleSpan>
-            <NavLink
-              sx={{
-                display: ['none', 'block', 'block'],
-                color: isHomePage ? 'primary' : 'secondary'
-              }}
-            >
-              <Link href='/'>Home</Link>
-            </NavLink>
-            <NavLink
-              sx={{ color: pathname === 'join' ? 'primary' : 'secondary' }}
-            >
-              <Link href='/join'>Community</Link>
-            </NavLink>
+            <Link href='/' passHref>
+              <NavLink
+                style={{
+                  display: ['none', 'block', 'block'],
+                  color: isHomePage
+                    ? theme.colors.primary
+                    : theme.colors.secondary
+                }}
+              >
+                Home
+              </NavLink>
+            </Link>
+            <Link href='/join' passHref>
+              <NavLink
+                style={{
+                  color:
+                    pathname === 'join'
+                      ? theme.colors.primary
+                      : theme.colors.secondary
+                }}
+              >
+                Community{' '}
+              </NavLink>
+            </Link>
             {/* <NavLink href='/causes'>Causes</NavLink> */}
-            <NavLink
-              sx={{ color: pathname === 'projects' ? 'primary' : 'secondary' }}
-            >
-              <Link href='/projects'>Projects</Link>
-            </NavLink>
+
+            <Link href='/projects' passHref>
+              <NavLink
+                style={{
+                  color:
+                    pathname === 'projects'
+                      ? theme.colors.primary
+                      : theme.colors.secondary
+                }}
+              >
+                Projects
+              </NavLink>
+            </Link>
           </MiddleSpan>
 
           <UserSpan>

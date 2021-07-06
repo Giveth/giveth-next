@@ -93,6 +93,12 @@ const FETCH_USER_PROJECTS = gql`
       categories {
         name
       }
+      reactions {
+        reaction
+        id
+        projectUpdateId
+        userId
+      }
       qualityScore
       totalDonations
       totalHearts
