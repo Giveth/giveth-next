@@ -164,6 +164,14 @@ const ProjectDonatorView = ({
       return false
     }
   }
+
+  useEffect(() => {
+    // Prefetch the dashboard page
+    if (!project) return
+    router.prefetch(`/account?data=${project?.slug}&view=projects`)
+    router.prefetch(`/donate/${project?.slug}`)
+  }, [])
+
   return (
     <>
       <CancelledModal isOpen={isCancelled} />

@@ -277,7 +277,10 @@ const ProjectListing = props => {
               >
                 EDIT
               </Button>
-              <Link href={!props.disabled && `/project/${props?.slug}`}>
+              <Link
+                href={!props.disabled && `/project/${props?.slug}`}
+                passHref
+              >
                 <a style={{ margin: 'auto', zIndex: 10 }}>
                   <Text
                     sx={{
