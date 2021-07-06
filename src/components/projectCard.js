@@ -215,6 +215,7 @@ const ProjectCard = props => {
                 ? `https://trace.giveth.io/campaign/${project?.slug}`
                 : `/project/${props?.slug || project?.slug || ''}`
             }
+            passHref
           >
             <a
               target={project?.fromTrace ? '_blank' : null}
@@ -397,6 +398,7 @@ const ProjectCard = props => {
                     ? `https://trace.giveth.io/campaign/${project?.slug}`
                     : `/project/${props?.slug || project?.slug || ''}`
                 }
+                passHref
               >
                 <a
                   target={project?.fromTrace ? '_blank' : null}
@@ -414,6 +416,7 @@ const ProjectCard = props => {
                   href={
                     !props.disabled && `/donate/${props?.slug || project?.slug}`
                   }
+                  passHref
                 >
                   <a style={{ marginTop: 2, marginBottom: 2 }}>
                     <Text
