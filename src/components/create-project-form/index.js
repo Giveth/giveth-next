@@ -160,6 +160,7 @@ const CreateProjectForm = props => {
     let project = {}
     try {
       // console.log({ submitCurrentStep, data, formData })
+
       if (isCategoryStep(submitCurrentStep)) {
         project = {
           ...formData,
@@ -177,6 +178,14 @@ const CreateProjectForm = props => {
           ...data
         }
       }
+      // check title
+      if (!/^\w+$/.test(project?.projectName.replace(/\s/g, ''))) {
+        return Toast({
+          content: `Your project name isn't valid, please only use letters and numbers`,
+          type: 'error'
+        })
+      }
+      console.log({ project })
 
       if (isDescriptionStep(submitCurrentStep)) {
         // check if file is too large
