@@ -138,6 +138,7 @@ const SaveGasMessage = styled(Flex)`
   align-items: center;
   padding: 0.5rem 1rem;
   word-wrap: break-word;
+  margin-bottom: 10px;
 `
 
 const Separator = styled.div`
@@ -182,9 +183,10 @@ const OnlyCrypto = props => {
     sendTransaction,
     user,
     ready,
-    wallet: userWallet
+    switchEthChain,
+    wallet: userWallet,
+    currentNetwork
   } = useWallet()
-
   const { triggerPopup } = usePopup
 
   useEffect(() => {
@@ -882,27 +884,39 @@ const OnlyCrypto = props => {
                     ]}
                   />
                 )}
-                {!isXDAI && (
-                  <SaveGasMessage>
-                    <Image
-                      src={'/images/icon-streamline-gas.svg'}
-                      height='18px'
-                      width='18px'
-                      alt=''
-                    />
-                    <Text
-                      sx={{
-                        variant: 'text.medium',
-                        textAlign: 'left',
-                        color: 'background',
-                        marginLeft: '12px'
-                      }}
-                    >
-                      Save on gas fees, switch to xDAI network.
-                    </Text>
-                  </SaveGasMessage>
-                )}
               </Summary>
+            )}
+            {!isXDAI && !userWallet?.isTorus && (
+              <SaveGasMessage>
+                <Image
+                  src={'/images/icon-streamline-gas.svg'}
+                  height='18px'
+                  width='18px'
+                  alt=''
+                />
+                <Text
+                  sx={{
+                    variant: 'text.medium',
+                    textAlign: 'left',
+                    color: 'background',
+                    marginLeft: '12px'
+                  }}
+                >
+                  Save on gas fees, switch to xDAI network.
+                </Text>
+                <Text
+                  onClick={() => switchEthChain()}
+                  sx={{
+                    cursor: 'pointer',
+                    variant: 'text.medium',
+                    textAlign: 'left',
+                    color: 'yellow',
+                    marginLeft: '12px'
+                  }}
+                >
+                  Switch network
+                </Text>
+              </SaveGasMessage>
             )}
           </>
           <Flex sx={{ flexDirection: 'column', width: '100%' }}>

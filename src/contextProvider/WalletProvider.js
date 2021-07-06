@@ -102,7 +102,7 @@ function WalletProvider(props) {
           type: 'warn'
         })
       } else {
-        refreshPage()
+        // refreshPage()
       }
     })
     EVENT_SETUP_DONE = true
@@ -125,6 +125,30 @@ function WalletProvider(props) {
     Auth.handleLogout()
     setIsLoggedIn(false)
     setLoading(false)
+  }
+
+  async function switchEthChain(chainId) {
+    try {
+      // return xDAI by default
+      if (!chainId) {
+        window?.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: '0x64',
+              chainName: 'xDai',
+              nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
+              rpcUrls: ['https://rpc.xdaichain.com/'],
+              blockExplorerUrls: ['https://blockscout.com/xdai/mainnet']
+            }
+          ]
+        })
+      }
+      return true
+    } catch (error) {
+      console.log({ error })
+      return error
+    }
   }
 
   async function signMessage(message, publicAddress, loginFromXDAI) {
@@ -452,6 +476,7 @@ function WalletProvider(props) {
       network,
       currentNetwork,
       currentChainId,
+      switchEthChain,
       isWalletAddressValid,
       isAddressENS,
       getAddressFromENS,
