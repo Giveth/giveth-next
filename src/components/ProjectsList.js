@@ -148,6 +148,7 @@ const ProjectsList = props => {
   const sortBys = [
     'Default',
     'Verified',
+    'Traceable',
     'Amount Raised',
     'Hearts',
     'Recently Added',
@@ -215,6 +216,7 @@ const ProjectsList = props => {
       return b.qualityScore - a.qualityScore
     },
     a => a,
+    a => a,
     function amountRaised(a, b) {
       return b.totalDonations - a.totalDonations
     },
@@ -239,6 +241,9 @@ const ProjectsList = props => {
     function verified(a) {
       return !!a?.verified
     },
+    function traceable(a) {
+      return !!a?.fromTrace
+    },
     a => a,
     a => a,
     a => a,
@@ -254,9 +259,8 @@ const ProjectsList = props => {
   const loadMore = () => {
     setLimit(limit + 10)
   }
-  // const hasMore = limit < projectsFiltered?.length
-  const hasMore =
-    limit < projectsFiltered?.length || projectsFilteredSorted?.length > limit
+
+  const hasMore = projectsFilteredSorted?.length >= limit
 
   return (
     <>
@@ -415,7 +419,7 @@ const ProjectsList = props => {
                 endMessage={
                   <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
                     {!fromHomePage ? (
-                      projectsFilteredSorted?.length > 0 ? (
+                      projectsFilteredSorted?.length <= limit ? (
                         <>
                           <Text
                             variant='headings.h5'
@@ -460,7 +464,7 @@ const ProjectsList = props => {
                 >
                   {projectsFilteredSorted
                     ? projectsFilteredSorted
-                        ?.slice()
+                        ?.slice(0, limit)
                         .map((project, index) => (
                           <ProjectCard
                             shadowed
