@@ -378,8 +378,8 @@ function WalletProvider(props) {
       let web3Provider = wallet?.web3.eth
       let txn = null
       const txParams = {
-        to: params?.to,
-        value: params?.value
+        to: params?.to
+        // value: params?.value
       }
 
       if (!fromSigner) {
@@ -402,8 +402,14 @@ function WalletProvider(props) {
           return txn
         }
         const from = await web3Provider.getAccounts()
+        const decimals = await instance.methods.decimals().call()
+        txParams.value = ethers.utils.parseUnits(
+          params?.value,
+          parseInt(decimals)
+        )
+
         return instance.methods
-          .transfer(params?.to, params?.value)
+          .transfer(txParams?.to, txParams?.value)
           .send({
             from: from[0]
           })
@@ -416,6 +422,7 @@ function WalletProvider(props) {
       }
 
       // REGULAR ETH TRANSFER
+      txParams.value = ethers.utils.parseEther(params?.value)
       if (!txCallbacks || fromSigner) {
         // gets hash and checks until it's mined
         txn = await web3Provider.sendTransaction(txParams)

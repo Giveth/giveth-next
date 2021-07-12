@@ -15,7 +15,9 @@ export async function send(
   try {
     const transaction = {
       to: toAddress,
-      value: ethers.utils.parseEther(subtotal.toString())
+      // I CHANGED THIS: IMPORTANT
+      // value: ethers.utils.parseEther(subtotal.toString())
+      value: subtotal.toString()
     }
     let hash
 
