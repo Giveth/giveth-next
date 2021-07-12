@@ -127,6 +127,30 @@ function WalletProvider(props) {
     setLoading(false)
   }
 
+  async function switchEthChain(chainId) {
+    try {
+      // return xDAI by default
+      if (!chainId) {
+        window?.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: '0x64',
+              chainName: 'xDai',
+              nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
+              rpcUrls: ['https://rpc.xdaichain.com/'],
+              blockExplorerUrls: ['https://blockscout.com/xdai/mainnet']
+            }
+          ]
+        })
+      }
+      return true
+    } catch (error) {
+      console.log({ error })
+      return error
+    }
+  }
+
   async function signMessage(message, publicAddress, loginFromXDAI) {
     try {
       await checkNetwork()
@@ -354,8 +378,8 @@ function WalletProvider(props) {
       let web3Provider = wallet?.web3.eth
       let txn = null
       const txParams = {
-        to: params?.to,
-        value: params?.value
+        to: params?.to
+        // value: params?.value
       }
 
       if (!fromSigner) {
@@ -372,14 +396,24 @@ function WalletProvider(props) {
         const instance = fromSigner
           ? new ethers.Contract(contractAddress, tokenAbi, fromSigner)
           : new web3Provider.Contract(tokenAbi, contractAddress)
+        console.log({ instance })
+        const decimals = instance?.decimals
+          ? await instance.decimals()
+          : await instance.methods.decimals().call()
+        txParams.value = ethers.utils.parseUnits(
+          params?.value,
+          parseInt(decimals)
+        )
+
         if (fromSigner) {
-          txn = await instance.transfer(params?.to, params?.value)
+          txn = await instance.transfer(txParams?.to, txParams?.value)
           txCallbacks?.onTransactionHash(txn?.hash, txn?.from)
           return txn
         }
         const from = await web3Provider.getAccounts()
+
         return instance.methods
-          .transfer(params?.to, params?.value)
+          .transfer(txParams?.to, txParams?.value)
           .send({
             from: from[0]
           })
@@ -392,6 +426,7 @@ function WalletProvider(props) {
       }
 
       // REGULAR ETH TRANSFER
+      txParams.value = ethers.utils.parseEther(params?.value)
       if (!txCallbacks || fromSigner) {
         // gets hash and checks until it's mined
         txn = await web3Provider.sendTransaction(txParams)
@@ -452,6 +487,7 @@ function WalletProvider(props) {
       network,
       currentNetwork,
       currentChainId,
+      switchEthChain,
       isWalletAddressValid,
       isAddressENS,
       getAddressFromENS,
