@@ -102,7 +102,7 @@ function WalletProvider(props) {
           type: 'warn'
         })
       } else {
-        // refreshPage()
+        refreshPage()
       }
     })
     EVENT_SETUP_DONE = true
