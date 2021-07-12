@@ -396,17 +396,21 @@ function WalletProvider(props) {
         const instance = fromSigner
           ? new ethers.Contract(contractAddress, tokenAbi, fromSigner)
           : new web3Provider.Contract(tokenAbi, contractAddress)
-        if (fromSigner) {
-          txn = await instance.transfer(params?.to, params?.value)
-          txCallbacks?.onTransactionHash(txn?.hash, txn?.from)
-          return txn
-        }
-        const from = await web3Provider.getAccounts()
-        const decimals = await instance.methods.decimals().call()
+        console.log({ instance })
+        const decimals = instance?.decimals
+          ? await instance.decimals()
+          : await instance.methods.decimals().call()
         txParams.value = ethers.utils.parseUnits(
           params?.value,
           parseInt(decimals)
         )
+
+        if (fromSigner) {
+          txn = await instance.transfer(txParams?.to, txParams?.value)
+          txCallbacks?.onTransactionHash(txn?.hash, txn?.from)
+          return txn
+        }
+        const from = await web3Provider.getAccounts()
 
         return instance.methods
           .transfer(txParams?.to, txParams?.value)
