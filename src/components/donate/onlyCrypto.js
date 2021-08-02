@@ -601,6 +601,8 @@ const OnlyCrypto = props => {
       // transaction.notify(transactionHash)
     } catch (error) {
       toast.dismiss()
+      console.log('HEE', { error })
+
       if (
         error?.data?.code === 'INSUFFICIENT_FUNDS' ||
         error?.data?.code === 'UNPREDICTABLE_GAS_LIMIT'
@@ -610,6 +612,7 @@ const OnlyCrypto = props => {
       }
       return Toast({
         content:
+          error?.data?.data?.message ||
           error?.data?.message ||
           error?.error?.message ||
           error?.message ||

@@ -67,11 +67,19 @@ export const wallets = {
         network: { host: network },
         showTorusButton: false,
         whiteLabel: true,
+        enabledVerifiers: {
+          reddit: false
+        },
         loginConfig: {
           reddit: {
+            // This is not working, I think we would have to add a manual handler for this
+            // To get the token in the flow. Weird it's not working :(
             jwtParameters: {
+              // prod: yDIt8Lde-RoHqQ
+              // local: v3WA6ra_CbePou6yz9bGng
+              response_type: 'token',
               client_id: 'yDIt8Lde-RoHqQ',
-              redirect_uri: 'http://giveth.io/'
+              redirect_uri: 'http://localhost:3000'
             }
           }
         },
