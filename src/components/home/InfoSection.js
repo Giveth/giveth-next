@@ -63,7 +63,7 @@ const InfoSection = ({ content }) => {
           {content?.infoSubtitle}
         </Text>
         <a
-          href='https://medium.com/giveth/the-future-of-giving-is-crowdfunding-the-commons-ac265e3010b8'
+          href='https://docs.giveth.io/whatisgiveth/'
           target='_blank'
           rel='noopener noreferrer'
         >

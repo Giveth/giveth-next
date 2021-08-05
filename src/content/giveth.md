@@ -12,7 +12,7 @@ mainButtonText: 'Start raising funds for your project'
 # infosection
 infoHead: 'What is Giveth'
 infoSubtitle: ' A Decentralized Altruistic Community using blockchain technology to make the world a better place.'
-infoButtonText: 'Read our story on the future of giving'
+infoButtonText: 'Learn More About Giveth'
 feature1: 'Altruistic'
 feature1Text: 'We build tools for the common good and support others in doing so as well. On the Giveth DApp, 100% of the funds donated go to the cause the donor intended to support.'
 feature2: 'Decentralized'
