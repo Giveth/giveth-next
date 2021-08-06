@@ -210,11 +210,12 @@ const ProjectCard = props => {
           }}
         >
           <Link
-            href={
-              project?.fromTrace
-                ? `https://trace.giveth.io/campaign/${project?.slug}`
-                : `/project/${props?.slug || project?.slug || ''}`
-            }
+            // href={
+            //   project?.fromTrace
+            //     ? `https://trace.giveth.io/campaign/${project?.slug}`
+            //     : `/project/${props?.slug || project?.slug || ''}`
+            // }
+            href={`/project/${props?.slug || project?.slug || ''}`}
             passHref
           >
             <a
@@ -393,11 +394,12 @@ const ProjectCard = props => {
               <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
               </Givers>
               <Link
-                href={
-                  project?.fromTrace
-                    ? `https://trace.giveth.io/campaign/${project?.slug}`
-                    : `/project/${props?.slug || project?.slug || ''}`
-                }
+                // href={
+                //   project?.fromTrace
+                //     ? `https://trace.giveth.io/campaign/${project?.slug}`
+                //     : `/project/${props?.slug || project?.slug || ''}`
+                // }
+                href={`/project/${props?.slug || project?.slug || ''}`}
                 passHref
               >
                 <a
