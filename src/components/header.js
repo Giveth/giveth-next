@@ -209,6 +209,7 @@ const CategoriesList = () => {
   )
   const categories = currentProjectView?.globalCategories
 
+  if (!categories) return null
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <CategoriesListView>
