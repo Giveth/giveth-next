@@ -210,11 +210,12 @@ const ProjectCard = props => {
           }}
         >
           <Link
-            href={
-              project?.fromTrace
-                ? `https://trace.giveth.io/campaign/${project?.slug}`
-                : `/project/${props?.slug || project?.slug || ''}`
-            }
+            // href={
+            //   project?.fromTrace
+            //     ? `https://trace.giveth.io/campaign/${project?.slug}`
+            //     : `/project/${props?.slug || project?.slug || ''}`
+            // }
+            href={`/project/${props?.slug || project?.slug || ''}`}
             passHref
           >
             <a
@@ -393,11 +394,12 @@ const ProjectCard = props => {
               <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
               </Givers>
               <Link
-                href={
-                  project?.fromTrace
-                    ? `https://trace.giveth.io/campaign/${project?.slug}`
-                    : `/project/${props?.slug || project?.slug || ''}`
-                }
+                // href={
+                //   project?.fromTrace
+                //     ? `https://trace.giveth.io/campaign/${project?.slug}`
+                //     : `/project/${props?.slug || project?.slug || ''}`
+                // }
+                href={`/project/${props?.slug || project?.slug || ''}`}
                 passHref
               >
                 <a
@@ -411,30 +413,29 @@ const ProjectCard = props => {
                   </Button>
                 </a>
               </Link>
-              {!project?.fromTrace ? (
-                <Link
-                  href={
-                    !props.disabled && `/donate/${props?.slug || project?.slug}`
-                  }
-                  passHref
-                >
-                  <a style={{ marginTop: 2, marginBottom: 2 }}>
-                    <Text
-                      sx={{
-                        variant: 'links.default',
-                        my: 2,
-                        mx: 'auto',
-                        cursor: 'pointer',
-                        color: theme.colors.primary
-                      }}
-                    >
-                      Donate
-                    </Text>
-                  </a>
-                </Link>
-              ) : (
-                <span style={{ margin: '5px 0' }} />
-              )}
+              <Link
+                href={
+                  project?.fromTrace
+                    ? `https://trace.giveth.io/campaign/${project?.slug}`
+                    : !props.disabled &&
+                      `/donate/${props?.slug || project?.slug}`
+                }
+                passHref
+              >
+                <a style={{ marginTop: 2, marginBottom: 2 }}>
+                  <Text
+                    sx={{
+                      variant: 'links.default',
+                      my: 2,
+                      mx: 'auto',
+                      cursor: 'pointer',
+                      color: theme.colors.primary
+                    }}
+                  >
+                    Donate
+                  </Text>
+                </a>
+              </Link>
             </AltCardContent>
           )}
           <CardContent>

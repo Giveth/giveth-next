@@ -162,6 +162,15 @@ const CreateProjectForm = props => {
       // console.log({ submitCurrentStep, data, formData })
 
       if (isCategoryStep(submitCurrentStep)) {
+        let maxFiveCategories = Object.entries(data)?.filter(i => {
+          return i[1] === true
+        })
+        if (maxFiveCategories?.length > 5) {
+          return Toast({
+            content: `Please select no more than 5 categories`,
+            type: 'error'
+          })
+        }
         project = {
           ...formData,
           projectCategory: {

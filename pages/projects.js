@@ -20,6 +20,7 @@ const Project = (props) => {
       <Seo title="Projects" />
       {projects && !errors ? (
         <ProjectsList
+          query={props?.query}
           projects={[...projects, ...traceProjects]}
           // projects={[...traceProjects]}
           categories={categories}
@@ -59,7 +60,7 @@ export async function getServerSideProps(props) {
     categories = categoriesData?.categories;
 
     if (!!process.env.NEXT_PUBLIC_FEATHERS) {
-      // only fetch if there's a orute
+      // only fetch if there's a route
       // https://feathers.beta.giveth.io/campaigns?verified=true
       traceProjects = await fetch(
         `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?verified=true`
@@ -75,7 +76,6 @@ export async function getServerSideProps(props) {
   } catch (error) {
     errors = error;
   }
-
   return {
     props: {
       projects: projects || [],
@@ -84,6 +84,7 @@ export async function getServerSideProps(props) {
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,
+      query: props.query,
     },
   };
 }

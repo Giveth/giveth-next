@@ -94,14 +94,30 @@ export async function getServerSideProps(props) {
     errors = e;
   }
 
+  // Try to fetch from TRACE
+  const traceProject = await fetch(
+    `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?slug=${query?.slug}`
+  ).then(async function (response) {
+    if (response.status >= 400) {
+      errors = new Error("Bad response from server");
+    }
+    const res = await response.json();
+    const traceProj = res?.data[0];
+    return { ...traceProj, status: { id: "5" }, fromTrace: true };
+  });
+
+  if (traceProject) {
+    errors = null;
+  }
+
   return {
     props: {
-      project: project || null,
+      project: project || traceProject,
       donations: donations || null,
       updates: updates || null,
       reactions: reactions || null,
       admin: admin?.data?.user || {},
-      error: JSON.stringify(errors) || false,
+      error: !!errors ? JSON.stringify(errors) : false,
     },
   };
 }

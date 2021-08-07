@@ -610,6 +610,7 @@ const OnlyCrypto = props => {
       }
       return Toast({
         content:
+          error?.data?.data?.message ||
           error?.data?.message ||
           error?.error?.message ||
           error?.message ||
