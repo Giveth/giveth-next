@@ -157,7 +157,19 @@ const ProjectsList = props => {
 
   React.useEffect(() => {
     rebuildIndex()
+    checkCategory()
   }, [])
+
+  function checkCategory() {
+    const categoryFromQuery = props?.query?.category
+    if (categoryFromQuery) {
+      categoryList?.map((i, index) => {
+        if (i === categoryFromQuery) {
+          setCategory(index)
+        }
+      })
+    }
+  }
 
   function searchProjects(e) {
     const queryResult = search.search(e.target.value)

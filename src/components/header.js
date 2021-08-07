@@ -9,6 +9,7 @@ import { useMediaQuery } from 'react-responsive'
 import theme from '../utils/theme-ui'
 import Logo from './content/Logo'
 import Headroom from 'react-headroom'
+import { ProjectContext } from '../contextProvider/projectProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
 
@@ -153,10 +154,93 @@ const Decorator = styled.div`
   position: absolute;
 `
 
+const ProjectsCategories = styled.div`
+  .categoriesContent {
+    visibility: hidden;
+    max-width: 500px;
+    text-align: center;
+    margin: 0 5px 0 -10%;
+    padding-top: 1%;
+    border-radius: 6px;
+
+    position: absolute;
+    z-index: 1;
+  }
+
+  .categoriesContent a {
+    text-decoration: underline;
+  }
+
+  &:hover .categoriesContent {
+    visibility: visible;
+  }
+`
+
+const CategoriesListView = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 1% 0 5% 0;
+  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
+  background-color: ${theme.colors.background};
+  li {
+    cursor: pointer;
+    font-size: 14px;
+    color: ${theme.colors.secondary};
+    width: 50%;
+    padding: 0 5%;
+    border-bottom: 1px solid ${theme.colors.softGray};
+    text-align: left;
+  }
+  li:hover {
+    font-weight: bold;
+  }
+`
+
 const Login = dynamic(() => import('./torus/login'))
 
 const siteId = process.env.NEXT_PUBLIC_SITE_ID
 const projectSearch = process.env.PROJECT_SEARCH
+
+const CategoriesList = () => {
+  const { currentProjectView, setCurrentProjectView } = React.useContext(
+    ProjectContext
+  )
+  const categories = currentProjectView?.globalCategories
+
+  return (
+    <Flex sx={{ flexDirection: 'column' }}>
+      <CategoriesListView>
+        <Link href={'/projects'}>
+          <li>
+            <p>All</p>
+          </li>
+        </Link>
+        {categories
+          ?.sort(function (a, b) {
+            var textA = a.value.toUpperCase()
+            var textB = b.value.toUpperCase()
+            return textA < textB ? -1 : textA > textB ? 1 : 0
+          })
+          ?.map(c => {
+            return (
+              <Link
+                href={{
+                  pathname: '/projects',
+                  query: { category: c?.name }
+                }}
+              >
+                <li>
+                  <p>{c?.value}</p>
+                </li>
+              </Link>
+            )
+          })}
+      </CategoriesListView>
+    </Flex>
+  )
+}
 
 const Header = ({ siteTitle, isHomePage }) => {
   const router = useRouter()
@@ -298,19 +382,25 @@ const Header = ({ siteTitle, isHomePage }) => {
               </NavLink>
             </Link>
             {/* <NavLink href='/causes'>Causes</NavLink> */}
-
-            <Link href='/projects' passHref>
-              <NavLink
-                style={{
-                  color:
-                    pathname === 'projects'
-                      ? theme.colors.primary
-                      : theme.colors.secondary
-                }}
-              >
-                Projects
-              </NavLink>
-            </Link>
+            <ProjectsCategories>
+              <Link href='/projects' passHref>
+                <NavLink
+                  style={{
+                    color:
+                      pathname === 'projects'
+                        ? theme.colors.primary
+                        : theme.colors.secondary
+                  }}
+                >
+                  Projects
+                </NavLink>
+              </Link>
+              {!isMobile && (
+                <Flex className='categoriesContent'>
+                  <CategoriesList />
+                </Flex>
+              )}
+            </ProjectsCategories>
           </MiddleSpan>
 
           <UserSpan>

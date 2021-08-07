@@ -1,5 +1,7 @@
 import React from 'react'
-// import useLocalStorage from './useLocalStorage'
+import gql from 'graphql-tag'
+import { client } from '../../src/apollo/client'
+import useLocalStorage from './useLocalStorage'
 
 const projectContext = React.createContext({})
 
@@ -7,10 +9,14 @@ const ProjectProvider = props => {
   // Use this hook to hydrate from local store. Not tested yet
   // const [value, setValue] = useLocalStorage('name', [])
 
-  const [currentProjectView, setCurrentProjectView] = React.useState({
-    project: '',
-    donations: []
-  })
+  const [currentProjectView, setCurrentProjectView] = useLocalStorage(
+    'currentProjectView',
+    {
+      project: '',
+      donations: [],
+      globalCategories: null
+    }
+  )
 
   const providerValue = React.useMemo(
     () => ({
@@ -19,6 +25,33 @@ const ProjectProvider = props => {
     }),
     [currentProjectView]
   )
+
+  React.useEffect(() => {
+    const setCategories = async () => {
+      try {
+        const { data: categories } = await client.query({
+          query: gql`
+            query {
+              categories {
+                id
+                name
+                value
+              }
+            }
+          `
+        })
+        setCurrentProjectView({
+          ...currentProjectView,
+          globalCategories: categories?.categories
+        })
+      } catch (error) {
+        console.log({ error })
+      }
+    }
+    if (!currentProjectView.globalCategories) {
+      setCategories()
+    }
+  }, [])
 
   return (
     <projectContext.Provider value={providerValue}>

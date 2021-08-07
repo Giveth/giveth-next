@@ -20,6 +20,7 @@ const Project = (props) => {
       <Seo title="Projects" />
       {projects && !errors ? (
         <ProjectsList
+          query={props?.query}
           projects={[...projects, ...traceProjects]}
           // projects={[...traceProjects]}
           categories={categories}
@@ -75,7 +76,6 @@ export async function getServerSideProps(props) {
   } catch (error) {
     errors = error;
   }
-
   return {
     props: {
       projects: projects || [],
@@ -84,6 +84,7 @@ export async function getServerSideProps(props) {
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,
+      query: props.query,
     },
   };
 }
