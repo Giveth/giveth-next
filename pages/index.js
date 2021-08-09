@@ -131,7 +131,7 @@ const IndexPage = (props) => {
 export async function getServerSideProps(props) {
   const { loading, error = null, data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
-    variables: { limit: 3 },
+    variables: { limit: 20 },
   });
 
   const mdContent = matter(GivethContent);
@@ -143,7 +143,13 @@ export async function getServerSideProps(props) {
 
   return {
     props: {
-      topProjects: response?.projects,
+      topProjects: response?.projects
+        ?.filter((i) => !!i?.verified)
+        ?.sort((a, b) => {
+          console.log({ a, b });
+          if (a?.totalHearts > b?.totalHearts) return -1;
+        })
+        ?.slice(0, 3),
       content: mdContent?.data,
       mediumPosts: mediumPosts?.items?.slice(0, 2) || {},
       query: props.query,
