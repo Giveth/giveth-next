@@ -563,7 +563,8 @@ function ProjectEdition(props) {
       <ConfirmationModal
         showModal={showModal}
         setShowModal={setShowModal}
-        title='Saved!'
+        title='Success!'
+        subtitle='Please allow a few minutes for your changes to be displayed.'
         confirmation={{
           do: () =>
             window.location.replace(
