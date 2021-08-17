@@ -412,7 +412,6 @@ const DonationsTable = ({ donations }) => {
       </>
     )
   }
-  console.log({ filteredDonations })
   return (
     <>
       <FilterBox
