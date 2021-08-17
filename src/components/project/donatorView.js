@@ -375,14 +375,39 @@ const ProjectDonatorView = ({
                 </Text>
               </Button>
             )}
-            {!project?.fromTrace && (
+            <Button
+              variant='nofill'
+              type='button'
+              sx={{ textAlign: 'left' }}
+              onClick={e => {
+                e.preventDefault()
+                setCurrentTab('donation')
+              }}
+            >
+              <Text
+                sx={{
+                  color: '#303B72',
+                  paddingBottom: '0.5rem',
+                  borderBottomColor:
+                    currentTab === 'donation' ? '#C2449F' : null,
+                  borderBottomStyle: currentTab === 'donation' ? 'solid' : null
+                }}
+              >
+                Donations{' '}
+                {currentProjectView?.donations?.length > 0 &&
+                !project?.fromTrace
+                  ? `( ${currentProjectView.donations.length} )`
+                  : ''}
+              </Text>
+            </Button>
+            {project?.fromTrace && (
               <Button
                 variant='nofill'
                 type='button'
                 sx={{ textAlign: 'left' }}
                 onClick={e => {
                   e.preventDefault()
-                  setCurrentTab('donation')
+                  // setCurrentTab('donation')
                 }}
               >
                 <Text
@@ -390,15 +415,11 @@ const ProjectDonatorView = ({
                     color: '#303B72',
                     paddingBottom: '0.5rem',
                     borderBottomColor:
-                      currentTab === 'donation' ? '#C2449F' : null,
-                    borderBottomStyle:
-                      currentTab === 'donation' ? 'solid' : null
+                      currentTab === 'traces' ? '#C2449F' : null,
+                    borderBottomStyle: currentTab === 'traces' ? 'solid' : null
                   }}
                 >
-                  Donations{' '}
-                  {currentProjectView?.donations?.length > 0
-                    ? `( ${currentProjectView.donations.length} )`
-                    : ''}
+                  Traces
                 </Text>
               </Button>
             )}
@@ -512,7 +533,9 @@ const ProjectDonatorView = ({
             <Text sx={{ variant: 'text.default' }}>
               Donations:{' '}
               {project?.fromTrace
-                ? project?.donationCount
+                ? project?.donationCounters?.reduce((a, b) => {
+                    return a + b?.donationCount
+                  }, 0)
                 : donations?.length || 0}
             </Text>
           </Flex>
