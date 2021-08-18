@@ -32,6 +32,8 @@ const RichTextViewer = dynamic(() => import('../richTextViewer'), {
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
+const ProjectTraces = React.lazy(() => import('./projectTraces'))
+
 const FloatingDonateView = styled(Flex)`
   @media screen and (max-width: 800px) {
     width: 80%;
@@ -407,7 +409,7 @@ const ProjectDonatorView = ({
                 sx={{ textAlign: 'left' }}
                 onClick={e => {
                   e.preventDefault()
-                  // setCurrentTab('donation')
+                  setCurrentTab('traces')
                 }}
               >
                 <Text
@@ -451,6 +453,10 @@ const ProjectDonatorView = ({
             ) : currentTab === 'updates' && !isSSR ? (
               <React.Suspense fallback={<div />}>
                 <UpdatesTab project={project} isOwner={isOwner} />
+              </React.Suspense>
+            ) : currentTab === 'traces' && !isSSR ? (
+              <React.Suspense fallback={<div />}>
+                <ProjectTraces project={project} />
               </React.Suspense>
             ) : (
               !isSSR && (

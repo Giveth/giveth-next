@@ -106,28 +106,14 @@ export async function getServerSideProps(props) {
     return { ...traceProj, status: { id: "5" }, fromTrace: true };
   });
 
-  let traceProjectDonations,
-    traces = null;
   if (traceProject) {
     errors = null;
-
-    //GET TRACES
-    traces = await fetch(
-      `${process.env.NEXT_PUBLIC_FEATHERS}/traces?%24limit=25&%24skip=0&campaignId=${traceProject?._id}`
-    ).then(async function (response) {
-      if (response.status >= 400) {
-        errors = new Error("Bad response from server fetching traces");
-      }
-      const res = await response.json();
-      return res?.data;
-    });
   }
 
   return {
     props: {
       project: project || traceProject || null,
       donations: donations || null,
-      traces: traces || null,
       updates: updates || null,
       reactions: reactions || null,
       admin: admin?.data?.user || {},
