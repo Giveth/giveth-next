@@ -69,9 +69,9 @@ const FilterBox = styled(Flex)`
 const fetcher = url => axios.get(url).then(res => res.data)
 
 const ProjectTraces = ({ donations }) => {
-  const [currentDonations, setCurrentDonations] = React.useState([])
+  const [currentTraces, setCurrentTraces] = React.useState([])
   const [donationsFromTrace, setDonationsFromTrace] = React.useState([])
-  const [limit, setLimit] = React.useState(25)
+  const [limit, setLimit] = React.useState(50)
   const [skip, setSkip] = React.useState(0)
   const [traces, setTraces] = React.useState([])
   const [loading, setLoading] = React.useState(true)
@@ -90,27 +90,25 @@ const ProjectTraces = ({ donations }) => {
 
   const [activeItem, setCurrentItem] = React.useState(1)
 
+  React.useEffect(() => {
+    setCurrentTraces(tracesData?.data)
+  }, [tracesFetch])
+
   const searching = search => {
     setIsSearching(true)
 
-    const searchDonations = currentProjectView?.project?.fromTrace
-      ? donationsFromTrace
-      : donations
+    const searchData = tracesData?.data
 
     if (!search || search === '') {
       setIsSearching(false)
       setCurrentItem(1)
-      return setCurrentDonations(searchDonations)
+      return setCurrentTraces(searchData)
     }
 
     setCurrentItem(1)
 
-    const some = searchDonations?.filter(donation => {
-      const val =
-        donation?.user?.name ||
-        donation?.user?.firstName ||
-        donation?.fromWalletAddress ||
-        donation?.giverAddress
+    const some = searchData?.filter(trace => {
+      const val = trace?.title
       return (
         val
           ?.toString()
@@ -118,11 +116,11 @@ const ProjectTraces = ({ donations }) => {
           .indexOf(search.toString().toLowerCase()) === 0
       )
     })
-    setCurrentDonations(some)
+    setCurrentTraces(some)
   }
 
   const TableToShow = () => {
-    const paginationItems = tracesData?.data
+    const paginationItems = currentTraces || tracesData?.data
 
     // Data to be rendered using pagination.
     const itemsPerPage = 6
@@ -133,7 +131,7 @@ const ProjectTraces = ({ donations }) => {
 
     if (!isSearching) {
       if (indexOfLastItem >= limit) {
-        setLimit(limit + 25)
+        setLimit(limit + 50)
         setSkip(skip + limit)
       }
     }
