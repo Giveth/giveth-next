@@ -137,10 +137,13 @@ const ProjectTraces = ({ donations }) => {
         setSkip(skip + limit)
       }
     }
-    const currentItems = paginationItems?.slice(
-      indexOfFirstItem,
-      indexOfLastItem
-    )
+    // TODO: FIX THIS
+    const currentItems = paginationItems
+      // ?.sort(
+      //   (a, b) =>
+      //     new Date(b.createdAt)?.valueOf() - new Date(a.createdAt)?.valueOf()
+      // )
+      ?.slice(indexOfFirstItem, indexOfLastItem)
 
     const handlePageChange = pageNumber => {
       setCurrentItem(pageNumber)
@@ -158,7 +161,7 @@ const ProjectTraces = ({ donations }) => {
           {currentItems?.slice().map((project, index) => {
             if (!project) return null
             return (
-              <Box sx={{ width: '40%', margin: 1 }}>
+              <Box sx={{ width: '30%', px: 0.5 }}>
                 <ProjectCard
                   disabled
                   image={project.image || '/images/no-image-available.jpg'}
