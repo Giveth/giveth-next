@@ -186,7 +186,7 @@ const CategoriesListView = styled.ul`
   background-color: ${theme.colors.background};
   li {
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     color: ${theme.colors.secondary};
     width: 50%;
     padding: 0 5%;

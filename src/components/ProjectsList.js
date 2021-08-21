@@ -230,6 +230,7 @@ const ProjectsList = props => {
     a => a,
     a => a,
     function amountRaised(a, b) {
+      console.log({ b, a })
       return b.totalDonations - a.totalDonations
     },
     function hearts(a, b) {

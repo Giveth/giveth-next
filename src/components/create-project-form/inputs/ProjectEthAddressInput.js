@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Label, Input, Button, Text, Flex } from 'theme-ui'
 import theme from '../../../../src/utils/theme-ui'
+import { BsQuestionCircle } from 'react-icons/bs'
 import { animated } from 'react-spring'
 
 export const ProjectEthAddressInput = ({
@@ -44,45 +45,52 @@ export const ProjectEthAddressInput = ({
         >
           You can set a custom ethereum address or ENS to receive donations
         </Text>
-        <Text
+        <Flex
           className='tooltip'
           sx={{
-            fontSize: '3',
-            textDecoration: 'underline',
-            fontFamily: 'heading',
-            color: 'secondary',
-            mt: '8px',
-            lineHeight: '19px'
+            padding: '6px 14px 6px 0',
+            width: 'fit-content'
           }}
         >
-          What is an ETH address?
-          <span className='tooltiptext'>
-            Your ETH address, also known as an ERC20 address, is the receiving
-            address for your Ethereum wallet. This is where funds raised by your
-            project will be sent.
-            <br />
-            <br /> If you logged using Torus via your email or social media. You
-            can access your wallet{' '}
-            <a
-              href='https://app.tor.us/'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              here
-            </a>
-            .
-            <br />
-            <br /> Learn more about Ethereum wallets{' '}
-            <a
-              href='https://ethereum.org/en/wallets/'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              here
-            </a>
-            .
-          </span>
-        </Text>
+          <Text
+            sx={{
+              fontSize: '3',
+              // textDecoration: 'underline',
+              fontFamily: 'heading',
+              color: 'secondary',
+              mt: '8px',
+              lineHeight: '19px'
+            }}
+          >
+            What is an ETH address <BsQuestionCircle size={15} />
+            <span className='tooltiptext'>
+              Your ETH address, also known as an ERC20 address, is the receiving
+              address for your Ethereum wallet. This is where funds raised by
+              your project will be sent.
+              <br />
+              <br /> If you logged using Torus via your email or social media.
+              You can access your wallet{' '}
+              <a
+                href='https://app.tor.us/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                here
+              </a>
+              .
+              <br />
+              <br /> Learn more about Ethereum wallets{' '}
+              <a
+                href='https://ethereum.org/en/wallets/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                here
+              </a>
+              .
+            </span>
+          </Text>
+        </Flex>
       </Flex>
 
       <Flex sx={{ width: '175%' }}>

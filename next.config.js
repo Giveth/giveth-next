@@ -21,6 +21,7 @@ module.exports = {
       "feathers.beta.giveth.io",
       "feathers.giveth.io",
       "feathers.develop.giveth.io",
+      "ipfs.giveth.io",
     ],
   },
   cleanDistDir: false,

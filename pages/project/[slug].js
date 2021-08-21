@@ -112,7 +112,7 @@ export async function getServerSideProps(props) {
 
   return {
     props: {
-      project: project || traceProject,
+      project: project || traceProject || null,
       donations: donations || null,
       updates: updates || null,
       reactions: reactions || null,

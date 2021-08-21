@@ -5,6 +5,7 @@ const ConfirmationModal = ({
   showModal,
   setShowModal,
   title,
+  subtitle,
   confirmation,
   secondary,
   noMsg
@@ -47,11 +48,23 @@ const ConfirmationModal = ({
     >
       {title}
     </Text>
+    {subtitle && (
+      <Text
+        sx={{
+          pt: '10px',
+          fontSize: 4,
+          textAlign: 'center',
+          fontFamily: 'body'
+        }}
+      >
+        {subtitle}
+      </Text>
+    )}
     <Flex
       sx={{
         width: '304px',
         justifyContent: 'space-between',
-        mt: '70px',
+        mt: '50px',
         fontFamily: 'body'
       }}
     >

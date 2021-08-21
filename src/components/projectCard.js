@@ -149,7 +149,7 @@ const Categories = ({ categories }) => {
 const ProjectCard = props => {
   const router = useRouter()
   const { user, isLoggedIn } = useWallet()
-  const { project, fromViewStyle, shadowed } = props
+  const { project, fromViewStyle, isATrace, shadowed } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
@@ -184,8 +184,8 @@ const ProjectCard = props => {
 
   useEffect(() => {
     const checkUser = () => {
-      setHeartedCount(project?.reactions?.length)
-      setHeartedByUser(project?.reactions?.find(r => r?.userId === user?.id))
+      setHeartedCount(project?.totalHearts)
+      // setHeartedByUser(project?.reactions?.find(r => r?.userId === user?.id))
     }
     checkUser()
   }, [project])
@@ -206,6 +206,7 @@ const ProjectCard = props => {
         <CardContainer
           key={props.listingId || project?.title + '_card'}
           sx={{
+            border: isATrace ? `1px solid rgba(44, 13, 83, 0.2)` : null,
             boxShadow: altStyle ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
           }}
         >
@@ -215,7 +216,11 @@ const ProjectCard = props => {
             //     ? `https://trace.giveth.io/campaign/${project?.slug}`
             //     : `/project/${props?.slug || project?.slug || ''}`
             // }
-            href={`/project/${props?.slug || project?.slug || ''}`}
+            href={
+              isATrace
+                ? isATrace
+                : `/project/${props?.slug || project?.slug || ''}`
+            }
             passHref
           >
             <a
@@ -399,7 +404,11 @@ const ProjectCard = props => {
                 //     ? `https://trace.giveth.io/campaign/${project?.slug}`
                 //     : `/project/${props?.slug || project?.slug || ''}`
                 // }
-                href={`/project/${props?.slug || project?.slug || ''}`}
+                href={
+                  isATrace
+                    ? isATrace
+                    : `/project/${props?.slug || project?.slug || ''}`
+                }
                 passHref
               >
                 <a
@@ -413,29 +422,31 @@ const ProjectCard = props => {
                   </Button>
                 </a>
               </Link>
-              <Link
-                href={
-                  project?.fromTrace
-                    ? `https://trace.giveth.io/campaign/${project?.slug}`
-                    : !props.disabled &&
-                      `/donate/${props?.slug || project?.slug}`
-                }
-                passHref
-              >
-                <a style={{ marginTop: 2, marginBottom: 2 }}>
-                  <Text
-                    sx={{
-                      variant: 'links.default',
-                      my: 2,
-                      mx: 'auto',
-                      cursor: 'pointer',
-                      color: theme.colors.primary
-                    }}
-                  >
-                    Donate
-                  </Text>
-                </a>
-              </Link>
+              {!isATrace && (
+                <Link
+                  href={
+                    project?.fromTrace
+                      ? `https://trace.giveth.io/campaign/${project?.slug}`
+                      : !props.disabled &&
+                        `/donate/${props?.slug || project?.slug}`
+                  }
+                  passHref
+                >
+                  <a style={{ marginTop: 2, marginBottom: 2 }}>
+                    <Text
+                      sx={{
+                        variant: 'links.default',
+                        my: 2,
+                        mx: 'auto',
+                        cursor: 'pointer',
+                        color: theme.colors.primary
+                      }}
+                    >
+                      Donate
+                    </Text>
+                  </a>
+                </Link>
+              )}
             </AltCardContent>
           )}
           <CardContent>

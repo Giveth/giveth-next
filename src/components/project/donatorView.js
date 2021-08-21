@@ -32,6 +32,8 @@ const RichTextViewer = dynamic(() => import('../richTextViewer'), {
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
+const ProjectTraces = React.lazy(() => import('./projectTraces'))
+
 const FloatingDonateView = styled(Flex)`
   @media screen and (max-width: 800px) {
     width: 80%;
@@ -118,7 +120,7 @@ const ProjectDonatorView = ({
           [...new Set(projectDonations?.map(data => data?.fromWalletAddress))]
             .length
         )
-        setIsOwner(project?.admin === user.id)
+        setIsOwner(!project?.fromTrace && project?.admin === user.id)
 
         setReady(true)
       } catch (error) {
@@ -375,14 +377,39 @@ const ProjectDonatorView = ({
                 </Text>
               </Button>
             )}
-            {!project?.fromTrace && (
+            <Button
+              variant='nofill'
+              type='button'
+              sx={{ textAlign: 'left' }}
+              onClick={e => {
+                e.preventDefault()
+                setCurrentTab('donation')
+              }}
+            >
+              <Text
+                sx={{
+                  color: '#303B72',
+                  paddingBottom: '0.5rem',
+                  borderBottomColor:
+                    currentTab === 'donation' ? '#C2449F' : null,
+                  borderBottomStyle: currentTab === 'donation' ? 'solid' : null
+                }}
+              >
+                Donations{' '}
+                {currentProjectView?.donations?.length > 0 &&
+                !project?.fromTrace
+                  ? `( ${currentProjectView.donations.length} )`
+                  : ''}
+              </Text>
+            </Button>
+            {project?.fromTrace && (
               <Button
                 variant='nofill'
                 type='button'
                 sx={{ textAlign: 'left' }}
                 onClick={e => {
                   e.preventDefault()
-                  setCurrentTab('donation')
+                  setCurrentTab('traces')
                 }}
               >
                 <Text
@@ -390,15 +417,11 @@ const ProjectDonatorView = ({
                     color: '#303B72',
                     paddingBottom: '0.5rem',
                     borderBottomColor:
-                      currentTab === 'donation' ? '#C2449F' : null,
-                    borderBottomStyle:
-                      currentTab === 'donation' ? 'solid' : null
+                      currentTab === 'traces' ? '#C2449F' : null,
+                    borderBottomStyle: currentTab === 'traces' ? 'solid' : null
                   }}
                 >
-                  Donations{' '}
-                  {currentProjectView?.donations?.length > 0
-                    ? `( ${currentProjectView.donations.length} )`
-                    : ''}
+                  Traces
                 </Text>
               </Button>
             )}
@@ -430,6 +453,10 @@ const ProjectDonatorView = ({
             ) : currentTab === 'updates' && !isSSR ? (
               <React.Suspense fallback={<div />}>
                 <UpdatesTab project={project} isOwner={isOwner} />
+              </React.Suspense>
+            ) : currentTab === 'traces' && !isSSR ? (
+              <React.Suspense fallback={<div />}>
+                <ProjectTraces project={project} />
               </React.Suspense>
             ) : (
               !isSSR && (
@@ -512,7 +539,9 @@ const ProjectDonatorView = ({
             <Text sx={{ variant: 'text.default' }}>
               Donations:{' '}
               {project?.fromTrace
-                ? project?.donationCount
+                ? project?.donationCounters?.reduce((a, b) => {
+                    return a + b?.donationCount
+                  }, 0)
                 : donations?.length || 0}
             </Text>
           </Flex>
