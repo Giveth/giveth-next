@@ -120,7 +120,7 @@ const ProjectDonatorView = ({
           [...new Set(projectDonations?.map(data => data?.fromWalletAddress))]
             .length
         )
-        setIsOwner(project?.admin === user.id)
+        setIsOwner(!project?.fromTrace && project?.admin === user.id)
 
         setReady(true)
       } catch (error) {
