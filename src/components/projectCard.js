@@ -184,8 +184,8 @@ const ProjectCard = props => {
 
   useEffect(() => {
     const checkUser = () => {
-      setHeartedCount(project?.reactions?.length)
-      setHeartedByUser(project?.reactions?.find(r => r?.userId === user?.id))
+      setHeartedCount(project?.totalHearts)
+      // setHeartedByUser(project?.reactions?.find(r => r?.userId === user?.id))
     }
     checkUser()
   }, [project])
