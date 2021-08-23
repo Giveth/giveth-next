@@ -259,6 +259,19 @@ const UserDetails = () => {
               My Projects
             </MenuItem>
           </Link>
+          <Link
+            href='/create'
+            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+          >
+            <MenuItem
+              sx={{
+                variant: 'text.medium'
+              }}
+              className='shadow boxheight'
+            >
+              Create a Project
+            </MenuItem>
+          </Link>
           <MenuLink
             href='https://github.com/Giveth/giveth-2/issues/new/choose'
             target='_blank'

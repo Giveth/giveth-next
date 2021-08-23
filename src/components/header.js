@@ -249,6 +249,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+  const isMobileForProjectBtn = useMediaQuery({ query: '(max-width: 1200px)' })
   const [hasScrolled, setScrollState] = useState(false)
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = router.pathname?.split('/')[1]
@@ -278,12 +279,56 @@ const Header = ({ siteTitle, isHomePage }) => {
     router.push('/create')
   }
 
+  const MainLogo = () => {
+    return (
+      <LogoSpan
+        className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
+      >
+        <Logo alt='' width='100px' height='100px' />
+        {siteId === 'giveth' ? (
+          <Text
+            pl={3}
+            sx={{
+              variant: 'text.default',
+              color: 'secondary',
+              fontFamily: 'fonts.body',
+              fontSize: 3,
+              fontWeight: 'medium',
+              textDecoration: 'none',
+              lineHeights: 'tallest',
+              letterSpacing: '0.32px',
+              cursor: 'pointer',
+              zIndex: 3
+            }}
+          >
+            GIVETH
+          </Text>
+        ) : (
+          ''
+        )}
+      </LogoSpan>
+    )
+  }
+
   useEffect(() => {
     router?.prefetch('/create')
   }, [])
 
   return (
     <Headroom>
+      {isMobile && (
+        <Link
+          href='/'
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: '10px',
+            alignItems: 'center'
+          }}
+        >
+          <MainLogo />
+        </Link>
+      )}
       <HeaderContainer
         style={{
           marginBottom: '1.45rem'
@@ -316,60 +361,26 @@ const Header = ({ siteTitle, isHomePage }) => {
               />
             </Decorator>
           ) : null}
-          <Link href='/'>
-            {isMobile ? (
-              <Logo
-                siteId={process.env.NEXT_PUBLIC_SITE_ID}
-                alt=''
-                width='40px'
-                height='40px'
-                style={{ mr: 3 }}
-              />
-            ) : (
-              <LogoSpan
-                className={
-                  hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''
-                }
-              >
-                <Logo alt='' width='100px' height='100px' />
-                {siteId === 'giveth' ? (
-                  <Text
-                    pl={3}
-                    sx={{
-                      variant: 'text.default',
-                      color: 'secondary',
-                      fontFamily: 'fonts.body',
-                      fontSize: 3,
-                      fontWeight: 'medium',
-                      textDecoration: 'none',
-                      lineHeights: 'tallest',
-                      letterSpacing: '0.32px',
-                      cursor: 'pointer',
-                      zIndex: 3
-                    }}
-                  >
-                    GIVETH
-                  </Text>
-                ) : (
-                  ''
-                )}
-              </LogoSpan>
-            )}
-          </Link>
-
-          <MiddleSpan>
-            <Link href='/' passHref>
-              <NavLink
-                style={{
-                  display: ['none', 'block', 'block'],
-                  color: isHomePage
-                    ? theme.colors.primary
-                    : theme.colors.secondary
-                }}
-              >
-                Home
-              </NavLink>
+          {!isMobile && (
+            <Link href='/'>
+              <MainLogo />
             </Link>
+          )}
+          <MiddleSpan>
+            {!isMobile && (
+              <Link href='/' passHref>
+                <NavLink
+                  style={{
+                    display: ['none', 'block', 'block'],
+                    color: isHomePage
+                      ? theme.colors.primary
+                      : theme.colors.secondary
+                  }}
+                >
+                  Home
+                </NavLink>
+              </Link>
+            )}
             <Link href='/join' passHref>
               <NavLink
                 style={{
@@ -405,7 +416,7 @@ const Header = ({ siteTitle, isHomePage }) => {
           </MiddleSpan>
 
           <UserSpan>
-            {isMobile ? null : (
+            {isMobileForProjectBtn ? null : (
               <Flex>
                 {pathname !== 'projects' && (
                   <CreateLink onClick={goCreate}>Create a project</CreateLink>

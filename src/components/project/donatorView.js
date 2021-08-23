@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
+import { useMediaQuery } from 'react-responsive'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
@@ -50,6 +51,7 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const router = useRouter()
   const { user } = useWallet()
   const [ready, setReady] = useState(false)
@@ -396,7 +398,8 @@ const ProjectDonatorView = ({
                 }}
               >
                 Donations{' '}
-                {currentProjectView?.donations?.length > 0 &&
+                {!isMobile &&
+                currentProjectView?.donations?.length > 0 &&
                 !project?.fromTrace
                   ? `( ${currentProjectView.donations.length} )`
                   : ''}
