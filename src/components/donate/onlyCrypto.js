@@ -937,6 +937,7 @@ const OnlyCrypto = props => {
           <Flex sx={{ flexDirection: 'column', width: '100%' }}>
             <Flex
               sx={{
+                flex: 1,
                 width: '100%',
                 alignItems: 'center',
                 textAlign: 'center',
@@ -946,9 +947,9 @@ const OnlyCrypto = props => {
               <Button
                 onClick={() => confirmDonation(isLoggedIn && ready)}
                 sx={{
-                  flex: 0.8,
+                  flex: [1, 0.8, 0.8],
                   variant: 'buttons.default',
-                  padding: '1.063rem 7.375rem',
+                  padding: ['1.063rem 1rem', '1.063rem 7.375rem', '1.063rem 7.375rem'],
                   mt: 2,
                   textTransform: 'uppercase',
                   width: '100%'

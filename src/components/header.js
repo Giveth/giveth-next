@@ -279,9 +279,10 @@ const Header = ({ siteTitle, isHomePage }) => {
     router.push('/create')
   }
 
-  const MainLogo = () => {
+  const MainLogo = ({isMobile}) => {
     return (
       <LogoSpan
+        style={{margin: isMobile && 10}}
         className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
       >
         <Logo alt='' width='100px' height='100px' />
@@ -298,7 +299,8 @@ const Header = ({ siteTitle, isHomePage }) => {
               lineHeights: 'tallest',
               letterSpacing: '0.32px',
               cursor: 'pointer',
-              zIndex: 3
+              zIndex: 3,
+              
             }}
           >
             GIVETH
@@ -319,14 +321,8 @@ const Header = ({ siteTitle, isHomePage }) => {
       {isMobile && (
         <Link
           href='/'
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: '10px',
-            alignItems: 'center'
-          }}
         >
-          <MainLogo />
+          <MainLogo isMobile/>
         </Link>
       )}
       <HeaderContainer
