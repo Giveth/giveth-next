@@ -651,15 +651,29 @@ const OnlyCrypto = props => {
               textAlign: 'center'
             }}
           >
+          <Text
+            sx={{
+              fontFamily: 'heading',
+              fontSize: '15px',
+              fontWeight: 'regular',
+              lineHeight: 'tall',
+              letterSpacing: '2px',
+              overflowWrap: 'normal',
+              color: 'secondary',
+              mt: 2,
+              mb: 4
+            }}
+          >DONATE TO
+          </Text>
             <Text
               sx={{
                 color: 'secondary',
-                variant: ['headings.h4', 'headings.h4'],
+                variant: 'headings.h4',
                 mt: 2,
                 mb: 4
               }}
             >
-              Support {project?.title}
+            {project?.title}
             </Text>
             <QRCode value={project?.walletAddress} size={250} />
             <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
