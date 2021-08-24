@@ -438,7 +438,7 @@ const DonationsTable = ({ donations }) => {
           <IconSearch />
         </SearchInput>
       </FilterBox>
-      {loading ? (
+      {(currentProjectView?.project?.fromTrace && !traceDonationsFetch?.data) || loading ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
           <Spinner variant='spinner.medium' />
         </Flex>
