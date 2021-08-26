@@ -148,6 +148,7 @@ const Separator = styled.div`
 
 const OnlyCrypto = props => {
   // ON BOARD
+  const { project } = props
   const [wallet, setWallet] = useState(null)
   const [onboard, setOnboard] = useState(null)
   const [mainToken, setMainToken] = useState(null)
@@ -156,7 +157,6 @@ const OnlyCrypto = props => {
   const [tokenAddress, setTokenAddress] = useState(null)
   const [selectedTokenBalance, setSelectedTokenBalance] = useState(0)
   const [notify, setNotify] = useState(null)
-  const { project } = props
   const [tokenPrice, setTokenPrice] = useState(1)
   const [mainTokenPrice, setMainTokenPrice] = useState(1)
   const [gasPrice, setGasPrice] = useState(null)
@@ -460,7 +460,7 @@ const OnlyCrypto = props => {
     return ready
   }
 
-  const confirmDonation = async isFromOwnProvider => {
+  const confirmDonation = async (isFromOwnProvider, traceable) => {
     try {
       let fromOwnProvider = isFromOwnProvider
 
@@ -594,7 +594,8 @@ const OnlyCrypto = props => {
             //   type: 'error'
             // })
           }
-        }
+        },
+        traceable
       )
 
       // Commented notify and instead we are using our own service
@@ -651,20 +652,21 @@ const OnlyCrypto = props => {
               textAlign: 'center'
             }}
           >
-          <Text
-            sx={{
-              fontFamily: 'heading',
-              fontSize: '15px',
-              fontWeight: 'regular',
-              lineHeight: 'tall',
-              letterSpacing: '2px',
-              overflowWrap: 'normal',
-              color: 'secondary',
-              mt: 2,
-              mb: 4
-            }}
-          >DONATE TO
-          </Text>
+            <Text
+              sx={{
+                fontFamily: 'heading',
+                fontSize: '15px',
+                fontWeight: 'regular',
+                lineHeight: 'tall',
+                letterSpacing: '2px',
+                overflowWrap: 'normal',
+                color: 'secondary',
+                mt: 2,
+                mb: 4
+              }}
+            >
+              DONATE TO
+            </Text>
             <Text
               sx={{
                 color: 'secondary',
@@ -673,7 +675,7 @@ const OnlyCrypto = props => {
                 mb: 4
               }}
             >
-            {project?.title}
+              {project?.title}
             </Text>
             <QRCode value={project?.walletAddress} size={250} />
             <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
@@ -949,7 +951,11 @@ const OnlyCrypto = props => {
                 sx={{
                   flex: [1, 0.8, 0.8],
                   variant: 'buttons.default',
-                  padding: ['1.063rem 1rem', '1.063rem 7.375rem', '1.063rem 7.375rem'],
+                  padding: [
+                    '1.063rem 1rem',
+                    '1.063rem 7.375rem',
+                    '1.063rem 7.375rem'
+                  ],
                   mt: 2,
                   textTransform: 'uppercase',
                   width: '100%'
@@ -957,6 +963,7 @@ const OnlyCrypto = props => {
               >
                 Donate
               </Button>
+
               <Flex
                 sx={{
                   flex: 0.2,
@@ -968,6 +975,24 @@ const OnlyCrypto = props => {
                 <SVGLogo />
               </Flex>
             </Flex>
+            {(project?.fromTrace || project?.IOTraceable) && (
+              <Button
+                onClick={() => confirmDonation(isLoggedIn && ready, true)}
+                sx={{
+                  variant: 'buttons.default',
+                  padding: [
+                    '1.063rem 1rem',
+                    '1.063rem 7.375rem',
+                    '1.063rem 7.375rem'
+                  ],
+                  mt: 2,
+                  textTransform: 'uppercase',
+                  width: '100%'
+                }}
+              >
+                Traceable Donation
+              </Button>
+            )}
             {isLoggedIn && ready && (
               <Text
                 sx={{

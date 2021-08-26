@@ -103,6 +103,7 @@ export async function getServerSideProps(props) {
     }
     const res = await response.json();
     const traceProj = res?.data[0];
+    if (!traceProj) return null;
     if (project) {
       // It was initially IO project
       return { ...traceProj, ...project, IOTraceable: true };

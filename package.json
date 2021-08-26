@@ -30,6 +30,7 @@
     "@ethersproject/providers": "^5.1.2",
     "@ethersproject/units": "^5.1.0",
     "@ethersproject/wallet": "^5.1.0",
+    "@giveth/bridge-contract": "^1.0.6",
     "@metamask/detect-provider": "^1.2.0",
     "@metamask/onboarding": "^1.0.0",
     "@sentry/browser": "^6.3.5",
