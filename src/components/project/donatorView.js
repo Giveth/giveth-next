@@ -51,6 +51,7 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
+  console.log({ project })
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const router = useRouter()
   const { user } = useWallet()
@@ -107,7 +108,7 @@ const ProjectDonatorView = ({
           0
         )
         setTotalReactions(projectReactions)
-        setHeartedCount(projectReactions?.length)
+        setHeartedCount(projectReactions?.length || project?.totalHearts)
         setHearted(projectReactions?.find(o => o.userId === user?.id))
 
         setCurrentProjectView({
@@ -405,7 +406,7 @@ const ProjectDonatorView = ({
                   : ''}
               </Text>
             </Button>
-            {project?.fromTrace && (
+            {(project?.fromTrace || project?.IOTraceable) && (
               <Button
                 variant='nofill'
                 type='button'
@@ -508,7 +509,9 @@ const ProjectDonatorView = ({
           >
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
-          {project?.verified && (
+          {(project?.verified ||
+            project?.IOTraceable ||
+            project?.fromTrace) && (
             <Flex
               sx={{
                 // cursor: 'pointer',
@@ -519,7 +522,9 @@ const ProjectDonatorView = ({
             >
               <GoVerified color={theme.colors.blue} />
               <Text sx={{ variant: 'text.default', ml: 2 }}>
-                {project?.fromTrace ? 'traceable' : 'verified'}
+                {project?.fromTrace || project?.IOTraceable
+                  ? 'traceable'
+                  : 'verified'}
               </Text>
             </Flex>
           )}

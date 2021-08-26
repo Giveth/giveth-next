@@ -255,6 +255,7 @@ const ProjectsList = props => {
       return !!a?.verified
     },
     function traceable(a) {
+      !!a?.fromTrace && console.log({ a })
       return !!a?.fromTrace
     },
     a => a,
