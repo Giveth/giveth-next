@@ -401,6 +401,7 @@ function WalletProvider(props) {
         // RELEASE: 0xC59dCE5CCC065A4b51A2321F857466A25ca49B40
         // TRACE: 0x30f938fED5dE6e06a9A7Cd2Ac3517131C317B1E7
 
+        // TODO !!!!!!!!!!!!
         const givethBridgeCurrent = new GivethBridge(
           wallet?.web3,
           process.env.NEXT_PUBLIC_GIVETH_BRIDGE_ADDRESS

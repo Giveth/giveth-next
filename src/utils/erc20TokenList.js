@@ -26,6 +26,13 @@ const mainnetTokens = {
     },
     {
       chainId: 1,
+      address: '0x03ab458634910aad20ef5f1c8ee96f1d6ac54919',
+      symbol: 'RAI',
+      name: 'Rai Reflex Index',
+      decimals: 18
+    },
+    {
+      chainId: 1,
       address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
       symbol: 'USDT',
       name: 'Tether',
@@ -617,6 +624,62 @@ const xDaiTokens = {
   ]
 }
 
+const traceTokens = {
+  name: 'TRACE ERC20 WHITELIST',
+  timestamp: null,
+  keywords: ['trace', 'erc20'],
+  tokens: [
+    {
+      chainId: 1,
+      name: 'ETH',
+      address: '0x0',
+      foreignAddress: '0xe3ee055346a9EfaF4AA2900847dEb04de0195398',
+      symbol: 'ETH',
+      coingeckoId: 'ethereum',
+      decimals: 6
+    },
+    {
+      chainId: 1,
+      name: 'DAI',
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      foreignAddress: '0x05A075B296995AdCaEC7c1dE0E52271a4Cf6DEb8',
+      symbol: 'DAI',
+      rateEqSymbol: 'USD',
+      coingeckoId: 'dai',
+      decimals: 3
+    },
+    {
+      chainId: 1,
+      name: 'PAN',
+      address: '0xd56dac73a4d6766464b38ec6d91eb45ce7457c44',
+      foreignAddress: '0x0aaf4acccddb40cdb6a1df3cfbc7944aa5effcc6',
+      symbol: 'PAN',
+      coingeckoId: 'panvala-pan',
+      decimals: 2
+    },
+    {
+      chainId: 1,
+      name: 'WBTC',
+      address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+      foreignAddress: '0x6d03800013c591611a6ee597191d9f608b833510',
+      symbol: 'WBTC',
+      rateEqSymbol: 'BTC',
+      coingeckoId: 'bitcoin',
+      decimals: 8
+    },
+    {
+      chainId: 1,
+      name: 'USDC',
+      address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+      foreignAddress: '0xf14eCE303f190A70A2CF7C7011F75bDa658aD6EF',
+      symbol: 'USDC',
+      rateEqSymbol: 'USD',
+      coingeckoId: 'usd-coin',
+      decimals: 3
+    }
+  ]
+}
+
 const getTokens = network => {
   let tokens = {}
   switch (network) {
@@ -628,6 +691,9 @@ const getTokens = network => {
       break
     case 100:
       tokens = xDaiTokens
+      break
+    case 'trace':
+      tokens = traceTokens
       break
     default:
       tokens = mainnetTokens

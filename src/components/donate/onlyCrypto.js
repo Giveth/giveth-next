@@ -4,7 +4,7 @@ import _ from 'lodash'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { Button, Flex, Label, Text, jsx } from 'theme-ui'
+import { Button, Flex, Label, Text, Switch } from 'theme-ui'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
@@ -169,6 +169,8 @@ const OnlyCrypto = props => {
   const [txHash, setTxHash] = useState(null)
   const [erc20List, setErc20List] = useState([])
   const [anonymous, setAnonymous] = useState(false)
+  const [switchTraceable, setSwitchTraceable] = useState(false)
+  const [traceTokenList, setTraceTokenList] = useState([])
   const [modalIsOpen, setIsOpen] = useState(false)
   const [icon, setIcon] = useState(null)
   const usePopup = React.useContext(PopupContext)
@@ -280,6 +282,8 @@ const OnlyCrypto = props => {
     }
     setMainToken(mainToken)
     const tokenList = getERC20List(currentChainId)
+    getERC20List('trace')
+    setTraceTokenList(getERC20List('trace'))
 
     if (mainToken === 'ETH') {
       setMainTokenPrice(ETHPrice)
@@ -460,9 +464,16 @@ const OnlyCrypto = props => {
     return ready
   }
 
-  const confirmDonation = async (isFromOwnProvider, traceable) => {
+  const confirmDonation = async (isFromOwnProvider, isTraceable) => {
     try {
       let fromOwnProvider = isFromOwnProvider
+      // Traceable by default if it comes from Trace only
+      // Depends on the toggle if it's an IO to Trace project
+      let traceable = project?.fromTrace
+        ? true
+        : isTraceable
+        ? isTraceable
+        : switchTraceable
 
       if (!project?.walletAddress) {
         return Toast({
@@ -623,6 +634,11 @@ const OnlyCrypto = props => {
 
   const isMainnet = currentChainId === 1
   const isXDAI = currentChainId === 100
+  const traceableNetwork = currentChainId == process.env.NEXT_PUBLIC_NETWORK_ID
+  const canBeTraceable =
+    (project?.IOTraceable || project?.fromTrace) &&
+    traceableNetwork &&
+    traceTokenList?.tokens?.find(i => i?.symbol === selectedToken?.symbol)
 
   return (
     <>
@@ -903,8 +919,37 @@ const OnlyCrypto = props => {
                 )}
               </Summary>
             )}
-            {!isXDAI && !userWallet?.isTorus && (
-              <SaveGasMessage>
+            {canBeTraceable && !isXDAI && project?.IOTraceable && (
+              <Switch
+                label='Make this a traceable donation'
+                onChange={() =>
+                  setSwitchTraceable(switchTraceable === true ? false : true)
+                }
+                value={switchTraceable}
+                defaultValue={switchTraceable}
+              />
+            )}
+            {project?.fromTrace && <Text>This is a trace only donation</Text>}
+            {switchTraceable === true && (
+              <SaveGasMessage
+                sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
+              >
+                <Text
+                  sx={{
+                    variant: 'text.medium',
+                    textAlign: 'left',
+                    color: 'background'
+                  }}
+                >
+                  Traceable donations are supported on mainnet using ETH, DAI,
+                  PAN, USDC or WBTC
+                </Text>
+              </SaveGasMessage>
+            )}
+            {!switchTraceable && !isXDAI && !userWallet?.isTorus && (
+              <SaveGasMessage
+                sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
+              >
                 <Image
                   src={'/images/icon-streamline-gas.svg'}
                   height='18px'
@@ -975,24 +1020,6 @@ const OnlyCrypto = props => {
                 <SVGLogo />
               </Flex>
             </Flex>
-            {(project?.fromTrace || project?.IOTraceable) && (
-              <Button
-                onClick={() => confirmDonation(isLoggedIn && ready, true)}
-                sx={{
-                  variant: 'buttons.default',
-                  padding: [
-                    '1.063rem 1rem',
-                    '1.063rem 7.375rem',
-                    '1.063rem 7.375rem'
-                  ],
-                  mt: 2,
-                  textTransform: 'uppercase',
-                  width: '100%'
-                }}
-              >
-                Traceable Donation
-              </Button>
-            )}
             {isLoggedIn && ready && (
               <Text
                 sx={{
