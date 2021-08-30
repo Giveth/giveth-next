@@ -255,6 +255,7 @@ const ProjectsList = props => {
       return !!a?.verified
     },
     function traceable(a) {
+      !!a?.fromTrace && console.log({ a })
       return !!a?.fromTrace
     },
     a => a,
@@ -324,12 +325,12 @@ const ProjectsList = props => {
           }}
         >
           {!fromHomePage ? (
-            <Flex>
+            <Flex sx={{ flexDirection: ['column', null, 'row'] }}>
               <Flex
                 sx={{
                   // width: '100%',
-                  flex: 0.6,
-                  flexDirection: ['row', null, 'row'],
+                  flex: [1, null, 0.6],
+                  flexDirection: ['column', null, 'row'],
                   justifyContent: ['space-around', null, null]
                 }}
               >
@@ -385,7 +386,7 @@ const ProjectsList = props => {
               <Flex
                 sx={{
                   alignItems: 'center',
-                  flex: 0.4,
+                  flex: [1, 0.4, 0.4],
                   width: '100%',
                   padding: '0 3% 0 0',
                   mt: [4, 0, 0],
@@ -397,7 +398,7 @@ const ProjectsList = props => {
                   variant='forms.search'
                   style={{
                     width: '100%',
-                    margin: 'auto'
+                    margin: '20px 0 0 0'
                   }}
                   onChange={searchProjects}
                 />

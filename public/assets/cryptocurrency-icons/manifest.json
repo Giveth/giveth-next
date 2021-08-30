@@ -1570,6 +1570,11 @@
 		"color": "#9d4bef"
 	},
 	{
+		"symbol": "RAI",
+		"name": "Rai",
+		"color": "#ffff"
+	},
+	{
 		"symbol": "RAP",
 		"name": "Rapture",
 		"color": "#000000"

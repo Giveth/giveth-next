@@ -212,6 +212,12 @@ const CreateProjectForm = props => {
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
         let projectWalletAddress
+        if (!data?.projectName) {
+          return Toast({
+            content: 'Please set at least a title to your project',
+            type: 'error'
+          })
+        }
         if (didEnterWalletAddress) {
           setInputLoading(true)
           projectWalletAddress = await getProjectWallet(

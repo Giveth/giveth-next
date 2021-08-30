@@ -942,6 +942,27 @@
     "@ethersproject/properties" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
 
+"@giveth/bridge-contract@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@giveth/bridge-contract/-/bridge-contract-1.0.6.tgz#66abf797ef4ca63be13293658e2b4f8b7357c486"
+  integrity sha512-MDzkawchCpU+ic7Figv9ovJykuesxwi01xblQWdItSqWL582nPDLaMh/zMJIrMGT/6YdfJ3/XP4D3N+g/77e5A==
+  dependencies:
+    "@giveth/common-contracts" "^0.7.1"
+    "@giveth/eth-contract-class" "^1.0.1"
+    minimetoken "^0.2.0"
+
+"@giveth/common-contracts@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@giveth/common-contracts/-/common-contracts-0.7.1.tgz#1d465739b0d0044eb8cdc51f7128887aad0ed82c"
+  integrity sha512-s8F2HR5rJdmzG/XzQU5L7Nmi0SvmAeay/kqMrv0IqEgW+75m+Z4xjvemytouSpOSgEFiDSfIuTWrYCs1Sq+UJA==
+
+"@giveth/eth-contract-class@^1.0.1":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@giveth/eth-contract-class/-/eth-contract-class-1.1.0.tgz#e78571e50c5a9e7bc34b1c6fd9685b5e5d22fe8b"
+  integrity sha512-7+3+/MSTKWfmxCy5KQ9b7lMKEO/fJ8aOAhGGuq5mJ0pt1tt7EXrA8Xy/XDyvPgT2DlaeXT83NTrKvRyVqyV9pw==
+  dependencies:
+    web3-core-promievent "^1.5.1"
+
 "@graphql-typed-document-node/core@^3.0.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.0.tgz#0eee6373e11418bfe0b5638f654df7a4ca6a3950"
@@ -4571,6 +4592,13 @@ eth-block-tracker@4.4.3, eth-block-tracker@^4.4.2:
     pify "^3.0.0"
     safe-event-emitter "^1.0.1"
 
+eth-contract-class@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/eth-contract-class/-/eth-contract-class-0.0.6.tgz#398b8952149cc747cb959fa8b5d480288c7a8bce"
+  integrity sha1-OYuJUhScx0fLlZ+otdSAKIx6i84=
+  dependencies:
+    web3-core-promievent "^1.0.0-beta.21"
+
 eth-ens-namehash@2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/eth-ens-namehash/-/eth-ens-namehash-2.0.8.tgz#229ac46eca86d52e0c991e7cb2aef83ff0f68bcf"
@@ -7404,6 +7432,13 @@ minimatch@^3.0.4:
   integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
   dependencies:
     brace-expansion "^1.1.7"
+
+minimetoken@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/minimetoken/-/minimetoken-0.2.0.tgz#c182231eae93e752e5d8801c2967e6d6ef6a0e6f"
+  integrity sha512-oRwMg4tbr4sAznQ8+eS6ZQbrIQNt2Qn0wTFHQJVlPCCQ1cgq24h1B2KIaUtqIUu/eKZi7a5NE1MOcv0tZQxYFQ==
+  dependencies:
+    eth-contract-class "0.0.6"
 
 minimist-options@^3.0.1:
   version "3.0.2"
@@ -10794,6 +10829,13 @@ web3-core-promievent@1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/web3-core-promievent/-/web3-core-promievent-1.5.0.tgz#fab9fe72520e46d8fee73ccf8d2f15243e4bc4fd"
   integrity sha512-7GkbOIMtcp1qN8LRMMmwIhulzEldT+3Mu7ii2WgAcFFKT1yzUl6Gmycf8mmoEKpAuADAQ9Qeyk0PskTR6rTYlQ==
+  dependencies:
+    eventemitter3 "4.0.4"
+
+web3-core-promievent@^1.0.0-beta.21, web3-core-promievent@^1.5.1:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/web3-core-promievent/-/web3-core-promievent-1.5.2.tgz#2dc9fe0e5bbeb7c360fc1aac5f12b32d9949a59b"
+  integrity sha512-5DacbJXe98ozSor7JlkTNCy6G8945VunRRkPxMk98rUrg60ECVEM/vuefk1atACzjQsKx6tmLZuHxbJQ64TQeQ==
   dependencies:
     eventemitter3 "4.0.4"
 

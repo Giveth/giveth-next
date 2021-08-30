@@ -27,7 +27,6 @@ import DropdownInput from '../dropdownInput'
 import { parseBalance } from '../../util'
 
 dayjs.extend(localizedFormat)
-
 const Table = styled.table`
   border-collapse: collapse;
   margin: 4rem 0;
@@ -163,7 +162,7 @@ const FilterBox = styled(Flex)`
 `
 const fetcher = url => axios.get(url).then(res => res.data)
 
-const DonationsTable = ({ donations }) => {
+const DonationsTable = ({ donations = [] }) => {
   const options = ['All Donations', 'Fiat', 'Crypto']
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [donationsFromTrace, setDonationsFromTrace] = React.useState([])
@@ -177,13 +176,19 @@ const DonationsTable = ({ donations }) => {
   )
   const client = useApolloClient()
 
+  const fromTrace =
+    currentProjectView?.project?.fromTrace ||
+    currentProjectView?.project?.IOTraceable
+
   const traceDonationsFetch =
-    currentProjectView?.project?.fromTrace &&
+    fromTrace &&
     useSWR(
       `${process.env.NEXT_PUBLIC_FEATHERS}/donations?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView?.project?._id}`,
       fetcher
     )
+
   const traceDonations = traceDonationsFetch?.data
+
   React.useEffect(() => {
     if (!traceDonations) {
       return setLoading(true)
@@ -191,7 +196,11 @@ const DonationsTable = ({ donations }) => {
       setLoading(false)
     }
     setDonationsFromTrace([...donationsFromTrace, ...traceDonations?.data])
-    setCurrentDonations([...donationsFromTrace, ...traceDonations?.data])
+    setCurrentDonations([
+      ...currentDonations,
+      ...donationsFromTrace,
+      ...traceDonations?.data
+    ])
   }, [JSON.stringify(traceDonations)])
 
   React.useEffect(() => {
@@ -210,8 +219,8 @@ const DonationsTable = ({ donations }) => {
   const searching = search => {
     setIsSearching(true)
 
-    const searchDonations = currentProjectView?.project?.fromTrace
-      ? donationsFromTrace
+    const searchDonations = fromTrace
+      ? [...donations, ...donationsFromTrace]
       : donations
 
     if (!search || search === '') {
@@ -263,7 +272,7 @@ const DonationsTable = ({ donations }) => {
     const indexOfLastItem = activeItem * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
 
-    if (currentProjectView?.project?.fromTrace && !isSearching) {
+    if (fromTrace && !isSearching) {
       if (indexOfLastItem >= limit) {
         setLimit(limit + 25)
         setSkip(skip + limit)
@@ -438,7 +447,7 @@ const DonationsTable = ({ donations }) => {
           <IconSearch />
         </SearchInput>
       </FilterBox>
-      {loading ? (
+      {(fromTrace && !traceDonationsFetch?.data) || loading ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
           <Spinner variant='spinner.medium' />
         </Flex>

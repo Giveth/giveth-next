@@ -10,7 +10,8 @@ export async function send(
   isLoggedIn,
   sendTransaction,
   provider,
-  txCallbacks
+  txCallbacks,
+  traceable
 ) {
   try {
     const transaction = {
@@ -25,7 +26,9 @@ export async function send(
       const regularTransaction = await sendTransaction(
         transaction,
         txCallbacks,
-        contractAddress
+        contractAddress,
+        null,
+        traceable
       )
       hash = regularTransaction?.transactionHash
     } else {
@@ -34,7 +37,8 @@ export async function send(
         transaction,
         txCallbacks,
         contractAddress,
-        signer
+        signer,
+        traceable
       )
       console.log('look here', { signerTransaction })
       hash = signerTransaction?.hash

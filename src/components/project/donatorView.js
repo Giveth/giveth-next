@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
+import { useMediaQuery } from 'react-responsive'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
@@ -50,6 +51,8 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
+  console.log({ project })
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const router = useRouter()
   const { user } = useWallet()
   const [ready, setReady] = useState(false)
@@ -105,7 +108,7 @@ const ProjectDonatorView = ({
           0
         )
         setTotalReactions(projectReactions)
-        setHeartedCount(projectReactions?.length)
+        setHeartedCount(projectReactions?.length || project?.totalHearts)
         setHearted(projectReactions?.find(o => o.userId === user?.id))
 
         setCurrentProjectView({
@@ -396,13 +399,14 @@ const ProjectDonatorView = ({
                 }}
               >
                 Donations{' '}
-                {currentProjectView?.donations?.length > 0 &&
+                {!isMobile &&
+                currentProjectView?.donations?.length > 0 &&
                 !project?.fromTrace
                   ? `( ${currentProjectView.donations.length} )`
                   : ''}
               </Text>
             </Button>
-            {project?.fromTrace && (
+            {(project?.fromTrace || project?.IOTraceable) && (
               <Button
                 variant='nofill'
                 type='button'
@@ -505,7 +509,9 @@ const ProjectDonatorView = ({
           >
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
-          {project?.verified && (
+          {(project?.verified ||
+            project?.IOTraceable ||
+            project?.fromTrace) && (
             <Flex
               sx={{
                 // cursor: 'pointer',
@@ -516,7 +522,9 @@ const ProjectDonatorView = ({
             >
               <GoVerified color={theme.colors.blue} />
               <Text sx={{ variant: 'text.default', ml: 2 }}>
-                {project?.fromTrace ? 'traceable' : 'verified'}
+                {project?.fromTrace || project?.IOTraceable
+                  ? 'traceable'
+                  : 'verified'}
               </Text>
             </Flex>
           )}

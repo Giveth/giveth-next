@@ -103,7 +103,14 @@ export async function getServerSideProps(props) {
     }
     const res = await response.json();
     const traceProj = res?.data[0];
-    return { ...traceProj, status: { id: "5" }, fromTrace: true };
+    if (!traceProj) return null;
+    if (project) {
+      // It was initially IO project
+      return { ...traceProj, ...project, IOTraceable: true };
+    } else {
+      // Only Traceable
+      return { ...traceProj, status: { id: "5" }, fromTrace: true };
+    }
   });
 
   if (traceProject) {
@@ -112,7 +119,7 @@ export async function getServerSideProps(props) {
 
   return {
     props: {
-      project: project || traceProject || null,
+      project: traceProject || project || null,
       donations: donations || null,
       updates: updates || null,
       reactions: reactions || null,
