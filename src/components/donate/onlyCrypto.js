@@ -469,11 +469,12 @@ const OnlyCrypto = props => {
       let fromOwnProvider = isFromOwnProvider
       // Traceable by default if it comes from Trace only
       // Depends on the toggle if it's an IO to Trace project
-      let traceable = project?.fromTrace
-        ? true
-        : isTraceable
-        ? isTraceable
-        : switchTraceable
+      // let traceable = project?.fromTrace
+      //   ? true
+      //   : isTraceable
+      //   ? isTraceable
+      //   : switchTraceable
+      let traceable = false
 
       if (!project?.walletAddress) {
         return Toast({
@@ -919,33 +920,36 @@ const OnlyCrypto = props => {
                 )}
               </Summary>
             )}
-            {canBeTraceable && !isXDAI && project?.IOTraceable && (
-              <Switch
-                label='Make this a traceable donation'
-                onChange={() =>
-                  setSwitchTraceable(switchTraceable === true ? false : true)
-                }
-                value={switchTraceable}
-                defaultValue={switchTraceable}
-              />
-            )}
-            {project?.fromTrace && <Text>This is a trace only donation</Text>}
-            {switchTraceable === true && (
-              <SaveGasMessage
-                sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
-              >
-                <Text
-                  sx={{
-                    variant: 'text.medium',
-                    textAlign: 'left',
-                    color: 'background'
-                  }}
-                >
-                  Traceable donations are supported on mainnet using ETH, DAI,
-                  PAN, USDC or WBTC
-                </Text>
-              </SaveGasMessage>
-            )}
+            {
+            // UNCOMMENT THIS TO BRING TRACEABLE DONATIONS
+            // {canBeTraceable && !isXDAI && project?.IOTraceable && (
+            //   <Switch
+            //     label='Make this a traceable donation'
+            //     onChange={() =>
+            //       setSwitchTraceable(switchTraceable === true ? false : true)
+            //     }
+            //     value={switchTraceable}
+            //     defaultValue={switchTraceable}
+            //   />
+            // )}
+            // {project?.fromTrace && <Text>This is a trace only donation</Text>}
+            // {switchTraceable === true && (
+            //   <SaveGasMessage
+            //     sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
+            //   >
+            //     <Text
+            //       sx={{
+            //         variant: 'text.medium',
+            //         textAlign: 'left',
+            //         color: 'background'
+            //       }}
+            //     >
+            //       Traceable donations are supported on mainnet using ETH, DAI,
+            //       PAN, USDC or WBTC
+            //     </Text>
+            //   </SaveGasMessage>
+            // )}
+            }
             {!switchTraceable && !isXDAI && !userWallet?.isTorus && (
               <SaveGasMessage
                 sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
