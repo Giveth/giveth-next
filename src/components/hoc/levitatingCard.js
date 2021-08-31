@@ -4,11 +4,11 @@ import { useSpring, animated, to } from '@react-spring/web'
 
 const calcXY = (x, y) => [
   -(y - window.innerHeight / 2) / 20,
-  (x - window.innerWidth / 2) / 150,
+  (x - window.innerWidth / 2) / 10,
   1
 ]
 const calcXYsteady = (x, y) => [-0.5, 0.5, 1]
-
+// TODO understand this
 const perspective = (x, y, s) =>
   `perspective(500px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
 
@@ -18,15 +18,16 @@ function LevitatingCard ({ children, steady, style }) {
     config: { mass: 5, tension: 200, friction: 100 }
   }))
 
-  const sx = { ...style, ...{ transform: props.xys.interpolate(perspective) } }
+  const sx = { ...style }
+  // const sx = { ...style, ...{ transform: props.xys.interpolate(perspective) } }
 
   return (
     <>
       <animated.div
-        onMouseMove={({ clientX: x, clientY: y }) =>
-          set({ xys: steady ? calcXYsteady(x, y) : calcXY(x, y) })
-        }
-        onMouseLeave={() => set({ xys: [0, 0, 1] })}
+        // onMouseMove={({ clientX: x, clientY: y }) =>
+        //   set({ xys: steady ? calcXYsteady(x, y) : calcXY(x, y) })
+        // }
+        // onMouseLeave={() => set({ xys: [0, 0, 1] })}
         style={sx}
         className='levitating-card '
       >
