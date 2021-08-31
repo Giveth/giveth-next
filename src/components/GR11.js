@@ -1,44 +1,81 @@
 import React from 'react'
-import { Flex, Button, Text } from 'theme-ui'
-import { useSpring, animated, to } from '@react-spring/web'
-
-const calcXY = (x, y) => [
-  -(y - window.innerHeight / 2) / 20,
-  (x - window.innerWidth / 2) / 150,
-  1.0
-]
-
-const perspective = (x, y, s) =>
-  `perspective(500px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
+import { useRouter } from 'next/router'
+import { Flex, Button, Text, Image } from 'theme-ui'
+import LevitatingCard from './hoc/levitatingCard'
 
 function GR11 () {
-  const [props, set] = useSpring(() => ({
-    xys: [0, 0, 1],
-    config: { mass: 5, tension: 200, friction: 100 }
-  }))
+  const router = useRouter()
+
+  if (process.env.NEXT_PUBLIC_NETWORK !== 'ropsten') return null
 
   return (
     <>
-      <animated.div
-        onMouseMove={({ clientX: x, clientY: y }) => set({ xys: calcXY(x, y) })}
-        onMouseLeave={() => set({ xys: [0, 0, 1] })}
-        style={{ transform: props.xys.interpolate(perspective) }}
-        className='gr11'
-      >
+      <LevitatingCard style={{ margin: '0 15% 5% 15%' }}>
         <Flex
-          style={{
+          sx={{
             flex: 1,
-            flexDirection: ['column', 'row', 'row'],
-            px: '15%'
+            width: '100%',
+            flexDirection: ['column-reverse', 'row', 'row'],
+            mb: ['25%', 0, 0]
           }}
         >
-          <Flex sx={{ flex: 0.5, background: 'blue' }}>
-            <Text>Sept 8-23</Text>
+          <Flex
+            sx={{
+              flex: 0.5,
+              width: '100%',
+              flexDirection: 'column',
+              alignItems: 'center',
+              background: '#0C0631',
+              padding: '50px 0',
+              borderTopLeftRadius: [0, '16px', '16px'],
+              borderBottomLeftRadius: [0, '16px', '16px']
+            }}
+          >
+            <Image
+              src='/images/GR11.png'
+              style={{
+                objectFit: 'cover',
+                objectPosition: '3px 0'
+              }}
+            />
+            <Text
+              sx={{
+                variant: 'text.default',
+                fontSize: '24px',
+                color: 'background'
+              }}
+            >
+              Sept 8-23
+            </Text>
           </Flex>
-          <Flex sx={{ flex: 0.5, flexDirection: 'column', background: 'red' }}>
-            <Text>Gitcoin Grants</Text>
-            <Text>Round 11 is here!</Text>
-            <Text>
+          <Flex
+            sx={{
+              flex: 0.5,
+              px: 4,
+              py: '50px',
+              flexDirection: 'column',
+              background: '#5326EC',
+              '*': {
+                zIndex: 2
+              },
+              borderTopRightRadius: [0, '16px', '16px'],
+              borderBottomRightRadius: [0, '16px', '16px']
+            }}
+          >
+            <Text sx={{ variant: 'headings.h1', color: 'background' }}>
+              Gitcoin Grants
+            </Text>
+            <Text sx={{ variant: 'headings.h1', color: 'background' }}>
+              Round 11 is here!
+            </Text>
+            <Text
+              sx={{
+                variant: 'text.default',
+                fontSize: '24px',
+                color: 'background',
+                pr: 4
+              }}
+            >
               Donate to support Giveth with the power of Quadratic Funding
             </Text>
             <Button
@@ -50,28 +87,29 @@ function GR11 () {
                 fontWeight: 'bold',
                 fontSize: 2,
                 lineHeight: 'button',
-                letterSpacing: 'normal'
+                letterSpacing: 'normal',
+                mt: 4
               }}
+              onClick={() =>
+                router.push('https://gitcoin.co/grants/795/giveth-20')
+              }
             >
-              DONATE ON GITCOIN
+              DONATE
             </Button>
           </Flex>
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0
+            }}
+          >
+            <Image src='/images/arc-1.png' style={{ maxHeight: '300px' }} />
+          </div>
         </Flex>
-      </animated.div>
+      </LevitatingCard>
       <style global jsx>
-        {`
-          .gr11 {
-            margin: 0 15%;
-            align-items: center;
-            border-radius: 15px;
-            box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
-            transition: box-shadow 0.5s;
-          }
-
-          .gr11:hover {
-            box-shadow: 0px 30px 100px -10px rgba(0, 0, 0, 0.4);
-          }
-        `}
+        {``}
       </style>
     </>
   )

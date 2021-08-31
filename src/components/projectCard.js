@@ -16,6 +16,7 @@ import { BsHeartFill } from 'react-icons/bs'
 import { FaShareAlt } from 'react-icons/fa'
 import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
+import LevitatingCard from './hoc/levitatingCard'
 
 const RichTextViewer = dynamic(() => import('./richTextViewer'), {
   ssr: false
@@ -55,6 +56,7 @@ const Badge = styled.span`
   padding: 3px 11.76px;
   margin: 0.4rem;
   align-items: center;
+  text-align: center;
   border: 1px solid ${theme.colors.bodyLight};
   border-radius: 48px;
   color: ${theme.colors.bodyLight};
@@ -125,11 +127,9 @@ const Categories = ({ categories }) => {
     return (
       <Badge key={index}>
         <Text
-          sx={{ variant: 'text.default' }}
+          sx={{ variant: 'text.paragraph', fontSize: 1 }}
           style={{
-            fontSize: '10px',
             color: theme.colors.bodyLight,
-            fontWeight: '500',
             textTransform: 'uppercase'
           }}
         >
@@ -196,13 +196,13 @@ const ProjectCard = props => {
   const isNewProject = new Date(project?.creationDate)?.valueOf() > twoWeeksAgo
 
   return (
-    <>
-      <Box
-        key={props.listingId + '_box'}
-        style={{ width: '100%' }}
-        onMouseOver={() => setAltStyle(true)}
-        onMouseLeave={() => setAltStyle(false)}
-      >
+    <Box
+      key={props.listingId + '_box'}
+      style={{ width: '100%' }}
+      onMouseOver={() => setAltStyle(true)}
+      onMouseLeave={() => setAltStyle(false)}
+    >
+      <LevitatingCard steady>
         <CardContainer
           key={props.listingId || project?.title + '_card'}
           sx={{
@@ -486,14 +486,15 @@ const ProjectCard = props => {
             </CardFooter>
           </CardContent>
         </CardContainer>
-        {
-          // <Donate
-          //   maxAmount={balance}
-          //   doDonate={values => alert('donating' + values.amount)}
-          // />
-        }
-      </Box>
-    </>
+      </LevitatingCard>
+
+      {
+        // <Donate
+        //   maxAmount={balance}
+        //   doDonate={values => alert('donating' + values.amount)}
+        // />
+      }
+    </Box>
   )
 }
 
