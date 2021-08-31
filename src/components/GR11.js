@@ -51,10 +51,12 @@ function GR11 () {
           <Flex
             sx={{
               flex: 0.5,
-              px: 4,
-              py: '50px',
+              width: '100%',
+              pt: '50px',
+              pb: '-50px',
               flexDirection: 'column',
               background: '#5326EC',
+              position: 'relative',
               '*': {
                 zIndex: 2
               },
@@ -62,10 +64,10 @@ function GR11 () {
               borderBottomRightRadius: [0, '16px', '16px']
             }}
           >
-            <Text sx={{ variant: 'headings.h1', color: 'background' }}>
+            <Text sx={{ variant: 'headings.h1', px: 4, color: 'background' }}>
               Gitcoin Grants
             </Text>
-            <Text sx={{ variant: 'headings.h1', color: 'background' }}>
+            <Text sx={{ variant: 'headings.h1', px: 4, color: 'background' }}>
               Round 11 is here!
             </Text>
             <Text
@@ -73,7 +75,7 @@ function GR11 () {
                 variant: 'text.default',
                 fontSize: '24px',
                 color: 'background',
-                pr: 4
+                px: 4
               }}
             >
               Donate to support Giveth with the power of Quadratic Funding
@@ -88,7 +90,8 @@ function GR11 () {
                 fontSize: 2,
                 lineHeight: 'button',
                 letterSpacing: 'normal',
-                mt: 4
+                mt: 4,
+                ml: 4
               }}
               onClick={() =>
                 router.push('https://gitcoin.co/grants/795/giveth-20')
@@ -96,16 +99,16 @@ function GR11 () {
             >
               DONATE
             </Button>
+            <Image
+              src='/images/arc-1.png'
+              sx={{
+                position: 'absolute',
+                right: 0,
+                bottom: 0,
+                zIndex: 1
+              }}
+            />
           </Flex>
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0
-            }}
-          >
-            <Image src='/images/arc-1.png' style={{ maxHeight: '300px' }} />
-          </div>
         </Flex>
       </LevitatingCard>
       <style global jsx>
