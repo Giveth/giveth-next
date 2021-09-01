@@ -1,23 +1,26 @@
-import React, { useState } from "react";
-import Seo from "../src/components/seo";
-import ErrorPage from "../src/components/errorPage";
-import { client } from "../src/apollo/client";
-import Layout from "../src/components/layout";
-
+import React, { useState } from 'react'
+import Seo from '../src/components/seo'
+import ErrorPage from '../src/components/errorPage'
+import { client } from '../src/apollo/client'
+import Layout from '../src/components/layout'
+import GR11 from '../src/components/GR11'
 import ProjectsList, {
   OrderByDirection,
-  OrderByField,
-} from "../src/components/ProjectsList";
+  OrderByField
+} from '../src/components/ProjectsList'
 
-import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from "../src/apollo/gql/projects";
+import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from '../src/apollo/gql/projects'
 
-const Project = (props) => {
-  const { projects, traceProjects, categories, totalCount, errors } = props;
-  const [limit, setLimit] = useState(12);
-  const [orderByField, setOrderByField] = useState(OrderByField.Balance);
+const Project = props => {
+  const { projects, traceProjects, categories, totalCount, errors } = props
+  const [limit, setLimit] = useState(12)
+  const [orderByField, setOrderByField] = useState(OrderByField.Balance)
   return (
     <Layout>
-      <Seo title="Projects" />
+      <Seo title='Projects' />
+      <div style={{ marginTop: '-3%' }}>
+        <GR11 />
+      </div>
       {projects && !errors ? (
         <ProjectsList
           query={props?.query}
@@ -26,38 +29,38 @@ const Project = (props) => {
           categories={categories}
           totalCount={totalCount}
           maxLimit={limit}
-          selectOrderByField={(orderByField) => {
-            setLimit(2);
-            setOrderByField(orderByField);
+          selectOrderByField={orderByField => {
+            setLimit(2)
+            setOrderByField(orderByField)
           }}
         />
       ) : (
         <ErrorPage json={errors} />
       )}
     </Layout>
-  );
-};
+  )
+}
 
-export async function getServerSideProps(props) {
+export async function getServerSideProps (props) {
   // Fetch Project
   let projects,
     traceProjects,
-    categories = null;
-  let errors = null;
+    categories = null
+  let errors = null
   try {
     const { loading, error, data: fetchProject } = await client.query({
       query: FETCH_ALL_PROJECTS,
-      fetchPolicy: "network-only",
-    });
+      fetchPolicy: 'network-only'
+    })
     projects = Array.from(fetchProject?.projects).filter(
-      (i) => i?.status?.id === "5"
-    );
+      i => i?.status?.id === '5'
+    )
 
     const { data: categoriesData } = await client.query({
       query: GET_CATEGORIES,
-      fetchPolicy: "network-only",
-    });
-    categories = categoriesData?.categories;
+      fetchPolicy: 'network-only'
+    })
+    categories = categoriesData?.categories
 
     if (!!process.env.NEXT_PUBLIC_FEATHERS) {
       // only fetch if there's a route
@@ -66,27 +69,27 @@ export async function getServerSideProps(props) {
         `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?verified=true`
       ).then(function (response) {
         if (response.status >= 400) {
-          errors = new Error("Bad response from server");
+          errors = new Error('Bad response from server')
         }
-        return response.json();
-      });
+        return response.json()
+      })
     }
 
-    errors = error;
+    errors = error
   } catch (error) {
-    errors = error;
+    errors = error
   }
   return {
     props: {
       projects: projects || [],
       traceProjects:
-        traceProjects?.data?.map((i) => ({ ...i, fromTrace: true })) || [],
+        traceProjects?.data?.map(i => ({ ...i, fromTrace: true })) || [],
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,
-      query: props.query,
-    },
-  };
+      query: props.query
+    }
+  }
 }
 
-export default Project;
+export default Project

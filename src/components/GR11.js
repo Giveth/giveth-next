@@ -6,7 +6,12 @@ import LevitatingCard from './hoc/levitatingCard'
 function GR11 () {
   const router = useRouter()
 
-  if (process.env.NEXT_PUBLIC_NETWORK !== 'ropsten') return null
+  const today = new Date()
+  const firstDay = new Date('09/08/2021')
+  const lastDay = new Date('09/23/2021')
+
+  const showme = today >= firstDay && today <= lastDay
+  if (!showme && process.env.NEXT_PUBLIC_NETWORK !== 'ropsten') return null
 
   return (
     <>
@@ -64,10 +69,22 @@ function GR11 () {
               borderBottomRightRadius: [0, '16px', '16px']
             }}
           >
-            <Text sx={{ variant: 'headings.h1', px: 4, color: 'background' }}>
+            <Text
+              sx={{
+                variant: 'headings.h2',
+                px: 4,
+                color: 'background'
+              }}
+            >
               Gitcoin Grants
             </Text>
-            <Text sx={{ variant: 'headings.h1', px: 4, color: 'background' }}>
+            <Text
+              sx={{
+                variant: 'headings.h2',
+                px: 4,
+                color: 'background'
+              }}
+            >
               Round 11 is here!
             </Text>
             <Text
@@ -91,7 +108,8 @@ function GR11 () {
                 lineHeight: 'button',
                 letterSpacing: 'normal',
                 mt: 4,
-                ml: 4
+                ml: 4,
+                mb: [4, 0, 0]
               }}
               onClick={() =>
                 router.push('https://gitcoin.co/grants/795/giveth-20')
@@ -105,15 +123,13 @@ function GR11 () {
                 position: 'absolute',
                 right: 0,
                 bottom: 0,
-                zIndex: 1
+                zIndex: 1,
+                maxHeight: '400px'
               }}
             />
           </Flex>
         </Flex>
       </LevitatingCard>
-      <style global jsx>
-        {``}
-      </style>
     </>
   )
 }
