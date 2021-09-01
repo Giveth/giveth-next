@@ -386,7 +386,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                       : theme.colors.secondary
                 }}
               >
-                Community{' '}
+                Join{' '}
               </NavLink>
             </Link>
             {/* <NavLink href='/causes'>Causes</NavLink> */}
