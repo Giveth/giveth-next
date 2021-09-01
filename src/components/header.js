@@ -255,7 +255,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const pathname = router.pathname?.split('/')[1]
 
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -266,7 +266,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -279,10 +279,10 @@ const Header = ({ siteTitle, isHomePage }) => {
     router.push('/create')
   }
 
-  const MainLogo = ({isMobile}) => {
+  const MainLogo = ({ isMobile }) => {
     return (
       <LogoSpan
-        style={{margin: isMobile && 10}}
+        style={{ margin: isMobile && 10 }}
         className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
       >
         <Logo alt='' width='100px' height='100px' />
@@ -299,8 +299,7 @@ const Header = ({ siteTitle, isHomePage }) => {
               lineHeights: 'tallest',
               letterSpacing: '0.32px',
               cursor: 'pointer',
-              zIndex: 3,
-              
+              zIndex: 3
             }}
           >
             GIVETH
@@ -319,10 +318,8 @@ const Header = ({ siteTitle, isHomePage }) => {
   return (
     <Headroom>
       {isMobile && (
-        <Link
-          href='/'
-        >
-          <MainLogo isMobile/>
+        <Link href='/'>
+          <MainLogo isMobile />
         </Link>
       )}
       <HeaderContainer
@@ -377,19 +374,6 @@ const Header = ({ siteTitle, isHomePage }) => {
                 </NavLink>
               </Link>
             )}
-            <Link href='/join' passHref>
-              <NavLink
-                style={{
-                  color:
-                    pathname === 'join'
-                      ? theme.colors.primary
-                      : theme.colors.secondary
-                }}
-              >
-                Join{' '}
-              </NavLink>
-            </Link>
-            {/* <NavLink href='/causes'>Causes</NavLink> */}
             <ProjectsCategories>
               <Link href='/projects' passHref>
                 <NavLink
@@ -409,6 +393,19 @@ const Header = ({ siteTitle, isHomePage }) => {
                 </Flex>
               )}
             </ProjectsCategories>
+            <Link href='/join' passHref>
+              <NavLink
+                style={{
+                  color:
+                    pathname === 'join'
+                      ? theme.colors.primary
+                      : theme.colors.secondary
+                }}
+              >
+                Join{' '}
+              </NavLink>
+            </Link>
+            {/* <NavLink href='/causes'>Causes</NavLink> */}
           </MiddleSpan>
 
           <UserSpan>
