@@ -197,8 +197,8 @@ const DonateIndex = props => {
 
   const ShareIcons = ({ message, centered }) => {
     const shareTitle = `Check out on @Givethio`
-    const url = location?.href
-
+    const url = window?.location?.href
+    console.log(window?.location?.href)
     return (
       <Share
         style={{
