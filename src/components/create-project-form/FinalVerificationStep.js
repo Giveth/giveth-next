@@ -79,37 +79,6 @@ const FinalVerificationStep = ({
       </>
       <>
         <Flex>
-          <Text sx={labelStyle}>Admin</Text>
-          <Button
-            type='button'
-            sx={{
-              color: 'primary',
-              border: 0,
-              background: 'unset',
-              fontSize: 1,
-              p: 0,
-              pl: 2,
-              mt: '16px',
-              cursor: 'pointer'
-            }}
-            onClick={() => setStep(1)}
-          >
-            Edit
-          </Button>
-        </Flex>
-        <Text
-          sx={{
-            fontSize: 4,
-            fontFamily: 'heading',
-            color: 'secondary',
-            mt: '9px'
-          }}
-        >
-          {formData.projectAdmin}
-        </Text>
-      </>
-      <>
-        <Flex>
           <Text sx={labelStyle}>Description</Text>
           <Button
             type='button'
@@ -123,7 +92,7 @@ const FinalVerificationStep = ({
               mt: '16px',
               cursor: 'pointer'
             }}
-            onClick={() => setStep(2)}
+            onClick={() => setStep(1)}
           >
             Edit
           </Button>
@@ -158,7 +127,7 @@ const FinalVerificationStep = ({
               mt: '18px',
               cursor: 'pointer'
             }}
-            onClick={() => setStep(3)}
+            onClick={() => setStep(2)}
           >
             Edit
           </Button>
@@ -210,7 +179,7 @@ const FinalVerificationStep = ({
               mt: '18px',
               cursor: 'pointer'
             }}
-            onClick={() => setStep(4)}
+            onClick={() => setStep(3)}
           >
             Edit
           </Button>
@@ -252,7 +221,7 @@ const FinalVerificationStep = ({
               mt: '16px',
               cursor: 'pointer'
             }}
-            onClick={() => setStep(6)}
+            onClick={() => setStep(5)}
           >
             Edit
           </Button>
@@ -284,7 +253,7 @@ const FinalVerificationStep = ({
                 mt: '16px',
                 cursor: 'pointer'
               }}
-              onClick={() => setStep(5)}
+              onClick={() => setStep(4)}
             >
               Edit
             </Button>

@@ -164,7 +164,7 @@ const HighFive = ({
                   fontSize: 3,
                   fontFamily: 'body',
                   color: 'secondary',
-                  mt: '8px'
+                  mt: '16px'
                 }}
               >
                 {' '}
