@@ -1,5 +1,6 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
+import redirect from 'nextjs-redirect'
 import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
@@ -197,7 +198,7 @@ const DonateIndex = props => {
 
   const ShareIcons = ({ message, centered }) => {
     const shareTitle = `Check out on @Givethio`
-    const url = window?.location?.href
+    const url = typeof window !== 'undefined' ? window?.location?.href : null
     return (
       <Share
         style={{
@@ -232,6 +233,17 @@ const DonateIndex = props => {
           </FacebookShareButton>
         </SocialIcons>
       </Share>
+    )
+  }
+
+  if (!!project?.fromTrace) {
+    const Redirect = redirect(
+      `https://trace.giveth.io/campaign/${project?.slug}`
+    )
+    return (
+      <Redirect>
+        <h3 style={{ color: 'white' }}>Redirecting to Giveth TRACE...</h3>
+      </Redirect>
     )
   }
 
