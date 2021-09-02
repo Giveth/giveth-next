@@ -84,6 +84,8 @@ export async function getServerSideProps (props) {
         if (foundIndex) {
           projects[foundIndex] = { ...projects[foundIndex], IOTraceable: true }
         }
+        return false
+      } else {
         return true
       }
     })
