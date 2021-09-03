@@ -272,6 +272,19 @@ const UserDetails = () => {
               Create a Project
             </MenuItem>
           </Link>
+          <Link
+            href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'
+            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+          >
+            <MenuItem
+              sx={{
+                variant: 'text.medium'
+              }}
+              className='shadow boxheight'
+            >
+              Project Verification
+            </MenuItem>
+          </Link>
           <MenuLink
             href='https://github.com/Giveth/giveth-2/issues/new/choose'
             target='_blank'

@@ -509,6 +509,19 @@ const ProjectDonatorView = ({
           >
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
+          {isOwner && (
+            <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
+              <Text
+                sx={{
+                  cursor: 'pointer',
+                  alignSelf: 'center',
+                  textDecoration: 'underline'
+                }}
+              >
+                Verify your project
+              </Text>
+            </Link>
+          )}
           {(project?.verified ||
             project?.IOTraceable ||
             project?.fromTrace) && (

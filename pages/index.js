@@ -59,7 +59,7 @@ const IndexContent = ({
   return (
     <>
       <Hero content={content} />
-      {/* <GR11 /> */}
+      <GR11 />
       <HomeTopProjects
         fromHomePage
         projects={topProjects}
