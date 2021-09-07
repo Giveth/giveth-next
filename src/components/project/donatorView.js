@@ -541,6 +541,18 @@ const ProjectDonatorView = ({
               </Text>
             </Flex>
           )}
+          {project?.listed === false && (
+            <Text
+              sx={{
+                variant: 'text.default',
+                color: 'red',
+                fontWeight: 'bold'
+              }}
+            >
+              {' '}
+              This project is unlisted{' '}
+            </Text>
+          )}
           <Text></Text>
           <Flex
             sx={{
