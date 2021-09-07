@@ -1,27 +1,25 @@
-import React, { useState } from 'react'
-import { Box, Link, Flex, Text } from 'theme-ui'
-import { useRouter } from 'next/router'
-import { useMediaQuery } from 'react-responsive'
-import { base64ToBlob, getEtherscanPrefix } from '../../utils'
-import styled from '@emotion/styled'
-import ConfettiAnimation from '../animations/confetti'
-import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
-import { useWallet } from '../../contextProvider/WalletProvider'
-import BillIcon from '../../images/svg/donation/bill-icon.svg'
+import React, { useState } from 'react';
+import { Box, Link, Flex, Text } from 'theme-ui';
+import { useMediaQuery } from 'react-responsive';
+import { base64ToBlob, getEtherscanPrefix } from '../../utils';
+import styled from '@emotion/styled';
+import ConfettiAnimation from '../animations/confetti';
+import { useWallet } from '../../contextProvider/WalletProvider';
+import BillIcon from '../../images/svg/donation/bill-icon.svg';
 
 const Content = styled(Flex)`
   flex-direction: column;
   z-index: 10;
   min-width: 32vw;
   word-wrap: break-word;
-`
+`;
 
 const Receipt = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 const DownloadReceipt = styled(Box)`
   display: flex;
@@ -33,27 +31,26 @@ const DownloadReceipt = styled(Box)`
   padding: 20px 14px;
   align-items: center;
   cursor: pointer;
-`
+`;
 
 const Success = props => {
-  const router = useRouter()
-  const { isLoggedIn, login } = useWallet()
-  const { project, sessionId, hash, currentChainId } = props
-  const [pdfBase64, setPdfBase64] = useState(null)
+  const { isLoggedIn, login } = useWallet();
+  const { project, hash, currentChainId } = props;
+  const [pdfBase64, setPdfBase64] = useState(null);
 
   const downloadPDF = () => {
-    const blob = base64ToBlob(pdfBase64)
-    const filename = 'donation_invoice.pdf'
-    const uriContent = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.setAttribute('href', uriContent)
-    link.setAttribute('download', filename)
-    const event = new MouseEvent('click')
-    link.dispatchEvent(event)
-  }
+    const blob = base64ToBlob(pdfBase64);
+    const filename = 'donation_invoice.pdf';
+    const uriContent = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', uriContent);
+    link.setAttribute('download', filename);
+    const event = new MouseEvent('click');
+    link.dispatchEvent(event);
+  };
 
-  const etherscanPrefix = getEtherscanPrefix()
-  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+  const etherscanPrefix = getEtherscanPrefix();
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' });
   return (
     <>
       <Flex
@@ -135,17 +132,24 @@ const Success = props => {
         ) : (
           <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
             Thank you for your support{' '}
-            <span
-              sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
-              onClick={() => router.push('/account?view=donations')}
-            >
-              View your donations
-            </span>
+            <div>
+              <Link
+                sx={{
+                  variant: 'text.paragraph',
+                  color: 'yellow',
+                  cursor: 'pointer'
+                }}
+                target='_blank'
+                href='/account?view=donations'
+              >
+                View your donations
+              </Link>
+            </div>
           </Text>
         )}
       </Content>
     </>
-  )
-}
+  );
+};
 
-export default Success
+export default Success;
