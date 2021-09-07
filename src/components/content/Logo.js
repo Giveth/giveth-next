@@ -1,17 +1,20 @@
-import React from 'react'
-import Image from 'next/image'
+import Image from 'next/image';
 
-const Logo = props => {
-  let siteLogo
-  const siteId = process.env.NEXT_PUBLIC_SITE_ID
+const Logo = () => {
+  let siteLogo;
+  const siteId = process.env.NEXT_PUBLIC_SITE_ID;
 
   if (siteId === 'giveth') {
-    siteLogo = '/images/giveth-logo-blue.svg'
+    siteLogo = '/images/giveth-logo-blue.svg';
   } else if (siteId === 'co2ken') {
-    siteLogo = '/images/logos/co2ken-logo.png'
+    siteLogo = '/images/logos/co2ken-logo.png';
   }
 
-  return <Image src={siteLogo} alt='logo' {...props} />
-}
+  return (
+    <div style={{ marginRight: '10px' }}>
+      <Image src={siteLogo} alt='logo' width='60px' height='60px' />
+    </div>
+  );
+};
 
-export default Logo
+export default Logo;
