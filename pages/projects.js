@@ -15,6 +15,7 @@ const Project = props => {
   const { projects, traceProjects, categories, totalCount, errors } = props
   const [limit, setLimit] = useState(12)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
+
   return (
     <Layout>
       <Seo title='Projects' />
@@ -74,7 +75,20 @@ export async function getServerSideProps (props) {
         return response.json()
       })
     }
-
+    //Check io2trace projects
+    traceProjects = traceProjects?.data?.filter(i => {
+      if (!!i?.givethIoProjectId) {
+        const foundIndex = projects?.findIndex(
+          x => x.id == i?.givethIoProjectId
+        )
+        if (foundIndex) {
+          projects[foundIndex] = { ...projects[foundIndex], IOTraceable: true }
+        }
+        return false
+      } else {
+        return true
+      }
+    })
     errors = error
   } catch (error) {
     errors = error
@@ -82,8 +96,7 @@ export async function getServerSideProps (props) {
   return {
     props: {
       projects: projects || [],
-      traceProjects:
-        traceProjects?.data?.map(i => ({ ...i, fromTrace: true })) || [],
+      traceProjects: traceProjects?.map(i => ({ ...i, fromTrace: true })) || [],
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,

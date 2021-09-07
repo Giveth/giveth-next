@@ -59,6 +59,7 @@
     "next": "^11.0.0",
     "next-seo": "^4.24.0",
     "nextjs-progressbar": "^0.0.9",
+    "nextjs-redirect": "^5.0.2",
     "prop-types": "^15.6.2",
     "qrcode.react": "^1.0.1",
     "query-string": "^7.0.0",

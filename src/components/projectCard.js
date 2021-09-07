@@ -275,7 +275,7 @@ const ProjectCard = props => {
             </a>
           </Link>
           <div style={{ position: 'relative' }}>
-            {project?.fromTrace ? (
+            {project?.fromTrace || project?.IOTraceable ? (
               <Dot
                 style={{
                   backgroundColor: theme.colors.secondary
