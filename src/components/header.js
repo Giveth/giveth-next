@@ -285,8 +285,11 @@ const Header = ({ siteTitle, isHomePage }) => {
         style={{ margin: isMobile && 10 }}
         className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
       >
+      <Link href='/'>
         <Logo alt='' width='100px' height='100px' />
+      </Link>
         {siteId === 'giveth' ? (
+      <Link href='/'>
           <Text
             pl={3}
             sx={{
@@ -304,6 +307,7 @@ const Header = ({ siteTitle, isHomePage }) => {
           >
             GIVETH
           </Text>
+          </Link>
         ) : (
           ''
         )}
@@ -318,9 +322,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   return (
     <Headroom>
       {isMobile && (
-        <Link href='/'>
-          <MainLogo isMobile />
-        </Link>
+          <MainLogo isMobile/>
       )}
       <HeaderContainer
         style={{
@@ -355,9 +357,7 @@ const Header = ({ siteTitle, isHomePage }) => {
             </Decorator>
           ) : null}
           {!isMobile && (
-            <Link href='/'>
               <MainLogo />
-            </Link>
           )}
           <MiddleSpan>
             {!isMobile && (
