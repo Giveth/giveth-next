@@ -97,28 +97,29 @@ function GR11 () {
             >
               Donate to support Giveth with the power of Quadratic Funding
             </Text>
-            <Button
-              type='submit'
-              variant='buttons.default'
-              sx={{
-                maxWidth: '230px',
-                height: '52px',
-                fontWeight: 'bold',
-                fontSize: 2,
-                lineHeight: 'button',
-                letterSpacing: 'normal',
-                mt: 4,
-                ml: 4,
-                mb: [4, 0, 0]
-              }}
-              onClick={() =>
-                router.push(
-                  'https://gitcoin.co/grants/795/givethio-panvala-league'
-                )
-              }
+            <a
+              target='_blank'
+              rel='noopener noreferrer'
+              href='https://gitcoin.co/grants/795/givethio-panvala-league'
             >
-              DONATE
-            </Button>
+              <Button
+                type='submit'
+                variant='buttons.default'
+                sx={{
+                  maxWidth: '300px',
+                  height: '52px',
+                  fontWeight: 'bold',
+                  fontSize: 2,
+                  lineHeight: 'button',
+                  letterSpacing: 'normal',
+                  mt: 4,
+                  ml: 4,
+                  mb: [4, 0, 0]
+                }}
+              >
+                DONATE
+              </Button>
+            </a>
             <Image
               src='/images/arc-1.png'
               sx={{
