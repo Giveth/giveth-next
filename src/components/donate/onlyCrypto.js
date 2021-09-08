@@ -357,9 +357,8 @@ const OnlyCrypto = props => {
       i => i?.symbol === tokenSymbol?.toUpperCase()
     )
     if (found) {
-      img = `/assets/cryptocurrency-icons/32/color/${
-        tokenSymbol?.toLowerCase() || 'eth'
-      }.png`
+      img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() ||
+        'eth'}.png`
       setIcon(img)
     } else {
       setIcon(`/assets/cryptocurrency-icons/32/color/eth.png`)
@@ -921,34 +920,34 @@ const OnlyCrypto = props => {
               </Summary>
             )}
             {
-            // UNCOMMENT THIS TO BRING TRACEABLE DONATIONS
-            // {canBeTraceable && !isXDAI && project?.IOTraceable && (
-            //   <Switch
-            //     label='Make this a traceable donation'
-            //     onChange={() =>
-            //       setSwitchTraceable(switchTraceable === true ? false : true)
-            //     }
-            //     value={switchTraceable}
-            //     defaultValue={switchTraceable}
-            //   />
-            // )}
-            // {project?.fromTrace && <Text>This is a trace only donation</Text>}
-            // {switchTraceable === true && (
-            //   <SaveGasMessage
-            //     sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
-            //   >
-            //     <Text
-            //       sx={{
-            //         variant: 'text.medium',
-            //         textAlign: 'left',
-            //         color: 'background'
-            //       }}
-            //     >
-            //       Traceable donations are supported on mainnet using ETH, DAI,
-            //       PAN, USDC or WBTC
-            //     </Text>
-            //   </SaveGasMessage>
-            // )}
+              // UNCOMMENT THIS TO BRING TRACEABLE DONATIONS
+              // {canBeTraceable && !isXDAI && project?.IOTraceable && (
+              //   <Switch
+              //     label='Make this a traceable donation'
+              //     onChange={() =>
+              //       setSwitchTraceable(switchTraceable === true ? false : true)
+              //     }
+              //     value={switchTraceable}
+              //     defaultValue={switchTraceable}
+              //   />
+              // )}
+              // {project?.fromTrace && <Text>This is a trace only donation</Text>}
+              // {switchTraceable === true && (
+              //   <SaveGasMessage
+              //     sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
+              //   >
+              //     <Text
+              //       sx={{
+              //         variant: 'text.medium',
+              //         textAlign: 'left',
+              //         color: 'background'
+              //       }}
+              //     >
+              //       Traceable donations are supported on mainnet using ETH, DAI,
+              //       PAN, USDC or WBTC
+              //     </Text>
+              //   </SaveGasMessage>
+              // )}
             }
             {!switchTraceable && !isXDAI && !userWallet?.isTorus && (
               <SaveGasMessage
@@ -1024,6 +1023,19 @@ const OnlyCrypto = props => {
                 <SVGLogo />
               </Flex>
             </Flex>
+            {/* {project?.listed === false && (
+              <Text
+                sx={{
+                  variant: 'text.default',
+                  color: 'red',
+                  fontWeight: 'bold',
+                  alignSelf: 'center'
+                }}
+              >
+                {' '}
+                This project is unlisted{' '}
+              </Text>
+            )} */}
             {isLoggedIn && ready && (
               <Text
                 sx={{

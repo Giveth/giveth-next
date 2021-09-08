@@ -1,5 +1,6 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
+import redirect from 'nextjs-redirect'
 import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
@@ -116,7 +117,6 @@ const DonateIndex = props => {
   const [paymentSessionId, setPaymentSessionId] = React.useState(null)
   const [isCancelled, setIsCancelled] = React.useState(null)
   const { currentChainId } = useWallet()
-
   React.useEffect(() => {
     if (project?.status?.id !== '5') {
       setIsCancelled(true)
@@ -127,7 +127,7 @@ const DonateIndex = props => {
   }, [])
 
   // TODO: Implement this on a utils file
-  function getUrlParams(search) {
+  function getUrlParams (search) {
     const hashes = search?.slice(search.indexOf('?') + 1).split('&')
     return hashes?.reduce((params, hash) => {
       const [key, val] = hash.split('=')
@@ -135,7 +135,7 @@ const DonateIndex = props => {
     }, {})
   }
 
-  function PaymentOptions() {
+  function PaymentOptions () {
     const isSSR = typeof window === 'undefined'
 
     const ShowPaymentOption = () => {
@@ -198,8 +198,7 @@ const DonateIndex = props => {
 
   const ShareIcons = ({ message, centered }) => {
     const shareTitle = `Check out on @Givethio`
-    const url = location?.href
-
+    const url = typeof window !== 'undefined' ? window?.location?.href : null
     return (
       <Share
         style={{
@@ -234,6 +233,17 @@ const DonateIndex = props => {
           </FacebookShareButton>
         </SocialIcons>
       </Share>
+    )
+  }
+
+  if (!!project?.fromTrace) {
+    const Redirect = redirect(
+      `https://trace.giveth.io/campaign/${project?.slug}`
+    )
+    return (
+      <Redirect>
+        <h3 style={{ color: 'white' }}>Redirecting to Giveth TRACE...</h3>
+      </Redirect>
     )
   }
 

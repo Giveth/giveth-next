@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, Button, Flex } from 'theme-ui'
 import { FaCheckCircle, FaExclamationCircle } from 'react-icons/fa'
 
-const EditButtonSection = ({ formData, setStep }) => {
+const EditButtonSection = ({ formData, currentStep, setStep }) => {
   const EditBtn = ({ step, title, wasSet, sx = {} }) => {
     return (
       <Flex sx={sx}>
@@ -24,20 +24,21 @@ const EditButtonSection = ({ formData, setStep }) => {
               fontSize: 0,
               textTransform: 'uppercase',
               fontFamily: 'heading',
-              color: 'bodyLight'
+              color: currentStep === step ? 'primary' : 'bodyLight',
+              fontWeight: currentStep === step ? 'bold' : null
             }}
           >
             {title}
           </Text>
         </Button>
 
-        <Text sx={{ ml: '10px' }}>
+        {/* <Text sx={{ ml: '10px' }}>
           {wasSet ? (
             <FaCheckCircle size='15px' color='green' />
           ) : (
             <FaExclamationCircle size='15px' color='lightGray' />
           )}
-        </Text>
+        </Text> */}
       </Flex>
     )
   }
@@ -47,7 +48,6 @@ const EditButtonSection = ({ formData, setStep }) => {
       sx={{
         mt: '29px',
         // justifyContent: 'space-between',
-        width: '65%'
       }}
       columns={[2, '3fr 1fr']}
     >
@@ -56,31 +56,31 @@ const EditButtonSection = ({ formData, setStep }) => {
         <>
           <EditBtn
             step={1}
-            title={'Admin'}
-            wasSet={formData.projectAdmin}
-            sx={{ ml: '7%' }}
-          />
-          <EditBtn
-            step={2}
             title={'Description'}
             wasSet={formData.projectDescription}
             sx={{ ml: '7%' }}
           />
           <EditBtn
-            step={3}
+            step={2}
             title={'Category'}
             wasSet={formData.projectCategory}
             sx={{ ml: '7%' }}
           />
           <EditBtn
-            step={4}
+            step={3}
             title={'Impact'}
             wasSet={formData.projectImpactLocation}
             sx={{ ml: '7%' }}
           />
           <EditBtn
-            step={6}
-            title={'Eth Address'}
+            step={4}
+            title={'Image'}
+            wasSet={formData.ProjectImageInput}
+            sx={{ ml: '7%' }}
+          />
+          <EditBtn
+            step={5}
+            title={'ETH Address'}
             wasSet={formData.projectWalletAddress}
             sx={{ ml: '7%' }}
           />

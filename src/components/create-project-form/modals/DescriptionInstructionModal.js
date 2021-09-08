@@ -1,6 +1,5 @@
-import React from 'react'
-import Link from 'next/link'
-import { Button, Text } from 'theme-ui'
+import React from 'react';
+import { Button, Text } from 'theme-ui';
 
 export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
   <div
@@ -58,7 +57,7 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
               {`${item}?`}
             </Text>
           </li>
-        )
+        );
       })}
     </ol>
     <Text
@@ -84,4 +83,4 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
       </a>
     </Text>
   </div>
-)
+);

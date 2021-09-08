@@ -1,13 +1,14 @@
 import styled from '@emotion/styled'
 import { Image, Text } from 'theme-ui'
+import { FiExternalLink } from 'react-icons/fi'
+import { useMediaQuery } from 'react-responsive';
+
 import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
 import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { formatEtherscanLink } from '../../util'
-
-import { FiExternalLink } from 'react-icons/fi'
 
 const AccountDetails = styled.div`
   width: 200px;
@@ -75,6 +76,8 @@ const StyledButton = styled.a`
   padding: 0.5rem;
 `
 const UserDetails = () => {
+  const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
+
   const {
     ref,
     isComponentVisible,
@@ -164,18 +167,20 @@ const UserDetails = () => {
           <Jdenticon size='32' value={address} />
         )}
 
-        <Text
-          p={1}
-          sx={{
-            variant: 'text.default',
-            fontWeight: 'normal',
-            ml: 2,
-            color: 'secondary',
-            textTransform: 'capitalize'
-          }}
-        >
-          {user.getName()}
-        </Text>
+        {!isXsWindow && (
+          <Text
+            p={1}
+            sx={{
+              variant: 'text.default',
+              fontWeight: 'normal',
+              ml: 2,
+              color: 'secondary',
+              textTransform: 'capitalize'
+            }}
+          >
+            {user.getName()}
+          </Text>
+        )}
       </StyledButton>
       {isComponentVisible ? (
         <AccountDetails>
@@ -270,6 +275,19 @@ const UserDetails = () => {
               className='shadow boxheight'
             >
               Create a Project
+            </MenuItem>
+          </Link>
+          <Link
+            href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'
+            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+          >
+            <MenuItem
+              sx={{
+                variant: 'text.medium'
+              }}
+              className='shadow boxheight'
+            >
+              Project Verification
             </MenuItem>
           </Link>
           <MenuLink

@@ -144,6 +144,19 @@ const HighFive = ({
                 View my project
               </Text>
             </Link>
+            <Link href={`https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5`}>
+              <Text
+                sx={{
+                  cursor: 'pointer',
+                  fontSize: 3,
+                  fontFamily: 'body',
+                  color: 'secondary',
+                  mt: '16px'
+                }}
+              >
+                Verify my project
+              </Text>
+            </Link>
             <Link href='/'>
               <Text
                 sx={{

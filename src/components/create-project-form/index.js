@@ -60,7 +60,7 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     doValidateToken()
-    async function doValidateToken() {
+    async function doValidateToken () {
       const isValid = await validateToken()
       // console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
@@ -82,14 +82,6 @@ const CreateProjectForm = props => {
         animationStyle={animationStyle}
         currentValue={formData?.projectName}
         register={register}
-      />
-    ),
-    ({ animationStyle }) => (
-      <ProjectAdminInput
-        animationStyle={animationStyle}
-        currentValue={formData?.projectAdmin}
-        register={register}
-        goBack={goBack}
       />
     ),
     ({ animationStyle }) => (
@@ -363,7 +355,7 @@ const CreateProjectForm = props => {
       <Progress max={steps.length} value={progressPercentage}>
         <Text>Progress bar test text</Text>
       </Progress>
-      <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
+      <Box sx={{ mx: ['20px', '140px', '140px'], mt: '50px', position: 'relative' }}>
         <>
           <Flex
             sx={{
@@ -398,6 +390,7 @@ const CreateProjectForm = props => {
                   <EditButtonSection
                     formData={formData}
                     setStep={setCurrentStep}
+                    currentStep={currentStep}
                   />
                 ) : null}
                 {inputIsLoading ? (
@@ -430,18 +423,18 @@ const CreateProjectForm = props => {
 
 export default CreateProjectForm
 
-function isDescriptionStep(currentStep) {
+function isDescriptionStep (currentStep) {
+  return currentStep === 1
+}
+
+function isCategoryStep (currentStep) {
   return currentStep === 2
 }
 
-function isCategoryStep(currentStep) {
-  return currentStep === 3
-}
-
-function isFinalConfirmationStep(currentStep, steps) {
+function isFinalConfirmationStep (currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep(currentStep, steps) {
+function isLastStep (currentStep, steps) {
   return currentStep === steps.length - 1
 }

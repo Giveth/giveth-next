@@ -33,6 +33,83 @@ const mainnetTokens = {
     },
     {
       chainId: 1,
+      address: '0xda007777d86ac6d989cc9f79a73261b3fc5e0da0',
+      symbol: 'NODE',
+      name: 'dAppNode',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xde30da39c46104798bb5aa3fe8b9e0e1f348163f',
+      symbol: 'GTC',
+      name: 'Gitcoin',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc770eefad204b5180df6a14ee197d99d808ee52d',
+      symbol: 'FOX',
+      name: 'ShapeShift FOX Token (FOX)',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xD533a949740bb3306d119CC777fa900bA034cd52',
+      symbol: 'CRV',
+      name: 'Curve DAO Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xa47c8bf37f92abed4a126bda807a7b7498661acd',
+      symbol: 'UST',
+      name: 'TerraUSD',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+      symbol: 'SUSHI',
+      name: 'Sushi Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xba100000625a3754423978a60c9317c58a424e3d',
+      symbol: 'BAL',
+      name: 'Balancer',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xad32a8e6220741182940c5abf610bde99e737b2d',
+      symbol: 'DOUGH',
+      name: 'PieDAO DOUGH',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x09a3ecafa817268f77be1283176b946c4ff2e608',
+      symbol: 'MIR',
+      name: 'Wrapped MIR Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x30cf203b48edaa42c3b4918e955fed26cd012a3f',
+      symbol: 'SEED',
+      name: 'Metagame SEED',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xdd1ad9a21ce722c151a836373babe42c868ce9a4',
+      symbol: 'UBI',
+      name: 'PoH Universal Basic Income',
+      decimals: 18
+    },
+    {
+      chainId: 1,
       address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
       symbol: 'USDT',
       name: 'Tether',
@@ -544,6 +621,13 @@ const xDaiTokens = {
   timestamp: null,
   keywords: ['custom', 'erc20'],
   tokens: [
+    {
+      chainId: 100,
+      address: '0xc60e38C6352875c051B481Cbe79Dd0383AdB7817',
+      symbol: 'XNODE',
+      name: 'dAppNode on xDAI',
+      decimals: 18
+    },
     {
       chainId: 100,
       address: '0x981fb9ba94078a2275a8fc906898ea107b9462a8',

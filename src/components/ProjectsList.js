@@ -160,7 +160,7 @@ const ProjectsList = props => {
     checkCategory()
   }, [])
 
-  function checkCategory() {
+  function checkCategory () {
     const categoryFromQuery = props?.query?.category
     if (categoryFromQuery) {
       categoryList?.map((i, index) => {
@@ -171,7 +171,7 @@ const ProjectsList = props => {
     }
   }
 
-  function searchProjects(e) {
+  function searchProjects (e) {
     const queryResult = search.search(e.target.value)
     setSearchQuery(e.target.value)
     setSearchResults(queryResult)
@@ -179,7 +179,7 @@ const ProjectsList = props => {
   // handleSubmit = e => {
   //   e.preventDefault()
   // }
-  function rebuildIndex() {
+  function rebuildIndex () {
     const dataToSearch = new JsSearch.Search('id')
     /**
      *  defines a indexing strategy for the data
@@ -205,7 +205,7 @@ const ProjectsList = props => {
     setIsLoading(false)
   }
 
-  function filterCategory(searchedResults) {
+  function filterCategory (searchedResults) {
     const categoryName = categoryList[category].toLowerCase()
 
     return searchedResults.filter(
@@ -217,32 +217,32 @@ const ProjectsList = props => {
   const projectsFiltered =
     category === 0 ? searchedResults : filterCategory(searchedResults)
 
-  function sum(items, prop) {
+  function sum (items, prop) {
     return items.reduce(function (a, b) {
       return a + b[prop]
     }, 0)
   }
   //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Old Projects']
   const sortFunctions = [
-    function qualityScore(a, b) {
+    function qualityScore (a, b) {
       return b.verified - a.verified || b.qualityScore - a.qualityScore
     },
     a => a,
     a => a,
-    function amountRaised(a, b) {
+    function amountRaised (a, b) {
       console.log({ b, a })
       return b.totalDonations - a.totalDonations
     },
-    function hearts(a, b) {
+    function hearts (a, b) {
       return b.totalHearts - a.totalHearts
     },
-    function recentlyAdded(a, b) {
+    function recentlyAdded (a, b) {
       return (
         new Date(b?.creationDate)?.valueOf() -
         new Date(a?.creationDate)?.valueOf()
       )
     },
-    function earlyAdded(a, b) {
+    function earlyAdded (a, b) {
       return (
         new Date(a?.creationDate)?.valueOf() -
         new Date(b?.creationDate)?.valueOf()
@@ -251,12 +251,12 @@ const ProjectsList = props => {
   ]
   const filterFunctions = [
     a => a,
-    function verified(a) {
+    function verified (a) {
       return !!a?.verified
     },
-    function traceable(a) {
-      !!a?.fromTrace && console.log({ a })
-      return !!a?.fromTrace
+    function traceable (a) {
+      // !!a?.fromTrace && console.log({ a })
+      return !!a?.fromTrace || a?.IOTraceable
     },
     a => a,
     a => a,
@@ -315,13 +315,13 @@ const ProjectsList = props => {
           <CreateLink>Create a project</CreateLink>
         </Link>
       </Flex>
-      <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
+      <ProjectSection p={0} sx={{ variant: 'grayBox' }}>
         <div
           style={{
             alignItems: 'center',
             margin: '0 auto',
             maxWidth: '1440px',
-            padding: '0 1.0875rem 1.45rem'
+            paddingTop: 40
           }}
         >
           {!fromHomePage ? (
@@ -409,8 +409,7 @@ const ProjectsList = props => {
           <Flex
             sx={{
               width: '100%',
-              flexDirection: ['column-reverse', 'row', 'row'],
-              mt: 2
+              flexDirection: ['column-reverse', 'row', 'row']
             }}
           >
             <div
@@ -471,9 +470,10 @@ const ProjectsList = props => {
                   p={4}
                   columns={[1, 2, 3]}
                   style={{
-                    margin: 0,
                     columnGap: '2.375em',
-                    justifyItems: 'center'
+                    justifyItems: 'center',
+                    marginTop: 20,
+                    marginBottom: 60
                   }}
                 >
                   {projectsFilteredSorted
@@ -499,7 +499,13 @@ const ProjectsList = props => {
                 </Grid>
               </InfiniteScroll>
               {fromHomePage && (
-                <Flex style={{ justifyContent: 'center' }}>
+                <Flex
+                  style={{
+                    justifyContent: 'center',
+                    marginTop: 20,
+                    background: 'transparent'
+                  }}
+                >
                   <Link href='/projects'>
                     <Button
                       sx={{
