@@ -112,7 +112,9 @@ function GR11 () {
                 mb: [4, 0, 0]
               }}
               onClick={() =>
-                router.push('https://gitcoin.co/grants/795/giveth-20')
+                router.push(
+                  'https://gitcoin.co/grants/795/givethio-panvala-league'
+                )
               }
             >
               DONATE

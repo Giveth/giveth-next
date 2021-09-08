@@ -541,7 +541,7 @@ const ProjectDonatorView = ({
               </Text>
             </Flex>
           )}
-          {project?.listed === false && (
+          {/* {project?.listed === false && (
             <Text
               sx={{
                 variant: 'text.default',
@@ -552,7 +552,7 @@ const ProjectDonatorView = ({
               {' '}
               This project is unlisted{' '}
             </Text>
-          )}
+          )} */}
           <Text></Text>
           <Flex
             sx={{

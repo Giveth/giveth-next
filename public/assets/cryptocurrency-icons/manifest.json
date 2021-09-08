@@ -2283,5 +2283,60 @@
     "symbol": "XDAI",
 		"name": "0x",
 		"color": "#0000"
+  },
+  {
+    "symbol": "NODE",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "XNODE",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "GTC",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "FOX",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "CRV",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "UST",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "SUSHI",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "DOUGH",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "MIR",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "SEED",
+		"name": "0x",
+		"color": "#0000"
+  },
+  {
+    "symbol": "UBI",
+		"name": "0x",
+		"color": "#0000"
   } 
 ]

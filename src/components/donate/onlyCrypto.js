@@ -1023,7 +1023,7 @@ const OnlyCrypto = props => {
                 <SVGLogo />
               </Flex>
             </Flex>
-            {project?.listed === false && (
+            {/* {project?.listed === false && (
               <Text
                 sx={{
                   variant: 'text.default',
@@ -1035,7 +1035,7 @@ const OnlyCrypto = props => {
                 {' '}
                 This project is unlisted{' '}
               </Text>
-            )}
+            )} */}
             {isLoggedIn && ready && (
               <Text
                 sx={{
