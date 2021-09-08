@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { Box, IconButton, Text, Flex } from 'theme-ui'
+import { IconButton, Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../utils/theme-ui'
@@ -17,14 +17,14 @@ const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;
   height: 140px;
   position: relative;
-  @media (max-width: 700) {
+  @media (max-width: 700px) {
     height: 160px;
   }
 `
 
 const HeaderSpan = styled.nav`
   position: absolute;
-  z-index: 2;
+  z-index: 5;
   margin: 0 auto;
   padding: 80px 80px 0 80px;
   max-width: 100vw;
@@ -96,6 +96,7 @@ const MiddleSpan = styled.span`
   grid-gap: 3em;
   justify-self: center;
   max-width: 290px;
+  z-index: 5;
   @media (max-width: 1030px) {
     grid-gap: 10px;
     grid-column: 2;
@@ -162,9 +163,8 @@ const ProjectsCategories = styled.div`
     margin: 0 5px 0 -10%;
     padding-top: 1%;
     border-radius: 6px;
-
     position: absolute;
-    z-index: 1;
+    z-index: 5;
   }
 
   .categoriesContent a {
@@ -248,6 +248,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const { isLoggedIn, user } = useWallet()
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
+  const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const isMobileForProjectBtn = useMediaQuery({ query: '(max-width: 1200px)' })
   const [hasScrolled, setScrollState] = useState(false)
@@ -279,39 +280,27 @@ const Header = ({ siteTitle, isHomePage }) => {
     router.push('/create')
   }
 
-  const MainLogo = ({ isMobile }) => {
+  const MainLogo = () => {
     return (
-      <LogoSpan
-        style={{ margin: isMobile && 10 }}
-        className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
-      >
-      <Link href='/'>
-        <Logo alt='' width='100px' height='100px' />
+      <Link href="/">
+        <LogoSpan
+          className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
+        >
+          <Logo />
+          {siteId === 'giveth' && !isXsWindow ? (
+            <Text
+              pl={3}
+              sx={{
+                fontWeight: 'medium',
+              }}
+            >
+              GIVETH
+            </Text>
+          ) : (
+            ''
+          )}
+        </LogoSpan>
       </Link>
-        {siteId === 'giveth' ? (
-      <Link href='/'>
-          <Text
-            pl={3}
-            sx={{
-              variant: 'text.default',
-              color: 'secondary',
-              fontFamily: 'fonts.body',
-              fontSize: 3,
-              fontWeight: 'medium',
-              textDecoration: 'none',
-              lineHeights: 'tallest',
-              letterSpacing: '0.32px',
-              cursor: 'pointer',
-              zIndex: 3
-            }}
-          >
-            GIVETH
-          </Text>
-          </Link>
-        ) : (
-          ''
-        )}
-      </LogoSpan>
     )
   }
 
@@ -320,10 +309,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   }, [])
 
   return (
-    <Headroom>
-      {isMobile && (
-          <MainLogo isMobile/>
-      )}
+    <Headroom style={{ zIndex: 5 }}>
       <HeaderContainer
         style={{
           marginBottom: '1.45rem'
@@ -332,33 +318,31 @@ const Header = ({ siteTitle, isHomePage }) => {
         <HeaderSpan
           className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
         >
-          {!isMobile ? (
-            <Decorator>
-              <img
-                src={'/images/decorator-cloud1.svg'}
-                alt=''
-                sx={{
-                  position: 'absolute',
-                  top: '-70px',
-                  left: '300px'
-                }}
-                className='hide'
-              />
-              <img
-                src={'/images/decorator-cloud2.svg'}
-                alt=''
-                sx={{
-                  position: 'absolute',
-                  top: '-80px',
-                  left: '92vw'
-                }}
-                className='hide'
-              />
-            </Decorator>
-          ) : null}
-          {!isMobile && (
-              <MainLogo />
-          )}
+          <Decorator>
+            <img
+              src={'/images/decorator-cloud1.svg'}
+              alt=''
+              sx={{
+                position: 'absolute',
+                top: '-70px',
+                left: '300px'
+              }}
+              className='hide'
+            />
+            <img
+              src={'/images/decorator-cloud2.svg'}
+              alt=''
+              sx={{
+                position: 'absolute',
+                top: '-80px',
+                left: '92vw'
+              }}
+              className='hide'
+            />
+          </Decorator>
+
+          <MainLogo />
+
           <MiddleSpan>
             {!isMobile && (
               <Link href='/' passHref>
@@ -422,7 +406,7 @@ const Header = ({ siteTitle, isHomePage }) => {
               </Flex>
             )}
             {pathname !== 'projects' && (
-              <img src={'/images/icon-vertical-line.svg'} alt='' />
+              <img style={{ margin: '0 10px'}} src={'/images/icon-vertical-line.svg'} alt='' />
             )}
             <Login />
           </UserSpan>
