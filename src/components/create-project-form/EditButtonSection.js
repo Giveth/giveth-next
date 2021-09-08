@@ -48,7 +48,6 @@ const EditButtonSection = ({ formData, currentStep, setStep }) => {
       sx={{
         mt: '29px',
         // justifyContent: 'space-between',
-        width: '65%'
       }}
       columns={[2, '3fr 1fr']}
     >
