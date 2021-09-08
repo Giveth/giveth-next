@@ -355,7 +355,7 @@ const CreateProjectForm = props => {
       <Progress max={steps.length} value={progressPercentage}>
         <Text>Progress bar test text</Text>
       </Progress>
-      <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
+      <Box sx={{ mx: ['20px', '140px', '140px'], mt: '50px', position: 'relative' }}>
         <>
           <Flex
             sx={{
