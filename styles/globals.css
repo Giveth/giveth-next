@@ -23,6 +23,11 @@ a {
   cursor: pointer !important;  
 }
 
+/* Fix Google Autocomplete container border */
+.pac-container {
+  border-top: unset;
+  box-shadow: unset;
+}
 
 /* quill view */
 .quill a {
