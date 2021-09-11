@@ -287,11 +287,11 @@ function ProjectEditionForm(props) {
                 })}
             </Box>
             <CustomLabel title='Impact Location' htmlFor='editImpactLocation' />
-            {mapLocation || project?.impactLocation ? (
+            {mapLocation && (
               <Text sx={{ fontFamily: 'body', color: 'muted', fontSize: 8 }}>
-                {mapLocation || project?.impactLocation}
+                {mapLocation}
               </Text>
-            ) : null}
+            )}
             <div id='locationField'>
               <Input
                 id='autocomplete'
@@ -301,6 +301,7 @@ function ProjectEditionForm(props) {
                 onChange={e => setMapLocation(e.target.value)}
               />
             </div>
+
             <Label
               sx={{
                 display: 'flex',
@@ -310,20 +311,19 @@ function ProjectEditionForm(props) {
               }}
             >
               <Checkbox
-                defaultChecked={
-                  mapLocation === 'Global' ||
-                  project?.impactLocation === 'Global'
-                }
-                onChange={() => {
-                  mapLocation === 'Global'
-                    ? setMapLocation('')
-                    : setMapLocation('Global')
+                checked={ mapLocation === 'Global' }
+                onChange={e => {
+                  const checked = e.target.checked
+                  checked
+                    ? setMapLocation('Global')
+                    : setMapLocation('')
                 }}
               />
               <Text sx={{ fontFamily: 'body', fontSize: 2 }}>
                 This project has a global impact
               </Text>
             </Label>
+
             <div
               css={{
                 display: 'flex',
@@ -423,16 +423,15 @@ function ProjectEdition(props) {
       variables: { slug: props?.project }
     }
   )
+
   useEffect(() => {
     web3 = wallet.web3
   }, [])
 
-  useEffect(
-    data => {
-      if (fetchedProject) {
-        if (fetchedProject.projectBySlug) {
-          setProject(fetchedProject.projectBySlug)
-        }
+  useEffect(() => {
+      if (fetchedProject?.projectBySlug) {
+        setProject(fetchedProject.projectBySlug)
+        setMapLocation(fetchedProject.projectBySlug.impactLocation)
       }
     },
     [fetchedProject]
@@ -515,7 +514,7 @@ function ProjectEdition(props) {
         title: data.editTitle || project?.title,
         description: data.desc || data.editDescription,
         admin: project.admin,
-        impactLocation: mapLocation || project?.impactLocation,
+        impactLocation: mapLocation,
         categories: projectCategories,
         walletAddress: ethAddress
           ? Web3.utils.toChecksumAddress(ethAddress)
