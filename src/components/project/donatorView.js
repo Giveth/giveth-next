@@ -536,8 +536,8 @@ const ProjectDonatorView = ({
               <GoVerified color={theme.colors.blue} />
               <Text sx={{ variant: 'text.default', ml: 2 }}>
                 {project?.fromTrace || project?.IOTraceable
-                  ? 'traceable'
-                  : 'verified'}
+                  ? 'Traceable'
+                  : 'Verified'}
               </Text>
             </Flex>
           )}
