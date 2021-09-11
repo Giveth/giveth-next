@@ -106,6 +106,7 @@ const CreateProjectForm = props => {
       <ProjectImpactLocationInput
         animationStyle={animationStyle}
         currentValue={formData?.projectImpactLocation}
+        setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
       />
