@@ -3,7 +3,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 #### Prerequisites
-- You need to use NodeJS v12 or higher.
+- You need to use NodeJS v14 or higher.
 - You need to use yarn.
 - You need to have git.
 
@@ -25,7 +25,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     ```
     cd giveth-next
     ```
-3. Make sure you have [NodeJS](https://nodejs.org/) (v12 or higher) and [yarn](https://yarnpkg.com/) installed.
+3. Make sure you have [NodeJS](https://nodejs.org/) (v14 or higher) and [yarn](https://yarnpkg.com/) installed.
 4. Install dependencies from within giveth-next directory:
     ```
     yarn install
