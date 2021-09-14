@@ -63,7 +63,7 @@ function ProjectEditionForm(props) {
 
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState(null)
-  const [desc, setDesc] = useState(null)
+  const [desc, setDesc] = useState('')
   const [isActive, setIsActive] = useState(null)
 
   const { register, handleSubmit, setValue, errors } = useForm() // initialize the hook
@@ -231,7 +231,7 @@ function ProjectEditionForm(props) {
                   }}
                   value={desc}
                   placeholder='Write your update...'
-                  onChange={(newValue, delta, source) => {
+                  onChange={newValue => {
                     try {
                       // console.log({ newValue })
                       setValue('editDescription', newValue)
