@@ -19,7 +19,7 @@ class linkType extends Link {
 Quill.register(linkType)
 
 function RichTextViewer(props) {
-  const [content, setContent] = useState(null)
+  const [content, setContent] = useState('')
 
   useEffect(() => {
     setContent(props?.content)
@@ -34,10 +34,6 @@ function RichTextViewer(props) {
         theme={'bubble'}
       />
     </div>
-    // <div
-    //   style={{ fontFamily: `Red Hat Text, sans serif` }}
-    //   dangerouslySetInnerHTML={{ __html: content }}
-    // ></div>
   )
 }
 
