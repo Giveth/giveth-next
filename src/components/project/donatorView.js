@@ -13,6 +13,7 @@ import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.s
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
+
 import { GoVerified } from 'react-icons/go'
 import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
@@ -41,6 +42,26 @@ const FloatingDonateView = styled(Flex)`
     align-self: center;
     margin: 0 auto;
     bottom: 0;
+  }
+`
+
+const NoImage = styled.div`
+  width: 100vw;
+  margin: 0 5%;
+  height: 250px;
+  border-radius: 10px;
+  background-color: rgb(233, 233, 233);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    margin-left: -50px;
+  }
+  @media screen and (max-width: 576px) {
+    img {
+      margin-left: 0;
+    }
   }
 `
 
@@ -177,27 +198,45 @@ const ProjectDonatorView = ({
     router.prefetch(`/donate/${project?.slug}`)
   }, [])
 
+  const projectPic = () => {
+    const isSVG = setImage(project?.image)
+    if (isSVG) return isSVG
+    else if (project.image) {
+      return (
+        <Image
+          src={project.image}
+          onError={ev =>
+            (ev.target.src =
+              'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
+          }
+          sx={{
+            objectFit: 'cover',
+            // objectPosition: '100% 25%',
+            width: '100vw',
+            margin: '0 5%',
+            height: '250px',
+            borderRadius: '10px'
+          }}
+        />
+      )
+    } else {
+      return (
+        <NoImage>
+          <Image
+            src='/images/no-image-available.jpg'
+            width={250}
+          />
+          <h2>No Image Available</h2>
+        </NoImage>
+      )
+    }
+  }
+
   return (
     <>
       <CancelledModal isOpen={isCancelled} />
       <Flex>
-        {setImage(project?.image) || (
-          <Image
-            src={project?.image ? project?.image : '/images/giveth_bg.jpg'}
-            onError={ev =>
-              (ev.target.src =
-                'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
-            }
-            sx={{
-              objectFit: 'cover',
-              // objectPosition: '100% 25%',
-              width: '100vw',
-              margin: '0 5%',
-              height: '250px',
-              borderRadius: '10px'
-            }}
-          />
-        )}
+        {projectPic()}
       </Flex>
       <Flex
         sx={{
@@ -642,11 +681,11 @@ const ProjectDonatorView = ({
                     color={hearted ? theme.colors.red : theme.colors.muted}
                     onClick={reactToProject}
                   />
-                  {heartedCount && heartedCount > 0 ? (
+                  {heartedCount && heartedCount > 0 && (
                     <Text sx={{ variant: 'text.default', ml: 2 }}>
                       {heartedCount}
                     </Text>
-                  ) : null}
+                  )}
                 </Flex>
                 <Flex
                   sx={{
