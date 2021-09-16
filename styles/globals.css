@@ -29,6 +29,10 @@ a {
   text-decoration: underline;
 }
 
+/* Fix quill emoji not clickable */
+#emoji-close-div, .textarea-emoji-control {
+  display: none !important;
+}
 
 /* quill editor styles */
 .ql-editor {
