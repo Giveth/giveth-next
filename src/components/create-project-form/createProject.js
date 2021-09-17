@@ -134,7 +134,7 @@ const CreateProject = props => {
                   We have logged you out to resolve this.
                 </Text>
                 <Text sx={{ variant: 'text.default' }}>
-                  <Link to='/'>Please login and start again</Link>
+                  <Link href='/'>Please login and start again</Link>
                 </Text>
               </>
             )

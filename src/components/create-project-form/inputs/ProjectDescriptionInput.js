@@ -116,7 +116,9 @@ export const ProjectDescriptionInput = ({
           zIndex: 100,
           alignItems: 'flex-end',
           justifyContent: 'flex-end',
-          flexDirection: 'row-reverse'
+          flexDirection: 'row-reverse',
+          marginTop: '10px',
+          marginBottom: '50px',
         }}
       >
         <Button
@@ -125,6 +127,7 @@ export const ProjectDescriptionInput = ({
             mt: '100px',
             width: '180px',
             height: '52px',
+            cursor: 'pointer',
             borderRadius: '48px'
           }}
           type='submit'
@@ -135,8 +138,7 @@ export const ProjectDescriptionInput = ({
               fontFamily: 'body',
               fontWeight: 'bold',
               fontSize: 2,
-              letterSpacing: '4%',
-              cursor: 'pointer'
+              letterSpacing: '4%'
             }}
           >
             NEXT

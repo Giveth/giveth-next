@@ -178,6 +178,8 @@ function TextRichWithQuill(props) {
 
   if (!mod) return null;
 
+  const value = (props.defaultValue && !content) ? props.defaultValue : content
+
   return (
     <ReactQuill
       modules={mod}
@@ -186,8 +188,7 @@ function TextRichWithQuill(props) {
       ref={props?.ref}
       id={props?.id}
       name={props?.name}
-      value={content || props?.defaultValue}
-      defaultValue={props?.defaultValue}
+      value={value}
       onChange={handleChange}
       style={props?.style}
     />

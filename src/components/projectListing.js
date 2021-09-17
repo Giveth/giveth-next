@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { Heading, Box, Card, Flex, Button, Text } from 'theme-ui'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
+import Image from "next/image";
 
 import theme from '../utils/theme-ui/index'
 // import Donate from '../components/donateForm'
@@ -14,6 +15,12 @@ import theme from '../utils/theme-ui/index'
 const RichTextViewer = dynamic(() => import('./richTextViewer'), {
   ssr: false
 })
+
+const StyledImage = styled(Image)`
+  cursor: pointer;
+  border-radius: 12px 12px 0 0;
+  object-fit: cover;
+`
 
 const CardContainer = styled(Card)`
   position: relative;
@@ -61,6 +68,7 @@ const Dot = styled.span`
   margin: -10% 0 0 24px;
   font-family: 'Red Hat Text', sans-serif;
   font-size: 10px;
+  position: relative;
 `
 
 const DotInner = styled.span`
@@ -75,7 +83,6 @@ const AltCardContent = styled.span`
   flex: 1;
   width: 100%;
   flex-direction: column;
-  position: absolute;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 12px;
   padding: 0.5rem 1.5rem 1rem 1.5rem;
@@ -168,24 +175,43 @@ const ProjectListing = props => {
         >
           {/* need to add options from the gallery. */}
           <div key={props.listingId + '_div'}>
-            <div
-              src={props.image}
-              style={{
-                width: '100%',
-                height: '186px',
-                borderRadius: '12px 12px 0px 0px',
-                backgroundImage: /^\d+$/.test(props.image)
-                  ? `url('/assets/create/projectImageGallery${props.image.toString()}.svg')`
-                  : `url(${props.image})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat'
-              }}
-              alt={props.name}
-              onError={ev =>
-                (ev.target.src =
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT17JlsfL6JrGYQ2Ze5ptTTuawx5J4axpWkIw&usqp=CAU')
-              }
-            />
+            {/^\d+$/.test(props.image) ? (
+              <div
+                style={{
+                  width: '100%',
+                  height: '186px',
+                  margin: '0 auto',
+                  cursor: 'pointer',
+                  borderRadius: '12px 12px 0px 0px',
+                  backgroundImage: `url('/assets/create/projectImageGallery${props.image.toString()}.svg')`,
+                  backgroundColor: '#cccccc',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  position: 'relative'
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: '100%',
+                  height: '186px',
+                  margin: '0 auto',
+                  cursor: 'pointer',
+                  borderRadius: '12px 12px 0px 0px',
+                  backgroundColor: '#cccccc',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  position: 'relative'
+                }}
+              >
+                <StyledImage
+                  src={props.image}
+                  layout='fill'
+                  priority={true}
+                  quality={40}
+                />
+              </div>
+            )}
 
             <Dot
               key={props.listingId + '_card'}
@@ -308,7 +334,7 @@ const ProjectListing = props => {
                 // wordWrap: 'break-word',
                 // whiteSpace: 'nowrap',
                 overflow: 'hidden',
-                maxHeight: '6rem',
+                maxHeight: '6.4rem',
                 lineHeight: '1.2rem',
                 display: '-webkit-box',
                 WebkitLineClamp: '3',
