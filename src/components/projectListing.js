@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { Heading, Box, Card, Flex, Button, Text } from 'theme-ui'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
-import Image from "next/image";
+import Image from 'next/image'
 
 import theme from '../utils/theme-ui/index'
 // import Donate from '../components/donateForm'
@@ -190,7 +190,7 @@ const ProjectListing = props => {
                   position: 'relative'
                 }}
               />
-            ) : (
+            ) : !!props.image ? (
               <div
                 style={{
                   width: '100%',
@@ -211,6 +211,20 @@ const ProjectListing = props => {
                   quality={40}
                 />
               </div>
+            ) : (
+              <div
+                style={{
+                  width: '100%',
+                  height: '186px',
+                  margin: '0 auto',
+                  cursor: 'pointer',
+                  borderRadius: '12px 12px 0px 0px',
+                  backgroundColor: '#cccccc',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  position: 'relative'
+                }}
+              />
             )}
 
             <Dot
