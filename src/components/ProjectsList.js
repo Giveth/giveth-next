@@ -145,13 +145,33 @@ const ProjectsList = props => {
   const categoryList = Array.isArray(categories)
     ? ['All'].concat(categories.map(o => o.name))
     : ['All']
-  const sortBys = ['Default', 'Amount raised', 'Hearts']
+  const sortBys = [
+    'Default',
+    'Verified',
+    'Traceable',
+    'Amount Raised',
+    'Hearts',
+    'Recently Added',
+    'Old Projects'
+  ]
 
   React.useEffect(() => {
     rebuildIndex()
+    checkCategory()
   }, [])
 
-  function searchProjects(e) {
+  function checkCategory () {
+    const categoryFromQuery = props?.query?.category
+    if (categoryFromQuery) {
+      categoryList?.map((i, index) => {
+        if (i === categoryFromQuery) {
+          setCategory(index)
+        }
+      })
+    }
+  }
+
+  function searchProjects (e) {
     const queryResult = search.search(e.target.value)
     setSearchQuery(e.target.value)
     setSearchResults(queryResult)
@@ -159,7 +179,7 @@ const ProjectsList = props => {
   // handleSubmit = e => {
   //   e.preventDefault()
   // }
-  function rebuildIndex() {
+  function rebuildIndex () {
     const dataToSearch = new JsSearch.Search('id')
     /**
      *  defines a indexing strategy for the data
@@ -185,7 +205,7 @@ const ProjectsList = props => {
     setIsLoading(false)
   }
 
-  function filterCategory(searchedResults) {
+  function filterCategory (searchedResults) {
     const categoryName = categoryList[category].toLowerCase()
 
     return searchedResults.filter(
@@ -197,32 +217,64 @@ const ProjectsList = props => {
   const projectsFiltered =
     category === 0 ? searchedResults : filterCategory(searchedResults)
 
-  function sum(items, prop) {
+  function sum (items, prop) {
     return items.reduce(function (a, b) {
       return a + b[prop]
     }, 0)
   }
-  //['Quality score', 'Amount raised', 'Hearts']
+  //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Old Projects']
   const sortFunctions = [
-    function qualityScore(a, b) {
-      return b.qualityScore - a.qualityScore
+    function qualityScore (a, b) {
+      return b.verified - a.verified || b.qualityScore - a.qualityScore
     },
-    function amountRaised(a, b) {
+    a => a,
+    a => a,
+    function amountRaised (a, b) {
+      console.log({ b, a })
       return b.totalDonations - a.totalDonations
     },
-    function hearts(a, b) {
+    function hearts (a, b) {
       return b.totalHearts - a.totalHearts
+    },
+    function recentlyAdded (a, b) {
+      return (
+        new Date(b?.creationDate)?.valueOf() -
+        new Date(a?.creationDate)?.valueOf()
+      )
+    },
+    function earlyAdded (a, b) {
+      return (
+        new Date(a?.creationDate)?.valueOf() -
+        new Date(b?.creationDate)?.valueOf()
+      )
     }
   ]
+  const filterFunctions = [
+    a => a,
+    function verified (a) {
+      return !!a?.verified
+    },
+    function traceable (a) {
+      // !!a?.fromTrace && console.log({ a })
+      return !!a?.fromTrace || a?.IOTraceable
+    },
+    a => a,
+    a => a,
+    a => a,
+    a => a
+  ]
+
   const projectsFilteredSorted = projectsFiltered
     ?.slice()
     ?.sort(sortFunctions[sortBy])
+    ?.filter(filterFunctions[sortBy])
     ?.slice(0, limit)
 
   const loadMore = () => {
-    setLimit(limit + 3)
+    setLimit(limit + 10)
   }
-  const hasMore = limit < projectsFiltered?.length
+
+  const hasMore = projectsFilteredSorted?.length >= limit
 
   return (
     <>
@@ -263,22 +315,22 @@ const ProjectsList = props => {
           <CreateLink>Create a project</CreateLink>
         </Link>
       </Flex>
-      <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
+      <ProjectSection p={0} sx={{ variant: 'grayBox' }}>
         <div
           style={{
             alignItems: 'center',
             margin: '0 auto',
             maxWidth: '1440px',
-            padding: '0 1.0875rem 1.45rem'
+            paddingTop: 40
           }}
         >
           {!fromHomePage ? (
-            <Flex>
+            <Flex sx={{ flexDirection: ['column', null, 'row'] }}>
               <Flex
                 sx={{
                   // width: '100%',
-                  flex: 0.6,
-                  flexDirection: ['row', null, 'row'],
+                  flex: [1, null, 0.6],
+                  flexDirection: ['column', null, 'row'],
                   justifyContent: ['space-around', null, null]
                 }}
               >
@@ -334,7 +386,7 @@ const ProjectsList = props => {
               <Flex
                 sx={{
                   alignItems: 'center',
-                  flex: 0.4,
+                  flex: [1, 0.4, 0.4],
                   width: '100%',
                   padding: '0 3% 0 0',
                   mt: [4, 0, 0],
@@ -346,7 +398,7 @@ const ProjectsList = props => {
                   variant='forms.search'
                   style={{
                     width: '100%',
-                    margin: 'auto'
+                    margin: '20px 0 0 0'
                   }}
                   onChange={searchProjects}
                 />
@@ -357,8 +409,7 @@ const ProjectsList = props => {
           <Flex
             sx={{
               width: '100%',
-              flexDirection: ['column-reverse', 'row', 'row'],
-              mt: 2
+              flexDirection: ['column-reverse', 'row', 'row']
             }}
           >
             <div
@@ -381,7 +432,7 @@ const ProjectsList = props => {
                 endMessage={
                   <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
                     {!fromHomePage ? (
-                      projectsFilteredSorted?.length > 0 ? (
+                      projectsFilteredSorted?.length <= limit ? (
                         <>
                           <Text
                             variant='headings.h5'
@@ -419,14 +470,15 @@ const ProjectsList = props => {
                   p={4}
                   columns={[1, 2, 3]}
                   style={{
-                    margin: 0,
                     columnGap: '2.375em',
-                    justifyItems: 'center'
+                    justifyItems: 'center',
+                    marginTop: 20,
+                    marginBottom: 60
                   }}
                 >
                   {projectsFilteredSorted
                     ? projectsFilteredSorted
-                        ?.slice()
+                        ?.slice(0, limit)
                         .map((project, index) => (
                           <ProjectCard
                             shadowed
@@ -447,7 +499,13 @@ const ProjectsList = props => {
                 </Grid>
               </InfiniteScroll>
               {fromHomePage && (
-                <Flex style={{ justifyContent: 'center' }}>
+                <Flex
+                  style={{
+                    justifyContent: 'center',
+                    marginTop: 20,
+                    background: 'transparent'
+                  }}
+                >
                   <Link href='/projects'>
                     <Button
                       sx={{

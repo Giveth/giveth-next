@@ -26,6 +26,90 @@ const mainnetTokens = {
     },
     {
       chainId: 1,
+      address: '0x03ab458634910aad20ef5f1c8ee96f1d6ac54919',
+      symbol: 'RAI',
+      name: 'Rai Reflex Index',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xda007777d86ac6d989cc9f79a73261b3fc5e0da0',
+      symbol: 'NODE',
+      name: 'dAppNode',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xde30da39c46104798bb5aa3fe8b9e0e1f348163f',
+      symbol: 'GTC',
+      name: 'Gitcoin',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc770eefad204b5180df6a14ee197d99d808ee52d',
+      symbol: 'FOX',
+      name: 'ShapeShift FOX Token (FOX)',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xD533a949740bb3306d119CC777fa900bA034cd52',
+      symbol: 'CRV',
+      name: 'Curve DAO Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xa47c8bf37f92abed4a126bda807a7b7498661acd',
+      symbol: 'UST',
+      name: 'TerraUSD',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+      symbol: 'SUSHI',
+      name: 'Sushi Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xba100000625a3754423978a60c9317c58a424e3d',
+      symbol: 'BAL',
+      name: 'Balancer',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xad32a8e6220741182940c5abf610bde99e737b2d',
+      symbol: 'DOUGH',
+      name: 'PieDAO DOUGH',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x09a3ecafa817268f77be1283176b946c4ff2e608',
+      symbol: 'MIR',
+      name: 'Wrapped MIR Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x30cf203b48edaa42c3b4918e955fed26cd012a3f',
+      symbol: 'SEED',
+      name: 'Metagame SEED',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xdd1ad9a21ce722c151a836373babe42c868ce9a4',
+      symbol: 'UBI',
+      name: 'PoH Universal Basic Income',
+      decimals: 18
+    },
+    {
+      chainId: 1,
       address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
       symbol: 'USDT',
       name: 'Tether',
@@ -539,6 +623,13 @@ const xDaiTokens = {
   tokens: [
     {
       chainId: 100,
+      address: '0xc60e38C6352875c051B481Cbe79Dd0383AdB7817',
+      symbol: 'XNODE',
+      name: 'dAppNode on xDAI',
+      decimals: 18
+    },
+    {
+      chainId: 100,
       address: '0x981fb9ba94078a2275a8fc906898ea107b9462a8',
       symbol: 'PAN',
       name: 'Panvala',
@@ -617,6 +708,62 @@ const xDaiTokens = {
   ]
 }
 
+const traceTokens = {
+  name: 'TRACE ERC20 WHITELIST',
+  timestamp: null,
+  keywords: ['trace', 'erc20'],
+  tokens: [
+    {
+      chainId: 1,
+      name: 'ETH',
+      address: '0x0',
+      foreignAddress: '0xe3ee055346a9EfaF4AA2900847dEb04de0195398',
+      symbol: 'ETH',
+      coingeckoId: 'ethereum',
+      decimals: 6
+    },
+    {
+      chainId: 1,
+      name: 'DAI',
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      foreignAddress: '0x05A075B296995AdCaEC7c1dE0E52271a4Cf6DEb8',
+      symbol: 'DAI',
+      rateEqSymbol: 'USD',
+      coingeckoId: 'dai',
+      decimals: 3
+    },
+    {
+      chainId: 1,
+      name: 'PAN',
+      address: '0xd56dac73a4d6766464b38ec6d91eb45ce7457c44',
+      foreignAddress: '0x0aaf4acccddb40cdb6a1df3cfbc7944aa5effcc6',
+      symbol: 'PAN',
+      coingeckoId: 'panvala-pan',
+      decimals: 2
+    },
+    {
+      chainId: 1,
+      name: 'WBTC',
+      address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+      foreignAddress: '0x6d03800013c591611a6ee597191d9f608b833510',
+      symbol: 'WBTC',
+      rateEqSymbol: 'BTC',
+      coingeckoId: 'bitcoin',
+      decimals: 8
+    },
+    {
+      chainId: 1,
+      name: 'USDC',
+      address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+      foreignAddress: '0xf14eCE303f190A70A2CF7C7011F75bDa658aD6EF',
+      symbol: 'USDC',
+      rateEqSymbol: 'USD',
+      coingeckoId: 'usd-coin',
+      decimals: 3
+    }
+  ]
+}
+
 const getTokens = network => {
   let tokens = {}
   switch (network) {
@@ -628,6 +775,9 @@ const getTokens = network => {
       break
     case 100:
       tokens = xDaiTokens
+      break
+    case 'trace':
+      tokens = traceTokens
       break
     default:
       tokens = mainnetTokens

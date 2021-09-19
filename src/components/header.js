@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { Box, IconButton, Text, Flex } from 'theme-ui'
+import { IconButton, Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../utils/theme-ui'
 import Logo from './content/Logo'
 import Headroom from 'react-headroom'
+import { ProjectContext } from '../contextProvider/projectProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
 
@@ -16,14 +17,14 @@ const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;
   height: 140px;
   position: relative;
-  @media (max-width: 700) {
+  @media (max-width: 700px) {
     height: 160px;
   }
 `
 
 const HeaderSpan = styled.nav`
   position: absolute;
-  z-index: 2;
+  z-index: 5;
   margin: 0 auto;
   padding: 80px 80px 0 80px;
   max-width: 100vw;
@@ -95,6 +96,7 @@ const MiddleSpan = styled.span`
   grid-gap: 3em;
   justify-self: center;
   max-width: 290px;
+  z-index: 5;
   @media (max-width: 1030px) {
     grid-gap: 10px;
     grid-column: 2;
@@ -117,13 +119,14 @@ const UserSpan = styled.span`
   }
 `
 
-const NavLink = styled(Box)`
+const NavLink = styled.a`
+  cursor: pointer;
   font-family: ${theme.fonts.heading}, sans-serif;
   font-weight: 500;
   line-height: 21px;
   text-decoration: none;
   :hover {
-    color: ${theme.colors.hover};
+    color: ${theme.colors.hover} !important;
   }
   :active {
     color: ${theme.colors.secondary};
@@ -152,22 +155,108 @@ const Decorator = styled.div`
   position: absolute;
 `
 
+const ProjectsCategories = styled.div`
+  .categoriesContent {
+    visibility: hidden;
+    max-width: 500px;
+    text-align: center;
+    margin: 0 5px 0 -10%;
+    padding-top: 1%;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 5;
+  }
+
+  .categoriesContent a {
+    text-decoration: underline;
+  }
+
+  &:hover .categoriesContent {
+    visibility: visible;
+  }
+`
+
+const CategoriesListView = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 1% 0 5% 0;
+  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
+  background-color: ${theme.colors.background};
+  li {
+    cursor: pointer;
+    font-size: 12px;
+    color: ${theme.colors.secondary};
+    width: 50%;
+    padding: 0 5%;
+    border-bottom: 1px solid ${theme.colors.softGray};
+    text-align: left;
+  }
+  li:hover {
+    font-weight: bold;
+  }
+`
+
 const Login = dynamic(() => import('./torus/login'))
 
 const siteId = process.env.NEXT_PUBLIC_SITE_ID
 const projectSearch = process.env.PROJECT_SEARCH
+
+const CategoriesList = () => {
+  const { currentProjectView, setCurrentProjectView } = React.useContext(
+    ProjectContext
+  )
+  const categories = currentProjectView?.globalCategories
+
+  if (!categories) return null
+  return (
+    <Flex sx={{ flexDirection: 'column' }}>
+      <CategoriesListView>
+        <Link href={'/projects'}>
+          <li>
+            <p>All</p>
+          </li>
+        </Link>
+        {categories
+          ?.sort(function (a, b) {
+            var textA = a.value.toUpperCase()
+            var textB = b.value.toUpperCase()
+            return textA < textB ? -1 : textA > textB ? 1 : 0
+          })
+          ?.map(c => {
+            return (
+              <Link
+                href={{
+                  pathname: '/projects',
+                  query: { category: c?.name }
+                }}
+              >
+                <li>
+                  <p>{c?.value}</p>
+                </li>
+              </Link>
+            )
+          })}
+      </CategoriesListView>
+    </Flex>
+  )
+}
 
 const Header = ({ siteTitle, isHomePage }) => {
   const router = useRouter()
   const { isLoggedIn, user } = useWallet()
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
+  const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+  const isMobileForProjectBtn = useMediaQuery({ query: '(max-width: 1200px)' })
   const [hasScrolled, setScrollState] = useState(false)
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = router.pathname?.split('/')[1]
+
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -178,7 +267,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -191,8 +280,36 @@ const Header = ({ siteTitle, isHomePage }) => {
     router.push('/create')
   }
 
+  const MainLogo = () => {
+    return (
+      <Link href="/">
+        <LogoSpan
+          className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
+        >
+          <Logo />
+          {siteId === 'giveth' && !isXsWindow ? (
+            <Text
+              pl={3}
+              sx={{
+                fontWeight: 'medium',
+              }}
+            >
+              GIVETH
+            </Text>
+          ) : (
+            ''
+          )}
+        </LogoSpan>
+      </Link>
+    )
+  }
+
+  useEffect(() => {
+    router?.prefetch('/create')
+  }, [])
+
   return (
-    <Headroom>
+    <Headroom style={{ zIndex: 5 }}>
       <HeaderContainer
         style={{
           marginBottom: '1.45rem'
@@ -201,95 +318,82 @@ const Header = ({ siteTitle, isHomePage }) => {
         <HeaderSpan
           className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
         >
-          {!isMobile ? (
-            <Decorator>
-              <img
-                src={'/images/decorator-cloud1.svg'}
-                alt=''
-                sx={{
-                  position: 'absolute',
-                  top: '-70px',
-                  left: '300px'
-                }}
-                className='hide'
-              />
-              <img
-                src={'/images/decorator-cloud2.svg'}
-                alt=''
-                sx={{
-                  position: 'absolute',
-                  top: '-80px',
-                  left: '92vw'
-                }}
-                className='hide'
-              />
-            </Decorator>
-          ) : null}
-          <Link href='/'>
-            {isMobile ? (
-              <Logo
-                siteId={process.env.NEXT_PUBLIC_SITE_ID}
-                alt=''
-                width='40px'
-                height='40px'
-                style={{ mr: 3 }}
-              />
-            ) : (
-              <LogoSpan
-                className={
-                  hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''
-                }
-              >
-                <Logo alt='' width='100px' height='100px' />
-                {siteId === 'giveth' ? (
-                  <Text
-                    pl={3}
-                    sx={{
-                      variant: 'text.default',
-                      color: 'secondary',
-                      fontFamily: 'fonts.body',
-                      fontSize: 3,
-                      fontWeight: 'medium',
-                      textDecoration: 'none',
-                      lineHeights: 'tallest',
-                      letterSpacing: '0.32px',
-                      cursor: 'pointer',
-                      zIndex: 3
-                    }}
-                  >
-                    GIVETH
-                  </Text>
-                ) : (
-                  ''
-                )}
-              </LogoSpan>
-            )}
-          </Link>
+          <Decorator>
+            <img
+              src={'/images/decorator-cloud1.svg'}
+              alt=''
+              sx={{
+                position: 'absolute',
+                top: '-70px',
+                left: '300px'
+              }}
+              className='hide'
+            />
+            <img
+              src={'/images/decorator-cloud2.svg'}
+              alt=''
+              sx={{
+                position: 'absolute',
+                top: '-80px',
+                left: '92vw'
+              }}
+              className='hide'
+            />
+          </Decorator>
+
+          <MainLogo />
 
           <MiddleSpan>
-            <NavLink
-              sx={{
-                display: ['none', 'block', 'block'],
-                color: isHomePage ? 'primary' : 'secondary'
-              }}
-            >
-              <Link href='/'>Home</Link>
-            </NavLink>
-            <NavLink
-              sx={{ color: pathname === 'join' ? 'primary' : 'secondary' }}
-            >
-              <Link href='/join'>Community</Link>
-            </NavLink>
+            {!isMobile && (
+              <Link href='/' passHref>
+                <NavLink
+                  style={{
+                    display: ['none', 'block', 'block'],
+                    color: isHomePage
+                      ? theme.colors.primary
+                      : theme.colors.secondary
+                  }}
+                >
+                  Home
+                </NavLink>
+              </Link>
+            )}
+            <ProjectsCategories>
+              <Link href='/projects' passHref>
+                <NavLink
+                  style={{
+                    color:
+                      pathname === 'projects'
+                        ? theme.colors.primary
+                        : theme.colors.secondary
+                  }}
+                >
+                  Projects
+                </NavLink>
+              </Link>
+              {!isMobile && (
+                <Flex className='categoriesContent'>
+                  <CategoriesList />
+                </Flex>
+              )}
+            </ProjectsCategories>
+            <Link href='/join' passHref>
+              <NavLink
+                style={{
+                  color:
+                    pathname === 'join'
+                      ? theme.colors.primary
+                      : theme.colors.secondary
+                }}
+              >
+                Join{' '}
+              </NavLink>
+            </Link>
             {/* <NavLink href='/causes'>Causes</NavLink> */}
-            <NavLink
-              sx={{ color: pathname === 'projects' ? 'primary' : 'secondary' }}
-            >
-              <Link href='/projects'>Projects</Link>
-            </NavLink>
           </MiddleSpan>
 
           <UserSpan>
-            {isMobile ? null : (
+            {isMobileForProjectBtn ? null : (
               <Flex>
                 {pathname !== 'projects' && (
                   <CreateLink onClick={goCreate}>Create a project</CreateLink>
@@ -302,7 +406,7 @@ const Header = ({ siteTitle, isHomePage }) => {
               </Flex>
             )}
             {pathname !== 'projects' && (
-              <img src={'/images/icon-vertical-line.svg'} alt='' />
+              <img style={{ margin: '0 10px'}} src={'/images/icon-vertical-line.svg'} alt='' />
             )}
             <Login />
           </UserSpan>

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import fetch from 'isomorphic-fetch'
 import _ from 'lodash'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
-import { useMutation } from '@apollo/client'
 import Image from 'next/image'
-import { Button, Flex, Label, Text, jsx } from 'theme-ui'
-import { client } from '../../apollo/client'
+import { Button, Flex, Label, Text, Switch } from 'theme-ui'
 import { PopupContext } from '../../contextProvider/popupProvider'
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
-import { SAVE_DONATION } from '../../apollo/gql/donations'
+import { FETCH_ETH_PRICE, FETCH_TOKEN_PRICE } from '../../apollo/gql/donations'
 
 import Modal from '../modal'
 // import Select from '../selectWithAutocomplete'
@@ -45,6 +45,10 @@ const Select = dynamic(() => import('../selectWithAutocomplete'), {
 let provider
 
 const GIVETH_DONATION_AMOUNT = 5
+const client = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+  cache: new InMemoryCache()
+})
 
 const Content = styled.div`
   max-width: 41.25rem;
@@ -52,6 +56,8 @@ const Content = styled.div`
 `
 
 const AmountSection = styled.div`
+  display: flex;
+  flex-direction: column;
   margin: 1.3rem 0 0 0;
   @media (max-width: 800px) {
     display: flex;
@@ -63,6 +69,10 @@ const AmountSection = styled.div`
 `
 
 const AmountContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   margin: 2rem 0;
   @media (max-width: 800px) {
     display: flex;
@@ -128,6 +138,7 @@ const SaveGasMessage = styled(Flex)`
   align-items: center;
   padding: 0.5rem 1rem;
   word-wrap: break-word;
+  margin-bottom: 10px;
 `
 
 const Separator = styled.div`
@@ -137,18 +148,20 @@ const Separator = styled.div`
 
 const OnlyCrypto = props => {
   // ON BOARD
+  const { project } = props
   const [wallet, setWallet] = useState(null)
   const [onboard, setOnboard] = useState(null)
   const [mainToken, setMainToken] = useState(null)
   const [selectedToken, setSelectedToken] = useState(null)
   const [tokenSymbol, setTokenSymbol] = useState(null)
+  const [tokenAddress, setTokenAddress] = useState(null)
   const [selectedTokenBalance, setSelectedTokenBalance] = useState(0)
   const [notify, setNotify] = useState(null)
-  const { project } = props
   const [tokenPrice, setTokenPrice] = useState(1)
   const [mainTokenPrice, setMainTokenPrice] = useState(1)
   const [gasPrice, setGasPrice] = useState(null)
   const [gasETHPrice, setGasETHPrice] = useState(null)
+  const [ETHPrice, setETHPrice] = useState(0)
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [inProgress, setInProgress] = useState(false)
@@ -156,6 +169,8 @@ const OnlyCrypto = props => {
   const [txHash, setTxHash] = useState(null)
   const [erc20List, setErc20List] = useState([])
   const [anonymous, setAnonymous] = useState(false)
+  const [switchTraceable, setSwitchTraceable] = useState(false)
+  const [traceTokenList, setTraceTokenList] = useState([])
   const [modalIsOpen, setIsOpen] = useState(false)
   const [icon, setIcon] = useState(null)
   const usePopup = React.useContext(PopupContext)
@@ -167,26 +182,29 @@ const OnlyCrypto = props => {
   const {
     isLoggedIn,
     currentChainId,
-    currentNetwork,
     sendTransaction,
     user,
     ready,
-    wallet: userWallet
+    switchEthChain,
+    wallet: userWallet,
+    currentNetwork
   } = useWallet()
-
   const { triggerPopup } = usePopup
 
   useEffect(() => {
     const init = async () => {
-      fetch(
-        `https://min-api.cryptocompare.com/data/price?fsym=${
-          tokenSymbol === 'XDAI' ? 'DAI' : tokenSymbol
-        }&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${
-          process.env.NEXT_PUBLIC_CRYPTOCOMPARE_KEY
-        }`
-      )
-        .then(response => response.json())
-        .then(data => setTokenPrice(data.USD))
+      client
+        .query({
+          query: FETCH_ETH_PRICE
+        })
+        .then(data => {
+          const { ethPrice } = data?.data?.bundle
+          setETHPrice(parseFloat(ethPrice)?.toFixed(2))
+        })
+        .catch(err => {
+          console.log('Error fetching data: ', err)
+        })
+      setTokenPrice(currentChainId === 100 ? 1 : ETHPrice)
       setOnboard(
         initOnboard(
           {
@@ -210,7 +228,45 @@ const OnlyCrypto = props => {
       setNotify(initNotify())
     }
     init()
-  }, [tokenSymbol, currentChainId])
+  }, [tokenSymbol, currentChainId, ETHPrice])
+
+  useEffect(() => {
+    if (selectedToken?.address)
+      if (currentChainId === 100) {
+        // isXDAI
+        let chain = 'xdai'
+        let tokenAddress = selectedToken?.address
+        // Workaround to show proper PAN price
+        if (selectedToken?.symbol === 'PAN') {
+          tokenAddress = '0xd56dac73a4d6766464b38ec6d91eb45ce7457c44'
+          chain = 'ethereum'
+        }
+        fetch(
+          `https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`
+        )
+          .then(response => response.json())
+          .then(data => {
+            const price = parseFloat(
+              data[Object.keys(data)[0]]?.usd?.toFixed(2)
+            )
+            setTokenPrice(price)
+          })
+      } else {
+        client
+          .query({
+            query: FETCH_TOKEN_PRICE,
+            variables: { id: selectedToken?.address }
+          })
+          .then(data => {
+            const derivedETH = data?.data?.tokens[0]?.derivedETH
+            setTokenPrice(parseFloat(ETHPrice * derivedETH)?.toFixed(2))
+          })
+          .catch(err => {
+            console.log('Error fetching data: ', err)
+            setTokenPrice(0)
+          })
+      }
+  }, [selectedToken])
 
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem(
@@ -225,19 +281,14 @@ const OnlyCrypto = props => {
       name: null
     }
     setMainToken(mainToken)
+    const tokenList = getERC20List(currentChainId)
+    getERC20List('trace')
+    setTraceTokenList(getERC20List('trace'))
 
     if (mainToken === 'ETH') {
-      fetch(
-        `https://min-api.cryptocompare.com/data/price?fsym=${mainToken}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
-      )
-        .then(response => response.json())
-        .then(data => {
-          setMainTokenPrice(data.USD)
-        })
-      // On xDAI the API does not work so we set the XDAI value to one dollar
-    } else setMainTokenPrice(1)
+      setMainTokenPrice(ETHPrice)
+    }
 
-    const tokenList = getERC20List(currentChainId)
     const formattedTokenList = tokenList?.tokens
       ? Array.from(tokenList?.tokens, token => {
           return {
@@ -309,6 +360,8 @@ const OnlyCrypto = props => {
       img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() ||
         'eth'}.png`
       setIcon(img)
+    } else {
+      setIcon(`/assets/cryptocurrency-icons/32/color/eth.png`)
     }
   }, [tokenSymbol, icon])
 
@@ -328,6 +381,7 @@ const OnlyCrypto = props => {
 
   const donationTokenToUSD = amountOfToken => {
     const USDValue = (amountOfToken * tokenPrice).toFixed(2)
+    if (currentChainId == 100) return ''
     if (USDValue > 0) {
       return `$${USDValue}`
     }
@@ -409,9 +463,17 @@ const OnlyCrypto = props => {
     return ready
   }
 
-  const confirmDonation = async isFromOwnProvider => {
+  const confirmDonation = async (isFromOwnProvider, isTraceable) => {
     try {
       let fromOwnProvider = isFromOwnProvider
+      // Traceable by default if it comes from Trace only
+      // Depends on the toggle if it's an IO to Trace project
+      // let traceable = project?.fromTrace
+      //   ? true
+      //   : isTraceable
+      //   ? isTraceable
+      //   : switchTraceable
+      let traceable = false
 
       if (!project?.walletAddress) {
         return Toast({
@@ -429,7 +491,6 @@ const OnlyCrypto = props => {
       }
 
       // Check amount if own provider
-      console.log({ selectedTokenBalance, subtotal })
       if (isFromOwnProvider && selectedTokenBalance < subtotal) {
         return triggerPopup('InsufficientFunds')
       }
@@ -463,7 +524,6 @@ const OnlyCrypto = props => {
               transactionHash,
               isXDAI // isXDAI
             )
-            console.log({ fromAddress, instantReceipt })
             // Save initial txn details to db
             const {
               donationId,
@@ -545,7 +605,8 @@ const OnlyCrypto = props => {
             //   type: 'error'
             // })
           }
-        }
+        },
+        traceable
       )
 
       // Commented notify and instead we are using our own service
@@ -561,6 +622,7 @@ const OnlyCrypto = props => {
       }
       return Toast({
         content:
+          error?.data?.data?.message ||
           error?.data?.message ||
           error?.error?.message ||
           error?.message ||
@@ -572,6 +634,11 @@ const OnlyCrypto = props => {
 
   const isMainnet = currentChainId === 1
   const isXDAI = currentChainId === 100
+  const traceableNetwork = currentChainId == process.env.NEXT_PUBLIC_NETWORK_ID
+  const canBeTraceable =
+    (project?.IOTraceable || project?.fromTrace) &&
+    traceableNetwork &&
+    traceTokenList?.tokens?.find(i => i?.symbol === selectedToken?.symbol)
 
   return (
     <>
@@ -603,13 +670,28 @@ const OnlyCrypto = props => {
           >
             <Text
               sx={{
+                fontFamily: 'heading',
+                fontSize: '15px',
+                fontWeight: 'regular',
+                lineHeight: 'tall',
+                letterSpacing: '2px',
+                overflowWrap: 'normal',
                 color: 'secondary',
-                variant: ['headings.h4', 'headings.h4'],
                 mt: 2,
                 mb: 4
               }}
             >
-              Support {project?.title}
+              DONATE TO
+            </Text>
+            <Text
+              sx={{
+                color: 'secondary',
+                variant: 'headings.h4',
+                mt: 2,
+                mb: 4
+              }}
+            >
+              {project?.title}
             </Text>
             <QRCode value={project?.walletAddress} size={250} />
             <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
@@ -650,32 +732,44 @@ const OnlyCrypto = props => {
           </Text>
         </Modal>
         <AmountSection>
-          <AmountContainer sx={{ width: ['100%', '100%'] }}>
+          <AmountContainer>
             {/* <Text sx={{ variant: 'text.large', mb: 3, color: 'background' }}>
             Enter your {tokenSymbol} amount
           </Text> */}
-            {isMainnet && (
-              <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
-                {tokenPrice &&
-                  tokenSymbol &&
-                  `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
-              </Text>
-            )}
-            <Text
+            <Flex
               sx={{
-                variant: 'text.small',
-                float: 'right',
-                color: 'anotherGrey',
-                mb: 1
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                mb: 2
               }}
             >
-              Available:{' '}
-              {parseFloat(selectedTokenBalance).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 6
-              })}{' '}
-              {tokenSymbol}
-            </Text>
+              <Text
+                sx={{
+                  variant: 'text.large',
+                  color: 'anotherGrey'
+                }}
+              >
+                {!isNaN(tokenPrice) && !!tokenSymbol
+                  ? `1 ${tokenSymbol} ≈ USD $${tokenPrice}`
+                  : ''}
+              </Text>
+
+              <Text
+                sx={{
+                  variant: 'text.small',
+                  color: 'anotherGrey'
+                }}
+              >
+                Available:{' '}
+                {parseFloat(selectedTokenBalance).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 6
+                })}{' '}
+                {tokenSymbol}
+              </Text>
+            </Flex>
             <OpenAmount>
               {isComponentVisible && (
                 <Flex
@@ -823,32 +917,77 @@ const OnlyCrypto = props => {
                     ]}
                   />
                 )}
-                {!isXDAI && (
-                  <SaveGasMessage>
-                    <Image
-                      src={'/images/icon-streamline-gas.svg'}
-                      height='18px'
-                      width='18px'
-                      alt=''
-                    />
-                    <Text
-                      sx={{
-                        variant: 'text.medium',
-                        textAlign: 'left',
-                        color: 'background',
-                        marginLeft: '12px'
-                      }}
-                    >
-                      Save on gas fees, switch to xDAI network.
-                    </Text>
-                  </SaveGasMessage>
-                )}
               </Summary>
+            )}
+            {
+              // UNCOMMENT THIS TO BRING TRACEABLE DONATIONS
+              // {canBeTraceable && !isXDAI && project?.IOTraceable && (
+              //   <Switch
+              //     label='Make this a traceable donation'
+              //     onChange={() =>
+              //       setSwitchTraceable(switchTraceable === true ? false : true)
+              //     }
+              //     value={switchTraceable}
+              //     defaultValue={switchTraceable}
+              //   />
+              // )}
+              // {project?.fromTrace && <Text>This is a trace only donation</Text>}
+              // {switchTraceable === true && (
+              //   <SaveGasMessage
+              //     sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
+              //   >
+              //     <Text
+              //       sx={{
+              //         variant: 'text.medium',
+              //         textAlign: 'left',
+              //         color: 'background'
+              //       }}
+              //     >
+              //       Traceable donations are supported on mainnet using ETH, DAI,
+              //       PAN, USDC or WBTC
+              //     </Text>
+              //   </SaveGasMessage>
+              // )}
+            }
+            {!switchTraceable && !isXDAI && !userWallet?.isTorus && (
+              <SaveGasMessage
+                sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
+              >
+                <Image
+                  src={'/images/icon-streamline-gas.svg'}
+                  height='18px'
+                  width='18px'
+                  alt=''
+                />
+                <Text
+                  sx={{
+                    variant: 'text.medium',
+                    textAlign: 'left',
+                    color: 'background',
+                    marginLeft: '12px'
+                  }}
+                >
+                  Save on gas fees, switch to xDAI network.
+                </Text>
+                <Text
+                  onClick={() => switchEthChain()}
+                  sx={{
+                    cursor: 'pointer',
+                    variant: 'text.medium',
+                    textAlign: 'left',
+                    color: 'yellow',
+                    marginLeft: '12px'
+                  }}
+                >
+                  Switch network
+                </Text>
+              </SaveGasMessage>
             )}
           </>
           <Flex sx={{ flexDirection: 'column', width: '100%' }}>
             <Flex
               sx={{
+                flex: 1,
                 width: '100%',
                 alignItems: 'center',
                 textAlign: 'center',
@@ -858,9 +997,13 @@ const OnlyCrypto = props => {
               <Button
                 onClick={() => confirmDonation(isLoggedIn && ready)}
                 sx={{
-                  flex: 0.8,
+                  flex: [1, 0.8, 0.8],
                   variant: 'buttons.default',
-                  padding: '1.063rem 7.375rem',
+                  padding: [
+                    '1.063rem 1rem',
+                    '1.063rem 7.375rem',
+                    '1.063rem 7.375rem'
+                  ],
                   mt: 2,
                   textTransform: 'uppercase',
                   width: '100%'
@@ -868,6 +1011,7 @@ const OnlyCrypto = props => {
               >
                 Donate
               </Button>
+
               <Flex
                 sx={{
                   flex: 0.2,
@@ -879,6 +1023,19 @@ const OnlyCrypto = props => {
                 <SVGLogo />
               </Flex>
             </Flex>
+            {/* {project?.listed === false && (
+              <Text
+                sx={{
+                  variant: 'text.default',
+                  color: 'red',
+                  fontWeight: 'bold',
+                  alignSelf: 'center'
+                }}
+              >
+                {' '}
+                This project is unlisted{' '}
+              </Text>
+            )} */}
             {isLoggedIn && ready && (
               <Text
                 sx={{

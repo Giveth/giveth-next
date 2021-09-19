@@ -66,7 +66,6 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
           }
         ]
       })
-      console.log({ data })
       setLoading(false)
       return data
     } catch (error) {

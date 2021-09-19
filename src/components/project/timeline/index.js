@@ -101,7 +101,7 @@ const Timeline = ({
         .map((i, index) => {
           const date = dayjs(i?.projectUpdate?.createdAt)
           return (
-            <Container key={index}>
+            <Container key={i.projectUpdate.id}>
               <LeftInfo sx={{ left: '-13px' }}>
                 <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
                   {date?.format('MMM') || ''}

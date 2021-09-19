@@ -14,6 +14,8 @@ const FETCH_ALL_PROJECTS = gql`
       walletAddress
       impactLocation
       qualityScore
+      verified
+      listed
       status {
         id
         symbol
@@ -53,6 +55,7 @@ const FETCH_PROJECTS = gql`
         description
         walletAddress
         impactLocation
+        listed
         categories {
           name
         }
@@ -89,8 +92,15 @@ const FETCH_USER_PROJECTS = gql`
       admin
       walletAddress
       impactLocation
+      listed
       categories {
         name
+      }
+      reactions {
+        reaction
+        id
+        projectUpdateId
+        userId
       }
       qualityScore
       totalDonations
@@ -115,6 +125,7 @@ const FETCH_MY_PROJECTS = gql`
       qualityScore
       totalDonations
       totalHearts
+      listed
       categories {
         name
       }
@@ -143,6 +154,7 @@ const FETCH_PROJECT = gql`
       qualityScore
       totalDonations
       totalHearts
+      listed
       status {
         id
         symbol
@@ -171,6 +183,8 @@ const FETCH_PROJECT_BY_SLUG = gql`
       qualityScore
       totalDonations
       totalHearts
+      listed
+      verified
       categories {
         name
       }

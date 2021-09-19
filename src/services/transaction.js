@@ -10,12 +10,15 @@ export async function send(
   isLoggedIn,
   sendTransaction,
   provider,
-  txCallbacks
+  txCallbacks,
+  traceable
 ) {
   try {
     const transaction = {
       to: toAddress,
-      value: ethers.utils.parseEther(subtotal.toString())
+      // I CHANGED THIS: IMPORTANT
+      // value: ethers.utils.parseEther(subtotal.toString())
+      value: subtotal.toString()
     }
     let hash
 
@@ -23,7 +26,9 @@ export async function send(
       const regularTransaction = await sendTransaction(
         transaction,
         txCallbacks,
-        contractAddress
+        contractAddress,
+        null,
+        traceable
       )
       hash = regularTransaction?.transactionHash
     } else {
@@ -32,7 +37,8 @@ export async function send(
         transaction,
         txCallbacks,
         contractAddress,
-        signer
+        signer,
+        traceable
       )
       console.log('look here', { signerTransaction })
       hash = signerTransaction?.hash

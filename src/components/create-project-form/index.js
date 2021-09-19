@@ -60,7 +60,7 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     doValidateToken()
-    async function doValidateToken() {
+    async function doValidateToken () {
       const isValid = await validateToken()
       // console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
@@ -85,14 +85,6 @@ const CreateProjectForm = props => {
       />
     ),
     ({ animationStyle }) => (
-      <ProjectAdminInput
-        animationStyle={animationStyle}
-        currentValue={formData?.projectAdmin}
-        register={register}
-        goBack={goBack}
-      />
-    ),
-    ({ animationStyle }) => (
       <ProjectDescriptionInput
         animationStyle={animationStyle}
         currentValue={formData?.projectDescription}
@@ -114,6 +106,7 @@ const CreateProjectForm = props => {
       <ProjectImpactLocationInput
         animationStyle={animationStyle}
         currentValue={formData?.projectImpactLocation}
+        setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
       />
@@ -160,7 +153,17 @@ const CreateProjectForm = props => {
     let project = {}
     try {
       // console.log({ submitCurrentStep, data, formData })
+
       if (isCategoryStep(submitCurrentStep)) {
+        let maxFiveCategories = Object.entries(data)?.filter(i => {
+          return i[1] === true
+        })
+        if (maxFiveCategories?.length > 5) {
+          return Toast({
+            content: `Please select no more than 5 categories`,
+            type: 'error'
+          })
+        }
         project = {
           ...formData,
           projectCategory: {
@@ -177,6 +180,14 @@ const CreateProjectForm = props => {
           ...data
         }
       }
+      // check title
+      if (!/^\w+$/.test(project?.projectName.replace(/\s/g, ''))) {
+        return Toast({
+          content: `Your project name isn't valid, please only use letters and numbers`,
+          type: 'error'
+        })
+      }
+      console.log({ project })
 
       if (isDescriptionStep(submitCurrentStep)) {
         // check if file is too large
@@ -194,6 +205,12 @@ const CreateProjectForm = props => {
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
         let projectWalletAddress
+        if (!data?.projectName) {
+          return Toast({
+            content: 'Please set at least a title to your project',
+            type: 'error'
+          })
+        }
         if (didEnterWalletAddress) {
           setInputLoading(true)
           projectWalletAddress = await getProjectWallet(
@@ -330,13 +347,16 @@ const CreateProjectForm = props => {
   //     </Flex>
   //   )
   // }
+  const progressPercentage = Object.keys(formData).filter(v =>
+    v.startsWith('proj')
+  )?.length
 
   return (
     <>
-      <Progress max={steps.length} value={currentStep}>
+      <Progress max={steps.length} value={progressPercentage}>
         <Text>Progress bar test text</Text>
       </Progress>
-      <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
+      <Box sx={{ mx: ['20px', '140px', '140px'], mt: '50px', position: 'relative' }}>
         <>
           <Flex
             sx={{
@@ -371,6 +391,7 @@ const CreateProjectForm = props => {
                   <EditButtonSection
                     formData={formData}
                     setStep={setCurrentStep}
+                    currentStep={currentStep}
                   />
                 ) : null}
                 {inputIsLoading ? (
@@ -403,18 +424,18 @@ const CreateProjectForm = props => {
 
 export default CreateProjectForm
 
-function isDescriptionStep(currentStep) {
+function isDescriptionStep (currentStep) {
+  return currentStep === 1
+}
+
+function isCategoryStep (currentStep) {
   return currentStep === 2
 }
 
-function isCategoryStep(currentStep) {
-  return currentStep === 3
-}
-
-function isFinalConfirmationStep(currentStep, steps) {
+function isFinalConfirmationStep (currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep(currentStep, steps) {
+function isLastStep (currentStep, steps) {
   return currentStep === steps.length - 1
 }

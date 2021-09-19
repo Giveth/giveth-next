@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Label, Input, Button, Text, Flex } from 'theme-ui'
+import theme from '../../../../src/utils/theme-ui'
+import { BsQuestionCircle } from 'react-icons/bs'
 import { animated } from 'react-spring'
 
 export const ProjectEthAddressInput = ({
@@ -31,17 +33,66 @@ export const ProjectEthAddressInput = ({
       >
         Set your eth address
       </Label>
-      <Text
-        sx={{
-          fontSize: '3',
-          fontFamily: 'heading',
-          color: 'secondary',
-          mt: '8px',
-          lineHeight: '19px'
-        }}
-      >
-        You can set a custom ethereum address or ENS to receive donations
-      </Text>
+      <Flex sx={{ flexDirection: 'column' }}>
+        <Text
+          sx={{
+            fontSize: '3',
+            fontFamily: 'heading',
+            color: 'secondary',
+            mt: '8px',
+            lineHeight: '19px'
+          }}
+        >
+          You can set a custom ethereum address or ENS to receive donations
+        </Text>
+        <Flex
+          className='tooltip'
+          sx={{
+            padding: '6px 14px 6px 0',
+            width: 'fit-content'
+          }}
+        >
+          <Text
+            sx={{
+              fontSize: '3',
+              // textDecoration: 'underline',
+              fontFamily: 'heading',
+              color: 'secondary',
+              mt: '8px',
+              lineHeight: '19px'
+            }}
+          >
+            What is an ETH address <BsQuestionCircle size={15} />
+            <span className='tooltiptext'>
+              Your ETH address, also known as an ERC20 address, is the receiving
+              address for your Ethereum wallet. This is where funds raised by
+              your project will be sent.
+              <br />
+              <br /> If you logged using Torus via your email or social media.
+              You can access your wallet{' '}
+              <a
+                href='https://app.tor.us/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                here
+              </a>
+              .
+              <br />
+              <br /> Learn more about Ethereum wallets{' '}
+              <a
+                href='https://ethereum.org/en/wallets/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                here
+              </a>
+              .
+            </span>
+          </Text>
+        </Flex>
+      </Flex>
+
       <Flex sx={{ width: '175%' }}>
         <Input
           sx={{
@@ -95,7 +146,8 @@ export const ProjectEthAddressInput = ({
             mt: '100px',
             width: '180px',
             height: '52px',
-            borderRadius: '48px'
+            borderRadius: '48px',
+            cursor: 'pointer'
           }}
           type='submit'
         >
@@ -106,7 +158,6 @@ export const ProjectEthAddressInput = ({
               fontWeight: 'bold',
               fontSize: 2,
               letterSpacing: '4%',
-              cursor: 'pointer'
             }}
           >
             NEXT
@@ -135,6 +186,34 @@ export const ProjectEthAddressInput = ({
           </Text>
         </Button>
       </Flex>
+      <style>{`
+        .tooltip {
+          position: relative;
+          display: inline-block;
+        }
+        .tooltip .tooltiptext {
+          visibility: hidden;
+          width: 350px;
+          max-width: 500px;
+          background-color: ${theme.colors.secondary};
+          color: #fff;
+          text-align: center;
+          padding: 15px 10px;
+          margin: 0 5px;
+          border-radius: 6px;
+         
+          position: absolute;
+          z-index: 1;
+        }
+
+        .tooltiptext a {
+          text-decoration: underline
+        }
+        
+        .tooltip:hover .tooltiptext {
+          visibility: visible;
+        }
+      `}</style>
     </animated.section>
   )
 }

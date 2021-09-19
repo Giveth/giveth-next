@@ -1,221 +1,91 @@
 import React from 'react'
 import { Text, Button, Flex } from 'theme-ui'
-import { FaCheckCircle } from 'react-icons/fa'
+import { FaCheckCircle, FaExclamationCircle } from 'react-icons/fa'
 
-const EditButtonSection = ({ formData, setStep }) => {
+const EditButtonSection = ({ formData, currentStep, setStep }) => {
+  const EditBtn = ({ step, title, wasSet, sx = {} }) => {
+    return (
+      <Flex sx={sx}>
+        <Button
+          type='button'
+          aria-label={`edit project ${title}`}
+          sx={{
+            color: 'primary',
+            border: 0,
+            background: 'unset',
+            fontSize: 1,
+            p: 0,
+            cursor: 'pointer'
+          }}
+          onClick={() => setStep(step)}
+        >
+          <Text
+            sx={{
+              fontSize: 0,
+              textTransform: 'uppercase',
+              fontFamily: 'heading',
+              color: currentStep === step ? 'primary' : 'bodyLight',
+              fontWeight: currentStep === step ? 'bold' : null
+            }}
+          >
+            {title}
+          </Text>
+        </Button>
+
+        {/* <Text sx={{ ml: '10px' }}>
+          {wasSet ? (
+            <FaCheckCircle size='15px' color='green' />
+          ) : (
+            <FaExclamationCircle size='15px' color='lightGray' />
+          )}
+        </Text> */}
+      </Flex>
+    )
+  }
+
   return (
     <Flex
       sx={{
         mt: '29px',
         // justifyContent: 'space-between',
-        width: '65%'
       }}
       columns={[2, '3fr 1fr']}
     >
-      {formData.projectName ? (
-        <Flex>
-          <Button
-            type='button'
-            aria-label='edit project name'
-            sx={{
-              color: 'primary',
-              border: 0,
-              background: 'unset',
-              fontSize: 1,
-              p: 0
-            }}
-            onClick={() => setStep(0)}
-          >
-            <Text
-              sx={{
-                fontSize: 0,
-                textTransform: 'uppercase',
-                fontFamily: 'heading',
-                color: 'bodyLight'
-              }}
-            >
-              Project Name
-            </Text>
-          </Button>
-
-          <Text sx={{ ml: '10px' }}>
-            <FaCheckCircle size='15px' color='green' />
-          </Text>
-        </Flex>
-      ) : null}
-      {formData.projectAdmin ? (
-        <Flex sx={{ ml: '7%' }}>
-          <Button
-            type='button'
-            aria-label='edit project administrator'
-            sx={{
-              color: 'primary',
-              border: 0,
-              background: 'unset',
-              fontSize: 1,
-              p: 0,
-              '&:hover': {
-                cursor: 'pointer'
-              }
-            }}
-            onClick={() => setStep(1)}
-          >
-            <Text
-              sx={{
-                fontSize: 0,
-                textTransform: 'uppercase',
-                fontFamily: 'heading',
-                color: 'bodyLight',
-                '&:hover': {
-                  cursor: 'pointer'
-                }
-              }}
-            >
-              Admin
-            </Text>
-          </Button>
-
-          <Text sx={{ ml: '10px' }}>
-            <FaCheckCircle size='15px' color='green' />
-          </Text>
-        </Flex>
-      ) : null}
-      {formData.projectDescription ? (
-        <Flex sx={{ ml: '7%' }}>
-          <Button
-            type='button'
-            aria-label='edit project description'
-            sx={{
-              color: 'primary',
-              border: 0,
-              background: 'unset',
-              fontSize: 1,
-              p: 0,
-              '&:hover': {
-                cursor: 'pointer'
-              }
-            }}
-            onClick={() => setStep(2)}
-          >
-            <Text
-              sx={{
-                fontSize: 0,
-                textTransform: 'uppercase',
-                fontFamily: 'heading',
-                color: 'bodyLight'
-              }}
-            >
-              Description
-            </Text>
-          </Button>
-
-          <Text sx={{ ml: '10px' }}>
-            <FaCheckCircle size='15px' color='green' />
-          </Text>
-        </Flex>
-      ) : null}
-      {formData.projectCategory ? (
-        <Flex sx={{ ml: '7%' }}>
-          <Button
-            type='button'
-            aria-label='edit project description'
-            sx={{
-              color: 'primary',
-              border: 0,
-              background: 'unset',
-              fontSize: 1,
-              p: 0,
-              '&:hover': {
-                cursor: 'pointer'
-              }
-            }}
-            onClick={() => setStep(3)}
-          >
-            <Text
-              sx={{
-                fontSize: 0,
-                textTransform: 'uppercase',
-                fontFamily: 'heading',
-                color: 'bodyLight'
-              }}
-            >
-              Category
-            </Text>
-          </Button>
-
-          <Text sx={{ ml: '10px' }}>
-            <FaCheckCircle size='15px' color='green' />
-          </Text>
-        </Flex>
-      ) : null}
-      {formData.projectImpactLocation ? (
-        <Flex sx={{ ml: '7%' }}>
-          <Button
-            type='button'
-            aria-label='edit project description'
-            sx={{
-              color: 'primary',
-              border: 0,
-              background: 'unset',
-              fontSize: 1,
-              p: 0,
-              '&:hover': {
-                cursor: 'pointer'
-              }
-            }}
-            onClick={() => setStep(4)}
-          >
-            <Text
-              sx={{
-                fontSize: 0,
-                textTransform: 'uppercase',
-                fontFamily: 'heading',
-                color: 'bodyLight'
-              }}
-            >
-              Impact
-            </Text>
-          </Button>
-
-          <Text sx={{ ml: '10px' }}>
-            <FaCheckCircle size='15px' color='green' />
-          </Text>
-        </Flex>
-      ) : null}
-      {formData.projectWalletAddress ? (
-        <Flex sx={{ ml: '7%' }}>
-          <Button
-            type='button'
-            aria-label='edit project address'
-            sx={{
-              color: 'primary',
-              border: 0,
-              background: 'unset',
-              fontSize: 1,
-              p: 0,
-              '&:hover': {
-                cursor: 'pointer'
-              }
-            }}
-            onClick={() => setStep(6)}
-          >
-            <Text
-              sx={{
-                fontSize: 0,
-                textTransform: 'uppercase',
-                fontFamily: 'heading',
-                color: 'bodyLight'
-              }}
-            >
-              Eth Address
-            </Text>
-          </Button>
-
-          <Text sx={{ ml: '10px' }}>
-            <FaCheckCircle size='15px' color='green' />
-          </Text>
-        </Flex>
-      ) : null}
+      <EditBtn step={0} title={'Project Name'} wasSet={formData.projectName} />
+      {formData?.projectName && (
+        <>
+          <EditBtn
+            step={1}
+            title={'Description'}
+            wasSet={formData.projectDescription}
+            sx={{ ml: '7%' }}
+          />
+          <EditBtn
+            step={2}
+            title={'Category'}
+            wasSet={formData.projectCategory}
+            sx={{ ml: '7%' }}
+          />
+          <EditBtn
+            step={3}
+            title={'Impact'}
+            wasSet={formData.projectImpactLocation}
+            sx={{ ml: '7%' }}
+          />
+          <EditBtn
+            step={4}
+            title={'Image'}
+            wasSet={formData.ProjectImageInput}
+            sx={{ ml: '7%' }}
+          />
+          <EditBtn
+            step={5}
+            title={'ETH Address'}
+            wasSet={formData.projectWalletAddress}
+            sx={{ ml: '7%' }}
+          />
+        </>
+      )}
     </Flex>
   )
 }

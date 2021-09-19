@@ -63,14 +63,14 @@ const InfoSection = ({ content }) => {
           {content?.infoSubtitle}
         </Text>
         <a
-          href='https://medium.com/giveth/the-future-of-giving-is-crowdfunding-the-commons-ac265e3010b8'
+          href='https://docs.giveth.io/whatisgiveth/'
           target='_blank'
           rel='noopener noreferrer'
         >
           <Button
             sx={{
               variant: 'buttons.nofillGray',
-              color: 'bodyLight',
+              color: 'background',
               fontSize: 14,
               background: 'unset',
               px: '3rem',

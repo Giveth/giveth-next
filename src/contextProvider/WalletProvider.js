@@ -19,6 +19,7 @@ import Toast from '../components/toast'
 import User from '../entities/user'
 
 import { getWallet } from '../wallets'
+import { GivethBridge } from '@giveth/bridge-contract'
 
 const WalletContext = React.createContext()
 const network = process.env.NEXT_PUBLIC_NETWORK
@@ -27,7 +28,7 @@ const networkId = process.env.NEXT_PUBLIC_NETWORK_ID
 let EVENT_SETUP_DONE = false
 let wallet = {}
 
-function useWallet() {
+function useWallet () {
   const context = React.useContext(WalletContext)
   if (!context) {
     throw new Error(`userWallet must be used within a WalletProvider`)
@@ -35,7 +36,7 @@ function useWallet() {
   return context
 }
 
-function WalletProvider(props) {
+function WalletProvider (props) {
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
 
@@ -118,7 +119,7 @@ function WalletProvider(props) {
     start()
   }, [])
 
-  async function logout(walletLoggedOut) {
+  async function logout (walletLoggedOut) {
     if (_.isEmpty(wallet)) return
     !walletLoggedOut && wallet?.logout()
     setLoading(true)
@@ -127,7 +128,31 @@ function WalletProvider(props) {
     setLoading(false)
   }
 
-  async function signMessage(message, publicAddress, loginFromXDAI) {
+  async function switchEthChain (chainId) {
+    try {
+      // return xDAI by default
+      if (!chainId) {
+        window?.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: '0x64',
+              chainName: 'xDai',
+              nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
+              rpcUrls: ['https://rpc.xdaichain.com/'],
+              blockExplorerUrls: ['https://blockscout.com/xdai/mainnet']
+            }
+          ]
+        })
+      }
+      return true
+    } catch (error) {
+      console.log({ error })
+      return error
+    }
+  }
+
+  async function signMessage (message, publicAddress, loginFromXDAI) {
     try {
       await checkNetwork()
       console.log({ loginFromXDAI }, process.env.NEXT_PUBLIC_NETWORK_ID)
@@ -188,7 +213,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function updateUserInfoOnly() {
+  async function updateUserInfoOnly () {
     if (!user) return null
     const { data } = await client.query({
       query: GET_USER_BY_ADDRESS,
@@ -204,13 +229,13 @@ function WalletProvider(props) {
     Auth.setUser(newUser)
   }
 
-  async function updateBalance(publicAddress) {
+  async function updateBalance (publicAddress) {
     if (!publicAddress) return null
     const balance = await wallet.web3.eth.getBalance(publicAddress)
     setBalance(wallet.web3.utils.fromWei(balance, 'ether'))
   }
 
-  async function updateUser(accounts) {
+  async function updateUser (accounts) {
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
@@ -236,7 +261,6 @@ function WalletProvider(props) {
       publicAddress,
       loginFromXDAI
     )
-    console.log('secret', process.env.NEXT_PUBLIC_OUR_SECRET)
     if (!signedMessage) return
 
     const { userIDFromDB, token, dbUser } = await getToken(
@@ -255,12 +279,12 @@ function WalletProvider(props) {
     setUser(user)
   }
 
-  async function validateToken() {
+  async function validateToken () {
     const isValid = await validateAuthToken(Auth.getUserToken())
     return isValid
   }
 
-  async function login({ walletProvider, verifier }) {
+  async function login ({ walletProvider, verifier }) {
     try {
       wallet = getWallet(walletProvider)
       setLoading(true)
@@ -307,7 +331,7 @@ function WalletProvider(props) {
     }
   }
 
-  function isWalletAddressValid(address) {
+  function isWalletAddressValid (address) {
     if (address.length !== 42 || !Web3.utils.isAddress(address)) {
       return false
     } else {
@@ -315,11 +339,11 @@ function WalletProvider(props) {
     }
   }
 
-  function isAddressENS(address) {
+  function isAddressENS (address) {
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
-  async function checkNetwork() {
+  async function checkNetwork () {
     if (!wallet) throw new Error('No Eth Provider')
     const byPassXDAI = currentChainId === 100
     const currentNetworkId = await wallet?.web3.eth.getChainId()
@@ -331,7 +355,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function sendEthersTransaction(toAddress, amount, provider) {
+  async function sendEthersTransaction (toAddress, amount, provider) {
     const transaction = {
       to: toAddress,
       value: ethers.utils.parseEther(amount.toString())
@@ -343,19 +367,20 @@ function WalletProvider(props) {
     const signerTransaction = await signer.sendTransaction(transaction)
     return signerTransaction
   }
-  async function sendTransaction(
+  async function sendTransaction (
     params,
     txCallbacks,
     contractAddress,
-    fromSigner
+    fromSigner,
+    traceableDonation = false
   ) {
     try {
       await checkNetwork(true)
       let web3Provider = wallet?.web3.eth
       let txn = null
       const txParams = {
-        to: params?.to,
-        value: params?.value
+        to: params?.to
+        // value: params?.value
       }
 
       if (!fromSigner) {
@@ -367,19 +392,46 @@ function WalletProvider(props) {
         web3Provider = fromSigner
       }
 
+      // TRACEABLE DONATION
+
+      if (traceableDonation) {
+        //
+        // DEV: 0x279277482F13aeF92914317a0417DD591145aDc9
+        // RELEASE: 0xC59dCE5CCC065A4b51A2321F857466A25ca49B40
+        // TRACE: 0x30f938fED5dE6e06a9A7Cd2Ac3517131C317B1E7
+
+        // TODO !!!!!!!!!!!!
+        const givethBridgeCurrent = new GivethBridge(
+          wallet?.web3,
+          process.env.NEXT_PUBLIC_GIVETH_BRIDGE_ADDRESS
+        )
+        console.log({ givethBridgeCurrent })
+        return alert('This is a trace donation, do something NOW!')
+      }
+
       // ERC20 TRANSFER
       if (contractAddress) {
         const instance = fromSigner
           ? new ethers.Contract(contractAddress, tokenAbi, fromSigner)
           : new web3Provider.Contract(tokenAbi, contractAddress)
+        console.log({ instance })
+        const decimals = instance?.decimals
+          ? await instance.decimals()
+          : await instance.methods.decimals().call()
+        txParams.value = ethers.utils.parseUnits(
+          params?.value,
+          parseInt(decimals)
+        )
+
         if (fromSigner) {
-          txn = await instance.transfer(params?.to, params?.value)
+          txn = await instance.transfer(txParams?.to, txParams?.value)
           txCallbacks?.onTransactionHash(txn?.hash, txn?.from)
           return txn
         }
         const from = await web3Provider.getAccounts()
+
         return instance.methods
-          .transfer(params?.to, params?.value)
+          .transfer(txParams?.to, txParams?.value)
           .send({
             from: from[0]
           })
@@ -392,6 +444,7 @@ function WalletProvider(props) {
       }
 
       // REGULAR ETH TRANSFER
+      txParams.value = ethers.utils.parseEther(params?.value)
       if (!txCallbacks || fromSigner) {
         // gets hash and checks until it's mined
         txn = await web3Provider.sendTransaction(txParams)
@@ -418,7 +471,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function getAddressFromENS(address) {
+  async function getAddressFromENS (address) {
     const ens = await wallet.web3.eth.ens.getOwner(address)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {
@@ -452,6 +505,7 @@ function WalletProvider(props) {
       network,
       currentNetwork,
       currentChainId,
+      switchEthChain,
       isWalletAddressValid,
       isAddressENS,
       getAddressFromENS,

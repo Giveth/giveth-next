@@ -1,5 +1,7 @@
 import React from 'react'
 import { ethers } from 'ethers'
+import axios from 'axios'
+import useSWR from 'swr'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { useApolloClient } from '@apollo/client'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
@@ -22,9 +24,9 @@ import Jdenticon from 'react-jdenticon'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
+import { parseBalance } from '../../util'
 
 dayjs.extend(localizedFormat)
-
 const Table = styled.table`
   border-collapse: collapse;
   margin: 4rem 0;
@@ -158,32 +160,83 @@ const FilterBox = styled(Flex)`
   width: 100%;
   justify-content: space-between;
 `
+const fetcher = url => axios.get(url).then(res => res.data)
 
-const DonationsTable = ({ donations }) => {
+const DonationsTable = ({ donations = [] }) => {
   const options = ['All Donations', 'Fiat', 'Crypto']
   const [currentDonations, setCurrentDonations] = React.useState([])
+  const [donationsFromTrace, setDonationsFromTrace] = React.useState([])
+  const [limit, setLimit] = React.useState(25)
+  const [skip, setSkip] = React.useState(0)
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
+  const [isSearching, setIsSearching] = React.useState(false)
+  const { currentProjectView, setCurrentProjectView } = React.useContext(
+    ProjectContext
+  )
   const client = useApolloClient()
+
+  const fromTrace =
+    currentProjectView?.project?.fromTrace ||
+    currentProjectView?.project?.IOTraceable
+
+  const traceDonationsFetch =
+    fromTrace &&
+    useSWR(
+      `${process.env.NEXT_PUBLIC_FEATHERS}/donations?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView?.project?._id}`,
+      fetcher
+    )
+
+  const traceDonations = traceDonationsFetch?.data
+
+  React.useEffect(() => {
+    if (!traceDonations) {
+      return setLoading(true)
+    } else {
+      setLoading(false)
+    }
+    setDonationsFromTrace([...donationsFromTrace, ...traceDonations?.data])
+    setCurrentDonations([
+      ...currentDonations,
+      ...donationsFromTrace,
+      ...traceDonations?.data
+    ])
+  }, [JSON.stringify(traceDonations)])
 
   React.useEffect(() => {
     const setup = async () => {
-      setCurrentDonations(donations)
+      if (donations) {
+        setCurrentDonations(donations)
+      }
       setLoading(false)
     }
 
     setup()
   }, [donations])
 
+  const [activeItem, setCurrentItem] = React.useState(1)
+
   const searching = search => {
+    setIsSearching(true)
+
+    const searchDonations = fromTrace
+      ? [...donations, ...donationsFromTrace]
+      : donations
+
     if (!search || search === '') {
-      return setCurrentDonations(donations)
+      setIsSearching(false)
+      setCurrentItem(1)
+      return setCurrentDonations(searchDonations)
     }
-    const some = donations?.filter(donation => {
+
+    setCurrentItem(1)
+
+    const some = searchDonations?.filter(donation => {
       const val =
         donation?.user?.name ||
         donation?.user?.firstName ||
-        donation?.fromWalletAddress
+        donation?.fromWalletAddress ||
+        donation?.giverAddress
       return (
         val
           ?.toString()
@@ -212,8 +265,6 @@ const DonationsTable = ({ donations }) => {
   const TableToShow = () => {
     const paginationItems = filteredDonations
 
-    const [activeItem, setCurrentItem] = React.useState(1)
-
     // Data to be rendered using pagination.
     const itemsPerPage = 10
 
@@ -221,10 +272,18 @@ const DonationsTable = ({ donations }) => {
     const indexOfLastItem = activeItem * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
 
-    const currentItems = paginationItems?.slice(
-      indexOfFirstItem,
-      indexOfLastItem
-    )
+    if (fromTrace && !isSearching) {
+      if (indexOfLastItem >= limit) {
+        setLimit(limit + 25)
+        setSkip(skip + limit)
+      }
+    }
+    const currentItems = paginationItems
+      ?.sort(
+        (a, b) =>
+          new Date(b.createdAt)?.valueOf() - new Date(a.createdAt)?.valueOf()
+      )
+      ?.slice(indexOfFirstItem, indexOfLastItem)
 
     const handlePageChange = pageNumber => {
       setCurrentItem(pageNumber)
@@ -268,77 +327,81 @@ const DonationsTable = ({ donations }) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems
-              ?.slice()
-              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-              .map((i, key) => {
-                if (!i) return null
-                return (
-                  <tr key={key}>
-                    <td
-                      data-label='Account'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
-                      <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                        {i?.createdAt
-                          ? dayjs(i.createdAt).format('ll')
-                          : 'null'}
-                      </Text>
-                    </td>
-                    <DonorBox
-                      data-label='Donor'
+            {currentItems?.slice().map((i, key) => {
+              if (!i) return null
+              return (
+                <tr key={key}>
+                  <td
+                    data-label='Account'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                      {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
+                    </Text>
+                  </td>
+                  <DonorBox
+                    data-label='Donor'
+                    sx={{
+                      variant: 'text.small',
+                      color: 'secondary',
+                      svg: { borderRadius: '50%' }
+                    }}
+                  >
+                    {i?.user?.avatar ? (
+                      <Avatar src={i?.user?.avatar} />
+                    ) : (
+                      <Jdenticon
+                        size='32'
+                        value={i?.fromWalletAddress || i?.giverAddress}
+                      />
+                    )}
+                    <Text
                       sx={{
                         variant: 'text.small',
                         color: 'secondary',
-                        svg: { borderRadius: '50%' }
+                        ml: 2
                       }}
                     >
-                      {i?.user?.avatar ? (
-                        <Avatar src={i?.user?.avatar} />
-                      ) : (
-                        <Jdenticon size='32' value={i?.fromWalletAddress} />
-                      )}
-                      <Text
-                        sx={{
-                          variant: 'text.small',
-                          color: 'secondary',
-                          ml: 2
-                        }}
-                      >
-                        {i?.user?.name
-                          ? i.user.name
-                          : i?.user?.firstName && i?.user?.lastName
-                          ? `${i.user.firstName} ${i.user.lastName}`
-                          : i?.user?.walletAddress || i?.fromWalletAddress}
-                      </Text>
-                    </DonorBox>
-                    <td
-                      data-label='Currency'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
+                      {i?.user?.name
+                        ? i.user.name
+                        : i?.user?.firstName && i?.user?.lastName
+                        ? `${i.user.firstName} ${i.user.lastName}`
+                        : i?.user?.walletAddress ||
+                          i?.fromWalletAddress ||
+                          i?.giverAddress}
+                    </Text>
+                  </DonorBox>
+                  <td
+                    data-label='Currency'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Badge variant='green'>
+                      {i?.currency || i?.token?.symbol}
+                    </Badge>
+                  </td>
+                  <td
+                    data-label='Amount'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Text
+                      sx={{
+                        variant: 'text.small',
+                        // whiteSpace: 'pre-wrap',
+                        color: 'secondary'
+                      }}
                     >
-                      <Badge variant='green'>{i?.currency}</Badge>
-                    </td>
-                    <td
-                      data-label='Amount'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
-                      <Text
-                        sx={{
-                          variant: 'text.small',
-                          // whiteSpace: 'pre-wrap',
-                          color: 'secondary'
-                        }}
-                      >
-                        {i?.currency === 'ETH' && i?.valueUsd
-                          ? `${
-                              i?.amount ? `${i?.amount} ETH` : ''
-                            } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
-                          : i?.amount}
-                      </Text>
-                    </td>
-                  </tr>
-                )
-              })}
+                      {!!i?.token?.symbol && i?.amount
+                        ? parseBalance(i?.amount, 18)
+                        : i?.currency === 'ETH' && i?.valueUsd
+                        ? `${
+                            i?.amount ? `${i?.amount} ETH` : ''
+                          } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
+                        : i?.amount}
+                    </Text>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </Table>
         <PagesStyle>
@@ -346,7 +409,7 @@ const DonationsTable = ({ donations }) => {
             hideNavigation
             hideFirstLastPages
             activePage={activeItem}
-            itemsCountPerPage={6}
+            itemsCountPerPage={itemsPerPage}
             totalItemsCount={paginationItems.length}
             pageRangeDisplayed={3}
             onChange={handlePageChange}
@@ -358,7 +421,6 @@ const DonationsTable = ({ donations }) => {
       </>
     )
   }
-
   return (
     <>
       <FilterBox
@@ -385,7 +447,7 @@ const DonationsTable = ({ donations }) => {
           <IconSearch />
         </SearchInput>
       </FilterBox>
-      {loading ? (
+      {(fromTrace && !traceDonationsFetch?.data) || loading ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
           <Spinner variant='spinner.medium' />
         </Flex>

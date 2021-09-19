@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
+import { useMediaQuery } from 'react-responsive'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
@@ -12,6 +13,8 @@ import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.s
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
+
+import { GoVerified } from 'react-icons/go'
 import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
 import { BsHeartFill } from 'react-icons/bs'
@@ -31,12 +34,34 @@ const RichTextViewer = dynamic(() => import('../richTextViewer'), {
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
+const ProjectTraces = React.lazy(() => import('./projectTraces'))
+
 const FloatingDonateView = styled(Flex)`
   @media screen and (max-width: 800px) {
     width: 80%;
     align-self: center;
     margin: 0 auto;
     bottom: 0;
+  }
+`
+
+const NoImage = styled.div`
+  width: 100vw;
+  margin: 0 5%;
+  height: 250px;
+  border-radius: 10px;
+  background-color: rgb(233, 233, 233);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    margin-left: -50px;
+  }
+  @media screen and (max-width: 576px) {
+    img {
+      margin-left: 0;
+    }
   }
 `
 
@@ -47,6 +72,8 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
+  console.log({ project })
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const router = useRouter()
   const { user } = useWallet()
   const [ready, setReady] = useState(false)
@@ -102,7 +129,7 @@ const ProjectDonatorView = ({
           0
         )
         setTotalReactions(projectReactions)
-        setHeartedCount(projectReactions?.length)
+        setHeartedCount(projectReactions?.length || project?.totalHearts)
         setHearted(projectReactions?.find(o => o.userId === user?.id))
 
         setCurrentProjectView({
@@ -117,7 +144,7 @@ const ProjectDonatorView = ({
           [...new Set(projectDonations?.map(data => data?.fromWalletAddress))]
             .length
         )
-        setIsOwner(project?.admin === user.id)
+        setIsOwner(!project?.fromTrace && project?.admin === user.id)
 
         setReady(true)
       } catch (error) {
@@ -163,27 +190,53 @@ const ProjectDonatorView = ({
       return false
     }
   }
+
+  useEffect(() => {
+    // Prefetch the dashboard page
+    if (!project || project?.fromTrace) return
+    router.prefetch(`/account?data=${project?.slug}&view=projects`)
+    router.prefetch(`/donate/${project?.slug}`)
+  }, [])
+
+  const projectPic = () => {
+    const isSVG = setImage(project?.image)
+    if (isSVG) return isSVG
+    else if (project.image) {
+      return (
+        <Image
+          src={project.image}
+          onError={ev =>
+            (ev.target.src =
+              'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
+          }
+          sx={{
+            objectFit: 'cover',
+            // objectPosition: '100% 25%',
+            width: '100vw',
+            margin: '0 5%',
+            height: '250px',
+            borderRadius: '10px'
+          }}
+        />
+      )
+    } else {
+      return (
+        <NoImage>
+          <Image
+            src='/images/no-image-available.jpg'
+            width={250}
+          />
+          <h2>No Image Available</h2>
+        </NoImage>
+      )
+    }
+  }
+
   return (
     <>
       <CancelledModal isOpen={isCancelled} />
       <Flex>
-        {setImage(project?.image) || (
-          <Image
-            src={project?.image ? project?.image : '/images/giveth_bg.jpg'}
-            onError={ev =>
-              (ev.target.src =
-                'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
-            }
-            sx={{
-              objectFit: 'cover',
-              // objectPosition: '100% 25%',
-              width: '100vw',
-              margin: '0 5%',
-              height: '250px',
-              borderRadius: '10px'
-            }}
-          />
-        )}
+        {projectPic()}
       </Flex>
       <Flex
         sx={{
@@ -223,19 +276,22 @@ const ProjectDonatorView = ({
                 {currentProjectView?.admin?.name && (
                   <Link
                     style={{ textDecoration: 'none' }}
-                    href={`/user/${currentProjectView.admin?.walletAddress}`}
+                    href={`/user/${currentProjectView?.admin?.walletAddress}`}
+                    passHref
                   >
-                    <Text
-                      sx={{
-                        fontSize: 4,
-                        fontFamily: 'body',
-                        fontWeight: 'body',
-                        color: 'primary',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {`by ${currentProjectView.admin.name}`}
-                    </Text>
+                    <a>
+                      <Text
+                        sx={{
+                          fontSize: 4,
+                          fontFamily: 'body',
+                          fontWeight: 'body',
+                          color: 'primary',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {`by ${currentProjectView?.admin?.name}`}
+                      </Text>
+                    </a>
                   </Link>
                 )}
 
@@ -291,9 +347,9 @@ const ProjectDonatorView = ({
           </Flex> */}
           <Flex
             sx={{
-              width: ['100%', null, '60%'],
-              alignItems: 'flex-start',
-              justifyContent: 'space-between',
+              // width: ['100%', '60%', '100%'],
+              // alignItems: 'flex-start',
+              // justifyContent: 'flex-start',
               height: '60px',
               mt: '20px'
             }}
@@ -301,7 +357,7 @@ const ProjectDonatorView = ({
             <Button
               variant='nofill'
               type='button'
-              sx={{ width: ['25%', '100%'] }}
+              sx={{ textAlign: 'left' }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('description')
@@ -320,43 +376,53 @@ const ProjectDonatorView = ({
                 Description
               </Text>
             </Button>
-            <Button
-              variant='nofill'
-              type='button'
-              sx={{ width: ['25%', '100%'] }}
-              onClick={e => {
-                e.preventDefault()
-                setCurrentTab('updates')
-              }}
-            >
-              <Text
-                sx={{
-                  color: '#303B72',
-                  paddingBottom: '0.5rem',
-                  borderBottomColor:
-                    currentTab === 'updates' ? '#C2449F' : null,
-                  borderBottomStyle: currentTab === 'updates' ? 'solid' : null
+            {!project?.fromTrace && (
+              <Button
+                variant='nofill'
+                type='button'
+                sx={{ textAlign: 'left' }}
+                onClick={e => {
+                  e.preventDefault()
+                  setCurrentTab('updates')
                 }}
               >
-                Updates
-                {currentProjectView?.updates ? (
-                  <Badge
-                    variant='blueDot'
-                    sx={{ ml: [-2, 2], textAlign: 'center' }}
-                  >
-                    <Text sx={{ color: 'white', mt: '-2px', fontSize: '15px' }}>
-                      {currentProjectView?.updates?.length}{' '}
-                    </Text>
-                  </Badge>
-                ) : (
-                  ''
-                )}
-              </Text>
-            </Button>
+                <Text
+                  sx={{
+                    color: '#303B72',
+                    paddingBottom: '0.5rem',
+                    borderBottomColor:
+                      currentTab === 'updates' ? '#C2449F' : null,
+                    borderBottomStyle: currentTab === 'updates' ? 'solid' : null
+                  }}
+                >
+                  Updates
+                  {currentProjectView?.updates ? (
+                    <Badge
+                      variant='blueDot'
+                      sx={{ ml: 2, textAlign: 'center' }}
+                    >
+                      <Text
+                        sx={{
+                          color: 'white',
+                          mt: '-2px',
+                          fontSize: '15px'
+                        }}
+                      >
+                        {currentProjectView?.updates?.length < 100
+                          ? currentProjectView?.updates?.length
+                          : '++'}
+                      </Text>
+                    </Badge>
+                  ) : (
+                    ''
+                  )}
+                </Text>
+              </Button>
+            )}
             <Button
               variant='nofill'
               type='button'
-              sx={{ width: ['25%', '100%'] }}
+              sx={{ textAlign: 'left' }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('donation')
@@ -372,11 +438,36 @@ const ProjectDonatorView = ({
                 }}
               >
                 Donations{' '}
-                {currentProjectView?.donations?.length > 0
+                {!isMobile &&
+                currentProjectView?.donations?.length > 0 &&
+                !project?.fromTrace
                   ? `( ${currentProjectView.donations.length} )`
                   : ''}
               </Text>
             </Button>
+            {(project?.fromTrace || project?.IOTraceable) && (
+              <Button
+                variant='nofill'
+                type='button'
+                sx={{ textAlign: 'left' }}
+                onClick={e => {
+                  e.preventDefault()
+                  setCurrentTab('traces')
+                }}
+              >
+                <Text
+                  sx={{
+                    color: '#303B72',
+                    paddingBottom: '0.5rem',
+                    borderBottomColor:
+                      currentTab === 'traces' ? '#C2449F' : null,
+                    borderBottomStyle: currentTab === 'traces' ? 'solid' : null
+                  }}
+                >
+                  Traces
+                </Text>
+              </Button>
+            )}
           </Flex>
           <Box sx={{ mt: '30px' }}>
             {currentTab === 'description' ? (
@@ -405,6 +496,10 @@ const ProjectDonatorView = ({
             ) : currentTab === 'updates' && !isSSR ? (
               <React.Suspense fallback={<div />}>
                 <UpdatesTab project={project} isOwner={isOwner} />
+              </React.Suspense>
+            ) : currentTab === 'traces' && !isSSR ? (
+              <React.Suspense fallback={<div />}>
+                <ProjectTraces project={project} />
               </React.Suspense>
             ) : (
               !isSSR && (
@@ -444,11 +539,64 @@ const ProjectDonatorView = ({
             onClick={() =>
               isOwner
                 ? router.push(`/account?data=${project?.slug}&view=projects`)
+                : project?.fromTrace
+                ? router.push(
+                    `https://trace.giveth.io/campaign/${project?.slug}`
+                  )
                 : router.push(`/donate/${project?.slug}`)
             }
           >
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
+
+          {isOwner && !(project?.verified ||
+            project?.IOTraceable ||
+            project?.fromTrace) && (
+            <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
+              <Text
+                sx={{
+                  cursor: 'pointer',
+                  alignSelf: 'center',
+                  textDecoration: 'underline'
+                }}
+              >
+                Verify your project
+              </Text>
+            </Link>
+          )}
+
+          {(project?.verified ||
+            project?.IOTraceable ||
+            project?.fromTrace) && (
+            <Flex
+              sx={{
+                // cursor: 'pointer',
+                alignSelf: 'center',
+                my: 2,
+                alignItems: 'center'
+              }}
+            >
+              <GoVerified color={theme.colors.blue} />
+              <Text sx={{ variant: 'text.default', ml: 2 }}>
+                {project?.fromTrace || project?.IOTraceable
+                  ? 'Traceable'
+                  : 'Verified'}
+              </Text>
+            </Flex>
+          )}
+          {/* {project?.listed === false && (
+            <Text
+              sx={{
+                variant: 'text.default',
+                color: 'red',
+                fontWeight: 'bold'
+              }}
+            >
+              {' '}
+              This project is unlisted{' '}
+            </Text>
+          )} */}
+          <Text></Text>
           <Flex
             sx={{
               flexDirection: ['row', 'column', 'row'],
@@ -459,8 +607,19 @@ const ProjectDonatorView = ({
               my: '20px'
             }}
           >
-            <Text>Givers: {totalGivers || 0}</Text>
-            <Text>Donations: {donations?.length || 0}</Text>
+            {!project?.fromTrace && (
+              <Text sx={{ variant: 'text.default' }}>
+                Givers: {totalGivers || 0}
+              </Text>
+            )}
+            <Text sx={{ variant: 'text.default' }}>
+              Donations:{' '}
+              {project?.fromTrace
+                ? project?.donationCounters?.reduce((a, b) => {
+                    return a + b?.donationCount
+                  }, 0)
+                : donations?.length || 0}
+            </Text>
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
             {project?.categories?.length > 0 &&
@@ -504,58 +663,62 @@ const ProjectDonatorView = ({
               </Text>
             </Link>
           </Flex> */}
-          <Flex
-            sx={{
-              mt: 2,
-              justifyContent: 'center',
-              textAlign: 'center',
-              alignItems: 'center',
-              width: '100%'
-            }}
-          >
-            <Flex sx={{ alignItems: 'center', mr: 3 }}>
-              <BsHeartFill
-                style={{ cursor: 'pointer' }}
-                size='18px'
-                color={hearted ? theme.colors.red : theme.colors.muted}
-                onClick={reactToProject}
-              />
-              {heartedCount && heartedCount > 0 ? (
-                <Text sx={{ variant: 'text.default', ml: 2 }}>
-                  {heartedCount}
-                </Text>
-              ) : null}
-            </Flex>
-            <Flex
-              sx={{
-                cursor: 'pointer',
-                alignItems: 'center'
-              }}
-              onClick={() => {
-                usePopup?.triggerPopup('share', {
-                  title: project?.title,
-                  description: project?.description,
-                  slug: project?.slug
-                })
-              }}
-            >
-              <FaShareAlt size={'12px'} color={theme.colors.secondary} />
-              <Text
+          {!project?.fromTrace && (
+            <>
+              <Flex
                 sx={{
-                  variant: 'text.medium',
-                  color: 'secondary',
-                  textDecoration: 'none',
-                  ml: '10px'
+                  mt: 2,
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  alignItems: 'center',
+                  width: '100%'
                 }}
               >
-                Share
-              </Text>
-            </Flex>
-          </Flex>
-          {ready && currentProjectView?.donations?.length === 0 && (
-            <Flex sx={{ mt: 4 }}>
-              <FirstGiveBadge />
-            </Flex>
+                <Flex sx={{ alignItems: 'center', mr: 3 }}>
+                  <BsHeartFill
+                    style={{ cursor: 'pointer' }}
+                    size='18px'
+                    color={hearted ? theme.colors.red : theme.colors.muted}
+                    onClick={reactToProject}
+                  />
+                  {heartedCount && heartedCount > 0 && (
+                    <Text sx={{ variant: 'text.default', ml: 2 }}>
+                      {heartedCount}
+                    </Text>
+                  )}
+                </Flex>
+                <Flex
+                  sx={{
+                    cursor: 'pointer',
+                    alignItems: 'center'
+                  }}
+                  onClick={() => {
+                    usePopup?.triggerPopup('share', {
+                      title: project?.title,
+                      description: project?.description,
+                      slug: project?.slug
+                    })
+                  }}
+                >
+                  <FaShareAlt size={'12px'} color={theme.colors.secondary} />
+                  <Text
+                    sx={{
+                      variant: 'text.medium',
+                      color: 'secondary',
+                      textDecoration: 'none',
+                      ml: '10px'
+                    }}
+                  >
+                    Share
+                  </Text>
+                </Flex>
+              </Flex>
+              {ready && currentProjectView?.donations?.length === 0 && (
+                <Flex sx={{ mt: 4 }}>
+                  <FirstGiveBadge />
+                </Flex>
+              )}
+            </>
           )}
         </FloatingDonateView>
       </Flex>

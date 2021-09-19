@@ -1,17 +1,18 @@
-import React from 'react'
-import Link from 'next/link'
-import { Button, Text } from 'theme-ui'
+import React from 'react';
+import { Button, Text } from 'theme-ui';
 
 export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
   <div
     css={{
       display: showModal ? 'flex' : 'none',
       position: 'absolute',
-      left: '25%',
-      top: '-30%',
+      left: '0',
+      top: '-50px',
+      right: '0',
+      maxWidth: '600px',
+      margin: '0 auto',
       padding: '10%',
       flexDirection: 'column',
-      width: '600px',
       backgroundColor: 'white',
       boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)',
       borderRadius: '2px'
@@ -58,7 +59,7 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
               {`${item}?`}
             </Text>
           </li>
-        )
+        );
       })}
     </ol>
     <Text
@@ -84,4 +85,4 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
       </a>
     </Text>
   </div>
-)
+);
