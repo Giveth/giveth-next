@@ -12,6 +12,12 @@ const mainnetTokens = {
   tokens: [
     {
       chainId: 1,
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    {
+      chainId: 1,
       address: '0xd56dac73a4d6766464b38ec6d91eb45ce7457c44',
       symbol: 'PAN',
       name: 'Panvala',
@@ -439,7 +445,7 @@ const mainnetTokens = {
     },
     {
       chainId: 1,
-      address: '0x960b236a07cf122663c4303350609a66a7b288c0',
+      address: '0xa117000000f279d81a1d3cc75430faa017fa5a2e',
       symbol: 'ANT',
       name: 'Aragon',
       decimals: 18
@@ -467,7 +473,7 @@ const mainnetTokens = {
     },
     {
       chainId: 1,
-      address: '0x1c83501478f1320977047008496dacbd60bb15ef',
+      address: '0xc666081073e8dff8d3d1c2292a29ae1a2153ec09',
       symbol: 'DGTX',
       name: 'Digitex Futures',
       decimals: 18
@@ -594,6 +600,12 @@ const ropstenTokens = {
   keywords: ['custom', 'erc20'],
   tokens: [
     {
+      chainId: 1,
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    {
       chainId: 3,
       address: '0xad6d458402f60fd3bd25163575031acdce07538d',
       symbol: 'DAI',
@@ -611,7 +623,8 @@ const ropstenTokens = {
       chainId: 3,
       address: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
       symbol: 'UNI',
-      name: 'UNI Ropsten'
+      name: 'UNI Ropsten',
+      decimals: 18
     }
   ]
 }
@@ -622,8 +635,15 @@ const xDaiTokens = {
   keywords: ['custom', 'erc20'],
   tokens: [
     {
+      chainId: 1,
+      name: 'XDAI',
+      symbol: 'XDAI',
+      decimals: 18
+    },
+    {
       chainId: 100,
       address: '0xc60e38C6352875c051B481Cbe79Dd0383AdB7817',
+      ethereumAddress: '0xda007777d86ac6d989cc9f79a73261b3fc5e0da0',
       symbol: 'XNODE',
       name: 'dAppNode on xDAI',
       decimals: 18
@@ -631,6 +651,7 @@ const xDaiTokens = {
     {
       chainId: 100,
       address: '0x981fb9ba94078a2275a8fc906898ea107b9462a8',
+      ethereumAddress: '0xd56dac73a4d6766464b38ec6d91eb45ce7457c44',
       symbol: 'PAN',
       name: 'Panvala',
       decimals: 18
@@ -646,64 +667,65 @@ const xDaiTokens = {
       chainId: 100,
       address: '0xb7D311E2Eb55F2f68a9440da38e7989210b9A05e',
       symbol: 'STAKE',
-      name: 'STAKE on xDai'
-      // decimals: 18
+      name: 'STAKE on xDai',
+      decimals: 18
     },
     {
       chainId: 100,
       address: '0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83',
       symbol: 'USDC',
-      name: 'USDC on xDai'
-      // decimals: 18
+      name: 'USDC on xDai',
+      decimals: 6
     },
     {
       chainId: 100,
       address: '0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1',
       symbol: 'WETH',
-      name: 'Wrapped Ether on xDai'
-      // decimals: 18
+      name: 'Wrapped Ether on xDai',
+      decimals: 18
     },
     {
       chainId: 100,
       address: '0xE2e73A1c69ecF83F464EFCE6A5be353a37cA09b2',
       symbol: 'LINK',
-      name: 'ChainLink Token on xDai'
-      // decimals: 18
+      name: 'ChainLink Token on xDai',
+      decimals: 18
     },
     {
       chainId: 100,
       address: '0x1e16aa4Df73d29C029d94CeDa3e3114EC191E25A',
       symbol: 'xMOON',
-      name: 'Moons on xDai'
-      // decimals: 18
+      name: 'Moons on xDai',
+      decimals: 18
     },
     {
       chainId: 100,
       address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
       symbol: 'WXDAI',
-      name: 'Wrapped XDAI'
-      // decimals: 18
+      name: 'Wrapped XDAI',
+      decimals: 18
     },
     {
       chainId: 100,
       address: '0x4ECaBa5870353805a9F068101A40E0f32ed605C6',
+      ethereumAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
       symbol: 'USDT',
-      name: 'Tether USD on xDai'
-      // decimals: 18
+      name: 'Tether USD on xDai',
+      decimals: 6
     },
     {
       chainId: 100,
       address: '0x8e5bBbb09Ed1ebdE8674Cda39A0c169401db4252',
       symbol: 'WBTC',
-      name: 'Wrapped BTC on xDai'
-      // decimals: 18
+      name: 'Wrapped BTC on xDai',
+      decimals: 8
     },
     {
       chainId: 100,
       address: '0x3a97704a1b25F08aa230ae53B352e2e72ef52843',
       symbol: 'AGVE',
-      name: 'Agave Token'
-      // decimals: 18
+      name: 'Agave Token',
+      decimals: 18
     }
   ]
 }
