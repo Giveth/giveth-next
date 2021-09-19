@@ -22,8 +22,7 @@ const SelectWithAutocomplete = ({
     { value: 'vanilla', label: 'Vanilla' }
   ]
 
-  const CustomOption = props => {
-    const { children, value, innerProps, isDisabled } = props
+  const CustomOption = ({ children, value, innerProps, isDisabled }) => {
     const [icon, setIcon] = useState(null)
     const StyledOption = styled.div`
       &:hover {
@@ -116,7 +115,7 @@ const SelectWithAutocomplete = ({
         }),
         menuList: provided => ({
           ...provided,
-          maxHeight: '150px'
+          maxHeight: '300px'
         }),
         control: () => ({
           // none of react-select's styles are passed to <Control />
