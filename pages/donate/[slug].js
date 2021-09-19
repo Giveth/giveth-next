@@ -19,13 +19,15 @@ const Donate = props => {
 
 export async function getServerSideProps (props) {
   const { query } = props
+  const slug = decodeURI(query?.slug).replace(/\s/g, '')
+
   let project,
     errors = null
   try {
     // Fetch Project
     const { loading, error, data: fetchProject } = await client.query({
       query: FETCH_PROJECT_BY_SLUG,
-      variables: { slug: query?.slug },
+      variables: { slug: slug },
       fetchPolicy: 'network-only'
     })
     project = fetchProject?.projectBySlug
@@ -37,7 +39,7 @@ export async function getServerSideProps (props) {
 
   // Try to fetch from TRACE
   const traceProject = await fetch(
-    `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?slug=${query?.slug}`
+    `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?slug=${slug}`
   ).then(async function (response) {
     if (response.status >= 400) {
       errors = new Error('Bad response from server')
