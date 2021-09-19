@@ -1,14 +1,14 @@
-import React from "react";
-import AccountIndex from "../src/components/account";
-import Seo from "../src/components/seo";
-import Layout from "../src/components/layout";
-const AccountPage = (props) => {
+import React from 'react'
+import AccountIndex from '../src/components/account'
+import Seo from '../src/components/seo'
+import Layout from '../src/components/layout'
+const AccountPage = props => {
   return (
     <Layout noHeader>
-      <Seo />
+      <Seo title='account' />
       <AccountIndex />
     </Layout>
-  );
-};
+  )
+}
 
-export default AccountPage;
+export default AccountPage

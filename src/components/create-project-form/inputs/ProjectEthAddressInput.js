@@ -146,7 +146,8 @@ export const ProjectEthAddressInput = ({
             mt: '100px',
             width: '180px',
             height: '52px',
-            borderRadius: '48px'
+            borderRadius: '48px',
+            cursor: 'pointer'
           }}
           type='submit'
         >
@@ -157,7 +158,6 @@ export const ProjectEthAddressInput = ({
               fontWeight: 'bold',
               fontSize: 2,
               letterSpacing: '4%',
-              cursor: 'pointer'
             }}
           >
             NEXT
