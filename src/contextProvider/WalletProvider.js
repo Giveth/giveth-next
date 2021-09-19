@@ -103,7 +103,7 @@ function WalletProvider(props) {
           type: 'warn'
         })
       } else {
-        refreshPage()
+        // refreshPage()
       }
     })
     EVENT_SETUP_DONE = true
@@ -368,6 +368,7 @@ function WalletProvider(props) {
     const signerTransaction = await signer.sendTransaction(transaction)
     return signerTransaction
   }
+
   async function sendTransaction(
     params,
     txCallbacks,
