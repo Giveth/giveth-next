@@ -4,6 +4,14 @@ import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import ERC20List from './erc20TokenList'
 import Web3 from 'web3'
 
+const xDaiChainId = 100
+const appNetworkId = process.env.NEXT_PUBLIC_NETWORK_ID
+
+export function checkNetwork(networkId) {
+  const isXdai = networkId === xDaiChainId
+  return networkId?.toString() === appNetworkId || isXdai;
+}
+
 export function titleCase(str) {
   //hot fix
   return str
