@@ -2,12 +2,20 @@ import { client } from '../../src/apollo/client'
 import ErrorPage from '../../src/components/errorPage'
 import DonationView from '../../src/components/donate'
 import Layout from '../../src/components/layout'
-
+import Seo from '../../src/components/seo'
 import { FETCH_PROJECT_BY_SLUG } from '../../src/apollo/gql/projects'
 
 const Donate = props => {
   return (
     <Layout asDialog>
+    <Seo
+      title={
+        props?.project?.title
+          ? `Donate to ${props?.project?.title}`
+          : "Donate to this project!"
+      }
+      image={props?.project?.image}
+    />
       {props?.error ? (
         <ErrorPage json={props.error} />
       ) : (
@@ -37,7 +45,7 @@ export async function getServerSideProps (props) {
     errors = JSON.stringify(e)
   }
 
-  // Try to fetch from TRACE
+  Try to fetch from TRACE
   const traceProject = await fetch(
     `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?slug=${slug}`
   ).then(async function (response) {
@@ -62,7 +70,9 @@ export async function getServerSideProps (props) {
 
   return {
     props: {
-      project: traceProject || project || null,
+      project:
+       traceProject ||
+       project || null,
       error: errors
     }
   }
