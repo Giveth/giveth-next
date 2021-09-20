@@ -45,7 +45,7 @@ export async function getServerSideProps (props) {
     errors = JSON.stringify(e)
   }
 
-  Try to fetch from TRACE
+  // Try to fetch from TRACE
   const traceProject = await fetch(
     `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?slug=${slug}`
   ).then(async function (response) {
