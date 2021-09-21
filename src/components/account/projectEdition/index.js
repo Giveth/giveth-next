@@ -8,16 +8,16 @@ import {
   Label,
   Text,
   Input,
-  Textarea
 } from 'theme-ui'
 import Web3 from 'web3'
 import { BiArrowBack } from 'react-icons/bi'
-import theme from '../../../utils/theme-ui/index'
+import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
+
+import theme from '../../../utils/theme-ui/index'
 import {
   GET_LINK_BANK_CREATION,
   EDIT_PROJECT,
-  GET_PROJECT_BY_ADDRESS,
   FETCH_PROJECT_BY_SLUG,
   WALLET_ADDRESS_IS_VALID
 } from '../../../apollo/gql/projects'
@@ -26,12 +26,12 @@ import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
-import { useWallet } from '../../../contextProvider/WalletProvider'
 import ImageSection from './imageSection'
-import styled from '@emotion/styled'
 import Toast from '../../toast'
+import { maxSelectedCategory } from '../../../utils/constants'
+
 // import dynamic from 'next/dynamic'
-import { getWallet } from '../../../wallets'
+// import { getWallet } from '../../../wallets'
 
 // const getWallet = dynamic(
 //   () => import('../../../wallets').then(md => md.getWallet),
@@ -39,9 +39,6 @@ import { getWallet } from '../../../wallets'
 //     ssr: false
 //   }
 // )
-
-let wallet = null
-let web3 = null
 
 const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
@@ -53,7 +50,6 @@ function ProjectEditionForm(props) {
   const {
     goBack,
     setCancelModal,
-    setShowModal,
     updateProject,
     project,
     client,
@@ -61,7 +57,6 @@ function ProjectEditionForm(props) {
     setMapLocation
   } = props
 
-  const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState(null)
   const [desc, setDesc] = useState('')
   const [isActive, setIsActive] = useState(null)
@@ -113,7 +108,6 @@ function ProjectEditionForm(props) {
 
   return (
     <>
-      {loading && <LoadingModal isOpen={loading} />}
       <Flex sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <Flex sx={{ alignItems: 'center' }}>
           <BiArrowBack
@@ -200,18 +194,7 @@ function ProjectEditionForm(props) {
               title='Project Description'
               htmlFor='editDescription'
             />
-            {/* <Textarea
-              sx={{
-                resize: 'none',
-                fontFamily: 'body',
-                color: 'secondary'
-              }}
-              id='editDescription'
-              name='editDescription'
-              defaultValue={project?.description}
-              ref={register}
-              rows={12}
-            /> */}
+
             {!isSSR && (
               <React.Suspense fallback={<div />}>
                 <RichTextInput
@@ -415,8 +398,6 @@ function ProjectEdition(props) {
   const [showCancelModal, setCancelModal] = useState(false)
   const [mapLocation, setMapLocation] = useState(null)
 
-  const { wallet } = useWallet()
-
   const { data: fetchedProject, loadingProject } = useQuery(
     FETCH_PROJECT_BY_SLUG,
     {
@@ -425,21 +406,15 @@ function ProjectEdition(props) {
   )
 
   useEffect(() => {
-    web3 = wallet.web3
-  }, [])
-
-  useEffect(() => {
-      if (fetchedProject?.projectBySlug) {
-        setProject(fetchedProject.projectBySlug)
-        setMapLocation(fetchedProject.projectBySlug.impactLocation)
-      }
-    },
-    [fetchedProject]
-  )
+    if (fetchedProject?.projectBySlug) {
+      setProject(fetchedProject.projectBySlug)
+      setMapLocation(fetchedProject.projectBySlug.impactLocation)
+    }
+  }, [fetchedProject])
 
   useEffect(() => {
     window?.google && window.initMap(setMapLocation)
-  })
+  }, [])
 
   useEffect(() => {
     if (project && updateProjectOnServer) {
@@ -509,6 +484,12 @@ function ProjectEdition(props) {
           projectCategories.push(categoryList[category].name)
         }
       }
+
+      if (projectCategories.length > maxSelectedCategory)
+        return Toast({
+          content: `Please select no more than ${maxSelectedCategory} categories`,
+          type: 'error'
+        })
 
       const projectData = {
         title: data.editTitle || project?.title,
