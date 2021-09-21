@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import {
   Box,
   Heading,
@@ -7,25 +6,22 @@ import {
   Button,
   Spinner,
   Progress,
-  Link,
   Text
 } from 'theme-ui'
-import _ from 'lodash'
 import { useRouter } from 'next/router'
-import {
-  GET_PROJECT_BY_ADDRESS,
-  WALLET_ADDRESS_IS_VALID
-} from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/client'
-import { getProjectWallet } from './utils'
-import { useWallet } from '../../contextProvider/WalletProvider'
-import { PopupContext } from '../../contextProvider/popupProvider'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 
 import {
+  GET_PROJECT_BY_ADDRESS,
+  WALLET_ADDRESS_IS_VALID
+} from '../../apollo/gql/projects'
+import { getProjectWallet } from './utils'
+import { useWallet } from '../../contextProvider/WalletProvider'
+import { PopupContext } from '../../contextProvider/popupProvider'
+import {
   ProjectNameInput,
-  ProjectAdminInput,
   ProjectDescriptionInput,
   ProjectCategoryInput,
   ProjectImpactLocationInput,
@@ -36,6 +32,8 @@ import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
+import { maxSelectedCategory } from "../../utils/constants";
+
 
 const CreateProjectForm = props => {
   const router = useRouter()
@@ -46,12 +44,12 @@ const CreateProjectForm = props => {
   const [flashMessage, setFlashMessage] = useState('')
   const [formData, setFormData] = useState({})
   const { register, handleSubmit, setValue } = useForm({
-    defaultValues: React.useMemo(() => {
+    defaultValues: useMemo(() => {
       return formData
     }, [formData])
   })
   const [walletUsed, setWalletUsed] = useState(false)
-  const usePopup = React.useContext(PopupContext)
+  const usePopup = useContext(PopupContext)
   const client = useApolloClient()
 
   const [currentStep, setCurrentStep] = useState(0)
@@ -158,12 +156,13 @@ const CreateProjectForm = props => {
         let maxFiveCategories = Object.entries(data)?.filter(i => {
           return i[1] === true
         })
-        if (maxFiveCategories?.length > 5) {
+
+        if (maxFiveCategories.length > maxSelectedCategory)
           return Toast({
-            content: `Please select no more than 5 categories`,
+            content: `Please select no more than ${maxSelectedCategory} categories`,
             type: 'error'
           })
-        }
+
         project = {
           ...formData,
           projectCategory: {
