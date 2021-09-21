@@ -51,7 +51,7 @@ export async function getServerSideProps (props) {
   try {
     const { loading, error, data: fetchProject } = await client.query({
       query: FETCH_ALL_PROJECTS,
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'no-cache'
     })
     projects = Array.from(fetchProject?.projects).filter(
       i => i?.status?.id === '5'

@@ -149,8 +149,7 @@ const ProjectCard = props => {
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
   const strUserId = user?.id?.toString()
-  const initUserHearted =
-    project?.reactions?.filter(o => o.userId === strUserId).length > 0
+  const initUserHearted =project?.reactions?.find(r => r?.userId === user?.id)
   const [hearted, setHearted] = useState(initUserHearted)
   const [heartedByUser, setHeartedByUser] = useState(null)
   const [heartedCount, setHeartedCount] = useState(null)
@@ -179,7 +178,7 @@ const ProjectCard = props => {
   }
 
   useEffect(() => {
-    setHeartedCount(project?.totalHearts)
+    setHeartedCount(project?.reactions?.length)
     setHeartedByUser(project?.reactions?.find(r => r.userId === user?.id))
   }, [project])
 

@@ -234,7 +234,8 @@ const ProjectsList = props => {
       return b.totalDonations - a.totalDonations
     },
     function hearts (a, b) {
-      return b.totalHearts - a.totalHearts
+      // return b.totalHearts - a.totalHearts
+      return b.reactions.length - a.reactions.length()
     },
     function recentlyAdded (a, b) {
       return (
