@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react'
 import fetch from 'isomorphic-fetch'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { Button, Flex, Label, Text } from 'theme-ui'
+import {Button, Flex, Label, Text} from 'theme-ui'
 import QRCode from 'qrcode.react'
-import { BsCaretDownFill } from 'react-icons/bs'
-import { ethers } from "ethers";
+import {BsCaretDownFill} from 'react-icons/bs'
+import {ethers} from "ethers";
 
 import Modal from '../modal'
-import { ensRegex, getERC20List, checkNetwork } from '../../utils'
+import {checkNetwork, ensRegex, getERC20List, pollEvery} from '../../utils'
 import useComponentVisible from '../../utils/useComponentVisible'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
@@ -18,15 +18,15 @@ import theme from '../../utils/theme-ui'
 import tokenAbi from 'human-standard-token-abi'
 import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
-import { toast } from 'react-toastify'
+import {toast} from 'react-toastify'
 import * as transaction from '../../services/transaction'
-import { saveDonation, saveDonationTransaction } from '../../services/donation'
+import {saveDonation, saveDonationTransaction} from '../../services/donation'
 import InProgressModal from './inProgressModal'
 import UnconfirmedModal from './unconfirmedModal'
-import { Context as Web3Context } from "../../contextProvider/Web3Provider";
-import { PopupContext } from '../../contextProvider/popupProvider'
+import {Context as Web3Context} from "../../contextProvider/Web3Provider";
+import {PopupContext} from '../../contextProvider/popupProvider'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
-import { useWallet } from "../../contextProvider/WalletProvider";
+import {useWallet} from "../../contextProvider/WalletProvider";
 
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
@@ -36,9 +36,10 @@ const Select = dynamic(() => import('../selectWithAutocomplete'), {
 
 const xdaiChain = { id: 100, name: 'xdai', mainToken: 'XDAI' }
 const ethereumChain = { id: 1, name: 'ethereum', mainToken: 'ETH' }
-const xdaiExcluded = ['PAN', 'XNODE', 'USDT']
+const xdaiExcluded = ['PAN', 'XNODE', 'USDT', 'CRV']
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT']
 const GIVETH_DONATION_AMOUNT = 5
+const POLL_DELAY_TOKENS = 2000
 
 const Content = styled.div`
   max-width: 41.25rem;
@@ -133,7 +134,7 @@ const SaveGasMessage = styled(Flex)`
 const OnlyCrypto = props => {
   const {
     state: { validProvider, balance, web3, account, isEnabled, networkId, provider },
-    actions: { switchWallet, enableProvider, initOnBoard }
+    actions: { switchWallet, enableProvider, initOnBoard, switchToXdai }
   } = useContext(Web3Context);
 
   const { sendTransaction, isLoggedIn } = useWallet()
@@ -147,6 +148,8 @@ const OnlyCrypto = props => {
   } = useComponentVisible(false)
 
   const { triggerPopup } = usePopup
+
+  const stopPolling = useRef();
 
   const { project } = props
   const [selectedToken, setSelectedToken] = useState({})
@@ -188,18 +191,9 @@ const OnlyCrypto = props => {
   }, [networkId])
 
   useEffect(() => {
-    const setBalance = async () => {
-      // Main tokens doesn't have address
-      if (selectedToken.address) {
-        const instance = new web3.eth.Contract(tokenAbi, selectedToken.address)
-        const _balance = await instance.methods.balanceOf(account).call() / 10 ** selectedToken.decimals
-        setSelectedTokenBalance(_balance)
-      } else {
-        setSelectedTokenBalance(balance)
-      }
-    }
+    if (isEnabled) pollToken()
 
-    if (isEnabled) setBalance().then()
+    return () => clearPoll()
   }, [selectedToken, isEnabled, account, networkId, balance])
 
   useEffect(() => {
@@ -244,6 +238,41 @@ const OnlyCrypto = props => {
       setIcon(`/assets/cryptocurrency-icons/32/color/eth.png`)
     }
   }, [tokenSymbol])
+
+  const clearPoll = () => {
+    if (stopPolling.current) {
+      stopPolling.current()
+      stopPolling.current = undefined
+    }
+  }
+
+  const pollToken = useCallback(() => {
+    clearPoll()
+
+    // Native token balance is provided by the Web3Provider
+    if (!selectedToken.address) {
+      return setSelectedTokenBalance(balance)
+    }
+
+    stopPolling.current = pollEvery(
+      () => ({
+        request: async () => {
+          try {
+            const instance = new web3.eth.Contract(tokenAbi, selectedToken.address)
+            return await instance.methods.balanceOf(account).call() / 10 ** selectedToken.decimals
+          } catch (e) {
+            return 0;
+          }
+        },
+        onResult: _balance => {
+          if (_balance !== undefined && (!selectedTokenBalance || selectedTokenBalance !== _balance)) {
+            setSelectedTokenBalance(_balance)
+          }
+        },
+      }),
+      POLL_DELAY_TOKENS,
+    )();
+  }, [account, networkId, tokenSymbol, balance]);
 
   const fetchPrices = (chain, tokenAddress) => {
     return fetch(
@@ -653,6 +682,7 @@ const OnlyCrypto = props => {
                 {tokenSymbol}
               </Text>
             </Flex>
+
             <OpenAmount>
               {isComponentVisible && (
                 <Flex
@@ -851,18 +881,18 @@ const OnlyCrypto = props => {
                 >
                   Save on gas fees, switch to xDAI network.
                 </Text>
-                {/*<Text*/}
-                {/*  onClick={switchEthChain}*/}
-                {/*  sx={{*/}
-                {/*    cursor: 'pointer',*/}
-                {/*    variant: 'text.medium',*/}
-                {/*    textAlign: 'left',*/}
-                {/*    color: 'yellow',*/}
-                {/*    marginLeft: '12px'*/}
-                {/*  }}*/}
-                {/*>*/}
-                {/*  Switch network*/}
-                {/*</Text>*/}
+                <Text
+                  onClick={switchToXdai}
+                  sx={{
+                    cursor: 'pointer',
+                    variant: 'text.medium',
+                    textAlign: 'left',
+                    color: 'yellow',
+                    marginLeft: '12px'
+                  }}
+                >
+                  Switch network
+                </Text>
               </SaveGasMessage>
             )}
           </>
