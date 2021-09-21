@@ -39,7 +39,7 @@ const ethereumChain = { id: 1, name: 'ethereum', mainToken: 'ETH' }
 const xdaiExcluded = ['PAN', 'XNODE', 'USDT', 'CRV']
 const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT']
 const GIVETH_DONATION_AMOUNT = 5
-const POLL_DELAY_TOKENS = 2000
+const POLL_DELAY_TOKENS = 5000
 
 const Content = styled.div`
   max-width: 41.25rem;
