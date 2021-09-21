@@ -70,7 +70,6 @@ const Web3Provider = props => {
         wallet: wallet => {
           window.localStorage.setItem('selectedWallet', wallet.name);
           const _web3 = new Web3(wallet.provider);
-          _web3[wallet.name] = true;
           setValidProvider(!!wallet.provider);
           setWeb3(_web3);
           setProvider(wallet.provider);
@@ -99,6 +98,21 @@ const Web3Provider = props => {
     onboard.walletSelect().then(selected => selected && onboard.walletCheck().then());
   };
 
+  const switchToXdai = () => {
+    window?.ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [
+        {
+          chainId: '0x64',
+          chainName: 'xDai',
+          nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
+          rpcUrls: ['https://rpc.xdaichain.com/'],
+          blockExplorerUrls: ['https://blockscout.com/xdai/mainnet']
+        }
+      ]
+    })
+  };
+
   const enableProvider = () => {
     if (validProvider) onboard.walletCheck().then();
   };
@@ -123,6 +137,7 @@ const Web3Provider = props => {
         },
         actions: {
           switchWallet,
+          switchToXdai,
           enableProvider,
           initOnBoard
         }
