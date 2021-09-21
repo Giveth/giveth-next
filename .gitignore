@@ -34,3 +34,6 @@ yarn-error.log*
 
 .cache
 .env*
+
+# Webstorm config
+.idea
