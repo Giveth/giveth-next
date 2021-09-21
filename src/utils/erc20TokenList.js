@@ -635,9 +635,17 @@ const xDaiTokens = {
   keywords: ['custom', 'erc20'],
   tokens: [
     {
-      chainId: 1,
+      chainId: 100,
       name: 'XDAI',
       symbol: 'XDAI',
+      decimals: 18
+    },
+    {
+      chainId: 100,
+      address: '0x1337BedC9D22ecbe766dF105c9623922A27963EC',
+      ethereumAddress: '0xD533a949740bb3306d119CC777fa900bA034cd52',
+      symbol: 'CRV',
+      name: 'Curve DAO Token',
       decimals: 18
     },
     {
