@@ -131,6 +131,9 @@ const Categories = ({ categories }) => {
 const ProjectListing = props => {
   const router = useRouter()
   const [hoverStyle, setHoverStyle] = React.useState(false)
+
+  const image = props.image || '/images/no-image-available.jpg'
+
   return (
     <Box
       key={props.listingId + '_box'}
@@ -175,7 +178,7 @@ const ProjectListing = props => {
         >
           {/* need to add options from the gallery. */}
           <div key={props.listingId + '_div'}>
-            {/^\d+$/.test(props.image) ? (
+            {/^\d+$/.test(image) ? (
               <div
                 style={{
                   width: '100%',
@@ -183,7 +186,7 @@ const ProjectListing = props => {
                   margin: '0 auto',
                   cursor: 'pointer',
                   borderRadius: '12px 12px 0px 0px',
-                  backgroundImage: `url('/assets/create/projectImageGallery${props.image.toString()}.svg')`,
+                  backgroundImage: `url('/assets/create/projectImageGallery${image.toString()}.svg')`,
                   backgroundColor: '#cccccc',
                   backgroundSize: 'cover',
                   backgroundRepeat: 'no-repeat',
@@ -205,7 +208,7 @@ const ProjectListing = props => {
                 }}
               >
                 <StyledImage
-                  src={props.image}
+                  src={image}
                   layout='fill'
                   priority={true}
                   quality={40}

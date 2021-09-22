@@ -191,7 +191,7 @@ const DonateIndex = props => {
             style={LEFT_BOX_STYLE}
           />
         </Options>
-        <ShowPaymentOption />
+        {ShowPaymentOption()}
       </>
     )
   }
@@ -306,7 +306,7 @@ const DonateIndex = props => {
         <ShareIcons message="Can't donate? Share this page instead." centered />
       </ProjectContainer>
       <Payment>
-        <PaymentOptions />
+        {PaymentOptions()}
       </Payment>
     </Container>
   )
