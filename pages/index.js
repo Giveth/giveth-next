@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as matter from 'gray-matter'
 import { client } from '../src/apollo/client'
-import { useEffect, useState } from 'react'
 import GivethContent from '../src/content/giveth.md'
 import Layout from '../src/components/layout'
 import Seo from '../src/components/seo'
@@ -15,7 +14,7 @@ import { PopupContext } from '../src/contextProvider/popupProvider'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
 
 import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
-import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
+// import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 import Ceramic from '@ceramicnetwork/http-client'
 import { IDX } from '@ceramicstudio/idx'
 import KeyDidResolver from 'key-did-resolver'
@@ -48,11 +47,9 @@ const IndexContent = ({
 }) => {
   const popup = React.useContext(PopupContext)
   // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
-  const [popupShown, setPopupShown] = useState(false)
   useEffect(() => {
     if (isWelcome) {
       popup.triggerPopup('WelcomeLoggedOut')
-      setPopupShown(true)
     }
   }, [])
 
@@ -131,7 +128,7 @@ const IndexPage = props => {
 }
 
 export async function getServerSideProps (props) {
-  const { loading, error = null, data: response } = await client.query({
+  const { data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
     variables: { limit: 20 }
   })
@@ -146,7 +143,7 @@ export async function getServerSideProps (props) {
   return {
     props: {
       topProjects: response?.projects
-        ?.filter(i => !!i?.verified)
+        ?.filter(i => !i?.verified)
         ?.sort((a, b) => {
           console.log({ a, b })
           if (a?.totalHearts > b?.totalHearts) return -1
