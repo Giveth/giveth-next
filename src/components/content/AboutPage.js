@@ -64,7 +64,8 @@ const AboutPage = ({ about, team }) => {
       <Seo title='About us' />
       <Flex>
         <Image
-          src={'/images/giveth-team-image.png'}
+          src='/images/giveth-team-image.jpg'
+          alt='giveth team image'
           sx={{
             objectFit: 'cover',
             objectPosition: 'top',
