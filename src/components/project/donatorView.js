@@ -3,10 +3,8 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
-import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-// import RichTextViewer from '../richTextViewer'
 
 import CancelledModal from './cancelledModal'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
@@ -20,11 +18,13 @@ import { ImLocation } from 'react-icons/im'
 import { BsHeartFill } from 'react-icons/bs'
 
 import Link from 'next/link'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { TOGGLE_PROJECT_REACTION } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
+
+// import RichTextViewer from '../richTextViewer'
 
 import { useWallet } from '../../contextProvider/WalletProvider'
 
@@ -72,15 +72,12 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
-  console.log({ project })
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const router = useRouter()
   const { user } = useWallet()
   const [ready, setReady] = useState(false)
   const [currentTab, setCurrentTab] = useState('description')
-  const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)
-  const [totalReactions, setTotalReactions] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
   const [isCancelled, setIsCancelled] = useState(null)
   const usePopup = React.useContext(PopupContext)
@@ -89,7 +86,6 @@ const ProjectDonatorView = ({
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
-  const reactions = totalReactions || project?.reactions
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
@@ -128,7 +124,6 @@ const ProjectDonatorView = ({
           (prev, current) => prev + current?.amount,
           0
         )
-        setTotalReactions(projectReactions)
         setHeartedCount(projectReactions?.length || project?.totalHearts)
         setHearted(projectReactions?.find(o => o.userId === user?.id))
 
