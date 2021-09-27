@@ -1,6 +1,5 @@
-import Link from 'next/link'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Heading, Text, jsx } from 'theme-ui'
+import { Grid, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 
 const HeroSection = styled(Grid)`
@@ -65,7 +64,7 @@ const Hero = () => {
         </Text>
       </HeroText>
       {isMobile ? null : (
-        <HeroImage src={'../../images/people-highfive.svg'} alt='' />
+        <HeroImage src='/images/people-highfive.svg' alt='' />
       )}
     </HeroSection>
   )
