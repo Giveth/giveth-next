@@ -181,6 +181,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
           <img
             src="/images/svg/general/decorators/dark-clouds.svg"
             style={{ position: "absolute", top: "41px", right: "42px" }}
+            alt='dark clouds img'
           />
           <Box
             sx={{

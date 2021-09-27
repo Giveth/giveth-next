@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import { Heading, Grid, Button, Card, Text } from 'theme-ui'
-import Link from 'next/link'
 import styled from '@emotion/styled'
 import Modal from 'react-modal'
 
 import theme from '../../utils/theme-ui/index'
-import { render } from 'react-dom'
 
 const CardContainer = styled(Card)`
   background-color: ${theme.colors.backgroundGray};

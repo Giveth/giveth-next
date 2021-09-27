@@ -13,6 +13,11 @@ import {
 } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import Jdenticon from 'react-jdenticon'
+import styled from '@emotion/styled'
+import { useApolloClient } from '@apollo/client'
+
 import ConfirmationModal from '../../confirmationModal'
 import { GET_USER } from '../../../apollo/gql/auth'
 import {
@@ -20,16 +25,8 @@ import {
   EDIT_PROJECT_UPDATE,
   DELETE_PROJECT_UPDATE
 } from '../../../apollo/gql/projects'
-import localizedFormat from 'dayjs/plugin/localizedFormat'
-import { useApolloClient } from '@apollo/client'
 import Toast from '../../../components/toast'
-import styled from '@emotion/styled'
-
 import theme from '../../../utils/theme-ui'
-
-import Jdenticon from 'react-jdenticon'
-import iconShare from '../../../images/icon-share.svg'
-import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 
 // import RichTextViewer from '../../richTextViewer'
@@ -79,7 +76,7 @@ const CardFooter = styled.span`
   align-items: center;
   justify-content: space-between;
   margin: -0.5rem 0 0.5rem 0;
-  padding: 0rem 1rem;
+  padding: 0 1rem;
 `
 const Top = styled(Flex)`
   padding: 0.5rem 0 1rem 0;
@@ -476,7 +473,7 @@ const TimelineCard = props => {
           <div>
             <IconButton onClick={react} sx={{ cursor: 'pointer' }}>
               <img
-                src={'/images/icon-heart.svg'}
+                src='/images/icon-heart.svg'
                 alt=''
                 style={{
                   '-webkit-filter': likedByUser

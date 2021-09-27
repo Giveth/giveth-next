@@ -1,4 +1,4 @@
-import { jsx, Flex, Grid, Text } from 'theme-ui'
+import { Grid, Text } from 'theme-ui'
 import { fetchEntries } from '../src/utils/contentfulPosts'
 import Layout from '../src/components/layout'
 import Seo from '../src/components/seo'
