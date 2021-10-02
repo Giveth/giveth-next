@@ -3,114 +3,15 @@ import Image from 'next/image';
 import { Box, Grid, Text, Flex } from 'theme-ui';
 import { useMediaQuery } from 'react-responsive';
 import styled from '@emotion/styled';
-import theme from '../utils/theme-ui';
-
-// import graphics
-import SocialNetworks from './content/SocialNetworks';
-
 import { FiExternalLink } from 'react-icons/fi';
-
-const Container = styled(Box)`
-  padding: 10px;
-  margin: 0 auto;
-  max-width: 1440px;
-  @media (max-width: 850px) {
-    background-color: ${theme.colors.lightestBlue};
-  }
-`;
-
-const FooterLink = styled.a`
-  font-family: ${theme.fonts.heading}, sans-serif;
-  color: ${theme.colors.bodyDark};
-  :hover {
-    color: ${theme.colors.accent};
-  }
-`;
-
-const FooterExternalLink = styled.a`
-  font-family: ${theme.fonts.heading}, sans-serif;
-  color: ${theme.colors.bodyDark};
-  cursor: pointer;
-  :hover {
-    color: ${theme.colors.accent};
-  }
-`;
-
-const ExtIcon = styled(FiExternalLink)`
-  size: 16px;
-  @media (max-width: 850px) {
-    size: 8px;
-  }
-`;
-
-const InnerGrid = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const LinkBox = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  width: 150px;
-  line-height: 2;
-  @media (max-width: 400px) {
-    font-size: 10px;
-  }
-`;
-
-const DonateSection = styled(Flex)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-
-  @media (max-width: 850px) {
-    margin-top: 5px;
-  }
-`;
-
-const CreditsSection = styled(Grid)`
-  padding: 40px 0;
-`;
+import theme from '../utils/theme-ui';
+import SocialNetworks from './content/SocialNetworks';
 
 const Footer = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 800px)' });
   function romanize(num) {
     if (!+num) return false;
-    const digits = String(+num).split(''),
-      key = [
-        '',
-        'C',
-        'CC',
-        'CCC',
-        'CD',
-        'D',
-        'DC',
-        'DCC',
-        'DCCC',
-        'CM',
-        '',
-        'X',
-        'XX',
-        'XXX',
-        'XL',
-        'L',
-        'LX',
-        'LXX',
-        'LXXX',
-        'XC',
-        '',
-        'I',
-        'II',
-        'III',
-        'IV',
-        'V',
-        'VI',
-        'VII',
-        'VIII',
-        'IX'
-      ];
-    
+    const digits = String(+num).split('')
     let roman = '',
       i = 3;
     while (i--) roman = (key[+digits.pop() + i * 10] || '') + roman;
@@ -128,17 +29,19 @@ const Footer = () => {
       <InnerGrid>
         {!isMobile && (
           <Link style={{ marginRight: '10px' }} href='/'>
-            <Image
-              src={'/images/giveth-logo-blue.svg'}
-              width='40px'
-              height='40px'
-            />
+            <a>
+              <Image
+                src='/images/giveth-logo-blue.svg'
+                width='40px'
+                height='40px'
+                alt='giveth-logo-blue'
+              />
+            </a>
           </Link>
         )}
-          
+
         <LinkBox>
           <FooterLink href='/'>Home</FooterLink>
-          {/* <FooterLink href='/causes'>Causes</FooterLink> */}
           <FooterLink href='/projects'>Projects</FooterLink>
           <FooterLink href='/about'>About Us</FooterLink>
           <FooterLink href='/faq'>FAQ</FooterLink>
@@ -232,5 +135,101 @@ const Footer = () => {
     </Container>
   );
 };
+
+const key = [
+  '',
+  'C',
+  'CC',
+  'CCC',
+  'CD',
+  'D',
+  'DC',
+  'DCC',
+  'DCCC',
+  'CM',
+  '',
+  'X',
+  'XX',
+  'XXX',
+  'XL',
+  'L',
+  'LX',
+  'LXX',
+  'LXXX',
+  'XC',
+  '',
+  'I',
+  'II',
+  'III',
+  'IV',
+  'V',
+  'VI',
+  'VII',
+  'VIII',
+  'IX'
+];
+
+const Container = styled(Box)`
+  padding: 10px;
+  margin: 0 auto;
+  max-width: 1440px;
+  @media (max-width: 850px) {
+    background-color: ${theme.colors.lightestBlue};
+  }
+`;
+
+const FooterLink = styled.a`
+  font-family: ${theme.fonts.heading}, sans-serif;
+  color: ${theme.colors.bodyDark};
+  :hover {
+    color: ${theme.colors.accent};
+  }
+`;
+
+const FooterExternalLink = styled.a`
+  font-family: ${theme.fonts.heading}, sans-serif;
+  color: ${theme.colors.bodyDark};
+  cursor: pointer;
+  :hover {
+    color: ${theme.colors.accent};
+  }
+`;
+
+const ExtIcon = styled(FiExternalLink)`
+  size: 16px;
+  @media (max-width: 850px) {
+    size: 8px;
+  }
+`;
+
+const InnerGrid = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const LinkBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  line-height: 2;
+  @media (max-width: 400px) {
+    font-size: 10px;
+  }
+`;
+
+const DonateSection = styled(Flex)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+
+  @media (max-width: 850px) {
+    margin-top: 5px;
+  }
+`;
+
+const CreditsSection = styled(Grid)`
+  padding: 40px 0;
+`;
 
 export default Footer;
