@@ -591,7 +591,6 @@ const ProjectDonatorView = ({
               This project is unlisted{' '}
             </Text>
           )} */}
-          <Text></Text>
           <Flex
             sx={{
               flexDirection: ['row', 'column', 'row'],
@@ -717,15 +716,15 @@ const ProjectDonatorView = ({
           )}
         </FloatingDonateView>
       </Flex>
-      {showMap ? (
+      {showMap && (
         <iframe
           width='100%'
           height='600'
           src='https://explorer.land/embed/project/balam1'
-          frameborder='0'
-          allowfullscreen
-        ></iframe>
-      ) : null}
+          frameBorder='0'
+          allowFullScreen
+        />
+      )}
       {/* <pre>{JSON.stringify(pageContext, null, 2)}</pre> */}
     </>
   )

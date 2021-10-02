@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { Box, Button, Image, Flex, Text } from 'theme-ui'
-import styled from '@emotion/styled'
+import React from 'react'
+import { Button, Image, Flex, Text } from 'theme-ui'
 import Modal from './modal'
 import Link from 'next/link'
 import { useWallet } from '../contextProvider/WalletProvider'
@@ -42,6 +41,7 @@ function ChangeNetworkPopup({ close }) {
       <Image
         src={'/images/decorator-exclamation.png'}
         style={{ alignSelf: 'center' }}
+        alt='decorator-exclamation img'
       />
       <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
         <Text color='secondary' variant='headings.h4' sx={{ mx: 4, pt: 4 }}>
@@ -76,6 +76,7 @@ function ChangeNetworkPopup({ close }) {
       <Image
         src={'/images/worried_woman.png'}
         style={{ position: 'absolute', left: -4, bottom: 0 }}
+        alt='worried woman img'
       />
     </Flex>
   )
@@ -122,22 +123,18 @@ function IncompleteProfilePopup({ close }) {
         e-mail before proceeding
       </Text>
       <Link href='/account'>
-        <Button
-          mt={4}
-          sx={{
-            width: '290px',
-            variant: 'buttons.default',
-            backgroundColor: 'secondary'
-          }}
-          onClick={() => {
-            try {
-            } catch (error) {
-              console.log({ error })
-            }
-          }}
-        >
-          COMPLETE PROFILE
-        </Button>
+        <a>
+          <Button
+            mt={4}
+            sx={{
+              width: '290px',
+              variant: 'buttons.default',
+              backgroundColor: 'secondary'
+            }}
+          >
+            COMPLETE PROFILE
+          </Button>
+        </a>
       </Link>
       <Text
         sx={{
@@ -232,7 +229,7 @@ function InsufficientFundsPopup({ close }) {
 function SharePopup() {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
-  const { title, description, slug } = value?.extra
+  const { description, slug } = value?.extra
   const shareTitle = `Check out on @Givethio`
   const url = `${window.location.origin}/project/${slug}`
 
