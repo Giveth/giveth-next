@@ -1,49 +1,29 @@
 import React from 'react'
 import Image from 'next/image'
-import { Grid, Box, Heading, Text, jsx } from 'theme-ui'
+import { Grid, Box, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import { useMediaQuery } from 'react-responsive'
-// import { useMediumFeed } from './MediumFeed'
-import MailchimpSignup from './MailchimpSignup'
-
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
+import MailchimpSignup from './MailchimpSignup'
 
 dayjs.extend(localizedFormat)
 
-// apply style to elements
-const Main = styled(Grid)`
-  position: relative;
-`
-const Container = styled(Box)`
-  margin: 0 auto;
-  max-width: 1440px;
-`
-
 const UpdatesSection = ({ mediumPosts }) => {
-  // import Object containing the last two Medium Posts with a hook
-  // const mediumPosts = useMediumFeed()
-
-  // use Media Query to check device width
-  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
-  // return null
   return (
     <React.Fragment>
-      {isMobile ? null : (
-        <div
-          className='semitransparent'
-          style={{
-            float: 'right',
-            translate: '-30px 150px'
-          }}
-        >
-          <Image
-            src='/images/decorator-elements.svg'
-            width='100%'
-            height='100%'
-          />
-        </div>
-      )}
+      <div
+        style={{
+          position: 'absolute',
+          right: '10px',
+        }}
+      >
+        <Image
+          src='/images/decorator-elements.svg'
+          width='100%'
+          height='100%'
+          alt='decorator elements'
+        />
+      </div>
       <Container p={[2, 3, 5]} sx={{ position: 'relative' }}>
         <Main>
           <Heading sx={{ variant: 'headings.h3' }}>
@@ -62,34 +42,17 @@ const UpdatesSection = ({ mediumPosts }) => {
              * Map medium content nodes from node Object and destructure to variables
              * */}
             {mediumPosts?.map(node => {
-              // const {
-              //   id,
-              //   title,
-              //   previewContent,
-              //   author,
-              //   createdAt,
-              //   virtuals,
-              //   uniqueSlug
-              // } = node
-              // const published = new Date(createdAt.toString())
-
-              // const minutesToRead = Math.round(virtuals.readingTime)
-              const minutesToRead = ''
-
-              // const meta = `${minutesToRead} min read`
-              const meta = ``
-
               return (
                 <Grid
                   columns={(1, 'auto')}
                   rows={6}
-                  key={node?.guid}
+                  key={node.guid}
                   sx={{ maxWidth: '500px' }}
                   p={[2, 0, 0]}
                 >
                   <Text
                     as='a'
-                    href={node?.link}
+                    href={node.link}
                     target='_blank'
                     rel='noopener noreferrer'
                     sx={{
@@ -98,14 +61,14 @@ const UpdatesSection = ({ mediumPosts }) => {
                       textDecoration: 'none'
                     }}
                   >
-                    {node?.title}
+                    {node.title}
                   </Text>
                   <Text sx={{ variant: 'text.large', color: 'secondary' }}>
                     {/* {previewContent.subtitle} */}
                   </Text>
                   <Grid rows={2} gap={0}>
                     <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>
-                      {node?.author}
+                      {node.author}
                     </Text>
 
                     <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>
@@ -114,13 +77,13 @@ const UpdatesSection = ({ mediumPosts }) => {
                         month: 'long',
                         day: '2-digit'
                       }).format(node?.pubDate)} */}
-                      {dayjs(node?.pubDate).format('ll')}
+                      {dayjs(node.pubDate).format('ll')}
                       {/* {meta} */}
                     </Text>
                   </Grid>
                   <Text
                     as='a'
-                    href={node?.link}
+                    href={node.link}
                     target='_blank'
                     rel='noopener noreferrer'
                     sx={{ variant: 'links.readmore' }}
@@ -136,5 +99,14 @@ const UpdatesSection = ({ mediumPosts }) => {
     </React.Fragment>
   )
 }
+
+const Main = styled(Grid)`
+  position: relative;
+`
+
+const Container = styled(Box)`
+  margin: 0 auto;
+  max-width: 1440px;
+`
 
 export default UpdatesSection
