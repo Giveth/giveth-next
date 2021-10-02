@@ -1,6 +1,6 @@
 import { client } from '../../src/apollo/client'
 import DonatorView from '../../src/components/project/donatorView'
-import ErrorPage from '../../src/components/errorPage'
+import NotFoundPage from '../404'
 import Layout from '../../src/components/layout'
 import Seo from '../../src/components/seo'
 import {
@@ -13,21 +13,21 @@ import { PROJECT_DONATIONS } from '../../src/apollo/gql/donations'
 
 const Project = props => {
   return (
-    <Layout>
-      <Seo
-        title={
-          props?.project?.title
-            ? `Check out ${props?.project?.title}`
-            : 'Check out this project!'
-        }
-        image={props?.project?.image}
-      />
-      {props?.error ? (
-        <ErrorPage json={props.error} />
-      ) : (
+    props.error ? (
+      <NotFoundPage />
+    ) : (
+      <Layout>
+        <Seo
+          title={
+            props.project?.title
+              ? `Check out ${props.project?.title}`
+              : 'Check out this project!'
+          }
+          image={props.project?.image}
+        />
         <DonatorView {...props} />
-      )}
-    </Layout>
+      </Layout>
+    )
   )
 }
 
