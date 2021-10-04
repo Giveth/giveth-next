@@ -1,27 +1,27 @@
 import { client } from '../../src/apollo/client'
-import ErrorPage from '../../src/components/errorPage'
 import DonationView from '../../src/components/donate'
 import Layout from '../../src/components/layout'
 import Seo from '../../src/components/seo'
 import { FETCH_PROJECT_BY_SLUG } from '../../src/apollo/gql/projects'
+import NotFoundPage from "../404";
 
 const Donate = props => {
   return (
-    <Layout asDialog>
-    <Seo
-      title={
-        props?.project?.title
-          ? `Donate to ${props?.project?.title}`
-          : "Donate to this project!"
-      }
-      image={props?.project?.image}
-    />
-      {props?.error ? (
-        <ErrorPage json={props.error} />
-      ) : (
+    props.error ? (
+      <NotFoundPage />
+    ) : (
+      <Layout asDialog>
+        <Seo
+          title={
+            props?.project?.title
+              ? `Donate to ${props?.project?.title}`
+              : "Donate to this project!"
+          }
+          image={props?.project?.image}
+        />
         <DonationView {...props} />
-      )}
-    </Layout>
+      </Layout>
+    )
   )
 }
 

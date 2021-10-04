@@ -41,96 +41,6 @@ const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT']
 const GIVETH_DONATION_AMOUNT = 5
 const POLL_DELAY_TOKENS = 5000
 
-const Content = styled.div`
-  max-width: 41.25rem;
-  word-wrap: break-word;
-`
-
-const AmountSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 1.3rem 0 0 0;
-  @media (max-width: 800px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-`
-
-const AmountContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  margin: 2rem 0;
-  @media (max-width: 800px) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`
-
-const OpenAmount = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  position: relative;
-
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
-  }
-`
-
-const InputComponent = styled.input`
-  background: white;
-  border: none;
-  border-radius: 12px;
-  padding: 1rem 0.4rem 1rem 1.4rem;
-  outline: none;
-  width: 100%;
-`
-
-const CheckboxLabel = styled(Label)`
-  @media (max-width: 800px) {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-  cursor: pointer;
-`
-
-const Summary = styled(Flex)`
-  flex-direction: column;
-  margin: 2rem 0;
-`
-
-const SmRow = styled(Flex)`
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 0.75rem 0;
-  align-items: center;
-`
-
-const SaveGasMessage = styled(Flex)`
-  flex: 1;
-  flex-direction: row;
-  background: #3e50a7;
-  border-radius: 4px;
-  height: 40px;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  word-wrap: break-word;
-  margin-bottom: 10px;
-`
-
 const OnlyCrypto = props => {
   const {
     state: { validProvider, balance, web3, account, isEnabled, networkId, provider },
@@ -215,7 +125,7 @@ const OnlyCrypto = props => {
     } else if (selectedToken.symbol === ethereumChain.mainToken) {
       mainTokenPrice && setTokenPrice(mainTokenPrice)
     }
-  }, [selectedToken])
+  }, [selectedToken, mainTokenPrice])
 
   useEffect(() => {
     web3?.eth.getGasPrice().then(wei => {
@@ -402,17 +312,16 @@ const OnlyCrypto = props => {
         })
       }
 
+      const isCorrectNetwork = checkNetwork(networkId)
+      if (!isCorrectNetwork) return triggerPopup('WrongNetwork')
+
       if (!amountTyped || parseFloat(amountTyped) <= 0) {
         return Toast({ content: 'Please set an amount', type: 'warn' })
       }
 
-      // Check amount if own provider
       if (selectedTokenBalance < subtotal) {
         return triggerPopup('InsufficientFunds')
       }
-
-      const isCorrectNetwork = checkNetwork(networkId)
-      if (!isCorrectNetwork) return triggerPopup('WrongNetwork')
 
       Toast({
         content: 'Donation in progress...',
@@ -742,7 +651,7 @@ const OnlyCrypto = props => {
                   src={
                     icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`
                   }
-                  alt={tokenSymbol}
+                  alt={tokenSymbol || ''}
                   onError={ev => {
                     ev.target.src = ETHIcon
                     ev.target.onerror = null
@@ -977,5 +886,95 @@ const OnlyCrypto = props => {
     </>
   )
 }
+
+const Content = styled.div`
+  max-width: 41.25rem;
+  word-wrap: break-word;
+`
+
+const AmountSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 1.3rem 0 0 0;
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+`
+
+const AmountContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 0;
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`
+
+const OpenAmount = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  position: relative;
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+`
+
+const InputComponent = styled.input`
+  background: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 0.4rem 1rem 1.4rem;
+  outline: none;
+  width: 100%;
+`
+
+const Summary = styled(Flex)`
+  flex-direction: column;
+  margin: 2rem 0;
+`
+
+const SmRow = styled(Flex)`
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.75rem 0;
+  align-items: center;
+`
+
+const SaveGasMessage = styled(Flex)`
+  flex: 1;
+  flex-direction: row;
+  background: #3e50a7;
+  border-radius: 4px;
+  height: 40px;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  word-wrap: break-word;
+  margin-bottom: 10px;
+`
+
+// const CheckboxLabel = styled(Label)`
+//   @media (max-width: 800px) {
+//     display: flex;
+//     justify-content: space-between;
+//     width: 100%;
+//   }
+//   cursor: pointer;
+// `
 
 export default OnlyCrypto
