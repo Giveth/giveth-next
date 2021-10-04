@@ -29,6 +29,7 @@ import { categoryList } from '../../../utils/constants'
 import ImageSection from './imageSection'
 import Toast from '../../toast'
 import { maxSelectedCategory } from '../../../utils/constants'
+import {invalidProjectTitleToast, isProjectTitleValid} from '../../../validation/projectValidation';
 
 // import dynamic from 'next/dynamic'
 // import { getWallet } from '../../../wallets'
@@ -476,7 +477,9 @@ function ProjectEdition(props) {
           return Toast({ content: reason, type: 'error' })
         }
       }
-
+      if (!isProjectTitleValid(data.editTitle)) {
+        return invalidProjectTitleToast();
+      }
       const projectCategories = []
       for (const category in categoryList) {
         const name = categoryList[category]?.name
