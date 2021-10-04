@@ -67,12 +67,8 @@ export async function getServerSideProps () {
   const joinConsumeReq = await fetchEntries({
     contentType: 'contentJoinConsumeProvider'
   })
-  const joinChat = await joinReq.map(j => {
-    return j.fields
-  })
-  const joinConsume = await joinConsumeReq.map(j => {
-    return j.fields
-  })
+  const joinChat = joinReq.map(j => j.fields)
+  const joinConsume = joinConsumeReq.map(j => j.fields)
 
   return {
     props: {

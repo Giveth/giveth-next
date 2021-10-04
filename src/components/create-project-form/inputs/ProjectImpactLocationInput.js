@@ -9,12 +9,17 @@ export const ProjectImpactLocationInput = ({
   goBack,
   setValue,
 }) => {
-  const [showLocationInput, setShowLocationInput] = useState(false)
   const [location, setLocation] = useState(
     currentValue === 'Global' ? 'Global' : currentValue
   )
+
+  const handleChange = value => {
+    setValue('projectImpactLocation', value)
+    setLocation(value)
+  }
+
   useEffect(() => {
-    typeof window !== 'undefined' && window.initMap(setLocation)
+    typeof window !== 'undefined' && window.initMap(handleChange)
   }, [])
 
   return (
@@ -49,8 +54,9 @@ export const ProjectImpactLocationInput = ({
             id='autocomplete'
             placeholder='Search a Location'
             type='text'
+            disabled={location === 'Global'}
             sx={{ fontFamily: 'body', width: '400px', mr: '35px' }}
-            onChange={e => setLocation(e.target.value)}
+            onChange={e => handleChange(e.target.value)}
           />
         </div>
         <input
@@ -69,7 +75,7 @@ export const ProjectImpactLocationInput = ({
         >
           <Checkbox
             defaultChecked={location === 'Global'}
-            onChange={e => setValue('projectImpactLocation', e.target.checked ? 'Global' : '')}
+            onChange={e => handleChange(e.target.checked ? 'Global' : '')}
           />
           <Text sx={{ fontFamily: 'body', fontSize: 2 }}>
             This project has a global impact
