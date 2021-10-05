@@ -264,11 +264,12 @@ const ProjectsList = props => {
     a => a
   ]
 
-  const projectsFilteredSorted = projectsFiltered
+  const projectsFilteredNoSlice = projectsFiltered
     ?.slice()
     ?.sort(sortFunctions[sortBy])
     ?.filter(filterFunctions[sortBy])
-    ?.slice(0, limit)
+
+  const projectsFilteredSorted = projectsFilteredNoSlice?.slice(0, limit)
 
   const loadMore = () => {
     setLimit(limit + 10)
@@ -308,7 +309,7 @@ const ProjectsList = props => {
                 variant: 'headings.h4',
                 color: 'bodyLight'
               }}
-            >{`(${totalCount})`}</Text>
+            >{`(${projectsFilteredNoSlice?.length})`}</Text>
           )}
         </Flex>
         <Link href='/create'>
