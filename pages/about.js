@@ -1,10 +1,8 @@
-import { jsx, Text, Box } from "theme-ui";
-import { fetchEntries } from "../src/utils/contentfulPosts";
 import React from "react";
-import Seo from "../src/components/seo";
+import { Box } from "theme-ui";
 import styled from "@emotion/styled";
-
-import Layout from "../src/components/layout";
+import { fetchEntries } from "../src/utils/contentfulPosts";
+import Seo from "../src/components/seo";
 import AboutPage from "../src/components/content/AboutPage";
 
 const Main = styled(Box)``;
@@ -30,12 +28,8 @@ export async function getServerSideProps() {
     contentType: "contentAbout",
   });
 
-  const team = await teamReq?.map((f) => {
-    return f.fields;
-  });
-  const about = await aboutReq?.map((f) => {
-    return f.fields;
-  });
+  const team = teamReq?.map(f => f.fields);
+  const about = aboutReq?.map(f => f.fields);
   console.log({ team: JSON.stringify(team) });
   return {
     props: {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Select from 'react-select'
 import { Image, Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
@@ -8,6 +8,15 @@ import theme from '../utils/theme-ui/index'
 import iconManifest from '../../public/assets/cryptocurrency-icons/manifest.json'
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
+const StyledOption = styled.div`
+    &:hover {
+      div {
+        color: ${theme.colors.background};
+      }
+      background-color: ${theme.colors.hover};
+    }
+  `
+
 const SelectWithAutocomplete = ({
   content,
   width,
@@ -16,32 +25,14 @@ const SelectWithAutocomplete = ({
   menuIsOpen,
   isTokenList
 }) => {
-  const options = content || [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ]
+  const options = content || []
 
-  const CustomOption = props => {
-    const { children, value, innerProps, isDisabled } = props
-    const [icon, setIcon] = useState(null)
-    const StyledOption = styled.div`
-      &:hover {
-        div {
-          color: ${theme.colors.background};
-        }
-        background-color: ${theme.colors.hover};
-      }
-    `
-
+  const CustomOption = ({ children, value, innerProps, isDisabled }) => {
     if (isDisabled) return null
     let toShow = children
     // Special render for tokens, showing extra info
     if (isTokenList) {
-      let img = ''
-      const found = iconManifest?.find(
-        i => i?.symbol === value?.symbol?.toUpperCase()
-      )
+      const found = iconManifest.find(i => i.symbol === value.symbol?.toUpperCase())
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
           {found ? (
@@ -58,14 +49,14 @@ const SelectWithAutocomplete = ({
                 ev.target.src = ETHIcon
                 ev.target.onerror = null
               }}
-              width={'32px'}
-              height={'32px'}
+              width='32px'
+              height='32px'
             />
           ) : (
             <Image
               src={`/assets/cryptocurrency-icons/32/color/eth.png`}
-              width={'32px'}
-              height={'32px'}
+              width='32px'
+              height='32px'
             />
           )}
 
@@ -116,7 +107,7 @@ const SelectWithAutocomplete = ({
         }),
         menuList: provided => ({
           ...provided,
-          maxHeight: '150px'
+          maxHeight: '300px'
         }),
         control: () => ({
           // none of react-select's styles are passed to <Control />

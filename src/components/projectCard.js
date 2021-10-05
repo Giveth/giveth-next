@@ -3,15 +3,11 @@ import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
 import theme from '../utils/theme-ui/index'
 // import Donate from '../components/donateForm'
-import {
-  TOGGLE_PROJECT_REACTION,
-  GET_PROJECT_REACTIONS
-} from '../apollo/gql/projects'
+import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
 import { BsHeartFill } from 'react-icons/bs'
 import { FaShareAlt } from 'react-icons/fa'
 import { PopupContext } from '../contextProvider/popupProvider'
@@ -147,18 +143,17 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectCard = props => {
-  const router = useRouter()
-  const { user, isLoggedIn } = useWallet()
-  const { project, fromViewStyle, isATrace, shadowed } = props
+  const { user } = useWallet()
+  const { project, fromViewStyle, isATrace } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
   const strUserId = user?.id?.toString()
-  const initUserHearted =
-    project?.reactions?.filter(o => o.userId === strUserId).length > 0
+  const initUserHearted =project?.reactions?.find(r => r?.userId === user?.id)
   const [hearted, setHearted] = useState(initUserHearted)
   const [heartedByUser, setHeartedByUser] = useState(null)
   const [heartedCount, setHeartedCount] = useState(null)
+
   const reactToProject = async () => {
     try {
       const reaction = await client?.mutate({
@@ -183,11 +178,8 @@ const ProjectCard = props => {
   }
 
   useEffect(() => {
-    const checkUser = () => {
-      setHeartedCount(project?.totalHearts)
-      // setHeartedByUser(project?.reactions?.find(r => r?.userId === user?.id))
-    }
-    checkUser()
+    setHeartedCount(project?.reactions?.length)
+    setHeartedByUser(project?.reactions?.find(r => r.userId === user?.id))
   }, [project])
 
   const image = props?.image || project?.image
@@ -339,7 +331,7 @@ const ProjectCard = props => {
                     color={
                       heartedByUser ? theme.colors.red : theme.colors.muted
                     }
-                    onClick={() => reactToProject()}
+                    onClick={reactToProject}
                   />
                   {heartedCount && (
                     <Text sx={{ variant: 'text.default', ml: 2 }}>

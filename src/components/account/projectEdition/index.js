@@ -8,16 +8,16 @@ import {
   Label,
   Text,
   Input,
-  Textarea
 } from 'theme-ui'
 import Web3 from 'web3'
 import { BiArrowBack } from 'react-icons/bi'
-import theme from '../../../utils/theme-ui/index'
+import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
+
+import theme from '../../../utils/theme-ui/index'
 import {
   GET_LINK_BANK_CREATION,
   EDIT_PROJECT,
-  GET_PROJECT_BY_ADDRESS,
   FETCH_PROJECT_BY_SLUG,
   WALLET_ADDRESS_IS_VALID
 } from '../../../apollo/gql/projects'
@@ -26,12 +26,13 @@ import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
-import { useWallet } from '../../../contextProvider/WalletProvider'
 import ImageSection from './imageSection'
-import styled from '@emotion/styled'
 import Toast from '../../toast'
+import { maxSelectedCategory } from '../../../utils/constants'
+import {invalidProjectTitleToast, isProjectTitleValid} from '../../../validation/projectValidation';
+
 // import dynamic from 'next/dynamic'
-import { getWallet } from '../../../wallets'
+// import { getWallet } from '../../../wallets'
 
 // const getWallet = dynamic(
 //   () => import('../../../wallets').then(md => md.getWallet),
@@ -39,9 +40,6 @@ import { getWallet } from '../../../wallets'
 //     ssr: false
 //   }
 // )
-
-let wallet = null
-let web3 = null
 
 const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
@@ -53,7 +51,6 @@ function ProjectEditionForm(props) {
   const {
     goBack,
     setCancelModal,
-    setShowModal,
     updateProject,
     project,
     client,
@@ -61,9 +58,8 @@ function ProjectEditionForm(props) {
     setMapLocation
   } = props
 
-  const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState(null)
-  const [desc, setDesc] = useState(null)
+  const [desc, setDesc] = useState('')
   const [isActive, setIsActive] = useState(null)
 
   const { register, handleSubmit, setValue, errors } = useForm() // initialize the hook
@@ -113,7 +109,6 @@ function ProjectEditionForm(props) {
 
   return (
     <>
-      {loading && <LoadingModal isOpen={loading} />}
       <Flex sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <Flex sx={{ alignItems: 'center' }}>
           <BiArrowBack
@@ -200,18 +195,7 @@ function ProjectEditionForm(props) {
               title='Project Description'
               htmlFor='editDescription'
             />
-            {/* <Textarea
-              sx={{
-                resize: 'none',
-                fontFamily: 'body',
-                color: 'secondary'
-              }}
-              id='editDescription'
-              name='editDescription'
-              defaultValue={project?.description}
-              ref={register}
-              rows={12}
-            /> */}
+
             {!isSSR && (
               <React.Suspense fallback={<div />}>
                 <RichTextInput
@@ -231,7 +215,7 @@ function ProjectEditionForm(props) {
                   }}
                   value={desc}
                   placeholder='Write your update...'
-                  onChange={(newValue, delta, source) => {
+                  onChange={newValue => {
                     try {
                       // console.log({ newValue })
                       setValue('editDescription', newValue)
@@ -287,11 +271,11 @@ function ProjectEditionForm(props) {
                 })}
             </Box>
             <CustomLabel title='Impact Location' htmlFor='editImpactLocation' />
-            {mapLocation || project?.impactLocation ? (
+            {mapLocation && (
               <Text sx={{ fontFamily: 'body', color: 'muted', fontSize: 8 }}>
-                {mapLocation || project?.impactLocation}
+                {mapLocation}
               </Text>
-            ) : null}
+            )}
             <div id='locationField'>
               <Input
                 id='autocomplete'
@@ -301,6 +285,7 @@ function ProjectEditionForm(props) {
                 onChange={e => setMapLocation(e.target.value)}
               />
             </div>
+
             <Label
               sx={{
                 display: 'flex',
@@ -310,20 +295,19 @@ function ProjectEditionForm(props) {
               }}
             >
               <Checkbox
-                defaultChecked={
-                  mapLocation === 'Global' ||
-                  project?.impactLocation === 'Global'
-                }
-                onChange={() => {
-                  mapLocation === 'Global'
-                    ? setMapLocation('')
-                    : setMapLocation('Global')
+                checked={ mapLocation === 'Global' }
+                onChange={e => {
+                  const checked = e.target.checked
+                  checked
+                    ? setMapLocation('Global')
+                    : setMapLocation('')
                 }}
               />
               <Text sx={{ fontFamily: 'body', fontSize: 2 }}>
                 This project has a global impact
               </Text>
             </Label>
+
             <div
               css={{
                 display: 'flex',
@@ -415,32 +399,23 @@ function ProjectEdition(props) {
   const [showCancelModal, setCancelModal] = useState(false)
   const [mapLocation, setMapLocation] = useState(null)
 
-  const { wallet } = useWallet()
-
   const { data: fetchedProject, loadingProject } = useQuery(
     FETCH_PROJECT_BY_SLUG,
     {
       variables: { slug: props?.project }
     }
   )
-  useEffect(() => {
-    web3 = wallet.web3
-  }, [])
 
-  useEffect(
-    data => {
-      if (fetchedProject) {
-        if (fetchedProject.projectBySlug) {
-          setProject(fetchedProject.projectBySlug)
-        }
-      }
-    },
-    [fetchedProject]
-  )
+  useEffect(() => {
+    if (fetchedProject?.projectBySlug) {
+      setProject(fetchedProject.projectBySlug)
+      setMapLocation(fetchedProject.projectBySlug.impactLocation)
+    }
+  }, [fetchedProject])
 
   useEffect(() => {
     window?.google && window.initMap(setMapLocation)
-  })
+  }, [])
 
   useEffect(() => {
     if (project && updateProjectOnServer) {
@@ -502,7 +477,9 @@ function ProjectEdition(props) {
           return Toast({ content: reason, type: 'error' })
         }
       }
-
+      if (!isProjectTitleValid(data.editTitle)) {
+        return invalidProjectTitleToast();
+      }
       const projectCategories = []
       for (const category in categoryList) {
         const name = categoryList[category]?.name
@@ -511,11 +488,17 @@ function ProjectEdition(props) {
         }
       }
 
+      if (projectCategories.length > maxSelectedCategory)
+        return Toast({
+          content: `Please select no more than ${maxSelectedCategory} categories`,
+          type: 'error'
+        })
+
       const projectData = {
         title: data.editTitle || project?.title,
         description: data.desc || data.editDescription,
         admin: project.admin,
-        impactLocation: mapLocation || project?.impactLocation,
+        impactLocation: mapLocation,
         categories: projectCategories,
         walletAddress: ethAddress
           ? Web3.utils.toChecksumAddress(ethAddress)

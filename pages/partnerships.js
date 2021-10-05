@@ -1,4 +1,4 @@
-import { jsx, Flex, Grid, Text, Box, Button } from "theme-ui";
+import { Flex, Grid, Text, Box, Button } from "theme-ui";
 import theme from "../src/utils/theme-ui";
 import { fetchEntries } from "../src/utils/contentfulPosts";
 import React from "react";
@@ -11,8 +11,6 @@ import styled from "@emotion/styled";
 import useMediaQuery from "react-responsive";
 
 import Layout from "../src/components/layout";
-
-import { FaMediumM, FaGithub } from "react-icons/fa";
 
 const Main = styled(Grid)`
   justify-content: start;
@@ -150,7 +148,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
           {friendsLogos?.map((friend) => (
             <ContentItem key={friend.logo.sys.id}>
               <a
-                to={friend.link}
+                href={friend.link}
                 style={{
                   textDecoration: "none",
                   textAlign: "center",
@@ -163,6 +161,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
                     height="50px"
                     style={{ objectFit: "contain" }}
                     src={friend.logo.fields.file.url}
+                    alt='friend logo'
                   />
 
                   <Text pt={2} sx={{ variant: "headings.h6" }}>
@@ -181,6 +180,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
           <img
             src="/images/svg/general/decorators/dark-clouds.svg"
             style={{ position: "absolute", top: "41px", right: "42px" }}
+            alt='dark clouds img'
           />
           <Box
             sx={{
@@ -227,17 +227,13 @@ const Partnerships = ({ friendsLogos, partners }) => {
 export async function getServerSideProps() {
   // contentful
   const friendsReq = await fetchEntries({ contentType: "friendslogos" });
-  const friendsLogos = await friendsReq.map((f) => {
-    return f.fields;
-  });
+  const friendsLogos = friendsReq.map(f => f.fields);
 
   const partnershipsReq = await fetchEntries({
     contentType: "contentPartnerships",
   });
   console.log(JSON.stringify(partnershipsReq));
-  const partnerships = await partnershipsReq?.map((p) => {
-    return p.fields;
-  });
+  const partnerships = partnershipsReq?.map(p => p.fields);
 
   return {
     props: {

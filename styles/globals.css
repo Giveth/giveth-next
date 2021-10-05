@@ -23,12 +23,21 @@ a {
   cursor: pointer !important;  
 }
 
+/* Fix Google Autocomplete container border */
+.pac-container {
+  border-top: unset;
+  box-shadow: unset;
+}
 
 /* quill view */
 .quill a {
   text-decoration: underline;
 }
 
+/* Fix quill emoji not clickable */
+#emoji-close-div, .textarea-emoji-control {
+  display: none !important;
+}
 
 /* quill editor styles */
 .ql-editor {

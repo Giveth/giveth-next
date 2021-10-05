@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRouter } from "next/router";
 import { Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
@@ -17,6 +18,9 @@ const DonateButton = styled(Button)`
 
 const AboutPage = ({ about, team }) => {
   console.log({ about, team })
+
+  const router = useRouter()
+
   // return null
   const [currentTab, setCurrentTab] = React.useState('mission')
   const richTextOptions = {
@@ -60,7 +64,8 @@ const AboutPage = ({ about, team }) => {
       <Seo title='About us' />
       <Flex>
         <Image
-          src={'/images/giveth-team-image.png'}
+          src='/images/giveth-team-image.jpg'
+          alt='giveth team image'
           sx={{
             objectFit: 'cover',
             objectPosition: 'top',
@@ -219,7 +224,7 @@ const AboutPage = ({ about, team }) => {
               paddingTop: '20px',
               paddingBottom: '20px'
             }}
-            onClick={() => navigate(`/donate/${theme.donationSlug}`)}
+            onClick={() => router.push(`/donate/${theme.donationSlug}`)}
           >
             <Text sx={{ color: 'background' }}>Support Giveth</Text>
           </DonateButton>

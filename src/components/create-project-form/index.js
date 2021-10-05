@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import {
   Box,
   Heading,
@@ -7,74 +6,74 @@ import {
   Button,
   Spinner,
   Progress,
-  Link,
   Text
-} from 'theme-ui'
-import _ from 'lodash'
-import { useRouter } from 'next/router'
+} from 'theme-ui';
+import { useRouter } from 'next/router';
+import { useApolloClient } from '@apollo/client';
+import { useForm } from 'react-hook-form';
+import { useTransition } from 'react-spring';
+
 import {
   GET_PROJECT_BY_ADDRESS,
   WALLET_ADDRESS_IS_VALID
-} from '../../apollo/gql/projects'
-import { useApolloClient } from '@apollo/client'
-import { getProjectWallet } from './utils'
-import { useWallet } from '../../contextProvider/WalletProvider'
-import { PopupContext } from '../../contextProvider/popupProvider'
-import { useForm } from 'react-hook-form'
-import { useTransition } from 'react-spring'
-
+} from '../../apollo/gql/projects';
+import { getProjectWallet } from './utils';
+import { useWallet } from '../../contextProvider/WalletProvider';
+import { PopupContext } from '../../contextProvider/popupProvider';
 import {
   ProjectNameInput,
-  ProjectAdminInput,
   ProjectDescriptionInput,
   ProjectCategoryInput,
   ProjectImpactLocationInput,
   ProjectImageInput,
   ProjectEthAddressInput
-} from './inputs'
-import EditButtonSection from './EditButtonSection'
-import FinalVerificationStep from './FinalVerificationStep'
-import ConfirmationModal from '../confirmationModal'
-import Toast from '../toast'
+} from './inputs';
+import EditButtonSection from './EditButtonSection';
+import FinalVerificationStep from './FinalVerificationStep';
+import ConfirmationModal from '../confirmationModal';
+import Toast from '../toast';
+import { maxSelectedCategory } from '../../utils/constants';
+import {invalidProjectTitleToast, isProjectTitleValid} from '../../validation/projectValidation';
+
 
 const CreateProjectForm = props => {
-  const router = useRouter()
-  const [loading, setLoading] = useState(true)
-  const [inputIsLoading, setInputLoading] = useState(false)
-  const [incompleteProfile, setIncompleteProfile] = useState(false)
-  const { isLoggedIn, user, validateToken, logout } = useWallet()
-  const [flashMessage, setFlashMessage] = useState('')
-  const [formData, setFormData] = useState({})
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [inputIsLoading, setInputLoading] = useState(false);
+  const [incompleteProfile, setIncompleteProfile] = useState(false);
+  const { isLoggedIn, user, validateToken, logout } = useWallet();
+  const [flashMessage, setFlashMessage] = useState('');
+  const [formData, setFormData] = useState({});
   const { register, handleSubmit, setValue } = useForm({
-    defaultValues: React.useMemo(() => {
-      return formData
+    defaultValues: useMemo(() => {
+      return formData;
     }, [formData])
-  })
-  const [walletUsed, setWalletUsed] = useState(false)
-  const usePopup = React.useContext(PopupContext)
-  const client = useApolloClient()
+  });
+  const [walletUsed, setWalletUsed] = useState(false);
+  const usePopup = useContext(PopupContext);
+  const client = useApolloClient();
 
-  const [currentStep, setCurrentStep] = useState(0)
-  const nextStep = () => setCurrentStep(currentStep + 1)
-  const goBack = () => setCurrentStep(currentStep - 1)
+  const [currentStep, setCurrentStep] = useState(0);
+  const nextStep = () => setCurrentStep(currentStep + 1);
+  const goBack = () => setCurrentStep(currentStep - 1);
 
   useEffect(() => {
-    doValidateToken()
-    async function doValidateToken () {
-      const isValid = await validateToken()
+    doValidateToken();
+    async function doValidateToken() {
+      const isValid = await validateToken();
       // console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
-      setFlashMessage('Your session has expired')
+      setFlashMessage('Your session has expired');
       if (!isValid) {
-        await logout()
+        await logout();
         // usePopup?.triggerPopup('WelcomeLoggedOut')
         router.push({
           pathname: '/',
           query: { welcome: true }
-        })
+        });
       }
     }
-  }, [])
+  }, []);
 
   const steps = [
     ({ animationStyle }) => (
@@ -106,6 +105,7 @@ const CreateProjectForm = props => {
       <ProjectImpactLocationInput
         animationStyle={animationStyle}
         currentValue={formData?.projectImpactLocation}
+        setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
       />
@@ -127,8 +127,8 @@ const CreateProjectForm = props => {
           formData?.projectWalletAddress
             ? formData?.projectWalletAddress
             : typeof walletUsed !== 'boolean'
-            ? walletUsed
-            : null
+              ? walletUsed
+              : null
         }
         walletUsed={
           typeof walletUsed !== 'boolean' &&
@@ -146,77 +146,76 @@ const CreateProjectForm = props => {
         categoryList={props.categoryList}
       />
     )
-  ]
+  ];
 
   const onSubmit = (formData, submitCurrentStep, doNextStep) => async data => {
-    let project = {}
+    let project = {};
     try {
       // console.log({ submitCurrentStep, data, formData })
 
       if (isCategoryStep(submitCurrentStep)) {
-        let maxFiveCategories = Object.entries(data)?.filter(i => {
-          return i[1] === true
-        })
-        if (maxFiveCategories?.length > 5) {
+        const maxFiveCategories = Object.entries(data)?.filter(i => {
+          return i[1] === true;
+        });
+
+        if (maxFiveCategories.length > maxSelectedCategory) {
           return Toast({
-            content: `Please select no more than 5 categories`,
+            content: `Please select no more than ${maxSelectedCategory} categories`,
             type: 'error'
-          })
+          });
         }
+
         project = {
           ...formData,
           projectCategory: {
             ...data,
             projectDescription: null
           }
-        }
+        };
         // TODO: For some reason we are getting projectDescription inside the category
         // we need to figure out why
-        delete project?.projectCategory['projectDescription']
+        delete project?.projectCategory['projectDescription'];
       } else {
         project = {
           ...formData,
           ...data
-        }
+        };
       }
       // check title
-      if (!/^\w+$/.test(project?.projectName.replace(/\s/g, ''))) {
-        return Toast({
-          content: `Your project name isn't valid, please only use letters and numbers`,
-          type: 'error'
-        })
+      if (!isProjectTitleValid(project?.projectName)) {
+        return invalidProjectTitleToast();
       }
-      console.log({ project })
+      console.log({ project });
 
       if (isDescriptionStep(submitCurrentStep)) {
         // check if file is too large
         const stringSize =
-          encodeURI(data?.projectDescription).split(/%..|./).length - 1
+          encodeURI(data?.projectDescription).split(/%..|./).length - 1;
         if (stringSize > 4000000) {
           // 4Mb tops max maybe?
           return Toast({
-            content: `Description too large`,
+            content: 'Description too large',
             type: 'error'
-          })
+          });
         }
       }
 
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
-        const didEnterWalletAddress = !!data?.projectWalletAddress
-        let projectWalletAddress
+        const didEnterWalletAddress = !!data?.projectWalletAddress;
+        let projectWalletAddress;
         if (!data?.projectName) {
           return Toast({
             content: 'Please set at least a title to your project',
             type: 'error'
-          })
+          });
         }
         if (didEnterWalletAddress) {
-          setInputLoading(true)
+          setInputLoading(true);
           projectWalletAddress = await getProjectWallet(
             data?.projectWalletAddress
-          )
+          );
         } else {
-          projectWalletAddress = user.addresses[0]
+          projectWalletAddress = user.addresses[0];
         }
 
         const { data: addressValidation } = await client.query({
@@ -224,50 +223,50 @@ const CreateProjectForm = props => {
           variables: {
             address: projectWalletAddress
           }
-        })
+        });
         if (!addressValidation?.walletAddressIsValid?.isValid) {
-          const reason = addressValidation?.walletAddressIsValid?.reasons[0]
-          setInputLoading(false)
+          const reason = addressValidation?.walletAddressIsValid?.reasons[0];
+          setInputLoading(false);
           if (reason === 'smart-contract') {
             return Toast({
               content: `Eth address ${projectWalletAddress} is a smart contract. We do not support smart contract wallets at this time because we use multiple blockchains, and there is a risk of your losing donations.`,
               type: 'error'
-            })
+            });
           } else if (reason === 'address-used') {
             return Toast({
               content: `Eth address ${projectWalletAddress} is already being used for a project`,
               type: 'error'
-            })
+            });
           } else {
             return Toast({
-              content: `Eth address not valid`,
+              content: 'Eth address not valid',
               type: 'error'
-            })
+            });
           }
         }
-        project.projectWalletAddress = projectWalletAddress
+        project.projectWalletAddress = projectWalletAddress;
       }
-      project.projectDescription = project?.projectDescription || ''
+      project.projectDescription = project?.projectDescription || '';
 
       window?.localStorage.setItem(
         'create-form',
         JSON.stringify({ ...project, projectImage: null })
-      )
+      );
       if (isLastStep(submitCurrentStep, steps)) {
-        props.onSubmit(project)
+        props.onSubmit(project);
       }
-      setInputLoading(false)
-      setFormData(project)
-      doNextStep()
+      setInputLoading(false);
+      setFormData(project);
+      doNextStep();
     } catch (error) {
-      console.log({ error })
-      setInputLoading(false)
+      console.log({ error });
+      setInputLoading(false);
       Toast({
         content: error?.message,
         type: 'error'
-      })
+      });
     }
-  }
+  };
 
   const stepTransitions = useTransition(currentStep, {
     from: {
@@ -277,45 +276,45 @@ const CreateProjectForm = props => {
     },
     enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
     leave: { opacity: 0, transform: 'translate3d(-50%,0,0)' }
-  })
+  });
 
-  const [showCloseModal, setShowCloseModal] = useState(false)
+  const [showCloseModal, setShowCloseModal] = useState(false);
   useEffect(() => {
-    const checkProjectWallet = async () => {
-      if (!user) return null
+    const checkProjectWallet = async() => {
+      if (!user) return null;
 
-      if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
+      if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false);
       const { data } = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
           address: user.getWalletAddress()
         }
-      })
+      });
       if (data?.projectByAddress) {
-        setWalletUsed(true)
+        setWalletUsed(true);
       } else {
-        setWalletUsed(user.getWalletAddress())
+        setWalletUsed(user.getWalletAddress());
       }
-      setLoading(false)
-    }
+      setLoading(false);
+    };
     if (!isLoggedIn) {
-      router.push('/', { state: { welcome: true, flashMessage } })
+      router.push('/', { state: { welcome: true, flashMessage } });
     } else if (!user?.name || !user?.email || user.email === '') {
-      usePopup?.triggerPopup('IncompleteProfile')
-      setIncompleteProfile(true)
+      usePopup?.triggerPopup('IncompleteProfile');
+      setIncompleteProfile(true);
     } else {
-      checkProjectWallet()
+      checkProjectWallet();
     }
-  }, [user, isLoggedIn, client, formData])
+  }, [user, isLoggedIn, client, formData]);
 
   useEffect(() => {
-    //Checks localstorage to reset form
-    const localCreateForm = window?.localStorage.getItem('create-form')
-    localCreateForm && setFormData(JSON.parse(localCreateForm))
-  }, [])
+    // Checks localstorage to reset form
+    const localCreateForm = window?.localStorage.getItem('create-form');
+    localCreateForm && setFormData(JSON.parse(localCreateForm));
+  }, []);
 
   if (incompleteProfile) {
-    return null
+    return null;
   }
 
   if (loading) {
@@ -323,7 +322,7 @@ const CreateProjectForm = props => {
       <Flex sx={{ justifyContent: 'center', pt: 5 }}>
         <Spinner variant='spinner.medium' />
       </Flex>
-    )
+    );
   }
 
   // // CHECKS USER
@@ -348,7 +347,7 @@ const CreateProjectForm = props => {
   // }
   const progressPercentage = Object.keys(formData).filter(v =>
     v.startsWith('proj')
-  )?.length
+  )?.length;
 
   return (
     <>
@@ -399,8 +398,8 @@ const CreateProjectForm = props => {
                   </Flex>
                 ) : (
                   stepTransitions((props, item, key) => {
-                    const Step = steps[item]
-                    return <Step key={key} animationStyle={props} />
+                    const Step = steps[item];
+                    return <Step key={key} animationStyle={props} />;
                   })
                 )}
                 <ConfirmationModal
@@ -418,23 +417,23 @@ const CreateProjectForm = props => {
         </>
       </Box>
     </>
-  )
+  );
+};
+
+export default CreateProjectForm;
+
+function isDescriptionStep(currentStep) {
+  return currentStep === 1;
 }
 
-export default CreateProjectForm
-
-function isDescriptionStep (currentStep) {
-  return currentStep === 1
+function isCategoryStep(currentStep) {
+  return currentStep === 2;
 }
 
-function isCategoryStep (currentStep) {
-  return currentStep === 2
+function isFinalConfirmationStep(currentStep, steps) {
+  return currentStep === steps.length - 2;
 }
 
-function isFinalConfirmationStep (currentStep, steps) {
-  return currentStep === steps.length - 2
-}
-
-function isLastStep (currentStep, steps) {
-  return currentStep === steps.length - 1
+function isLastStep(currentStep, steps) {
+  return currentStep === steps.length - 1;
 }

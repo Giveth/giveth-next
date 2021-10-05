@@ -13,6 +13,11 @@ import {
 } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import Jdenticon from 'react-jdenticon'
+import styled from '@emotion/styled'
+import { useApolloClient } from '@apollo/client'
+
 import ConfirmationModal from '../../confirmationModal'
 import { GET_USER } from '../../../apollo/gql/auth'
 import {
@@ -20,16 +25,8 @@ import {
   EDIT_PROJECT_UPDATE,
   DELETE_PROJECT_UPDATE
 } from '../../../apollo/gql/projects'
-import localizedFormat from 'dayjs/plugin/localizedFormat'
-import { useApolloClient } from '@apollo/client'
 import Toast from '../../../components/toast'
-import styled from '@emotion/styled'
-
 import theme from '../../../utils/theme-ui'
-
-import Jdenticon from 'react-jdenticon'
-import iconShare from '../../../images/icon-share.svg'
-import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 
 // import RichTextViewer from '../../richTextViewer'
@@ -79,7 +76,7 @@ const CardFooter = styled.span`
   align-items: center;
   justify-content: space-between;
   margin: -0.5rem 0 0.5rem 0;
-  padding: 0rem 1rem;
+  padding: 0 1rem;
 `
 const Top = styled(Flex)`
   padding: 0.5rem 0 1rem 0;
@@ -111,13 +108,14 @@ const RaisedHandsImg = styled.img`
 `
 
 const TimelineCard = props => {
-  const [currentContent, setCurrentContent] = useState(null)
-  const [newTitle, setNewTitle] = useState(null)
-  const [newInput, setNewInput] = useState(null)
-  const [editInput, setEditInput] = useState(null)
+  const [currentContent, setCurrentContent] = useState('')
+  const [newTitle, setNewTitle] = useState(undefined)
+  const [newInput, setNewInput] = useState('')
+  const [editInput, setEditInput] = useState('')
+  const [editTitle, setEditTitle] = useState(props?.content?.title)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(undefined)
   const { content, reactions, number, isOwner } = props
   const client = useApolloClient()
   const isSSR = typeof window === 'undefined'
@@ -152,12 +150,12 @@ const TimelineCard = props => {
 
   const editUpdate = async () => {
     try {
-      if (editInput === props?.content?.content) return setOpenEdit(false)
+      if (editInput === props?.content?.content && editTitle === props?.content?.title) return setOpenEdit(false)
       await client?.mutate({
         mutation: EDIT_PROJECT_UPDATE,
         variables: {
           content: editInput,
-          title: props?.content?.title,
+          title: editTitle,
           updateId: parseFloat(props?.content?.id)
         }
       })
@@ -291,15 +289,7 @@ const TimelineCard = props => {
                 }}
                 value={newInput}
                 placeholder='Write your update...'
-                onChange={(newValue, delta, source) => {
-                  try {
-                    setNewInput(newValue)
-                  } catch (error) {
-                    console.log({ error })
-                  }
-                }}
-                // onChange={e => getLength(e)}
-                // maxLength={2000}
+                onChange={setNewInput}
               />
             </React.Suspense>
           )}
@@ -409,13 +399,8 @@ const TimelineCard = props => {
             <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
               Update # {number}
             </Text>
-            <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
-              {
-                // dayjs(content?.createdAt)
-              }
-            </Text>
           </Top>
-          {content?.title}
+          {!openEdit && content?.title}
         </Heading>
         <CardContent>
           {user && (
@@ -442,45 +427,53 @@ const TimelineCard = props => {
             </Creator>
           )}
           {openEdit ? (
-            <RichTextInput
-              projectId={props?.projectId}
-              style={{
-                width: '100%',
-                height: '300px',
-                fontFamily: 'body',
-                padding: '1.125rem 1rem',
-                borderRadius: '12px',
-                marginBottom: '80px',
-                resize: 'none',
-                '&::placeholder': {
-                  variant: 'body',
-                  color: 'bodyLight'
-                }
-              }}
-              value={editInput}
-              placeholder='Write your update...'
-              onChange={(newValue, delta, source) => {
-                try {
-                  setEditInput(newValue)
-                } catch (error) {
-                  console.log({ error })
-                }
-              }}
-              // onChange={e => getLength(e)}
-              // maxLength={2000}
-            />
+            <>
+              <Input
+                variant='longInput'
+                sx={{
+                  width: '100%',
+                  variant: 'headings.h3',
+                  color: 'secondary',
+                  padding: '1.125rem 0 0 1rem',
+                  '&::placeholder': {
+                    variant: 'headings.h3',
+                    color: 'bodyLight'
+                  }
+                }}
+                type='text'
+                placeholder='Title'
+                value={editTitle}
+                onChange={e => setEditTitle(e.target.value)}
+              />
+              <RichTextInput
+                projectId={props?.projectId}
+                style={{
+                  width: '100%',
+                  height: '300px',
+                  fontFamily: 'body',
+                  padding: '1.125rem 1rem',
+                  borderRadius: '12px',
+                  marginBottom: '80px',
+                  resize: 'none',
+                  '&::placeholder': {
+                    variant: 'body',
+                    color: 'bodyLight'
+                  }
+                }}
+                value={editInput}
+                placeholder='Write your update...'
+                onChange={setEditInput}
+              />
+            </>
           ) : (
             <RichTextViewer content={currentContent} />
           )}
-          {
-            // <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
-          }
         </CardContent>
         <CardFooter>
           <div>
             <IconButton onClick={react} sx={{ cursor: 'pointer' }}>
               <img
-                src={'/images/icon-heart.svg'}
+                src='/images/icon-heart.svg'
                 alt=''
                 style={{
                   '-webkit-filter': likedByUser
@@ -505,7 +498,7 @@ const TimelineCard = props => {
                   zIndex: 5,
                   marginRight: 2
                 }}
-                onClick={async () => {
+                onClick={() => {
                   if (openEdit) {
                     setEditInput(currentContent)
                     return setOpenEdit(false)

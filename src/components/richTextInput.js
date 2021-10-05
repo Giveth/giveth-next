@@ -165,18 +165,20 @@ function TextRichWithQuill(props) {
 
   const handleChange = html => {
     setContent(html);
-    props?.onChange(html);
+    props.onChange(html);
   };
 
   useEffect(() => {
-    !mod && setMod(modules(props?.projectId));
+    !mod && setMod(modules(props.projectId));
   }, []);
 
   useEffect(() => {
-    setContent(props?.value);
-  }, [props?.value]);
+    setContent(props.value);
+  }, [props.value]);
 
   if (!mod) return null;
+
+  const value = (props.defaultValue && !content) ? props.defaultValue : content
 
   return (
     <ReactQuill
@@ -186,10 +188,9 @@ function TextRichWithQuill(props) {
       ref={props?.ref}
       id={props?.id}
       name={props?.name}
-      value={content || props?.defaultValue}
-      defaultValue={props?.defaultValue}
+      value={value}
       onChange={handleChange}
-      style={props?.style}
+      style={props.style}
     />
   );
 }

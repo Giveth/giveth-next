@@ -1,4 +1,4 @@
-import { jsx, Flex, Grid } from 'theme-ui'
+import { Flex, Grid } from 'theme-ui'
 import { fetchEntries } from '../src/utils/contentfulPosts'
 import Layout from '../src/components/layout'
 import Seo from '../src/components/seo'
@@ -29,9 +29,7 @@ export async function getServerSideProps () {
   const supportReq = await fetchEntries({
     contentType: 'contentSupportProvider'
   })
-  const support = await supportReq.map(s => {
-    return s.fields
-  })
+  const support = supportReq?.map(s => s.fields)
 
   return {
     props: {

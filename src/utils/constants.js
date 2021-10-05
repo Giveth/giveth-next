@@ -26,4 +26,6 @@ export const categoryList = [
   { name: 'waste', value: 'Waste', source: 'IRIS' },
   { name: 'water', value: 'Water', source: 'IRIS' },
   { name: 'other', value: 'Other', source: 'adhoc' }
-]
+];
+
+export const maxSelectedCategory = 5;

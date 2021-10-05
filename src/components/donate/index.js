@@ -191,7 +191,7 @@ const DonateIndex = props => {
             style={LEFT_BOX_STYLE}
           />
         </Options>
-        <ShowPaymentOption />
+        {ShowPaymentOption()}
       </>
     )
   }
@@ -267,7 +267,7 @@ const DonateIndex = props => {
             project={project}
             name={project?.title}
             description={project?.description}
-            image={project?.image || '/images/logos/giveth-logo.jpg'}
+            image={project?.image || '/images/no-image-available.jpg'}
             raised={1223}
             category={project?.categories || 'Blockchain 4 Good'}
             listingId='key1'
@@ -297,7 +297,7 @@ const DonateIndex = props => {
           name={project?.title}
           project={project}
           description={project?.description}
-          image={project?.image || '/images/logos/giveth-logo.jpg'}
+          image={project?.image || '/images/no-image-available.jpg'}
           raised={1223}
           categories={project?.categories}
           listingId='key1'
@@ -306,7 +306,7 @@ const DonateIndex = props => {
         <ShareIcons message="Can't donate? Share this page instead." centered />
       </ProjectContainer>
       <Payment>
-        <PaymentOptions />
+        {PaymentOptions()}
       </Payment>
     </Container>
   )

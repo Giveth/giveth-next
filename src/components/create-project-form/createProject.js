@@ -3,23 +3,22 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import * as queryString from 'query-string'
 import Web3 from 'web3'
-import Seo from '../../components/seo'
+import fetch from 'isomorphic-fetch'
 import { useMutation } from '@apollo/client'
 import { Flex, Text, Spinner, Image } from 'theme-ui'
+
+import Seo from '../../components/seo'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../../apollo/gql/projects'
 import Layout from '../../components/layout'
-// import decoratorClouds from "../images/decorator-clouds.svg";
-// import peoplePuzzle2 from "../images/people-puzzle2.svg";
-// import decoratorFizzySquare from "../images/decorator-fizzy-square.svg";
-// import peopleStretching from "../images/people-stretching.png";
 import HighFive from '../../components/create-project-form/highFive'
-import fetch from 'isomorphic-fetch'
-import { useWallet } from '../../contextProvider/WalletProvider'
 import GithubIssue from '../../components/GithubIssue'
 import Logger from '../../Logger'
 import { logout } from '../../services/auth'
 // import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
-
+// import decoratorClouds from "../images/decorator-clouds.svg";
+// import peoplePuzzle2 from "/images/people-puzzle2.svg";
+// import decoratorFizzySquare from "../images/decorator-fizzy-square.svg";
+// import peopleStretching from "../images/people-stretching.png";
 // import CreateProjectForm from './index'
 const CreateProjectForm = dynamic(() => import('./index'))
 
@@ -134,7 +133,7 @@ const CreateProject = props => {
                   We have logged you out to resolve this.
                 </Text>
                 <Text sx={{ variant: 'text.default' }}>
-                  <Link to='/'>Please login and start again</Link>
+                  <Link href='/'>Please login and start again</Link>
                 </Text>
               </>
             )

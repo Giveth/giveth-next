@@ -1,4 +1,4 @@
-import { jsx, Flex, Grid, Text } from 'theme-ui'
+import { Grid, Text } from 'theme-ui'
 import { fetchEntries } from '../src/utils/contentfulPosts'
 import Layout from '../src/components/layout'
 import Seo from '../src/components/seo'
@@ -67,12 +67,8 @@ export async function getServerSideProps () {
   const joinConsumeReq = await fetchEntries({
     contentType: 'contentJoinConsumeProvider'
   })
-  const joinChat = await joinReq.map(j => {
-    return j.fields
-  })
-  const joinConsume = await joinConsumeReq.map(j => {
-    return j.fields
-  })
+  const joinChat = joinReq.map(j => j.fields)
+  const joinConsume = joinConsumeReq.map(j => j.fields)
 
   return {
     props: {

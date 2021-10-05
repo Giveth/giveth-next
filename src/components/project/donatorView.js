@@ -3,27 +3,28 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
-import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-// import RichTextViewer from '../richTextViewer'
 
 import CancelledModal from './cancelledModal'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
+
 import { GoVerified } from 'react-icons/go'
 import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
 import { BsHeartFill } from 'react-icons/bs'
 
 import Link from 'next/link'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { TOGGLE_PROJECT_REACTION } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
+
+// import RichTextViewer from '../richTextViewer'
 
 import { useWallet } from '../../contextProvider/WalletProvider'
 
@@ -35,15 +36,6 @@ const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
 const ProjectTraces = React.lazy(() => import('./projectTraces'))
 
-const FloatingDonateView = styled(Flex)`
-  @media screen and (max-width: 800px) {
-    width: 80%;
-    align-self: center;
-    margin: 0 auto;
-    bottom: 0;
-  }
-`
-
 const ProjectDonatorView = ({
   project,
   donations: projectDonations,
@@ -51,15 +43,12 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
-  console.log({ project })
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const router = useRouter()
   const { user } = useWallet()
   const [ready, setReady] = useState(false)
   const [currentTab, setCurrentTab] = useState('description')
-  const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)
-  const [totalReactions, setTotalReactions] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
   const [isCancelled, setIsCancelled] = useState(null)
   const usePopup = React.useContext(PopupContext)
@@ -68,7 +57,6 @@ const ProjectDonatorView = ({
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
-  const reactions = totalReactions || project?.reactions
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
@@ -107,7 +95,6 @@ const ProjectDonatorView = ({
           (prev, current) => prev + current?.amount,
           0
         )
-        setTotalReactions(projectReactions)
         setHeartedCount(projectReactions?.length || project?.totalHearts)
         setHearted(projectReactions?.find(o => o.userId === user?.id))
 
@@ -177,27 +164,46 @@ const ProjectDonatorView = ({
     router.prefetch(`/donate/${project?.slug}`)
   }, [])
 
+  const projectPic = () => {
+    const isSVG = setImage(project?.image)
+    if (isSVG) return isSVG
+    else if (project.image) {
+      return (
+        <Image
+          src={project.image}
+          alt='project picture'
+          onError={ev =>
+            (ev.target.src =
+              'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
+          }
+          sx={{
+            objectFit: 'cover',
+            // objectPosition: '100% 25%',
+            width: '100vw',
+            margin: '0 5%',
+            height: '250px',
+            borderRadius: '10px'
+          }}
+        />
+      )
+    } else {
+      return (
+        <NoImage>
+          <Image
+            src='/images/no-image-available.jpg'
+            width={250}
+            alt='no-image-available image'
+          />
+        </NoImage>
+      )
+    }
+  }
+
   return (
     <>
       <CancelledModal isOpen={isCancelled} />
       <Flex>
-        {setImage(project?.image) || (
-          <Image
-            src={project?.image ? project?.image : '/images/giveth_bg.jpg'}
-            onError={ev =>
-              (ev.target.src =
-                'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
-            }
-            sx={{
-              objectFit: 'cover',
-              // objectPosition: '100% 25%',
-              width: '100vw',
-              margin: '0 5%',
-              height: '250px',
-              borderRadius: '10px'
-            }}
-          />
-        )}
+        {projectPic()}
       </Flex>
       <Flex
         sx={{
@@ -509,7 +515,10 @@ const ProjectDonatorView = ({
           >
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
-          {isOwner && (
+
+          {isOwner && !(project?.verified ||
+            project?.IOTraceable ||
+            project?.fromTrace) && (
             <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
               <Text
                 sx={{
@@ -522,6 +531,7 @@ const ProjectDonatorView = ({
               </Text>
             </Link>
           )}
+
           {(project?.verified ||
             project?.IOTraceable ||
             project?.fromTrace) && (
@@ -536,8 +546,8 @@ const ProjectDonatorView = ({
               <GoVerified color={theme.colors.blue} />
               <Text sx={{ variant: 'text.default', ml: 2 }}>
                 {project?.fromTrace || project?.IOTraceable
-                  ? 'traceable'
-                  : 'verified'}
+                  ? 'Traceable'
+                  : 'Verified'}
               </Text>
             </Flex>
           )}
@@ -553,7 +563,6 @@ const ProjectDonatorView = ({
               This project is unlisted{' '}
             </Text>
           )} */}
-          <Text></Text>
           <Flex
             sx={{
               flexDirection: ['row', 'column', 'row'],
@@ -638,11 +647,11 @@ const ProjectDonatorView = ({
                     color={hearted ? theme.colors.red : theme.colors.muted}
                     onClick={reactToProject}
                   />
-                  {heartedCount && heartedCount > 0 ? (
+                  {heartedCount && heartedCount > 0 && (
                     <Text sx={{ variant: 'text.default', ml: 2 }}>
                       {heartedCount}
                     </Text>
-                  ) : null}
+                  )}
                 </Flex>
                 <Flex
                   sx={{
@@ -679,18 +688,39 @@ const ProjectDonatorView = ({
           )}
         </FloatingDonateView>
       </Flex>
-      {showMap ? (
+      {showMap && (
         <iframe
           width='100%'
           height='600'
           src='https://explorer.land/embed/project/balam1'
-          frameborder='0'
-          allowfullscreen
-        ></iframe>
-      ) : null}
+          frameBorder='0'
+          allowFullScreen
+        />
+      )}
       {/* <pre>{JSON.stringify(pageContext, null, 2)}</pre> */}
     </>
   )
 }
+
+
+const FloatingDonateView = styled(Flex)`
+  @media screen and (max-width: 800px) {
+    width: 80%;
+    align-self: center;
+    margin: 0 auto;
+    bottom: 0;
+  }
+`
+
+const NoImage = styled.div`
+  width: 100vw;
+  margin: 0 5%;
+  height: 250px;
+  border-radius: 10px;
+  background-color: rgb(233, 233, 233);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 export default ProjectDonatorView

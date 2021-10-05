@@ -20,7 +20,6 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
         alignItems: 'center',
         padding: '6% 0',
         flexDirection: 'column',
-        alignItems: 'center',
         width: ['100vw', '600px', '600px'],
         backgroundColor: 'white',
         boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)',

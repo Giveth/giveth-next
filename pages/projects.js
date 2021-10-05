@@ -3,7 +3,6 @@ import Seo from '../src/components/seo'
 import ErrorPage from '../src/components/errorPage'
 import { client } from '../src/apollo/client'
 import Layout from '../src/components/layout'
-import GR11 from '../src/components/GR11'
 import ProjectsList, {
   OrderByDirection,
   OrderByField
@@ -19,9 +18,6 @@ const Project = props => {
   return (
     <Layout>
       <Seo title='Projects' />
-      <div style={{ marginTop: '-3%' }}>
-        <GR11 />
-      </div>
       {projects && !errors ? (
         <ProjectsList
           query={props?.query}
@@ -51,7 +47,7 @@ export async function getServerSideProps (props) {
   try {
     const { loading, error, data: fetchProject } = await client.query({
       query: FETCH_ALL_PROJECTS,
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'no-cache'
     })
     projects = Array.from(fetchProject?.projects).filter(
       i => i?.status?.id === '5'

@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
-import { ProjectContext } from '../../contextProvider/projectProvider'
 import { getEtherscanPrefix, titleCase } from '../../utils'
 import { useRouter } from 'next/router'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import theme from '../../utils/theme-ui'
-import { Input, Flex, Spinner, Text, jsx } from 'theme-ui'
-import { useWallet } from '../../contextProvider/WalletProvider'
+import { Input, Flex, Spinner, Text } from 'theme-ui'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import DropdownInput from '../dropdownInput'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
+// import DropdownInput from '../dropdownInput'
+// import { ProjectContext } from '../../contextProvider/projectProvider'
 
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
@@ -144,9 +143,9 @@ const IconSearch = styled(SearchIcon)`
 const SearchInput = styled(Flex)`
   align-items: center;
 `
-const FilterInput = styled(Flex)`
-  align-items: center;
-`
+// const FilterInput = styled(Flex)`
+//   align-items: center;
+// `
 
 const FilterBox = styled(Flex)`
   width: 100%;
@@ -155,16 +154,14 @@ const FilterBox = styled(Flex)`
 
 const MyDonations = props => {
   const router = useRouter()
-  // const options = ['All Donations', 'Fiat', 'Crypto']
   const options = ['All Donations', 'Crypto']
-  // const { user } = useWallet()
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
   // TODO: Set this context for the user
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  // const { currentProjectView, setCurrentProjectView } = React.useContext(
+  //   ProjectContext
+  // )
 
   const etherscanPrefix = getEtherscanPrefix()
 

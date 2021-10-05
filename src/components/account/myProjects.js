@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useQueryParams, StringParam } from 'use-query-params'
@@ -6,7 +6,7 @@ import ProjectCard from '../projectListing'
 import ProjectEdition from './projectEdition/index'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
-import { Flex, Grid, Text, jsx } from 'theme-ui'
+import { Flex, Grid, Text } from 'theme-ui'
 import DarkClouds from '../../images/svg/general/decorators/dark-clouds.svg'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
@@ -42,7 +42,7 @@ const MyProjects = props => {
   const { projects, edit } = props
 
   const [editProject, setEditProject] = useState(edit)
-  const { isLoggedIn, user } = useWallet()
+  const { isLoggedIn } = useWallet()
   const [query, setQuery] = useQueryParams({
     view: StringParam,
     data: StringParam

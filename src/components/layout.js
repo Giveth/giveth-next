@@ -19,8 +19,8 @@ import Popup from './popup'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import styled from '@emotion/styled'
-import dynamic from 'next/dynamic'
 import { WalletProvider } from '../contextProvider/WalletProvider'
+import Web3Provider from "../contextProvider/Web3Provider";
 
 const StyledToastContainer = styled(ToastContainer)`
   .Toastify__close-button {
@@ -206,7 +206,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
                 document.getElementById("autocomplete"),
                 {
                   types: ["geocode"],
-                }  
+                }
               );
               places = new google.maps.places.PlacesService(map);
               autocomplete.addListener("place_changed",function(e){
@@ -233,21 +233,24 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
         `}
         </script>
       </Head>
-      <WalletProvider>
-        <PopupProvider>
-          <GlobalProvider>
-            <QueryParamProvider>
-              <Provider template={AlertTemplate} {...AlertOptions}>
-                <GithubIssue fixed={true} />
-                <XDAIPopup />
-                <Template />
-                <Popup />
-              </Provider>
-            </QueryParamProvider>
-          </GlobalProvider>
-          <StyledToastContainer />
-        </PopupProvider>
-      </WalletProvider>
+
+      <Web3Provider>
+        <WalletProvider>
+          <PopupProvider>
+            <GlobalProvider>
+              <QueryParamProvider>
+                <Provider template={AlertTemplate} {...AlertOptions}>
+                  <GithubIssue fixed={true} />
+                  <XDAIPopup />
+                  <Template />
+                  <Popup />
+                </Provider>
+              </QueryParamProvider>
+            </GlobalProvider>
+            <StyledToastContainer />
+          </PopupProvider>
+        </WalletProvider>
+      </Web3Provider>
     </>
   )
 }

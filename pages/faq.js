@@ -1,4 +1,4 @@
-import { jsx, Text, Box } from "theme-ui";
+import { Box } from "theme-ui";
 import { fetchEntries } from "../src/utils/contentfulPosts";
 import React from "react";
 import Seo from "../src/components/seo";
@@ -27,9 +27,7 @@ export async function getServerSideProps() {
     contentType: "faqEntry",
   });
 
-  const faqs = await faqReq?.map((f) => {
-    return f.fields;
-  });
+  const faqs = faqReq?.map(f => f.fields);
 
   return {
     props: {

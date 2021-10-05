@@ -4,6 +4,34 @@ import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import ERC20List from './erc20TokenList'
 import Web3 from 'web3'
 
+const xDaiChainId = 100
+const appNetworkId = process.env.NEXT_PUBLIC_NETWORK_ID
+
+export function pollEvery(fn, delay) {
+  let timer = -1;
+  let stop = false;
+  const poll = async (request, onResult) => {
+    const result = await request();
+    if (!stop) {
+      onResult(result);
+      timer = setTimeout(poll.bind(null, request, onResult), delay);
+    }
+  };
+  return (...params) => {
+    const { request, onResult } = fn(...params);
+    poll(request, onResult).then();
+    return () => {
+      stop = true;
+      clearTimeout(timer);
+    };
+  };
+}
+
+export function checkNetwork(networkId) {
+  const isXdai = networkId === xDaiChainId
+  return networkId?.toString() === appNetworkId || isXdai;
+}
+
 export function titleCase(str) {
   //hot fix
   return str
