@@ -89,7 +89,7 @@ function IndexPage() {
 }
 
 export async function getServerSideProps() {
-  const { loading, error = null, data: response } = await client.query({
+  const { data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
     variables: { limit: 3 },
   })

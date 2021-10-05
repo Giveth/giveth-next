@@ -1,20 +1,16 @@
 import React from "react"
 import { Box } from "theme-ui"
-import styled from "@emotion/styled"
 import { fetchEntries } from "../src/utils/contentfulPosts"
 import Seo from "../src/components/seo"
 import AboutPage from "../src/components/content/AboutPage"
 
-const Main = styled(Box)``
-
 const About = (props) => {
-  // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <>
       <Seo title="FAQ" />
-      <Main>
+      <Box>
         <AboutPage {...props} />
-      </Main>
+      </Box>
     </>
   )
 }

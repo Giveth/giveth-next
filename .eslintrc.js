@@ -40,6 +40,7 @@ module.exports = {
   extends: [
     "next/core-web-vitals",
     "plugin:@next/next/recommended",
+    "eslint:recommended",
     "plugin:prettier/recommended",
   ],
   rules: {
