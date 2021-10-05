@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { Image, Text } from 'theme-ui'
 import { FiExternalLink } from 'react-icons/fi'
-import { useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from 'react-responsive'
 
 import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
@@ -17,16 +17,16 @@ const AccountDetails = styled.div`
   background: ${theme.colors.background};
   border: 1px solid ${theme.colors.background};
   box-sizing: border-box;
-  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
+  box-shadow: 0 5px 12px rgba(107, 117, 167, 0.3);
   border-radius: 6px;
   z-index: 205;
-  right: 0px;
+  right: 0;
   top: 60px;
   display: grid;
   grid-template-rows: repeat(7, auto);
-  grid-gap: 0px 1rem;
+  grid-gap: 0 1rem;
   .shadow {
-    box-shadow: 0px 1px 0px #f5f5f5;
+    box-shadow: 0 1px 0 #f5f5f5;
   }
   .boxheight {
     display: flex;
@@ -155,8 +155,8 @@ const UserDetails = () => {
           <Image
             alt=''
             sx={{
-              width: '30px',
-              height: '30px',
+              width: '30',
+              height: '30',
               borderRadius: '15px'
             }}
             onerror={`this.onerror=null;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqenVtmZ7dQULkiedSFuZ_YPmNonJGLDYGHA&usqp=CAU';`}

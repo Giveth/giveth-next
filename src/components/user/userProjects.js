@@ -16,10 +16,10 @@ export const UserProjects = props => {
         }}
       >
         <Text variant='headings.h5' color='secondary' mt={4}>
-          {name || 'This user'} hasn't created a project yet
+          {name || 'This user'} hasn`&apos;t created a project yet
         </Text>
         <Text variant='text.default' color='secondary' mt={3}>
-          Don't stop here! There are other projects you can donate to.
+          Don`&apos;t stop here! There are other projects you can donate to.
         </Text>
         <Link href='/projects'>
           <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: 4 }}>
@@ -54,7 +54,12 @@ export const UserProjects = props => {
             ?.slice()
             .sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
             .map(project => (
-              <ProjectCard key={project.id} shadowed project={project} raised={0} />
+              <ProjectCard
+                key={project.id}
+                shadowed
+                project={project}
+                raised={0}
+              />
             ))}
         </Grid>
       ) : (

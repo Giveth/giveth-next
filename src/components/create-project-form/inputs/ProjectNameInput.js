@@ -19,7 +19,7 @@ export const ProjectNameInput = ({
         }}
         htmlFor='projectName'
       >
-        What's the name of your project?
+        What&apos;s the name of your project?
       </Label>
       <div style={{ position: 'relative' }}>
         <Input

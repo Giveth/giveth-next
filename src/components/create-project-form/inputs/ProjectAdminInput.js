@@ -20,7 +20,8 @@ export const ProjectAdminInput = ({
         }}
         htmlFor='projectAdmin'
       >
-        What's the name of the organization or administrator of the project?
+        What&apos;s the name of the organization or administrator of the
+        project?
       </Label>
       <div style={{ position: 'relative' }}>
         <Input

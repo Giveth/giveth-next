@@ -6,14 +6,7 @@ import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
-import {
-  Avatar,
-  Badge,
-  Input,
-  Flex,
-  Spinner,
-  Text,
-} from 'theme-ui'
+import { Avatar, Badge, Input, Flex, Spinner, Text } from 'theme-ui'
 import Jdenticon from 'react-jdenticon'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -42,11 +35,10 @@ const DonationsTable = ({ donations = [] }) => {
     currentProjectView?.project?.fromTrace ||
     currentProjectView?.project?.IOTraceable
 
-  const traceDonationsFetch =
-    useSWR(
-      `${process.env.NEXT_PUBLIC_FEATHERS}/donations?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView?.project?._id}`,
-      fetcher
-    )
+  const traceDonationsFetch = useSWR(
+    `${process.env.NEXT_PUBLIC_FEATHERS}/donations?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView?.project?._id}`,
+    fetcher
+  )
 
   const traceDonations = fromTrace && traceDonationsFetch?.data
 
@@ -324,7 +316,6 @@ const DonationsTable = ({ donations = [] }) => {
     </>
   )
 }
-
 
 const Table = styled.table`
   border-collapse: collapse;

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react'
-import { Box, Button, Text, jsx } from 'theme-ui'
+import { Box, Button, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import QRCode from 'qrcode.react'
 

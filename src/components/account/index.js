@@ -1,11 +1,9 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { jsx, Text, Flex, Spinner, Box } from 'theme-ui'
+import { Flex } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
-import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
-import { BsArrowLeft } from 'react-icons/bs'
 import LoadingModal from '../../components/loadingModal'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
 import { FETCH_MY_PROJECTS } from '../../apollo/gql/projects'
@@ -13,28 +11,15 @@ import AccountTop from '../../components/account/AccountTop'
 import AccountNav from '../../components/account/AccountNav'
 import AccountBody from '../../components/account/AccountBody'
 
-const UserSpan = styled.span`
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  align-items: center;
-  justify-self: end;
-  @media (max-width: 1030px) {
-    grid-row: 1;
-    grid-column: 3;
-  }
-`
-
-const AccountPage = props => {
+const AccountPage = () => {
   const router = useRouter()
-  const { user, isLoggedIn } = useWallet()
-  const userWallets = user.walletAddresses
+  const { isLoggedIn } = useWallet()
   const { data: donations, loading: dataLoading } = useQuery(USERS_DONATIONS, {
     fetchPolicy: 'network-only'
   })
   const userDonations = donations?.donationsByDonor
 
-  const { data: userProjects, loading: projectsLoading, error } = useQuery(
+  const { data: userProjects, loading: projectsLoading } = useQuery(
     FETCH_MY_PROJECTS,
     {
       fetchPolicy: 'network-only'

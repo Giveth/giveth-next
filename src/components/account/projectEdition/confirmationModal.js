@@ -7,8 +7,7 @@ const ConfirmationModal = ({
   title,
   subtitle,
   confirmation,
-  secondary,
-  noMsg
+  secondary
 }) => (
   <div
     css={{

@@ -1,25 +1,21 @@
-import React, { useState } from 'react'
-import Seo from '../src/components/seo'
-import ErrorPage from '../src/components/errorPage'
-import { client } from '../src/apollo/client'
-import Layout from '../src/components/layout'
-import GR11 from '../src/components/GR11'
-import ProjectsList, {
-  OrderByDirection,
-  OrderByField
-} from '../src/components/ProjectsList'
+import React, { useState } from "react"
+import Seo from "../src/components/seo"
+import ErrorPage from "../src/components/errorPage"
+import { client } from "../src/apollo/client"
+import Layout from "../src/components/layout"
+import GR11 from "../src/components/GR11"
+import ProjectsList from "../src/components/ProjectsList"
 
-import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from '../src/apollo/gql/projects'
+import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from "../src/apollo/gql/projects"
 
-const Project = props => {
+const Project = (props) => {
   const { projects, traceProjects, categories, totalCount, errors } = props
   const [limit, setLimit] = useState(12)
-  const [orderByField, setOrderByField] = useState(OrderByField.Balance)
 
   return (
     <Layout>
-      <Seo title='Projects' />
-      <div style={{ marginTop: '-3%' }}>
+      <Seo title="Projects" />
+      <div style={{ marginTop: "-3%" }}>
         <GR11 />
       </div>
       {projects && !errors ? (
@@ -30,9 +26,8 @@ const Project = props => {
           categories={categories}
           totalCount={totalCount}
           maxLimit={limit}
-          selectOrderByField={orderByField => {
+          selectOrderByField={() => {
             setLimit(2)
-            setOrderByField(orderByField)
           }}
         />
       ) : (
@@ -42,24 +37,24 @@ const Project = props => {
   )
 }
 
-export async function getServerSideProps (props) {
+export async function getServerSideProps(props) {
   // Fetch Project
   let projects,
     traceProjects,
     categories = null
   let errors = null
   try {
-    const { loading, error, data: fetchProject } = await client.query({
+    const { error, data: fetchProject } = await client.query({
       query: FETCH_ALL_PROJECTS,
-      fetchPolicy: 'no-cache'
+      fetchPolicy: "no-cache",
     })
     projects = Array.from(fetchProject?.projects).filter(
-      i => i?.status?.id === '5'
+      (i) => i?.status?.id === "5"
     )
 
     const { data: categoriesData } = await client.query({
       query: GET_CATEGORIES,
-      fetchPolicy: 'network-only'
+      fetchPolicy: "network-only",
     })
     categories = categoriesData?.categories
 
@@ -70,16 +65,16 @@ export async function getServerSideProps (props) {
         `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?verified=true`
       ).then(function (response) {
         if (response.status >= 400) {
-          errors = new Error('Bad response from server')
+          errors = new Error("Bad response from server")
         }
         return response.json()
       })
     }
     //Check io2trace projects
-    traceProjects = traceProjects?.data?.filter(i => {
+    traceProjects = traceProjects?.data?.filter((i) => {
       if (!!i?.givethIoProjectId) {
         const foundIndex = projects?.findIndex(
-          x => x.id == i?.givethIoProjectId
+          (x) => x.id == i?.givethIoProjectId
         )
         if (foundIndex) {
           projects[foundIndex] = { ...projects[foundIndex], IOTraceable: true }
@@ -96,12 +91,13 @@ export async function getServerSideProps (props) {
   return {
     props: {
       projects: projects || [],
-      traceProjects: traceProjects?.map(i => ({ ...i, fromTrace: true })) || [],
+      traceProjects:
+        traceProjects?.map((i) => ({ ...i, fromTrace: true })) || [],
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,
-      query: props.query
-    }
+      query: props.query,
+    },
   }
 }
 

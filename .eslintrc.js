@@ -37,13 +37,17 @@
 // };
 
 module.exports = {
-  extends: 'next',
+  extends: [
+    "next/core-web-vitals",
+    "plugin:@next/next/recommended",
+    "plugin:prettier/recommended",
+  ],
   rules: {
-    'react/no-unescaped-entities': 'off',
-    '@next/next/no-page-custom-font': 'off'
+    "prettier/prettier": [
+      "error",
+      {
+        semi: false,
+      },
+    ],
   },
-  "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module"
-  },
-};
+}

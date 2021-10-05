@@ -127,7 +127,7 @@ const DonateIndex = props => {
   }, [])
 
   // TODO: Implement this on a utils file
-  function getUrlParams (search) {
+  function getUrlParams(search) {
     const hashes = search?.slice(search.indexOf('?') + 1).split('&')
     return hashes?.reduce((params, hash) => {
       const [key, val] = hash.split('=')
@@ -135,7 +135,7 @@ const DonateIndex = props => {
     }, {})
   }
 
-  function PaymentOptions () {
+  function PaymentOptions() {
     const isSSR = typeof window === 'undefined'
 
     const ShowPaymentOption = () => {
@@ -305,9 +305,7 @@ const DonateIndex = props => {
         />
         <ShareIcons message="Can't donate? Share this page instead." centered />
       </ProjectContainer>
-      <Payment>
-        {PaymentOptions()}
-      </Payment>
+      <Payment>{PaymentOptions()}</Payment>
     </Container>
   )
 }

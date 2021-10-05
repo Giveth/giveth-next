@@ -37,7 +37,13 @@ const Categories = ({ categories }) => {
   return categories?.length
     ? categories.map((category, index) => {
         if (!category) return null
-        return <BadgeContent key={category.name} index={index} name={category.name} />
+        return (
+          <BadgeContent
+            key={category.name}
+            index={index}
+            name={category.name}
+          />
+        )
       })
     : null
 }
@@ -384,7 +390,6 @@ const ProjectCard = props => {
     </Box>
   )
 }
-
 
 const CardContainer = styled(Card)`
   position: relative;

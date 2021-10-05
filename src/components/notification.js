@@ -1,6 +1,5 @@
 import React from 'react'
 import { Flex, Text } from 'theme-ui'
-import { Slide, toast } from 'react-toastify'
 import {
   IoMdWarning,
   IoIosCheckmarkCircle,
@@ -9,7 +8,6 @@ import {
 } from 'react-icons/io'
 import 'react-toastify/dist/ReactToastify.css'
 import theme from '../utils/theme-ui/index'
-import styled from '@emotion/styled'
 
 export default function Toast({ content = 'default msg', type, action }) {
   const Content = () => {

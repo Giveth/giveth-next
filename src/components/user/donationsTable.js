@@ -3,11 +3,9 @@ import { getEtherscanPrefix, titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
-import { Badge, Flex, Spinner, Text, jsx } from 'theme-ui'
-import { useQuery } from '@apollo/client'
+import { Badge, Flex, Text } from 'theme-ui'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
 dayjs.extend(localizedFormat)
 

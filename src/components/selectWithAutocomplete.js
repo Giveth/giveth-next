@@ -9,13 +9,13 @@ import iconManifest from '../../public/assets/cryptocurrency-icons/manifest.json
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 const StyledOption = styled.div`
-    &:hover {
-      div {
-        color: ${theme.colors.background};
-      }
-      background-color: ${theme.colors.hover};
+  &:hover {
+    div {
+      color: ${theme.colors.background};
     }
-  `
+    background-color: ${theme.colors.hover};
+  }
+`
 
 const SelectWithAutocomplete = ({
   content,
@@ -32,7 +32,9 @@ const SelectWithAutocomplete = ({
     let toShow = children
     // Special render for tokens, showing extra info
     if (isTokenList) {
-      const found = iconManifest.find(i => i.symbol === value.symbol?.toUpperCase())
+      const found = iconManifest.find(
+        i => i.symbol === value.symbol?.toUpperCase()
+      )
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
           {found ? (

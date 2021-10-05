@@ -10,8 +10,8 @@ module.exports = {
     config.module.rules.push({
       test: /\.md$/,
       use: "raw-loader",
-    });
-    return config;
+    })
+    return config
   },
   images: {
     domains: [
@@ -31,4 +31,4 @@ module.exports = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
-};
+}

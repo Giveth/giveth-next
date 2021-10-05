@@ -1,16 +1,16 @@
 // eslint-disable-next-line @next/next/no-document-import-in-page
-import Document, { Html, Head, Main, NextScript } from 'next/document'
-import { InitializeColorMode } from "theme-ui";
+import Document, { Html, Head, Main, NextScript } from "next/document"
+import { InitializeColorMode } from "theme-ui"
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx);
-    return { ...initialProps };
+    const initialProps = await Document.getInitialProps(ctx)
+    return { ...initialProps }
   }
 
   render() {
     // Replace html lang attribute value with your language.
-    const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 
     return (
       <Html>
@@ -31,7 +31,7 @@ class MyDocument extends Document {
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }
 

@@ -20,7 +20,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import styled from '@emotion/styled'
 import { WalletProvider } from '../contextProvider/WalletProvider'
-import Web3Provider from "../contextProvider/Web3Provider";
+import Web3Provider from '../contextProvider/Web3Provider'
 
 const StyledToastContainer = styled(ToastContainer)`
   .Toastify__close-button {

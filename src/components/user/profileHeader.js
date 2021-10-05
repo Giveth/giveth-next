@@ -47,7 +47,6 @@ export const ProfileHeader = props => {
           flex: [1, 0.5, 0.5],
           mr: 4,
           flexDirection: ['column', 'row', 'row'],
-          alignItems: ['center', null, null],
           width: ['100%', null, null],
           alignItems: ['left', null, null]
         }}

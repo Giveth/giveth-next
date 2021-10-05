@@ -1,11 +1,8 @@
 import React from 'react'
-import { useRouter } from 'next/router'
 import { Flex, Button, Text, Image } from 'theme-ui'
 import LevitatingCard from './hoc/levitatingCard'
 
-function GR11 () {
-  const router = useRouter()
-
+function GR11() {
   const today = new Date()
   const firstDay = new Date('09/08/2021')
   const lastDay = new Date('09/23/2021')

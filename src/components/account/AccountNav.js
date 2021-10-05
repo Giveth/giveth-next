@@ -1,4 +1,4 @@
-import { jsx, Flex, Text, Box } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { formatEtherscanLink } from '../../util'
@@ -19,11 +19,13 @@ const formatTitle = (title, projectsList, userDonations) => {
       return title
   }
 }
+
 const options = [
   { route: 'account', name: 'My Account' },
   { route: 'projects', name: 'My Projects' },
   { route: 'donations', name: 'My Donations' }
 ]
+
 const AccountNav = props => {
   const { setQuery, query, projectsList, userDonations } = props
   const { logout, user, currentChainId } = useWallet()

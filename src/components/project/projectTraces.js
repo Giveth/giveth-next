@@ -22,11 +22,10 @@ const ProjectTraces = () => {
   const [isSearching, setIsSearching] = React.useState(false)
   const { currentProjectView } = React.useContext(ProjectContext)
 
-  const tracesFetch =
-    useSWR(
-      `${process.env.NEXT_PUBLIC_FEATHERS}/traces?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView.project._id}`,
-      fetcher
-    )
+  const tracesFetch = useSWR(
+    `${process.env.NEXT_PUBLIC_FEATHERS}/traces?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView.project._id}`,
+    fetcher
+  )
   const tracesData = tracesFetch?.data
 
   const [activeItem, setCurrentItem] = React.useState(1)
@@ -161,7 +160,6 @@ const ProjectTraces = () => {
     </>
   )
 }
-
 
 const PagesStyle = styled.div`
   .inner-pagination {

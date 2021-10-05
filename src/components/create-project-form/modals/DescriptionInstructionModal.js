@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Text } from 'theme-ui';
+import React from 'react'
+import { Button, Text } from 'theme-ui'
 
 export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
   <div
@@ -59,7 +59,7 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
               {`${item}?`}
             </Text>
           </li>
-        );
+        )
       })}
     </ol>
     <Text
@@ -77,12 +77,13 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
       <a
         target='_blank'
         css={{ textDecoration: 'none' }}
-        href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization#' rel="noreferrer"
+        href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization#'
+        rel='noreferrer'
       >
         <Text sx={{ color: 'primary' }}>
-          "How to write a fundraising project description to increase donations"
+          How to write a fundraising project description to increase donations
         </Text>
       </a>
     </Text>
   </div>
-);
+)

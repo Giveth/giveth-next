@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
-import { Label, Input, Text, Button } from 'theme-ui'
+import React from 'react'
+import { Label, Text, Button } from 'theme-ui'
 import { GET_LINK_BANK_CREATION } from '../../../apollo/gql/projects'
 import { useQuery } from '@apollo/client'
 import { animated } from 'react-spring'
 
 export const ProjectBankAccountInput = ({
-  register,
-  currentValue,
   animationStyle,
   projectId,
   finalize,
@@ -57,8 +55,8 @@ export const ProjectBankAccountInput = ({
         mt={3}
         sx={{ variant: 'text.paragraph', color: 'secondary', width: '70%' }}
       >
-        If you don't connect your bank account you will receive donations in
-        crypto to your Giveth account. You an transfer your crypto funds or
+        If you don&apos;t connect your bank account you will receive donations
+        in crypto to your Giveth account. You an transfer your crypto funds or
         convert them to FIAT outside the Giveth platform. By connecting a bank
         account in addition to crypto donations, your project will be accepting
         donations in FIAT.

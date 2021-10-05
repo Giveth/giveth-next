@@ -2,9 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-
-import { ProjectContext } from '../../../contextProvider/projectProvider'
-import { Button, Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 import theme from '../../../utils/theme-ui'
 
 const Card = React.lazy(() => import('./card'))

@@ -54,7 +54,9 @@ const ProjectDonatorView = ({
   const usePopup = React.useContext(PopupContext)
   const isSSR = typeof window === 'undefined'
   const client = useApolloClient()
-  const { currentProjectView, setCurrentProjectView } = React.useContext(ProjectContext)
+  const { currentProjectView, setCurrentProjectView } = React.useContext(
+    ProjectContext
+  )
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
@@ -186,10 +188,7 @@ const ProjectDonatorView = ({
     } else {
       return (
         <NoImage>
-          <Image
-            src='/images/no-image-available.jpg'
-            width={250}
-          />
+          <Image src='/images/no-image-available.jpg' width={250} />
           <h2>No Image Available</h2>
         </NoImage>
       )
@@ -199,9 +198,7 @@ const ProjectDonatorView = ({
   return (
     <>
       <CancelledModal isOpen={isCancelled} />
-      <Flex>
-        {projectPic()}
-      </Flex>
+      <Flex>{projectPic()}</Flex>
       <Flex
         sx={{
           width: '90%',
@@ -513,21 +510,24 @@ const ProjectDonatorView = ({
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
 
-          {isOwner && !(project?.verified ||
-            project?.IOTraceable ||
-            project?.fromTrace) && (
-            <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
-              <Text
-                sx={{
-                  cursor: 'pointer',
-                  alignSelf: 'center',
-                  textDecoration: 'underline'
-                }}
-              >
-                Verify your project
-              </Text>
-            </Link>
-          )}
+          {isOwner &&
+            !(
+              project?.verified ||
+              project?.IOTraceable ||
+              project?.fromTrace
+            ) && (
+              <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
+                <Text
+                  sx={{
+                    cursor: 'pointer',
+                    alignSelf: 'center',
+                    textDecoration: 'underline'
+                  }}
+                >
+                  Verify your project
+                </Text>
+              </Link>
+            )}
 
           {(project?.verified ||
             project?.IOTraceable ||
@@ -698,7 +698,6 @@ const ProjectDonatorView = ({
     </>
   )
 }
-
 
 const FloatingDonateView = styled(Flex)`
   @media screen and (max-width: 800px) {

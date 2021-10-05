@@ -5,21 +5,16 @@ import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
 import {
   FacebookShareButton,
-  FacebookIcon,
   LinkedinShareButton,
-  LinkedinIcon,
-  TwitterShareButton,
-  TwitterIcon
+  TwitterShareButton
 } from 'react-share'
 
 const HighFive = ({
   project,
   addedProject,
-  projectId,
   projectImage,
   projectTitle,
-  projectDescription,
-  newProject
+  projectDescription
 }) => {
   const shareTitle = `Check out on @Givethio`
   const url = `${window.location.origin}/project/${addedProject?.slug}`

@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-  Flex,
-  Box,
-  Button,
-  Checkbox,
-  Label,
-  Text,
-  Input,
-} from 'theme-ui'
+import { Flex, Box, Button, Checkbox, Label, Text, Input } from 'theme-ui'
 import Web3 from 'web3'
 import { BiArrowBack } from 'react-icons/bi'
 import styled from '@emotion/styled'
@@ -29,7 +21,10 @@ import { categoryList } from '../../../utils/constants'
 import ImageSection from './imageSection'
 import Toast from '../../toast'
 import { maxSelectedCategory } from '../../../utils/constants'
-import {invalidProjectTitleToast, isProjectTitleValid} from '../../../validation/projectValidation';
+import {
+  invalidProjectTitleToast,
+  isProjectTitleValid
+} from '../../../validation/projectValidation'
 
 // import dynamic from 'next/dynamic'
 // import { getWallet } from '../../../wallets'
@@ -195,7 +190,6 @@ function ProjectEditionForm(props) {
               title='Project Description'
               htmlFor='editDescription'
             />
-
             {!isSSR && (
               <React.Suspense fallback={<div />}>
                 <RichTextInput
@@ -285,7 +279,6 @@ function ProjectEditionForm(props) {
                 onChange={e => setMapLocation(e.target.value)}
               />
             </div>
-
             <Label
               sx={{
                 display: 'flex',
@@ -295,19 +288,16 @@ function ProjectEditionForm(props) {
               }}
             >
               <Checkbox
-                checked={ mapLocation === 'Global' }
+                checked={mapLocation === 'Global'}
                 onChange={e => {
                   const checked = e.target.checked
-                  checked
-                    ? setMapLocation('Global')
-                    : setMapLocation('')
+                  checked ? setMapLocation('Global') : setMapLocation('')
                 }}
               />
               <Text sx={{ fontFamily: 'body', fontSize: 2 }}>
                 This project has a global impact
               </Text>
             </Label>
-
             <div
               css={{
                 display: 'flex',
@@ -478,7 +468,7 @@ function ProjectEdition(props) {
         }
       }
       if (!isProjectTitleValid(data.editTitle)) {
-        return invalidProjectTitleToast();
+        return invalidProjectTitleToast()
       }
       const projectCategories = []
       for (const category in categoryList) {

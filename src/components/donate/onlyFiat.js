@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
+import { Button, Checkbox, Input, Flex, Label, Text } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
-// import { loadStripe } from '@stripe/stripe-js'
 import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 import theme from '../../utils/theme-ui'
+// import { loadStripe } from '@stripe/stripe-js'
 
 const GIVETH_DONATION_AMOUNT = 5
 const COMING_SOON = true
@@ -79,7 +79,6 @@ const CheckboxLabel = styled(Label)`
     width: 100%;
   }
   cursor: pointer;
-}
 `
 
 const Summary = styled(Flex)`

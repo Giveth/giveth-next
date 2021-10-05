@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Label, Input, Button, Text, Flex } from 'theme-ui'
 import theme from '../../../../src/utils/theme-ui'
 import { BsQuestionCircle } from 'react-icons/bs'
@@ -11,16 +11,16 @@ export const ProjectEthAddressInput = ({
   animationStyle,
   goBack
 }) => {
-  const [characterLength, setCharacterLength] = useState(
-    currentValue ? currentValue.length : 0
-  )
-  const [address, setAddress] = useState(null)
+  // const [characterLength, setCharacterLength] = useState(
+  //   currentValue ? currentValue.length : 0
+  // )
+  // const [address, setAddress] = useState(null)
 
-  const onChangeAddress = e => {
-    e.preventDefault()
-    setCharacterLength(e.target.value.length)
-    setAddress(true)
-  }
+  // const onChangeAddress = e => {
+  //   e.preventDefault()
+  //   setCharacterLength(e.target.value.length)
+  //   setAddress(true)
+  // }
   return (
     <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
       <Label
@@ -106,7 +106,7 @@ export const ProjectEthAddressInput = ({
           {...register('projectWalletAddress')}
           defaultValue={currentValue}
           placeholder='0x00000...'
-          onChange={e => onChangeAddress(e)}
+          // onChange={e => onChangeAddress(e)}
         />
         <Text
           sx={{
@@ -157,7 +157,7 @@ export const ProjectEthAddressInput = ({
               fontFamily: 'body',
               fontWeight: 'bold',
               fontSize: 2,
-              letterSpacing: '4%',
+              letterSpacing: '4%'
             }}
           >
             NEXT
@@ -201,7 +201,7 @@ export const ProjectEthAddressInput = ({
           padding: 15px 10px;
           margin: 0 5px;
           border-radius: 6px;
-         
+
           position: absolute;
           z-index: 1;
         }
@@ -209,7 +209,7 @@ export const ProjectEthAddressInput = ({
         .tooltiptext a {
           text-decoration: underline
         }
-        
+
         .tooltip:hover .tooltiptext {
           visibility: visible;
         }

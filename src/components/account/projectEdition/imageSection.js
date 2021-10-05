@@ -24,14 +24,12 @@ const Selection = styled(Box)`
 
 function ImageSection({ image, register, setValue }) {
   const [displayImage, setDisplayImage] = useState(null)
-  const [fullImage, setFullImage] = useState(null)
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
     onDrop: async acceptedFile => {
       try {
-        setFullImage(acceptedFile)
         setDisplayImage(await toBase64(acceptedFile[0]))
       } catch (error) {
         console.log({ error })

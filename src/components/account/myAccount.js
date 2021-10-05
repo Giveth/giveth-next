@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useWallet } from '../../contextProvider/WalletProvider'
-import { Button, Box, Flex, Text, jsx } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 import Notification from '../notification'
 import Avatar from '../avatar'
 import EditProfileModal from './editProfileModal'
 
 const MyAccount = ({ info }) => {
   const [openModal, setOpenModal] = useState(false)
-  const [ethPrice, setEthPrice] = useState(1)
+  // const [ethPrice, setEthPrice] = useState(1)
   const wallet = useWallet()
   const user = wallet?.user
-  const balance = wallet?.balance
+  // const balance = wallet?.balance
 
-  useEffect(() => {
-    const init = async () => {
-      fetch(
-        'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP'
-      )
-        .then(response => response.json())
-        .then(data => setEthPrice(data.USD))
-    }
-    init()
-  })
+  // useEffect(() => {
+  //   const init = async () => {
+  //     fetch(
+  //       'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP'
+  //     ).then(response => response.json())
+  //     // .then(data => setEthPrice(data.USD))
+  //   }
+  //   init()
+  // }, [])
+
   return (
     <>
       <EditProfileModal

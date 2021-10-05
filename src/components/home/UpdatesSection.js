@@ -14,7 +14,7 @@ const UpdatesSection = ({ mediumPosts }) => {
       <div
         style={{
           position: 'absolute',
-          right: '10px',
+          right: '10px'
         }}
       >
         <Image

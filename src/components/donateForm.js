@@ -9,9 +9,8 @@ import theme from '../utils/theme-ui/index'
 const DonationForm = styled.form`
   display: grid;
   grid-gap: 0.5rem;
-  grid-template-columns: 0px auto auto;
-  align-items: bottom;
-  padding: 0.2rem 0px;
+  grid-template-columns: 0 auto auto;
+  padding: 0.2rem 0;
   .donatebutton {
     align-self: start;
     height: 36px;

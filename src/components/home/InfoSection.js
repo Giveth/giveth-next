@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import NextImage from 'next/image'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Flex, Image, Button, Text, jsx } from 'theme-ui'
+import { Grid, Box, Flex, Image, Button, Text } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import styled from '@emotion/styled'
 

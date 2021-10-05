@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router'
 import { Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'

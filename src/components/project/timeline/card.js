@@ -150,7 +150,11 @@ const TimelineCard = props => {
 
   const editUpdate = async () => {
     try {
-      if (editInput === props?.content?.content && editTitle === props?.content?.title) return setOpenEdit(false)
+      if (
+        editInput === props?.content?.content &&
+        editTitle === props?.content?.title
+      )
+        return setOpenEdit(false)
       await client?.mutate({
         mutation: EDIT_PROJECT_UPDATE,
         variables: {

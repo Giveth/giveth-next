@@ -1,11 +1,9 @@
 import { Grid, Button, Input, Flex, Text } from 'theme-ui'
 import React, { useState } from 'react'
-import { useAlert } from 'react-alert'
-import Toast from '../../components/toast'
-
-// import addToMailchimp from 'gatsby-plugin-mailchimp'
-import SubscribedAnimation from '../animations/subscribed'
 import { useMediaQuery } from 'react-responsive'
+import Toast from '../../components/toast'
+import SubscribedAnimation from '../animations/subscribed'
+// import addToMailchimp from 'gatsby-plugin-mailchimp'
 
 function validateEmail(email) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -13,7 +11,6 @@ function validateEmail(email) {
 }
 
 const MailchimpSignup = () => {
-  const alert = useAlert()
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
 

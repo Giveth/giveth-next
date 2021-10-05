@@ -6,13 +6,12 @@ const metamask = {
   isInitialized: false,
   supportLink: `https://etherscan.io/address/`,
   setweb3: function (provider) {
-    const web3Inst = new Web3(provider)
-    metamask.web3 = web3Inst
+    metamask.web3 = new Web3(provider)
     metamask.isInitialized = true
     metamask.provider = provider
   },
   enable: async () => window.ethereum.enable(),
-  init: async (buildEnv, network) => {
+  init: async () => {
     const provider = await detectEthereumProvider()
     if (provider) {
       // From now on, this should always be true:

@@ -11,7 +11,7 @@ class ImageUploader {
         '[Missing config] upload function that returns a promise is required'
       )
 
-    var toolbar = this.quill.getModule('toolbar')
+    const toolbar = this.quill.getModule('toolbar')
     toolbar.addHandler('image', this.selectLocalImage.bind(this))
 
     this.handleDrop = this.handleDrop.bind(this)

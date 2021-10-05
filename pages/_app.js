@@ -1,18 +1,18 @@
-import "../styles/globals.css";
-import "../src/components/richImageUploader/quill.imageUploader.css";
-import Head from "next/head";
-import { DefaultSeo } from "next-seo";
-import { ApolloProvider } from "@apollo/client";
-import { Web3Provider } from "@ethersproject/providers";
-import { Web3ReactProvider } from "@web3-react/core";
-import { ThemeProvider } from "theme-ui";
-import theme from "../src/utils/theme-ui";
-import NextNprogress from "nextjs-progressbar";
-import { client } from "../src/apollo/client";
-import SEO from "../next-seo.config";
+import "../styles/globals.css"
+import "../src/components/richImageUploader/quill.imageUploader.css"
+import Head from "next/head"
+import { DefaultSeo } from "next-seo"
+import { ApolloProvider } from "@apollo/client"
+import { Web3Provider } from "@ethersproject/providers"
+import { Web3ReactProvider } from "@web3-react/core"
+import { ThemeProvider } from "theme-ui"
+import theme from "../src/utils/theme-ui"
+import NextNprogress from "nextjs-progressbar"
+import { client } from "../src/apollo/client"
+import SEO from "../next-seo.config"
 
 function getLibrary(provider) {
-  return new Web3Provider(provider);
+  return new Web3Provider(provider)
 }
 
 function MyApp({ Component, pageProps }) {
@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }) {
         height="3"
       />
       <Head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"/>{" "}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" />{" "}
         {/* Autopilot */}
         <script
           dangerouslySetInnerHTML={{
@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }) {
         </Web3ReactProvider>
       </ThemeProvider>
     </>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp

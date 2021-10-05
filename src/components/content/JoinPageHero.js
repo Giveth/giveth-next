@@ -63,9 +63,7 @@ const Hero = () => {
           forward to welcoming you!
         </Text>
       </HeroText>
-      {isMobile ? null : (
-        <HeroImage src='/images/people-highfive.svg' alt='' />
-      )}
+      {isMobile ? null : <HeroImage src='/images/people-highfive.svg' alt='' />}
     </HeroSection>
   )
 }

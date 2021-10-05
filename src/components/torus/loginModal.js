@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Flex, Text } from 'theme-ui'
 import Image from 'next/image'
 import styled from '@emotion/styled'
@@ -10,30 +10,6 @@ import { SiFacebook, SiTwitter, SiReddit, SiDiscord } from 'react-icons/si'
 import { MdEmail } from 'react-icons/md'
 import DecoratorClouds from '../../images/decorator-clouds.svg'
 import MetamaskLogo from '../../images/logos/metamask-fox.svg'
-
-const customStyles = {
-  overlay: {
-    position: 'fixed',
-    zIndex: 4,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.25)',
-    backdropFilter: 'blur(2px)',
-    '-webkit-backdrop-filter': 'blur(2px)'
-  },
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    borderRadius: '12px',
-    borderColor: 'transparent',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-}
 
 const LongBtn = styled(Flex)`
   flex-direction: row;

@@ -46,7 +46,7 @@ const EditButtonSection = ({ formData, currentStep, setStep }) => {
   return (
     <Flex
       sx={{
-        mt: '29px',
+        mt: '29px'
         // justifyContent: 'space-between',
       }}
       columns={[2, '3fr 1fr']}

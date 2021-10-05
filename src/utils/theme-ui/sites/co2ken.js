@@ -1,5 +1,4 @@
 const green = '#00F7A9' // green
-const orange = '#FFAB5E' // orange
 
 export default {
   donationSlug: 'co2ken',

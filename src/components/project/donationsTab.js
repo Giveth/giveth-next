@@ -117,7 +117,6 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
   )
 }
 
-
 const Funds = styled.div`
   padding: 2rem;
   background: ${theme.colors.lightestBlue};

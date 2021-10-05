@@ -1,19 +1,19 @@
-import React from "react";
-import { Label, Input, Grid, Text, Button, Textarea } from "theme-ui";
-import theme from "../src/utils/theme-ui";
-import Seo from "../src/components/seo";
-import styled from "@emotion/styled";
-import useMediaQuery from "react-responsive";
-import Layout from "../src/components/layout";
+import React from "react"
+import { Label, Input, Grid, Text, Button, Textarea } from "theme-ui"
+import theme from "../src/utils/theme-ui"
+import Seo from "../src/components/seo"
+import styled from "@emotion/styled"
+import useMediaQuery from "react-responsive"
+import Layout from "../src/components/layout"
 
 const Main = styled(Grid)`
   justify-content: start;
   padding-left: 10vw;
   @media (max-width: 500px) {
     margin: 1rem;
-    padding: 0vw;
+    padding: 0;
   }
-`;
+`
 
 const FormStyled = styled(Grid)`
   max-width: 50vw;
@@ -39,7 +39,7 @@ const FormStyled = styled(Grid)`
       color: ${theme.colors.bodyLight};
     }
   }
-`;
+`
 
 const MessageStyled = styled(Textarea)`
   font-family: ${theme.fonts.body};
@@ -48,10 +48,10 @@ const MessageStyled = styled(Textarea)`
     outline: none;
     border-color: ${theme.colors.primary};
   }
-`;
+`
 
 const Contact = ({ data }) => {
-  const isMobile = useMediaQuery({ query: "(max-width: 825px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 825px)" })
   return (
     <Layout>
       <Seo title="Contact us" />
@@ -149,7 +149,7 @@ const Contact = ({ data }) => {
         </FormStyled>
       </Main>
     </Layout>
-  );
-};
+  )
+}
 
-export default Contact;
+export default Contact

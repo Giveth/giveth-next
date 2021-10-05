@@ -7,7 +7,7 @@ export const ProjectImpactLocationInput = ({
   currentValue,
   animationStyle,
   goBack,
-  setValue,
+  setValue
 }) => {
   const [location, setLocation] = useState(
     currentValue === 'Global' ? 'Global' : currentValue
@@ -125,7 +125,7 @@ export const ProjectImpactLocationInput = ({
               fontFamily: 'body',
               fontWeight: 'bold',
               fontSize: 2,
-              letterSpacing: '4%',
+              letterSpacing: '4%'
             }}
           >
             NEXT

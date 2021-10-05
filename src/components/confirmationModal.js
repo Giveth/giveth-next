@@ -5,8 +5,7 @@ const ConfirmationModal = ({
   showModal,
   setShowModal,
   title,
-  confirmation,
-  noMsg
+  confirmation
 }) => (
   <div
     style={{

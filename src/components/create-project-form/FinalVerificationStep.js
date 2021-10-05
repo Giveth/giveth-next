@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Button, Flex, Image, Grid, Box } from 'theme-ui'
+import { Text, Button, Flex, Image, Box } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import { animated } from 'react-spring'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'

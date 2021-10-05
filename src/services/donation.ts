@@ -1,7 +1,10 @@
-import { SAVE_DONATION, SAVE_DONATION_TRANSACTION } from '../apollo/gql/donations'
+import {
+  SAVE_DONATION,
+  SAVE_DONATION_TRANSACTION
+} from '../apollo/gql/donations'
 import { client } from '../apollo/client'
 
-export async function saveDonation (
+export async function saveDonation(
   fromAddress: string,
   toAddress: string,
   transactionId: string,
@@ -26,7 +29,7 @@ export async function saveDonation (
         projectId
       }
     })
-    const { saveDonation: saveDonationId } = data 
+    const { saveDonation: saveDonationId } = data
     donationId = saveDonationId
   } catch (error) {
     saveDonationErrors.push(error)
@@ -38,7 +41,10 @@ export async function saveDonation (
   }
 }
 
-export async function saveDonationTransaction (hash: string, donationId: Number) {
+export async function saveDonationTransaction(
+  hash: string,
+  donationId: Number
+) {
   const saveDonationTransactionErrors = []
   let savedDonationTransaction: any = 0
   try {
@@ -50,14 +56,13 @@ export async function saveDonationTransaction (hash: string, donationId: Number)
         // anonymous: false
       }
     })
-    savedDonationTransaction = data 
+    savedDonationTransaction = data
   } catch (error) {
     saveDonationTransactionErrors.push(error)
   }
-  
+
   return {
     savedDonationTransaction,
     saveDonationTransactionErrors
   }
-
 }

@@ -1,44 +1,44 @@
-import React from "react";
-import { Grid, Button, Heading, Text, IconButton } from "theme-ui";
-import styled from "@emotion/styled";
+import React from "react"
+import { Grid, Button, Heading, Text, IconButton } from "theme-ui"
+import styled from "@emotion/styled"
 
-import ProjectCard from "../src/components/projectCard";
+import ProjectCard from "../src/components/projectCard"
 
 // import placeholder image
-const noImage = "/images/no-image-available.jpg";
+const noImage = "/images/no-image-available.jpg"
 
 // import image assets
-const iconUser = "/images/icon-user.svg";
-const iconVerticalLine = "/images/icon-vertical-line.svg";
-const iconSearch = "/images/icon-search.svg";
-const iconShare = "/images/icon-share.svg";
-const iconHeart = "/images/icon-heart.svg";
-const iconStreamlineGas = "/images/icon-streamline-gas.svg";
-const imgPeopleAnnounce = "/images/people-announce.svg";
-const imgPeopleHeader = "/images/people-header.svg";
-const imgPeoplePuzzle = "/images/people-puzzle.svg";
-const imgPeopleStretching = "/images/people-stretching.png";
-const imgDecoratorCloud1 = "/images/decorator-cloud1.svg";
-const imgDecoratorCloud2 = "/images/decorator-cloud2.svg";
-const imgDecoratorElements = "/images/decorator-elements.svg";
-const imgDecoratorFizzy = "/images/decorator-fizzy-square.svg";
-const imgDecoratorFizzyRot = "/images/decorator-fizzy-square-rotated.svg";
-const imgDecoratorLeaf = "/images/decorator-leaf.svg";
+const iconUser = "/images/icon-user.svg"
+const iconVerticalLine = "/images/icon-vertical-line.svg"
+const iconSearch = "/images/icon-search.svg"
+const iconShare = "/images/icon-share.svg"
+const iconHeart = "/images/icon-heart.svg"
+const iconStreamlineGas = "/images/icon-streamline-gas.svg"
+const imgPeopleAnnounce = "/images/people-announce.svg"
+const imgPeopleHeader = "/images/people-header.svg"
+const imgPeoplePuzzle = "/images/people-puzzle.svg"
+const imgPeopleStretching = "/images/people-stretching.png"
+const imgDecoratorCloud1 = "/images/decorator-cloud1.svg"
+const imgDecoratorCloud2 = "/images/decorator-cloud2.svg"
+const imgDecoratorElements = "/images/decorator-elements.svg"
+const imgDecoratorFizzy = "/images/decorator-fizzy-square.svg"
+const imgDecoratorFizzyRot = "/images/decorator-fizzy-square-rotated.svg"
+const imgDecoratorLeaf = "/images/decorator-leaf.svg"
 // import UserDetails from '../components/torus/userDetails'
-import { WalletProvider } from "../src/contextProvider/WalletProvider";
+import { WalletProvider } from "../src/contextProvider/WalletProvider"
 
 const StyleGuide = styled.div`
   border: 1px solid lightgray;
   border-radius: 4px;
   margin: 1rem;
-`;
+`
 
 const Container = styled.div`
   padding: 1rem;
   button {
     margin: 0.5rem;
   }
-`;
+`
 
 const ViewStyles = () => {
   return (
@@ -239,7 +239,7 @@ const ViewStyles = () => {
         </WalletProvider>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ViewStyles;
+export default ViewStyles

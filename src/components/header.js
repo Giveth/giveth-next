@@ -218,8 +218,8 @@ const CategoriesList = () => {
         </Link>
         {categories
           ?.sort(function (a, b) {
-            const textA = a.value.toUpperCase();
-            const textB = b.value.toUpperCase();
+            const textA = a.value.toUpperCase()
+            const textB = b.value.toUpperCase()
             return textA < textB ? -1 : textA > textB ? 1 : 0
           })
           ?.map(c => {
@@ -254,7 +254,7 @@ const Header = ({ isHomePage }) => {
   const pathname = router.pathname?.split('/')[1]
 
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -265,7 +265,7 @@ const Header = ({ isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -280,7 +280,7 @@ const Header = ({ isHomePage }) => {
 
   const MainLogo = () => {
     return (
-      <Link href="/">
+      <Link href='/'>
         <LogoSpan
           className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
         >
@@ -289,7 +289,7 @@ const Header = ({ isHomePage }) => {
             <Text
               pl={3}
               sx={{
-                fontWeight: 'medium',
+                fontWeight: 'medium'
               }}
             >
               GIVETH
@@ -404,7 +404,11 @@ const Header = ({ isHomePage }) => {
               </Flex>
             )}
             {pathname !== 'projects' && (
-              <img style={{ margin: '0 10px'}} src={'/images/icon-vertical-line.svg'} alt='' />
+              <img
+                style={{ margin: '0 10px' }}
+                src={'/images/icon-vertical-line.svg'}
+                alt=''
+              />
             )}
             <Login />
           </UserSpan>
