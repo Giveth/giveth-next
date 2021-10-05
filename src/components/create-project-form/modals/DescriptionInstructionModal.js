@@ -77,7 +77,7 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
       <a
         target='_blank'
         css={{ textDecoration: 'none' }}
-        href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization#'
+        href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization#' rel="noreferrer"
       >
         <Text sx={{ color: 'primary' }}>
           "How to write a fundraising project description to increase donations"

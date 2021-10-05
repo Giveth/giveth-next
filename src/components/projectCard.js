@@ -1,122 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
+import { Heading, Box, Button, Card, Flex, Text } from 'theme-ui'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import styled from '@emotion/styled'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import theme from '../utils/theme-ui/index'
-// import Donate from '../components/donateForm'
 import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
 import { BsHeartFill } from 'react-icons/bs'
 import { FaShareAlt } from 'react-icons/fa'
 import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
 import LevitatingCard from './hoc/levitatingCard'
+// import Donate from '../components/donateForm'
 
 const RichTextViewer = dynamic(() => import('./richTextViewer'), {
   ssr: false
 })
-
-const CardContainer = styled(Card)`
-  position: relative;
-  z-index: 0;
-  background-color: ${theme.colors.background};
-  margin-bottom: 30px;
-  border-radius: 12px;
-  width: 100%;
-`
-
-const CardContent = styled(Flex)`
-  flex-direction: column;
-  word-wrap: break-word;
-  padding: 1rem;
-`
-
-const AltCardContent = styled.span`
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  flex: 1;
-  width: 100%;
-  z-index: 2;
-  flex-direction: column;
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: 12px;
-  padding: 0.5rem 1.5rem 1rem 1.5rem;
-  text-align: center;
-`
-
-const Badge = styled.span`
-  padding: 3px 11.76px;
-  margin: 0.4rem;
-  align-items: center;
-  text-align: center;
-  border: 1px solid ${theme.colors.bodyLight};
-  border-radius: 48px;
-  color: ${theme.colors.bodyLight};
-`
-
-const Dot = styled.span`
-  height: 68px;
-  width: 68px;
-  display: grid;
-  color: ${theme.colors.background};
-  border: 6px solid ${theme.colors.background};
-  border-radius: 50%;
-  position: absolute;
-  bottom: -34px;
-  left: 24px;
-  font-family: 'Red Hat Text', sans-serif;
-  font-size: 10px;
-`
-
-const DotInner = styled.span`
-  display: block;
-  text-align: center;
-  align-self: center;
-  position: relative;
-`
-
-const Options = styled.span`
-  font-family: 'Red Hat Text', sans-serif;
-  color: ${theme.colors.background};
-  display: flex;
-  position: absolute;
-  align-items: center;
-  bottom: -42px;
-  right: 24px;
-`
-
-const CardFooter = styled.span`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin: 1rem 0;
-`
-
-const Givers = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-self: center;
-  margin: 1.2rem 0 0.5rem 0;
-  div:first-child {
-    border-right: 2px solid #edf0fa;
-  }
-  div {
-    padding: 0 1rem;
-  }
-`
-const IconBtn = styled(IconButton)`
-  cursor: pointer;
-`
-
-const StyledImage = styled(Image)`
-  cursor: pointer;
-  border-radius: 12px 12px 0px 0px;
-  object-fit: cover;
-`
 
 const Categories = ({ categories }) => {
   const BadgeContent = ({ index, name }) => {
@@ -137,7 +37,7 @@ const Categories = ({ categories }) => {
   return categories?.length
     ? categories.map((category, index) => {
         if (!category) return null
-        return <BadgeContent index={index} name={category?.name} />
+        return <BadgeContent key={category.name} index={index} name={category.name} />
       })
     : null
 }
@@ -148,9 +48,6 @@ const ProjectCard = props => {
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
-  const strUserId = user?.id?.toString()
-  const initUserHearted =project?.reactions?.find(r => r?.userId === user?.id)
-  const [hearted, setHearted] = useState(initUserHearted)
   const [heartedByUser, setHeartedByUser] = useState(null)
   const [heartedCount, setHeartedCount] = useState(null)
 
@@ -170,7 +67,6 @@ const ProjectCard = props => {
       console.log({ hearted, reactionCount })
       setHeartedCount(reactionCount)
       setHeartedByUser(hearted)
-      setHearted(hearted)
     } catch (error) {
       usePopup?.triggerPopup('WelcomeLoggedOut')
       console.log({ error })
@@ -238,7 +134,6 @@ const ProjectCard = props => {
                     backgroundRepeat: 'no-repeat',
                     position: 'relative'
                   }}
-                  alt={props.name || project?.title}
                 />
               ) : (
                 <div
@@ -489,5 +384,102 @@ const ProjectCard = props => {
     </Box>
   )
 }
+
+
+const CardContainer = styled(Card)`
+  position: relative;
+  z-index: 0;
+  background-color: ${theme.colors.background};
+  margin-bottom: 30px;
+  border-radius: 12px;
+  width: 100%;
+`
+
+const CardContent = styled(Flex)`
+  flex-direction: column;
+  word-wrap: break-word;
+  padding: 1rem;
+`
+
+const AltCardContent = styled.span`
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  z-index: 2;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  padding: 0.5rem 1.5rem 1rem 1.5rem;
+  text-align: center;
+`
+
+const Badge = styled.span`
+  padding: 3px 11.76px;
+  margin: 0.4rem;
+  align-items: center;
+  text-align: center;
+  border: 1px solid ${theme.colors.bodyLight};
+  border-radius: 48px;
+  color: ${theme.colors.bodyLight};
+`
+
+const Dot = styled.span`
+  height: 68px;
+  width: 68px;
+  display: grid;
+  color: ${theme.colors.background};
+  border: 6px solid ${theme.colors.background};
+  border-radius: 50%;
+  position: absolute;
+  bottom: -34px;
+  left: 24px;
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 10px;
+`
+
+const DotInner = styled.span`
+  display: block;
+  text-align: center;
+  align-self: center;
+  position: relative;
+`
+
+const Options = styled.span`
+  font-family: 'Red Hat Text', sans-serif;
+  color: ${theme.colors.background};
+  display: flex;
+  position: absolute;
+  align-items: center;
+  bottom: -42px;
+  right: 24px;
+`
+
+const CardFooter = styled.span`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 1rem 0;
+`
+
+const Givers = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  margin: 1.2rem 0 0.5rem 0;
+  div:first-child {
+    border-right: 2px solid #edf0fa;
+  }
+  div {
+    padding: 0 1rem;
+  }
+`
+
+const StyledImage = styled(Image)`
+  cursor: pointer;
+  border-radius: 12px 12px 0px 0px;
+  object-fit: cover;
+`
 
 export default ProjectCard

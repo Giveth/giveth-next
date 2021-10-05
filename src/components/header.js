@@ -204,9 +204,7 @@ const siteId = process.env.NEXT_PUBLIC_SITE_ID
 const projectSearch = process.env.PROJECT_SEARCH
 
 const CategoriesList = () => {
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  const { currentProjectView } = React.useContext(ProjectContext)
   const categories = currentProjectView?.globalCategories
 
   if (!categories) return null
@@ -220,8 +218,8 @@ const CategoriesList = () => {
         </Link>
         {categories
           ?.sort(function (a, b) {
-            var textA = a.value.toUpperCase()
-            var textB = b.value.toUpperCase()
+            const textA = a.value.toUpperCase();
+            const textB = b.value.toUpperCase();
             return textA < textB ? -1 : textA > textB ? 1 : 0
           })
           ?.map(c => {
@@ -229,11 +227,12 @@ const CategoriesList = () => {
               <Link
                 href={{
                   pathname: '/projects',
-                  query: { category: c?.name }
+                  query: { category: c.name }
                 }}
+                key={c.name}
               >
                 <li>
-                  <p>{c?.value}</p>
+                  <p>{c.value}</p>
                 </li>
               </Link>
             )
@@ -243,7 +242,7 @@ const CategoriesList = () => {
   )
 }
 
-const Header = ({ siteTitle, isHomePage }) => {
+const Header = ({ isHomePage }) => {
   const router = useRouter()
   const { isLoggedIn, user } = useWallet()
   const usePopup = React.useContext(PopupContext)
@@ -252,7 +251,6 @@ const Header = ({ siteTitle, isHomePage }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const isMobileForProjectBtn = useMediaQuery({ query: '(max-width: 1200px)' })
   const [hasScrolled, setScrollState] = useState(false)
-  const [navHidden, setHideNavbar] = useState(false)
   const pathname = router.pathname?.split('/')[1]
 
   useEffect(() => {
@@ -414,14 +412,6 @@ const Header = ({ siteTitle, isHomePage }) => {
       </HeaderContainer>
     </Headroom>
   )
-}
-
-Header.propTypes = {
-  siteTitle: PropTypes.string
-}
-
-Header.defaultProps = {
-  siteTitle: ''
 }
 
 export default Header

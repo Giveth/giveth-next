@@ -53,8 +53,8 @@ export const UserProjects = props => {
           {projects
             ?.slice()
             .sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
-            .map((project, index) => (
-              <ProjectCard shadowed project={project} raised={0} />
+            .map(project => (
+              <ProjectCard key={project.id} shadowed project={project} raised={0} />
             ))}
         </Grid>
       ) : (

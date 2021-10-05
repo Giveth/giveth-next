@@ -1,10 +1,7 @@
 import React from 'react'
-import { ethers } from 'ethers'
 import axios from 'axios'
 import useSWR from 'swr'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { useApolloClient } from '@apollo/client'
-import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
@@ -12,154 +9,21 @@ import theme from '../../utils/theme-ui'
 import {
   Avatar,
   Badge,
-  Button,
-  Box,
   Input,
   Flex,
   Spinner,
   Text,
-  jsx
 } from 'theme-ui'
 import Jdenticon from 'react-jdenticon'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import DropdownInput from '../dropdownInput'
 import { parseBalance } from '../../util'
+// import DropdownInput from '../dropdownInput'
+// import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
+// import { useApolloClient } from '@apollo/client'
 
 dayjs.extend(localizedFormat)
-const Table = styled.table`
-  border-collapse: collapse;
-  margin: 4rem 0;
-  padding: 0;
-  width: 100%;
 
-  thead {
-    text-align: left;
-  }
-
-  caption {
-    font-size: 1.5em;
-    margin: 0.5em 0 0.75em;
-  }
-
-  tr {
-    border-bottom: 1px solid #eaebee;
-    padding: 0.35em;
-  }
-  th,
-  td {
-    padding: 0.625em;
-  }
-
-  th {
-    padding: 1rem 0;
-    font-size: 0.625rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  td {
-    padding: 1rem 0;
-  }
-
-  @media screen and (max-width: 800px) {
-    border: 0;
-
-    caption {
-      font-size: 1.3em;
-    }
-
-    thead {
-      border: none;
-      clip: rect(0 0 0 0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      width: 1px;
-    }
-
-    tr {
-      border-bottom: 5px solid #eaebee;
-      display: block;
-      margin: 1rem 0 4rem 0;
-    }
-    tr:last-child {
-      margin: 1rem 0 0 0;
-    }
-
-    td {
-      border-bottom: 1px solid #eaebee;
-      display: block;
-      font-size: 0.8em;
-      text-align: right;
-    }
-
-    td::before {
-      content: attr(aria-label);
-      content: attr(data-label);
-      float: left;
-      font-size: 0.8rem;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    td:last-child {
-      border-bottom: 0;
-    }
-  }
-`
-const PagesStyle = styled.div`
-  .inner-pagination {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    list-style-type: none;
-    font-family: ${theme.fonts.body};
-    margin: 0 0 3rem 0;
-    a {
-      text-decoration: none;
-    }
-  }
-  .item-page {
-    padding: 0.4rem 1rem;
-    margin: 0 0.3rem;
-    a {
-      color: ${theme.colors.secondary};
-    }
-  }
-  .active-page {
-    padding: 0.4rem 1rem;
-    margin: 0 0.3rem;
-    text-align: center;
-    background-color: ${theme.colors.secondary};
-    border-radius: 4px;
-    a {
-      color: white;
-    }
-  }
-`
-
-const DonorBox = styled.td`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
-const IconSearch = styled(SearchIcon)`
-  margin-left: -2.5rem;
-`
-const SearchInput = styled(Flex)`
-  align-items: center;
-`
-const FilterInput = styled(Flex)`
-  align-items: center;
-`
-
-const FilterBox = styled(Flex)`
-  width: 100%;
-  justify-content: space-between;
-`
 const fetcher = url => axios.get(url).then(res => res.data)
 
 const DonationsTable = ({ donations = [] }) => {
@@ -171,23 +35,20 @@ const DonationsTable = ({ donations = [] }) => {
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
   const [isSearching, setIsSearching] = React.useState(false)
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
-  const client = useApolloClient()
+  const { currentProjectView } = React.useContext(ProjectContext)
+  // const client = useApolloClient()
 
   const fromTrace =
     currentProjectView?.project?.fromTrace ||
     currentProjectView?.project?.IOTraceable
 
   const traceDonationsFetch =
-    fromTrace &&
     useSWR(
       `${process.env.NEXT_PUBLIC_FEATHERS}/donations?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView?.project?._id}`,
       fetcher
     )
 
-  const traceDonations = traceDonationsFetch?.data
+  const traceDonations = fromTrace && traceDonationsFetch?.data
 
   React.useEffect(() => {
     if (!traceDonations) {
@@ -333,7 +194,7 @@ const DonationsTable = ({ donations = [] }) => {
                 <tr key={key}>
                   <td
                     data-label='Account'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
+                    style={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
                       {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
@@ -373,7 +234,7 @@ const DonationsTable = ({ donations = [] }) => {
                   </DonorBox>
                   <td
                     data-label='Currency'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
+                    style={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Badge variant='green'>
                       {i?.currency || i?.token?.symbol}
@@ -381,7 +242,7 @@ const DonationsTable = ({ donations = [] }) => {
                   </td>
                   <td
                     data-label='Amount'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
+                    style={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text
                       sx={{
@@ -463,5 +324,141 @@ const DonationsTable = ({ donations = [] }) => {
     </>
   )
 }
+
+
+const Table = styled.table`
+  border-collapse: collapse;
+  margin: 4rem 0;
+  padding: 0;
+  width: 100%;
+
+  thead {
+    text-align: left;
+  }
+
+  caption {
+    font-size: 1.5em;
+    margin: 0.5em 0 0.75em;
+  }
+
+  tr {
+    border-bottom: 1px solid #eaebee;
+    padding: 0.35em;
+  }
+  th,
+  td {
+    padding: 0.625em;
+  }
+
+  th {
+    padding: 1rem 0;
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  td {
+    padding: 1rem 0;
+  }
+
+  @media screen and (max-width: 800px) {
+    border: 0;
+
+    caption {
+      font-size: 1.3em;
+    }
+
+    thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    tr {
+      border-bottom: 5px solid #eaebee;
+      display: block;
+      margin: 1rem 0 4rem 0;
+    }
+    tr:last-child {
+      margin: 1rem 0 0 0;
+    }
+
+    td {
+      border-bottom: 1px solid #eaebee;
+      display: block;
+      font-size: 0.8em;
+      text-align: right;
+    }
+
+    td::before {
+      content: attr(aria-label);
+      float: left;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    td:last-child {
+      border-bottom: 0;
+    }
+  }
+`
+const PagesStyle = styled.div`
+  .inner-pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    list-style-type: none;
+    font-family: ${theme.fonts.body};
+    margin: 0 0 3rem 0;
+    a {
+      text-decoration: none;
+    }
+  }
+  .item-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    a {
+      color: ${theme.colors.secondary};
+    }
+  }
+  .active-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    text-align: center;
+    background-color: ${theme.colors.secondary};
+    border-radius: 4px;
+    a {
+      color: white;
+    }
+  }
+`
+
+const DonorBox = styled.td`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+
+const IconSearch = styled(SearchIcon)`
+  margin-left: -2.5rem;
+`
+
+const SearchInput = styled(Flex)`
+  align-items: center;
+`
+
+const FilterBox = styled(Flex)`
+  width: 100%;
+  justify-content: space-between;
+`
+
+// const FilterInput = styled(Flex)`
+//   align-items: center;
+// `
 
 export default DonationsTable

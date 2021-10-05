@@ -1,7 +1,6 @@
 import React from 'react'
 import { Box, Button, Input, Text, Flex } from 'theme-ui'
 import { useWallet } from '../../contextProvider/WalletProvider'
-import * as Auth from '../../services/auth'
 import { checkIfURLisValid } from '../../utils'
 import { useMutation } from '@apollo/client'
 import { IoMdClose } from 'react-icons/io'
@@ -11,31 +10,6 @@ import theme from '../../utils/theme-ui/index'
 import Modal from 'react-modal'
 import Avatar from '../avatar'
 import Toast from '../../components/toast'
-
-const customStyles = {
-  overlay: {
-    position: 'fixed',
-    zIndex: 4,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    backdropFilter: 'blur(2px)',
-    '-webkit-backdrop-filter': 'blur(2px)'
-  },
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    borderRadius: '12px',
-    borderColor: 'transparent',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)'
-  }
-}
 
 const InputBox = props => {
   const {
@@ -80,7 +54,7 @@ const InputBox = props => {
 }
 
 function EditProfileModal(props) {
-  const [user, setUser] = React.useState(props?.user)
+  const user = props?.user
   const wallet = useWallet()
 
   const { register, handleSubmit, reset, errors } = useForm({
@@ -217,7 +191,6 @@ function EditProfileModal(props) {
             sx={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
           >
             <Button
-              type='button'
               aria-label='edit profile'
               variant='small'
               sx={{
@@ -229,7 +202,6 @@ function EditProfileModal(props) {
                 fontWeight: 'bold'
               }}
               type='submit'
-              // onClick={() => alert('This is still a mockup, hold on!')}
             >
               SAVE
             </Button>
@@ -265,6 +237,31 @@ function EditProfileModal(props) {
       </form>
     </Modal>
   )
+}
+
+const customStyles = {
+  overlay: {
+    position: 'fixed',
+    zIndex: 4,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    backdropFilter: 'blur(2px)',
+    '-webkit-backdrop-filter': 'blur(2px)'
+  },
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    borderRadius: '12px',
+    borderColor: 'transparent',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)'
+  }
 }
 
 export default EditProfileModal

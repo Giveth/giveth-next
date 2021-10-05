@@ -3,18 +3,8 @@ import styled from '@emotion/styled'
 import { Spinner, Flex, Text } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import DonationsTable from './donationsTable'
-import { useWallet } from '../../contextProvider/WalletProvider'
-
-const Funds = styled.div`
-  padding: 2rem;
-  background: ${theme.colors.lightestBlue};
-  border: 1px solid #d4daee;
-  box-sizing: border-box;
-  border-radius: 12px;
-`
 
 const DonationsTab = ({ project, donations: projectDonations }) => {
-  const { wallet: userWallet } = useWallet()
   const [loading, setLoading] = React.useState(true)
   const donations = projectDonations?.filter(el => el != null)
   const totalDonations = project?.fromTrace
@@ -126,5 +116,14 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
     </div>
   )
 }
+
+
+const Funds = styled.div`
+  padding: 2rem;
+  background: ${theme.colors.lightestBlue};
+  border: 1px solid #d4daee;
+  box-sizing: border-box;
+  border-radius: 12px;
+`
 
 export default DonationsTab

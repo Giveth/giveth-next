@@ -36,35 +36,6 @@ const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
 const ProjectTraces = React.lazy(() => import('./projectTraces'))
 
-const FloatingDonateView = styled(Flex)`
-  @media screen and (max-width: 800px) {
-    width: 80%;
-    align-self: center;
-    margin: 0 auto;
-    bottom: 0;
-  }
-`
-
-const NoImage = styled.div`
-  width: 100vw;
-  margin: 0 5%;
-  height: 250px;
-  border-radius: 10px;
-  background-color: rgb(233, 233, 233);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    margin-left: -50px;
-  }
-  @media screen and (max-width: 576px) {
-    img {
-      margin-left: 0;
-    }
-  }
-`
-
 const ProjectDonatorView = ({
   project,
   donations: projectDonations,
@@ -79,13 +50,11 @@ const ProjectDonatorView = ({
   const [currentTab, setCurrentTab] = useState('description')
   const [totalGivers, setTotalGivers] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
-  const [isCancelled, setIsCancelled] = useState(null)
+  const [isCancelled, setIsCancelled] = useState(false)
   const usePopup = React.useContext(PopupContext)
   const isSSR = typeof window === 'undefined'
   const client = useApolloClient()
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  const { currentProjectView, setCurrentProjectView } = React.useContext(ProjectContext)
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
@@ -729,5 +698,35 @@ const ProjectDonatorView = ({
     </>
   )
 }
+
+
+const FloatingDonateView = styled(Flex)`
+  @media screen and (max-width: 800px) {
+    width: 80%;
+    align-self: center;
+    margin: 0 auto;
+    bottom: 0;
+  }
+`
+
+const NoImage = styled.div`
+  width: 100vw;
+  margin: 0 5%;
+  height: 250px;
+  border-radius: 10px;
+  background-color: rgb(233, 233, 233);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    margin-left: -50px;
+  }
+  @media screen and (max-width: 576px) {
+    img {
+      margin-left: 0;
+    }
+  }
+`
 
 export default ProjectDonatorView
