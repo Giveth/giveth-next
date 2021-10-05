@@ -36,35 +36,6 @@ const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
 const ProjectTraces = React.lazy(() => import('./projectTraces'))
 
-const FloatingDonateView = styled(Flex)`
-  @media screen and (max-width: 800px) {
-    width: 80%;
-    align-self: center;
-    margin: 0 auto;
-    bottom: 0;
-  }
-`
-
-const NoImage = styled.div`
-  width: 100vw;
-  margin: 0 5%;
-  height: 250px;
-  border-radius: 10px;
-  background-color: rgb(233, 233, 233);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    margin-left: -50px;
-  }
-  @media screen and (max-width: 576px) {
-    img {
-      margin-left: 0;
-    }
-  }
-`
-
 const ProjectDonatorView = ({
   project,
   donations: projectDonations,
@@ -200,6 +171,7 @@ const ProjectDonatorView = ({
       return (
         <Image
           src={project.image}
+          alt='project picture'
           onError={ev =>
             (ev.target.src =
               'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
@@ -220,8 +192,8 @@ const ProjectDonatorView = ({
           <Image
             src='/images/no-image-available.jpg'
             width={250}
+            alt='no-image-available image'
           />
-          <h2>No Image Available</h2>
         </NoImage>
       )
     }
@@ -729,5 +701,26 @@ const ProjectDonatorView = ({
     </>
   )
 }
+
+
+const FloatingDonateView = styled(Flex)`
+  @media screen and (max-width: 800px) {
+    width: 80%;
+    align-self: center;
+    margin: 0 auto;
+    bottom: 0;
+  }
+`
+
+const NoImage = styled.div`
+  width: 100vw;
+  margin: 0 5%;
+  height: 250px;
+  border-radius: 10px;
+  background-color: rgb(233, 233, 233);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 export default ProjectDonatorView
