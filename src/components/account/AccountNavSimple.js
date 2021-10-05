@@ -1,10 +1,9 @@
 /** @jsx jsx */
-import React from 'react'
 import { Text, Box } from 'theme-ui'
 import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
-const formatTitle = (title, projectsList, userDonations) => {
+const formatTitle = title => {
   switch (title) {
     case 'My Projects':
       // return `My Projects ${

@@ -25,11 +25,11 @@ const DonationsTable = ({ donations = [] }) => {
   const [donationsFromTrace, setDonationsFromTrace] = React.useState([])
   const [limit, setLimit] = React.useState(25)
   const [skip, setSkip] = React.useState(0)
-  const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
   const [isSearching, setIsSearching] = React.useState(false)
   const { currentProjectView } = React.useContext(ProjectContext)
   // const client = useApolloClient()
+  const filter = 0
 
   const fromTrace =
     currentProjectView?.project?.fromTrace ||

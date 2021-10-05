@@ -22,55 +22,6 @@ import styled from '@emotion/styled'
 import { WalletProvider } from '../contextProvider/WalletProvider'
 import Web3Provider from '../contextProvider/Web3Provider'
 
-const StyledToastContainer = styled(ToastContainer)`
-  .Toastify__close-button {
-    color: ${theme.colors.bodyDark};
-  }
-  .Toastify__toast {
-    border-radius: 4px 0px 0px 4px;
-    background-color: white;
-  }
-  .Toastify__toast--info {
-    border-left: 6px solid ${theme.colors.blue};
-  }
-  .Toastify__toast--dark {
-    background-color: ${theme.colors.primary};
-    .Toastify__close-button {
-      color: ${theme.colors.background};
-    }
-  }
-  .Toastify__toast--error {
-    border-left: 6px solid ${theme.colors.red};
-  }
-  .Toastify__toast--success {
-    border-left: 6px solid ${theme.colors.green};
-  }
-  .Toastify__toast--warning {
-    border-left: 6px solid ${theme.colors.warnYellow};
-  }
-`
-
-const AlertOptions = {
-  timeout: 5000,
-  position: positions.BOTTOM_CENTER
-}
-
-const CookieBanner = styled(Flex)`
-  position: fixed;
-  z-index: 4;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 15px;
-  text-align: center;
-  align-self: center;
-  background-color: ${theme.colors.lightBlue};
-  border: 1px solid ${theme.colors.blue};
-  box-sizing: border-box;
-  border-radius: 8px;
-  justify-content: space-between;
-`
-
 const CookiesBanner = () => {
   const [cookiesAccepted, setCookiesAccepted] = React.useState('none')
   const [softLaunchSeen, setSoftLaunchSeen] = React.useState('none')
@@ -141,8 +92,6 @@ const CookiesBanner = () => {
 }
 
 const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
-  const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-
   const Template = () => {
     if (asDialog) {
       return (
@@ -254,6 +203,55 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
     </>
   )
 }
+
+const StyledToastContainer = styled(ToastContainer)`
+  .Toastify__close-button {
+    color: ${theme.colors.bodyDark};
+  }
+  .Toastify__toast {
+    border-radius: 4px 0px 0px 4px;
+    background-color: white;
+  }
+  .Toastify__toast--info {
+    border-left: 6px solid ${theme.colors.blue};
+  }
+  .Toastify__toast--dark {
+    background-color: ${theme.colors.primary};
+    .Toastify__close-button {
+      color: ${theme.colors.background};
+    }
+  }
+  .Toastify__toast--error {
+    border-left: 6px solid ${theme.colors.red};
+  }
+  .Toastify__toast--success {
+    border-left: 6px solid ${theme.colors.green};
+  }
+  .Toastify__toast--warning {
+    border-left: 6px solid ${theme.colors.warnYellow};
+  }
+`
+
+const AlertOptions = {
+  timeout: 5000,
+  position: positions.BOTTOM_CENTER
+}
+
+const CookieBanner = styled(Flex)`
+  position: fixed;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 15px;
+  text-align: center;
+  align-self: center;
+  background-color: ${theme.colors.lightBlue};
+  border: 1px solid ${theme.colors.blue};
+  box-sizing: border-box;
+  border-radius: 8px;
+  justify-content: space-between;
+`
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired

@@ -58,7 +58,7 @@ export async function getServerSideProps(props) {
     })
     categories = categoriesData?.categories
 
-    if (!!process.env.NEXT_PUBLIC_FEATHERS) {
+    if (process.env.NEXT_PUBLIC_FEATHERS) {
       // only fetch if there's a route
       // https://feathers.beta.giveth.io/campaigns?verified=true
       traceProjects = await fetch(
@@ -72,7 +72,7 @@ export async function getServerSideProps(props) {
     }
     //Check io2trace projects
     traceProjects = traceProjects?.data?.filter((i) => {
-      if (!!i?.givethIoProjectId) {
+      if (i?.givethIoProjectId) {
         const foundIndex = projects?.findIndex(
           (x) => x.id == i?.givethIoProjectId
         )

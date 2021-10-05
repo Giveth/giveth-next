@@ -41,7 +41,7 @@ const SetView = props => {
   }
 }
 const AccountBody = props => {
-  const { query, setQuery, projectsList, isSSR, userDonations } = props
+  const { query, projectsList, isSSR, userDonations } = props
 
   return (
     <Flex

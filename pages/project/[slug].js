@@ -123,7 +123,7 @@ export async function getServerSideProps(props) {
       updates: updates || null,
       reactions: reactions || null,
       admin: admin?.data?.user || {},
-      error: !!errors ? JSON.stringify(errors) : false,
+      error: errors ? JSON.stringify(errors) : false,
     },
   }
 }

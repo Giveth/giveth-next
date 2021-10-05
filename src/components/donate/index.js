@@ -25,92 +25,8 @@ const OnlyCrypto = dynamic(() => import('./onlyCrypto'), { ssr: false })
 const CRYPTO = 'Cryptocurrency'
 const CREDIT = 'Credit Card'
 
-const LEFT_BOX_STYLE = {
-  borderTopLeftRadius: '0.2rem',
-  borderBottomLeftRadius: '0.2rem'
-}
-const RIGHT_BOX_STYLE = {
-  borderTopRightRadius: '0.2rem',
-  borderBottomRightRadius: '0.2rem'
-}
-
-const Container = styled(Flex)`
-  flex-direction: row;
-  @media (max-width: 900px) {
-    flex-direction: column;
-  }
-`
-
-const ProjectContainer = styled(Flex)`
-  width: 25vw;
-  flex-direction: column;
-  margin: 0 3.125rem 0 0;
-  align-items: center;
-  @media (max-width: 1100px) {
-    width: 100%;
-  }
-`
-
-const Payment = styled.div`
-  display: flex;
-  flex-direction: column;
-  @media (max-width: 800px) {
-    width: 80vw;
-    margin: 3rem 0;
-    padding: 0;
-  }
-`
-
-const Share = styled.div`
-  align-items: center;
-`
-
-const SocialIcons = styled.div`
-  display: flex;
-  margin: 1rem 0;
-  justify-content: center;
-  * {
-    margin: 0 0.3rem;
-  }
-`
-
-const Options = styled.div`
-  display: flex;
-  width: 100%;
-  min-width: 29.25rem;
-  flex-direction: row;
-  border: 0.125rem solid white;
-  box-sizing: border-box;
-  border-radius: 0.375rem;
-  margin: 2.063rem 0 0 0;
-  box-sizing: border-box;
-
-  @media (max-width: 1100px) {
-    min-width: 20rem;
-  }
-
-  @media (max-width: 800px) {
-    width: 100%;
-    align-self: center;
-    margin: 2.063rem 0;
-  }
-`
-
-const OptionTypesBox = styled(Flex)`
-  flex-direction: column;
-  cursor: pointer;
-  width: 50%;
-  align-items: center;
-  text-align: center;
-  padding: 0.875rem 1.938rem;
-
-  @media (max-width: 800px) {
-    width: 50%;
-  }
-`
-
 const DonateIndex = props => {
-  const { location, project } = props
+  const { project } = props
   const [hashSent, setHashSent] = React.useState(false)
   const [paymentType, setPaymentType] = React.useState(CRYPTO)
   const [isAfterPayment, setIsAfterPayment] = React.useState(null)
@@ -236,7 +152,7 @@ const DonateIndex = props => {
     )
   }
 
-  if (!!project?.fromTrace) {
+  if (project?.fromTrace) {
     const Redirect = redirect(
       `https://trace.giveth.io/campaign/${project?.slug}`
     )
@@ -309,5 +225,88 @@ const DonateIndex = props => {
     </Container>
   )
 }
+
+const LEFT_BOX_STYLE = {
+  borderTopLeftRadius: '0.2rem',
+  borderBottomLeftRadius: '0.2rem'
+}
+const RIGHT_BOX_STYLE = {
+  borderTopRightRadius: '0.2rem',
+  borderBottomRightRadius: '0.2rem'
+}
+
+const Container = styled(Flex)`
+  flex-direction: row;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+`
+
+const ProjectContainer = styled(Flex)`
+  width: 25vw;
+  flex-direction: column;
+  margin: 0 3.125rem 0 0;
+  align-items: center;
+  @media (max-width: 1100px) {
+    width: 100%;
+  }
+`
+
+const Payment = styled.div`
+  display: flex;
+  flex-direction: column;
+  @media (max-width: 800px) {
+    width: 80vw;
+    margin: 3rem 0;
+    padding: 0;
+  }
+`
+
+const Share = styled.div`
+  align-items: center;
+`
+
+const SocialIcons = styled.div`
+  display: flex;
+  margin: 1rem 0;
+  justify-content: center;
+  * {
+    margin: 0 0.3rem;
+  }
+`
+
+const Options = styled.div`
+  display: flex;
+  width: 100%;
+  min-width: 29.25rem;
+  flex-direction: row;
+  border: 0.125rem solid white;
+  box-sizing: border-box;
+  border-radius: 0.375rem;
+  margin: 2.063rem 0 0 0;
+
+  @media (max-width: 1100px) {
+    min-width: 20rem;
+  }
+
+  @media (max-width: 800px) {
+    width: 100%;
+    align-self: center;
+    margin: 2.063rem 0;
+  }
+`
+
+const OptionTypesBox = styled(Flex)`
+  flex-direction: column;
+  cursor: pointer;
+  width: 50%;
+  align-items: center;
+  text-align: center;
+  padding: 0.875rem 1.938rem;
+
+  @media (max-width: 800px) {
+    width: 50%;
+  }
+`
 
 export default DonateIndex

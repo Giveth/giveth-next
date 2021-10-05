@@ -4,7 +4,7 @@ import { parseBalance } from '../util'
 import useKeepSWRDataLiveAsBlocksArrive from './useKeepSWRDataLiveAsBlocksArrive'
 
 function getETHBalance(library) {
-  return async (address, _) => {
+  return async address => {
     return library.getBalance(address).then(balance => parseBalance(balance))
   }
 }

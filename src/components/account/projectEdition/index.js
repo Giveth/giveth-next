@@ -8,8 +8,8 @@ import { useApolloClient, useQuery } from '@apollo/client'
 
 import theme from '../../../utils/theme-ui/index'
 import {
-  GET_LINK_BANK_CREATION,
-  EDIT_PROJECT,
+  // GET_LINK_BANK_CREATION,
+  // EDIT_PROJECT,
   FETCH_PROJECT_BY_SLUG,
   WALLET_ADDRESS_IS_VALID
 } from '../../../apollo/gql/projects'
@@ -48,7 +48,7 @@ function ProjectEditionForm(props) {
     setCancelModal,
     updateProject,
     project,
-    client,
+    // client,
     mapLocation,
     setMapLocation
   } = props
@@ -57,34 +57,34 @@ function ProjectEditionForm(props) {
   const [desc, setDesc] = useState('')
   const [isActive, setIsActive] = useState(null)
 
-  const { register, handleSubmit, setValue, errors } = useForm() // initialize the hook
+  const { register, handleSubmit, setValue } = useForm() // initialize the hook
   useEffect(() => {
     setCategories(project?.categories)
     setDesc(project?.description || '')
     setIsActive(project?.status?.id === '5')
   }, [project])
 
-  const connectBankAccount = async () => {
-    try {
-      const projectId = project?.id
-      if (!projectId) return alert('no project here')
-      const connectLink = await client.query({
-        query: GET_LINK_BANK_CREATION,
-        variables: {
-          projectId: parseInt(projectId),
-          returnUrl: `${window.location.origin}/account?projectId=${projectId}`,
-          refreshUrl: `${window.location.origin}/account?projectId=${projectId}`
-        }
-      })
-      if (connectLink?.data?.setProjectBankAccount) {
-        window.location.href = connectLink.data.setProjectBankAccount
-      } else {
-        alert('error')
-      }
-    } catch (error) {
-      console.log({ error })
-    }
-  }
+  // const connectBankAccount = async () => {
+  //   try {
+  //     const projectId = project?.id
+  //     if (!projectId) return alert('no project here')
+  //     const connectLink = await client.query({
+  //       query: GET_LINK_BANK_CREATION,
+  //       variables: {
+  //         projectId: parseInt(projectId),
+  //         returnUrl: `${window.location.origin}/account?projectId=${projectId}`,
+  //         refreshUrl: `${window.location.origin}/account?projectId=${projectId}`
+  //       }
+  //     })
+  //     if (connectLink?.data?.setProjectBankAccount) {
+  //       window.location.href = connectLink.data.setProjectBankAccount
+  //     } else {
+  //       alert('error')
+  //     }
+  //   } catch (error) {
+  //     console.log({ error })
+  //   }
+  // }
 
   const CustomLabel = ({ title, htmlFor, style, variant }) => {
     return (
@@ -119,7 +119,7 @@ function ProjectEditionForm(props) {
         </Flex>
 
         <form
-          onSubmit={handleSubmit((data, e) => {
+          onSubmit={handleSubmit(() => {
             const res = toggleProjectActivation(project?.id, isActive, msg =>
               Toast({ content: msg, type: 'success' })
             )
@@ -166,7 +166,7 @@ function ProjectEditionForm(props) {
         </form>
       </Flex>
       <form
-        onSubmit={handleSubmit((data, e) => {
+        onSubmit={handleSubmit(data => {
           console.log({ data, desc })
           updateProject({ ...data, desc })
         })}
@@ -409,7 +409,7 @@ function ProjectEdition(props) {
 
   useEffect(() => {
     if (project && updateProjectOnServer) {
-      const projectId = fetchedProject?.projectBySlug?.id
+      // const projectId = fetchedProject?.projectBySlug?.id
       const editProjectMutation = async () => {
         setLoading(true)
         try {
@@ -423,13 +423,13 @@ function ProjectEdition(props) {
             })
             return false
           }
-          const edit = await client.mutate({
-            mutation: EDIT_PROJECT,
-            variables: {
-              newProjectData: project,
-              projectId: parseFloat(projectId)
-            }
-          })
+          // const edit = await client.mutate({
+          //   mutation: EDIT_PROJECT,
+          //   variables: {
+          //     newProjectData: project,
+          //     projectId: parseFloat(projectId)
+          //   }
+          // })
           setUpdateProjectOnServer(false)
           setLoading(false)
           setShowModal(true)

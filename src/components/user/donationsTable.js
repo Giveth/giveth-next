@@ -1,5 +1,5 @@
 import React from 'react'
-import { getEtherscanPrefix, titleCase } from '../../utils'
+import { titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
@@ -9,147 +9,10 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 
 dayjs.extend(localizedFormat)
 
-const Table = styled.table`
-  border-collapse: collapse;
-  margin: 4rem 0;
-  padding: 0;
-  table-layout: fixed;
-  width: 100%;
-
-  thead {
-    text-align: left;
-  }
-
-  caption {
-    font-size: 1.5em;
-    margin: 0.5em 0 0.75em;
-  }
-
-  tr {
-    border-bottom: 1px solid #eaebee;
-    padding: 0.35em;
-  }
-  thead th:first-child {
-    border-left: none;
-    width: 10em;
-    min-width: 10em;
-    max-width: 10em;
-  }
-
-  thead th:nth-child(3),
-  thead th:nth-child(4) {
-    border-left: none;
-    width: 20em;
-    min-width: 20em;
-    max-width: 20em;
-  }
-  th,
-  td {
-    padding: 0.625em;
-    width: 80%;
-    overflow: auto;
-  }
-  th {
-    padding: 1rem 0;
-    font-size: 0.625rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  td {
-    padding: 1rem 0;
-  }
-  @media screen and (max-width: 800px) {
-    border: 0;
-
-    caption {
-      font-size: 1.3em;
-    }
-
-    thead {
-      border: none;
-      clip: rect(0 0 0 0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      width: 1px;
-    }
-
-    tr {
-      border-bottom: 5px solid #eaebee;
-      display: block;
-      margin: 1rem 0 4rem 0;
-    }
-    tr:last-child {
-      margin: 1rem 0 0 0;
-    }
-
-    td {
-      width: 100%;
-      border-bottom: 1px solid #eaebee;
-      display: block;
-      font-size: 0.8em;
-      text-align: right;
-    }
-
-    td::before {
-      content: attr(aria-label);
-      content: attr(data-label);
-      float: left;
-      font-size: 0.8rem;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    td:last-child {
-      border-bottom: 0;
-    }
-  }
-`
-const PagesStyle = styled.div`
-  .inner-pagination {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    list-style-type: none;
-    font-family: ${theme.fonts.body};
-    margin: 0 0 3rem 0;
-    a {
-      text-decoration: none;
-    }
-  }
-  .item-page {
-    padding: 0.4rem 1rem;
-    margin: 0 0.3rem;
-    a {
-      color: ${theme.colors.secondary};
-    }
-  }
-  .active-page {
-    padding: 0.4rem 1rem;
-    margin: 0 0.3rem;
-    text-align: center;
-    background-color: ${theme.colors.secondary};
-    border-radius: 4px;
-    a {
-      color: white;
-    }
-  }
-`
-
-const DonorBox = styled.td`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
 const DonationsTable = props => {
   const options = ['All Donations', 'Fiat', 'Crypto']
-  const [currentDonations, setCurrentDonations] = React.useState(
-    props?.donations
-  )
-  const [filter, setFilter] = React.useState(0)
+  const currentDonations = props?.donations
+  const filter = 0
 
   const filterDonations = items => {
     switch (options[filter]) {
@@ -185,12 +48,6 @@ const DonationsTable = props => {
     const handlePageChange = pageNumber => {
       setCurrentItem(pageNumber)
     }
-
-    const copy = hash => {
-      navigator.clipboard.writeText(hash)
-    }
-
-    const etherscanPrefix = getEtherscanPrefix()
 
     return (
       <Flex sx={{ flexDirection: 'column', mx: [2, 5, 5] }}>
@@ -304,5 +161,139 @@ const DonationsTable = props => {
     </>
   )
 }
+
+const Table = styled.table`
+  border-collapse: collapse;
+  margin: 4rem 0;
+  padding: 0;
+  table-layout: fixed;
+  width: 100%;
+
+  thead {
+    text-align: left;
+  }
+
+  caption {
+    font-size: 1.5em;
+    margin: 0.5em 0 0.75em;
+  }
+
+  tr {
+    border-bottom: 1px solid #eaebee;
+    padding: 0.35em;
+  }
+  thead th:first-child {
+    border-left: none;
+    width: 10em;
+    min-width: 10em;
+    max-width: 10em;
+  }
+
+  thead th:nth-child(3),
+  thead th:nth-child(4) {
+    border-left: none;
+    width: 20em;
+    min-width: 20em;
+    max-width: 20em;
+  }
+  th,
+  td {
+    padding: 0.625em;
+    width: 80%;
+    overflow: auto;
+  }
+  th {
+    padding: 1rem 0;
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  td {
+    padding: 1rem 0;
+  }
+  @media screen and (max-width: 800px) {
+    border: 0;
+
+    caption {
+      font-size: 1.3em;
+    }
+
+    thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    tr {
+      border-bottom: 5px solid #eaebee;
+      display: block;
+      margin: 1rem 0 4rem 0;
+    }
+    tr:last-child {
+      margin: 1rem 0 0 0;
+    }
+
+    td {
+      width: 100%;
+      border-bottom: 1px solid #eaebee;
+      display: block;
+      font-size: 0.8em;
+      text-align: right;
+    }
+
+    td::before {
+      content: attr(data-label);
+      float: left;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    td:last-child {
+      border-bottom: 0;
+    }
+  }
+`
+const PagesStyle = styled.div`
+  .inner-pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    list-style-type: none;
+    font-family: ${theme.fonts.body};
+    margin: 0 0 3rem 0;
+    a {
+      text-decoration: none;
+    }
+  }
+  .item-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    a {
+      color: ${theme.colors.secondary};
+    }
+  }
+  .active-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    text-align: center;
+    background-color: ${theme.colors.secondary};
+    border-radius: 4px;
+    a {
+      color: white;
+    }
+  }
+`
+
+const DonorBox = styled.td`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
 
 export default DonationsTable

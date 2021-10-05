@@ -48,7 +48,7 @@ export async function saveDonationTransaction(
   const saveDonationTransactionErrors = []
   let savedDonationTransaction: any = 0
   try {
-    const { data, error } = await client.mutate({
+    const { data } = await client.mutate({
       mutation: SAVE_DONATION_TRANSACTION,
       variables: {
         transactionId: hash?.toString(),

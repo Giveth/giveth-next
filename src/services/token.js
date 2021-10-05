@@ -1,7 +1,6 @@
-import React from 'react'
+import Web3 from 'web3'
 import { client } from '../apollo/client'
 import { DO_LOGIN, VALIDATE_TOKEN } from '../apollo/gql/auth'
-import Web3 from 'web3'
 import Logger from '../Logger'
 
 export async function validateAuthToken(token) {

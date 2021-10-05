@@ -83,16 +83,15 @@ const OnlyCrypto = props => {
   const [gasPrice, setGasPrice] = useState(null)
   const [gasETHPrice, setGasETHPrice] = useState(null)
   const [amountTyped, setAmountTyped] = useState('')
-  const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [inProgress, setInProgress] = useState(false)
   const [unconfirmed, setUnconfirmed] = useState(false)
   const [txHash, setTxHash] = useState(null)
   const [erc20List, setErc20List] = useState([])
-  // const [anonymous, setAnonymous] = useState(false)
-  const [switchTraceable, setSwitchTraceable] = useState(false)
-  const [traceTokenList, setTraceTokenList] = useState([])
   const [modalIsOpen, setIsOpen] = useState(false)
   const [icon, setIcon] = useState(null)
+  // const [anonymous, setAnonymous] = useState(false)
+  const switchTraceable = false
+  const donateToGiveth = false
 
   const tokenSymbol = selectedToken.symbol
   const isXdai = networkId === xdaiChain.id
@@ -447,7 +446,7 @@ const OnlyCrypto = props => {
               tokenSymbol
             })
           },
-          onError: _error => {
+          onError: () => {
             toast.dismiss()
             // the outside catch handles any error here
             // Toast({
@@ -482,11 +481,11 @@ const OnlyCrypto = props => {
     }
   }
 
-  const traceableNetwork = networkId == process.env.NEXT_PUBLIC_NETWORK_ID
-  const canBeTraceable =
-    (project?.IOTraceable || project?.fromTrace) &&
-    traceableNetwork &&
-    traceTokenList?.tokens?.find(i => i?.symbol === selectedToken.symbol)
+  // const traceableNetwork = networkId == process.env.NEXT_PUBLIC_NETWORK_ID
+  // const canBeTraceable =
+  //   (project?.IOTraceable || project?.fromTrace) &&
+  //   traceableNetwork &&
+  //   traceTokenList?.tokens?.find(i => i?.symbol === selectedToken.symbol)
 
   return (
     <>

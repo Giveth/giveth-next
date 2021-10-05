@@ -1,8 +1,6 @@
 import Web3 from 'web3'
-import React from 'react'
-
-// import dynamic from 'next/dynamic'
 import { getWallet } from '../wallets'
+// import dynamic from 'next/dynamic'
 
 // const getWallet = dynamic(() => import('../wallets').then(md => md.getWallet), {
 //   ssr: false

@@ -6,51 +6,7 @@ import styled from "@emotion/styled"
 import useMediaQuery from "react-responsive"
 import Layout from "../src/components/layout"
 
-const Main = styled(Grid)`
-  justify-content: start;
-  padding-left: 10vw;
-  @media (max-width: 500px) {
-    margin: 1rem;
-    padding: 0;
-  }
-`
-
-const FormStyled = styled(Grid)`
-  max-width: 50vw;
-  grid-template-rows: repeat(5, auto);
-  @media (max-width: 500px) {
-    max-width: 100%;
-  }
-  & label {
-    text-transform: uppercase;
-    color: ${theme.colors.secondary};
-    display: grid;
-    grid-gap: 24px;
-  }
-  input {
-    &::placeholder {
-      color: ${theme.colors.bodyLight};
-    }
-  }
-  & textarea {
-    border: 2px solid ${theme.colors.bodyLight};
-    border-radius: 16px;
-    &::placeholder {
-      color: ${theme.colors.bodyLight};
-    }
-  }
-`
-
-const MessageStyled = styled(Textarea)`
-  font-family: ${theme.fonts.body};
-  padding-left: 1rem;
-  &:focus {
-    outline: none;
-    border-color: ${theme.colors.primary};
-  }
-`
-
-const Contact = ({ data }) => {
+const Contact = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 825px)" })
   return (
     <Layout>
@@ -151,5 +107,49 @@ const Contact = ({ data }) => {
     </Layout>
   )
 }
+
+const Main = styled(Grid)`
+  justify-content: start;
+  padding-left: 10vw;
+  @media (max-width: 500px) {
+    margin: 1rem;
+    padding: 0;
+  }
+`
+
+const FormStyled = styled(Grid)`
+  max-width: 50vw;
+  grid-template-rows: repeat(5, auto);
+  @media (max-width: 500px) {
+    max-width: 100%;
+  }
+  & label {
+    text-transform: uppercase;
+    color: ${theme.colors.secondary};
+    display: grid;
+    grid-gap: 24px;
+  }
+  input {
+    &::placeholder {
+      color: ${theme.colors.bodyLight};
+    }
+  }
+  & textarea {
+    border: 2px solid ${theme.colors.bodyLight};
+    border-radius: 16px;
+    &::placeholder {
+      color: ${theme.colors.bodyLight};
+    }
+  }
+`
+
+const MessageStyled = styled(Textarea)`
+  font-family: ${theme.fonts.body};
+  padding-left: 1rem;
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.primary};
+  }
+`
 
 export default Contact

@@ -1,9 +1,8 @@
 import React from 'react'
 import { Text, Button, Flex } from 'theme-ui'
-import { FaCheckCircle, FaExclamationCircle } from 'react-icons/fa'
 
 const EditButtonSection = ({ formData, currentStep, setStep }) => {
-  const EditBtn = ({ step, title, wasSet, sx = {} }) => {
+  const EditBtn = ({ step, title, sx = {} }) => {
     return (
       <Flex sx={sx}>
         <Button

@@ -1,97 +1,14 @@
 import React, { useState } from 'react'
 import { Button, Checkbox, Input, Flex, Label, Text } from 'theme-ui'
-import { useApolloClient } from '@apollo/client'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
-import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 import theme from '../../utils/theme-ui'
 // import { loadStripe } from '@stripe/stripe-js'
+// import { useApolloClient } from '@apollo/client'
+// import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 
 const GIVETH_DONATION_AMOUNT = 5
 const COMING_SOON = true
-
-const Content = styled.div`
-  max-width: 41.25rem;
-  word-wrap: break-word;
-`
-
-const AmountSection = styled.div`
-  margin: 1.3rem 0 0 0;
-  @media (max-width: 800px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-`
-
-const AmountContainer = styled.div`
-  margin: 2rem 0;
-  @media (max-width: 800px) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`
-
-const OpenAmount = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
-const AmountItems = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-around;
-
-  @media (max-width: 800px) {
-    flex-direction: column;
-  }
-`
-
-const AmountItem = styled.div`
-  flex: 0.2;
-  padding: 1.5rem 0;
-  text-align: center;
-  cursor: pointer;
-  border: 1px white solid;
-  border-radius: 6px;
-  @media (max-width: 800px) {
-    margin: 0.5rem 0;
-  }
-`
-
-const InputComponent = styled(Input)`
-  background: transparent;
-  border: none;
-  padding: 1rem 0.4rem;
-  outline: none;
-  color: white;
-`
-
-const CheckboxLabel = styled(Label)`
-  @media (max-width: 800px) {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-  cursor: pointer;
-`
-
-const Summary = styled(Flex)`
-  flex-direction: column;
-  margin: 2rem 0;
-`
-
-const SmRow = styled(Flex)`
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 0.75rem 0;
-`
 
 const OnlyFiat = props => {
   const { project } = props
@@ -99,7 +16,7 @@ const OnlyFiat = props => {
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [anonymous, setAnonymous] = useState(false)
-  const client = useApolloClient()
+  // const client = useApolloClient()
   const amounts = [500, 100, 50, 30]
 
   const donation = parseFloat(amountTyped || amountSelect)
@@ -107,7 +24,7 @@ const OnlyFiat = props => {
     donation + (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0)
   const subtotal = (donationPlusFee + 0.3) / 0.971
 
-  const goCheckout = async event => {
+  const goCheckout = async () => {
     try {
       if (!amountSelect && !amountTyped) {
         return alert('Please set an amount before donating')
@@ -115,21 +32,19 @@ const OnlyFiat = props => {
       const amount = amountTyped || amountSelect
       if (amount <= 0) return alert('Please set a valid amount')
       // await getDonationSession({ variables: { amount: amountSelect } })
-      const projId = project?.id
-      const slug = project?.slug
-      let givethDonation = 0
-      donateToGiveth === true && (givethDonation = 5)
-      const { data } = await client.query({
-        query: GET_DONATION_SESSION,
-        variables: {
-          projectId: parseFloat(projId),
-          amount: parseFloat(subtotal),
-          anonymous: anonymous,
-          donateToGiveth: donateToGiveth,
-          successUrl: `${window.location.origin}/donate/${slug}?success=true`,
-          cancelUrl: `${window.location.origin}/donate/${slug}?success=false`
-        }
-      })
+      // const projId = project?.id
+      // const slug = project?.slug
+      // const { data } = await client.query({
+      //   query: GET_DONATION_SESSION,
+      //   variables: {
+      //     projectId: parseFloat(projId),
+      //     amount: parseFloat(subtotal),
+      //     anonymous: anonymous,
+      //     donateToGiveth: donateToGiveth,
+      //     successUrl: `${window.location.origin}/donate/${slug}?success=true`,
+      //     cancelUrl: `${window.location.origin}/donate/${slug}?success=false`
+      //   }
+      // })
       // goStripe(data)
     } catch (error) {
       alert(error?.message?.split('GraphQL error: ')[1])
@@ -360,5 +275,88 @@ const OnlyFiat = props => {
     </Content>
   )
 }
+
+const Content = styled.div`
+  max-width: 41.25rem;
+  word-wrap: break-word;
+`
+
+const AmountSection = styled.div`
+  margin: 1.3rem 0 0 0;
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+`
+
+const AmountContainer = styled.div`
+  margin: 2rem 0;
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`
+
+const OpenAmount = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+
+const AmountItems = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+`
+
+const AmountItem = styled.div`
+  flex: 0.2;
+  padding: 1.5rem 0;
+  text-align: center;
+  cursor: pointer;
+  border: 1px white solid;
+  border-radius: 6px;
+  @media (max-width: 800px) {
+    margin: 0.5rem 0;
+  }
+`
+
+const InputComponent = styled(Input)`
+  background: transparent;
+  border: none;
+  padding: 1rem 0.4rem;
+  outline: none;
+  color: white;
+`
+
+const CheckboxLabel = styled(Label)`
+  @media (max-width: 800px) {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  cursor: pointer;
+`
+
+const Summary = styled(Flex)`
+  flex-direction: column;
+  margin: 2rem 0;
+`
+
+const SmRow = styled(Flex)`
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.75rem 0;
+`
 
 export default OnlyFiat

@@ -193,7 +193,7 @@ const ProjectListing = props => {
                   position: 'relative'
                 }}
               />
-            ) : !!props.image ? (
+            ) : props.image ? (
               <div
                 style={{
                   width: '100%',

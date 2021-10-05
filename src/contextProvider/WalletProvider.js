@@ -11,7 +11,6 @@ import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import { PopupContext } from '../contextProvider/popupProvider'
 import LoadingModal from '../components/loadingModal'
 import SignInMetamaskModal from '../components/signInMetamaskModal'
-import getSigner from '../services/ethersSigner'
 import tokenAbi from 'human-standard-token-abi'
 import * as Auth from '../services/auth'
 import Toast from '../components/toast'
@@ -84,13 +83,13 @@ function WalletProvider(props) {
     // EVENTS ONLY --------------
 
     if (EVENT_SETUP_DONE || wallet.isTorus) return
-    const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
+    // const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
     wallet?.provider?.on('accountsChanged', accounts => {
       if (accounts[0] && accounts[0] !== account) {
         Toast({ content: 'Account changed', type: 'warn' })
       }
     })
-    wallet?.provider?.on('chainChanged', async chainId => {
+    wallet?.provider?.on('chainChanged', async () => {
       // needs to be fetched again as chainId is being returned like 0x
       const chainID = await wallet?.web3.eth.net.getId()
       setCurrentChainId(chainID)
@@ -273,7 +272,7 @@ function WalletProvider(props) {
         walletProvider
       })
       console.log(
-        `torus: login  wallet.torus is loaded : ${typeof wallet.torus === true}`
+        `torus: login  wallet.torus is loaded : ${wallet.torus === true}`
       )
       console.log(
         `updateUser: typeof wallet : ${JSON.stringify(typeof wallet, null, 2)}`
@@ -328,19 +327,6 @@ function WalletProvider(props) {
       usePopup?.triggerPopup('WrongNetwork')
       throw new Error(`Wrong network, please change to ${network} or xDAI`)
     }
-  }
-
-  async function sendEthersTransaction(toAddress, amount, provider) {
-    const transaction = {
-      to: toAddress,
-      value: ethers.utils.parseEther(amount.toString())
-    }
-
-    // console.log(`JF wallet?.provider : ${JSON.stringify(wallet, null, 2)}`)
-
-    const signer = getSigner(wallet)
-    const signerTransaction = await signer.sendTransaction(transaction)
-    return signerTransaction
   }
 
   async function sendTransaction(

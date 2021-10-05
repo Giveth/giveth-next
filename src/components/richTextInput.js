@@ -108,7 +108,7 @@ const modules = projectId => {
           Toast({
             content: 'Uploading image, please wait'
           })
-          const { data: imageUploaded, error } = await client.mutate({
+          const { data: imageUploaded } = await client.mutate({
             mutation: UPLOAD_IMAGE,
             variables: {
               imageUpload: {

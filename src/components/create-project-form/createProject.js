@@ -41,7 +41,7 @@ const CreateProject = props => {
     }
   })
   // const { projectId } = queryString.parse(location?.search)
-  const onSubmit = async (values, walletAddress) => {
+  const onSubmit = async values => {
     try {
       setProjectAdded(true)
 
@@ -76,12 +76,6 @@ const CreateProject = props => {
           `Invalid siteId ${process.env.NEXT_PUBLIC_SITE_ID}, checking NEXT_PUBLIC_SITE_ID in the .env config, it should be either 'giveth' or 'gaia-giveth'`
         )
       }
-
-      const projectDescImgs = window?.localStorage
-        .getItem('cached-uploaded-imgs')
-        ?.replace(/\[/g, '')
-        .replace(/\]/g, '')
-        .replace(/\s/g, '')
 
       const projectData = {
         title: values.projectName,

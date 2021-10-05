@@ -33,16 +33,16 @@ export function checkNetwork(networkId) {
 }
 
 export function titleCase(str) {
-  //hot fix
+  //TODO hot fix
   return str
-  if (!str) return null
-  return str
-    ?.toLowerCase()
-    .split(' ')
-    .map(function (word) {
-      return word.replace(word[0], word[0].toUpperCase())
-    })
-    .join(' ')
+  // if (!str) return null
+  // return str
+  //   ?.toLowerCase()
+  //   .split(' ')
+  //   .map(function (word) {
+  //     return word.replace(word[0], word[0].toUpperCase())
+  //   })
+  //   .join(' ')
 }
 
 export function base64ToBlob(base64) {
@@ -133,7 +133,7 @@ export async function getEtherscanTxs(
 }
 
 export function ensRegex(ens) {
-  return /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/.test(
+  return /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/.test(
     ens
   )
 }
@@ -150,7 +150,7 @@ export const getERC20List = ERC20List
 
 export async function checkIfURLisValid(checkUrl) {
   let url = checkUrl
-  if (!/^(?:f|ht)tps?\:\/\//.test(checkUrl)) {
+  if (!/^(?:f|ht)tps?:\/\//.test(checkUrl)) {
     url = 'https://' + url
   }
   const pattern = new RegExp(

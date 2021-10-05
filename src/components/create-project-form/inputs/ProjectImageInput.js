@@ -30,7 +30,7 @@ export const ProjectImageInput = ({
   animationStyle,
   goBack
 }) => {
-  const [image, setImage] = useState()
+  const image = undefined
   const [displayImage, setDisplayImage] = useState(currentValue)
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',

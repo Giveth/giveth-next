@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { client } from "../../src/apollo/client"
-import { jsx, Text, Flex, Spinner } from "theme-ui"
+import { Text, Flex } from "theme-ui"
 import Layout from "../../src/components/layout"
 import Seo from "../../src/components/seo"
 import { PublicProfileView } from "../../src/components/user"
