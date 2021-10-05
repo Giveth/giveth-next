@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "private": false,
   "scripts": {
+    "precommit": "lint-staged",
     "dev": "next dev",
     "build": "npm run clean && next build",
     "start": "next start",
@@ -14,6 +15,13 @@
     "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js",
     "cy:open:ganache": "ganache-cli -p 8545 && npx cypress open",
     "start-ganache": "ganache-cli -p 8545"
+  },
+  "lint-staged": {
+    "*.{js,jsx,json}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
   },
   "dependencies": {
     "@3id/connect": "^0.1.6",
@@ -104,6 +112,7 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "ganache-cli": "^6.12.2",
+    "lint-staged": "^11.2.0",
     "netlify-plugin-cypress": "^2.2.0",
     "prettier": "2.4.1",
     "typescript": "^4.3.2"
