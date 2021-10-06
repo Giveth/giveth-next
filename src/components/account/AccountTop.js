@@ -8,32 +8,6 @@ import theme from '../../utils/theme-ui/index'
 
 const Login = dynamic(() => import('../torus/login'))
 
-const UserSpan = styled.span`
-  position: relative;
-  display: grid;
-  grid-gap: 1.2em !important;
-  grid-template-columns: repeat(4, auto);
-  align-items: center;
-  justify-self: end;
-  @media (max-width: 1030px) {
-    justify-items: end;
-    grid-gap: 0;
-    grid-row: 1;
-    grid-column: 3;
-  }
-`
-const CreateLink = styled.div`
-  text-decoration: none;
-  font-family: 'Red Hat Display', sans-serif;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: ${theme.colors.primary};
-  align-self: center;
-  :hover {
-    color: ${theme.colors.accent};
-  }
-`
-
 const AccountTop = props => {
   const isDonation = (props?.query?.view || '') === 'donations'
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
@@ -93,4 +67,31 @@ const AccountTop = props => {
     </Flex>
   )
 }
+
+const UserSpan = styled.span`
+  position: relative;
+  display: grid;
+  grid-gap: 1.2em !important;
+  grid-template-columns: repeat(4, auto);
+  align-items: center;
+  justify-self: end;
+  @media (max-width: 1030px) {
+    justify-items: end;
+    grid-gap: 0;
+    grid-row: 1;
+    grid-column: 3;
+  }
+`
+const CreateLink = styled.div`
+  text-decoration: none;
+  font-family: 'Red Hat Display', sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: ${theme.colors.primary};
+  align-self: center;
+  :hover {
+    color: ${theme.colors.accent};
+  }
+`
+
 export default AccountTop

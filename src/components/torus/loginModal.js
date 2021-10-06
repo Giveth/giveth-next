@@ -11,40 +11,6 @@ import { MdEmail } from 'react-icons/md'
 import DecoratorClouds from '../../images/decorator-clouds.svg'
 import MetamaskLogo from '../../images/logos/metamask-fox.svg'
 
-const LongBtn = styled(Flex)`
-  flex-direction: row;
-  cursor: pointer;
-  justify-content: center;
-  width: 80%;
-  padding: 15px;
-  margin: 10px 0;
-  align-items: center;
-
-  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.2);
-  transition: box-shadow 0.3s ease-in-out;
-  ::after {
-    transition: opacity 0.3s ease-in-out;
-  }
-  :hover {
-    box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.4);
-  }
-`
-
-const TinyBtn = styled(Box)`
-  cursor: pointer;
-  align-items: center;
-  padding: 15px;
-  margin: 20px 0;
-  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.2);
-  transition: box-shadow 0.3s ease-in-out;
-  ::after {
-    transition: opacity 0.3s ease-in-out;
-  }
-  :hover {
-    box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.4);
-  }
-`
-
 function LoginModal(props) {
   const { login } = useWallet()
   const IconBtn = ({ icon, action }) => {
@@ -197,5 +163,39 @@ function LoginModal(props) {
     </Modal>
   )
 }
+
+const LongBtn = styled(Flex)`
+  flex-direction: row;
+  cursor: pointer;
+  justify-content: center;
+  width: 80%;
+  padding: 15px;
+  margin: 10px 0;
+  align-items: center;
+
+  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
+  ::after {
+    transition: opacity 0.3s ease-in-out;
+  }
+  :hover {
+    box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.4);
+  }
+`
+
+const TinyBtn = styled(Box)`
+  cursor: pointer;
+  align-items: center;
+  padding: 15px;
+  margin: 20px 0;
+  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
+  ::after {
+    transition: opacity 0.3s ease-in-out;
+  }
+  :hover {
+    box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.4);
+  }
+`
 
 export default LoginModal

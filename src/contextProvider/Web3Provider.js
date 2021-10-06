@@ -83,9 +83,8 @@ const Web3Provider = props => {
       }
     })
 
-    const previouslySelectedWallet = window.localStorage.getItem(
-      'selectedWallet'
-    )
+    const previouslySelectedWallet =
+      window.localStorage.getItem('selectedWallet')
     if (previouslySelectedWallet) {
       _onboard
         .walletSelect(previouslySelectedWallet)

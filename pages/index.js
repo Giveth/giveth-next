@@ -12,7 +12,6 @@ import GivethContent from "../src/content/giveth.md"
 import Layout from "../src/components/layout"
 import Seo from "../src/components/seo"
 import Hero from "../src/components/home/HeroSection"
-import GR11 from "../src/components/GR11"
 import InfoSection from "../src/components/home/InfoSection"
 import UpdatesSection from "../src/components/home/UpdatesSection"
 import HomeTopProjects from "../src/components/home/HomeTopProjects"
@@ -54,7 +53,6 @@ const IndexContent = ({
   return (
     <>
       <Hero content={content} />
-      <GR11 />
       <HomeTopProjects
         fromHomePage
         projects={topProjects}

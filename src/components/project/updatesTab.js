@@ -12,9 +12,8 @@ import Timeline from './timeline'
 const UpdatesTab = ({ project, isOwner }) => {
   const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE)
   const [loading, setLoading] = useState(false)
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  const { currentProjectView, setCurrentProjectView } =
+    React.useContext(ProjectContext)
   const { data } = useQuery(GET_PROJECT_UPDATES, {
     variables: {
       projectId: parseFloat(project?.id),

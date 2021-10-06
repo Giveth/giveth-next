@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 const SAVE_DONATION = gql`
-  mutation(
+  mutation (
     $chainId: Float!
     $fromAddress: String!
     $toAddress: String!
@@ -23,7 +23,7 @@ const SAVE_DONATION = gql`
   }
 `
 const SAVE_DONATION_TRANSACTION = gql`
-  mutation($transactionId: String!, $donationId: Float!) {
+  mutation ($transactionId: String!, $donationId: Float!) {
     saveDonationTransaction(
       transactionId: $transactionId
       donationId: $donationId
@@ -112,7 +112,7 @@ const USERS_DONATIONS = gql`
 `
 
 const FETCH_TOKEN_PRICE = gql`
-  query($id: String) {
+  query ($id: String) {
     tokens(where: { id: $id }) {
       id
       derivedETH

@@ -54,9 +54,8 @@ const ProjectDonatorView = ({
   const usePopup = React.useContext(PopupContext)
   const isSSR = typeof window === 'undefined'
   const client = useApolloClient()
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  const { currentProjectView, setCurrentProjectView } =
+    React.useContext(ProjectContext)
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
@@ -702,7 +701,6 @@ const ProjectDonatorView = ({
     </>
   )
 }
-
 
 const FloatingDonateView = styled(Flex)`
   @media screen and (max-width: 800px) {

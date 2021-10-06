@@ -309,7 +309,7 @@ const GET_STRIPE_PROJECT_DONATIONS = gql`
   }
 `
 const ADD_PROJECT = gql`
-  mutation($project: ProjectInput!) {
+  mutation ($project: ProjectInput!) {
     addProject(project: $project) {
       id
       title
@@ -329,7 +329,7 @@ const ADD_PROJECT = gql`
  ** PROJECT UPDATES
  */
 const ADD_PROJECT_UPDATE = gql`
-  mutation($projectId: Float!, $title: String!, $content: String!) {
+  mutation ($projectId: Float!, $title: String!, $content: String!) {
     addProjectUpdate(projectId: $projectId, title: $title, content: $content) {
       id
       projectId
@@ -428,7 +428,7 @@ const GET_PROJECT_BY_ADDRESS = gql`
 `
 
 const REGISTER_PROJECT_DONATION = gql`
-  mutation($txId: String!, $anonymous: Boolean!) {
+  mutation ($txId: String!, $anonymous: Boolean!) {
     registerProjectDonation(txId: $txId, anonymous: $anonymous)
   }
 `
@@ -483,7 +483,7 @@ const GET_CATEGORIES = gql`
 `
 
 const UPLOAD_IMAGE = gql`
-  mutation($imageUpload: ImageUpload!) {
+  mutation ($imageUpload: ImageUpload!) {
     uploadImage(imageUpload: $imageUpload) {
       url
       projectId

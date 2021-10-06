@@ -6,11 +6,8 @@ import { Flex, Text } from 'theme-ui'
 import useComponentVisible from '../utils/useComponentVisible'
 
 const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
-  const {
-    ref,
-    isComponentVisible,
-    setIsComponentVisible
-  } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false)
 
   return (
     <Flex sx={{ width: '100%', flexDirection: 'column' }}>

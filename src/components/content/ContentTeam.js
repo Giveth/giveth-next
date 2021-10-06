@@ -4,6 +4,61 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
 
+const ContentTeam = ({ headerdata }) => (
+  <React.Fragment>
+    <ContentContainer>
+      <Content>
+        {headerdata.map(edges => (
+          <ContentItem key={edges?.portrait?.sys?.id}>
+            <PortraitHelper>
+              <Portrait src={edges?.portrait?.fields?.file.url} />
+            </PortraitHelper>
+            <ContentFooter className='placeholder'>
+              <Headline1
+                pt={1}
+                sx={{ variant: 'headings.h6', color: 'secondary' }}
+              >
+                {edges.headline1}
+              </Headline1>
+
+              <Badge sx={{ variant: 'text.overlineSmall' }}>
+                {edges.headline2}
+              </Badge>
+
+              {/** Hide short bio
+             <Text
+              sx={{
+                variant: 'text.default',
+                width: '260px',
+                textAlign: 'center'
+              }}
+            >
+              {edges.node.shortBio}
+            </Text>
+            */}
+
+              <Social1
+                href={edges.socialTwitter}
+                className='social'
+                target='blank'
+              >
+                <FaTwitter size='24px' />
+              </Social1>
+              <Social2
+                href={edges.socialMedium}
+                className='social'
+                target='blank'
+              >
+                <FaGithub size='24px' />
+              </Social2>
+            </ContentFooter>
+          </ContentItem>
+        ))}
+      </Content>
+    </ContentContainer>
+  </React.Fragment>
+)
+
 const ContentContainer = styled.div`
   padding: 10vh 0;
   max-width: 960px;
@@ -106,60 +161,5 @@ const PortraitHelper = styled.div`
 const Portrait = styled.img`
   width: 100%;
 `
-
-const ContentTeam = ({ headerdata }) => (
-  <React.Fragment>
-    <ContentContainer>
-      <Content>
-        {headerdata.map(edges => (
-          <ContentItem key={edges?.portrait?.sys?.id}>
-            <PortraitHelper>
-              <Portrait src={edges?.portrait?.fields?.file.url} />
-            </PortraitHelper>
-            <ContentFooter className='placeholder'>
-              <Headline1
-                pt={1}
-                sx={{ variant: 'headings.h6', color: 'secondary' }}
-              >
-                {edges.headline1}
-              </Headline1>
-
-              <Badge sx={{ variant: 'text.overlineSmall' }}>
-                {edges.headline2}
-              </Badge>
-
-              {/** Hide short bio
-             <Text
-              sx={{
-                variant: 'text.default',
-                width: '260px',
-                textAlign: 'center'
-              }}
-            >
-              {edges.node.shortBio}
-            </Text>
-            */}
-
-              <Social1
-                href={edges.socialTwitter}
-                className='social'
-                target='blank'
-              >
-                <FaTwitter size='24px' />
-              </Social1>
-              <Social2
-                href={edges.socialMedium}
-                className='social'
-                target='blank'
-              >
-                <FaGithub size='24px' />
-              </Social2>
-            </ContentFooter>
-          </ContentItem>
-        ))}
-      </Content>
-    </ContentContainer>
-  </React.Fragment>
-)
 
 export default ContentTeam

@@ -26,7 +26,8 @@ function Seo({ description, title, image }) {
   //   `
   // )
   const metaDescription = description
-  const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
+  const base64Regex =
+    /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
   let metaImage = image
   if (base64Regex.test(image?.split(',')[1])) {
     // it's base64, convert >>> this doesnt work

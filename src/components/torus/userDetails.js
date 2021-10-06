@@ -10,79 +10,11 @@ import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { formatEtherscanLink } from '../../util'
 
-const AccountDetails = styled.div`
-  width: 200px;
-  position: absolute;
-  padding: 5px 0;
-  background: ${theme.colors.background};
-  border: 1px solid ${theme.colors.background};
-  box-sizing: border-box;
-  box-shadow: 0 5px 12px rgba(107, 117, 167, 0.3);
-  border-radius: 6px;
-  z-index: 205;
-  right: 0;
-  top: 60px;
-  display: grid;
-  grid-template-rows: repeat(7, auto);
-  grid-gap: 0 1rem;
-  .shadow {
-    box-shadow: 0 1px 0 #f5f5f5;
-  }
-  .boxheight {
-    display: flex;
-    align-self: center;
-    padding-top: 11px;
-    padding-bottom: 11px;
-  }
-  & :hover .balance {
-    opacity: 1;
-  }
-`
-
-const MenuItem = styled(Text)`
-  align-self: center;
-  padding-left: 16px;
-  cursor: pointer;
-  align-content: center;
-  color: ${theme.colors.secondary};
-  :hover {
-    color: ${theme.colors.primary};
-  }
-`
-
-const MenuTitle = styled(Text)`
-  align-self: center;
-  padding-left: 16px;
-  align-content: center;
-  color: ${theme.colors.secondary};
-`
-
-const MenuLink = styled.a`
-  text-decoration: none;
-`
-
-const Dot = styled.div`
-  height: 8px;
-  width: 8px;
-  border-radius: 50%;
-  display: inline-block;
-  margin: 0 4px 0 0;
-`
-const StyledButton = styled.a`
-  display: flex;
-  flex-direction: row;
-  cursor: pointer;
-  align-items: center;
-  padding: 0.5rem;
-`
 const UserDetails = () => {
   const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
 
-  const {
-    ref,
-    isComponentVisible,
-    setIsComponentVisible
-  } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false)
 
   const {
     isLoggedIn,
@@ -332,5 +264,71 @@ const UserDetails = () => {
     </div>
   )
 }
+
+const AccountDetails = styled.div`
+  width: 200px;
+  position: absolute;
+  padding: 5px 0;
+  background: ${theme.colors.background};
+  border: 1px solid ${theme.colors.background};
+  box-sizing: border-box;
+  box-shadow: 0 5px 12px rgba(107, 117, 167, 0.3);
+  border-radius: 6px;
+  z-index: 205;
+  right: 0;
+  top: 60px;
+  display: grid;
+  grid-template-rows: repeat(7, auto);
+  grid-gap: 0 1rem;
+  .shadow {
+    box-shadow: 0 1px 0 #f5f5f5;
+  }
+  .boxheight {
+    display: flex;
+    align-self: center;
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+  & :hover .balance {
+    opacity: 1;
+  }
+`
+
+const MenuItem = styled(Text)`
+  align-self: center;
+  padding-left: 16px;
+  cursor: pointer;
+  align-content: center;
+  color: ${theme.colors.secondary};
+  :hover {
+    color: ${theme.colors.primary};
+  }
+`
+
+const MenuTitle = styled(Text)`
+  align-self: center;
+  padding-left: 16px;
+  align-content: center;
+  color: ${theme.colors.secondary};
+`
+
+const MenuLink = styled.a`
+  text-decoration: none;
+`
+
+const Dot = styled.div`
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 4px 0 0;
+`
+const StyledButton = styled.a`
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+  padding: 0.5rem;
+`
 
 export default UserDetails

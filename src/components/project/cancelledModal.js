@@ -3,30 +3,6 @@ import { Flex, Text } from 'theme-ui'
 import Modal from 'react-modal'
 import Link from 'next/link'
 
-const customStyles = {
-  overlay: {
-    position: 'fixed',
-    zIndex: 4,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 235, 255, 0.25)',
-    backdropFilter: 'blur(2px)',
-    '-webkit-backdrop-filter': 'blur(2px)'
-  },
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    borderRadius: '12px',
-    borderColor: 'transparent',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-}
-
 function CancelledModal(props) {
   return (
     <Modal
@@ -58,6 +34,30 @@ function CancelledModal(props) {
       </Flex>
     </Modal>
   )
+}
+
+const customStyles = {
+  overlay: {
+    position: 'fixed',
+    zIndex: 4,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 235, 255, 0.25)',
+    backdropFilter: 'blur(2px)',
+    '-webkit-backdrop-filter': 'blur(2px)'
+  },
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    borderRadius: '12px',
+    borderColor: 'transparent',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
 }
 
 export default CancelledModal

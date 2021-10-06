@@ -2,21 +2,17 @@ import { Box } from "theme-ui"
 import { fetchEntries } from "../src/utils/contentfulPosts"
 import React from "react"
 import Seo from "../src/components/seo"
-import styled from "@emotion/styled"
 
 import Layout from "../src/components/layout"
 import ContentFaq from "../src/components/content/ContentFaq"
 
-const Main = styled(Box)``
-
 const Faq = ({ faqs }) => {
-  // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
       <Seo title="FAQ" />
-      <Main>
+      <Box>
         <ContentFaq faqs={faqs} isopen />
-      </Main>
+      </Box>
     </Layout>
   )
 }

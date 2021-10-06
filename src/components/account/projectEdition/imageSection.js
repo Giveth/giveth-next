@@ -11,17 +11,6 @@ import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery
 import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
 
-const Selection = styled(Box)`
-  cursor: pointer;
-  width: 80px;
-  height: 80px;
-  padding: 0;
-  margin: 4% 2% 0 0;
-  border: 2px solid #dfdae8;
-  border-radius: 8px;
-  background-color: ${theme.colors.background};
-`
-
 function ImageSection({ image, register, setValue }) {
   const [displayImage, setDisplayImage] = useState(null)
 
@@ -157,5 +146,16 @@ function ImageSection({ image, register, setValue }) {
     </>
   )
 }
+
+const Selection = styled(Box)`
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  padding: 0;
+  margin: 4% 2% 0 0;
+  border: 2px solid #dfdae8;
+  border-radius: 8px;
+  background-color: ${theme.colors.background};
+`
 
 export default ImageSection

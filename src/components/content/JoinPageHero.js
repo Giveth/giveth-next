@@ -2,25 +2,6 @@ import { useMediaQuery } from 'react-responsive'
 import { Grid, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 
-const HeroSection = styled(Grid)`
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  @media (max-width: 850px) {
-    grid-template-columns: 1fr;
-  }
-`
-
-const HeroImage = styled.img`
-  padding-right: 3rem;
-`
-
-const HeroText = styled(Grid)`
-  grid-template-rows: auto;
-  justify-self: center;
-  @media (max-width: 850px) {
-  }
-`
-
 const Hero = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
   return (
@@ -67,5 +48,24 @@ const Hero = () => {
     </HeroSection>
   )
 }
+
+const HeroSection = styled(Grid)`
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  @media (max-width: 850px) {
+    grid-template-columns: 1fr;
+  }
+`
+
+const HeroImage = styled.img`
+  padding-right: 3rem;
+`
+
+const HeroText = styled(Grid)`
+  grid-template-rows: auto;
+  justify-self: center;
+  @media (max-width: 850px) {
+  }
+`
 
 export default Hero

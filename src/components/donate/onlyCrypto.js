@@ -65,11 +65,8 @@ const OnlyCrypto = props => {
 
   const usePopup = React.useContext(PopupContext)
 
-  const {
-    ref,
-    isComponentVisible,
-    setIsComponentVisible
-  } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false)
 
   const { triggerPopup } = usePopup
 
@@ -374,19 +371,16 @@ const OnlyCrypto = props => {
         {
           onTransactionHash: async transactionHash => {
             // Save initial txn details to db
-            const {
-              donationId,
-              savedDonation,
-              saveDonationErrors
-            } = await saveDonation(
-              account,
-              toAddress,
-              transactionHash,
-              networkId,
-              Number(subtotal),
-              tokenSymbol,
-              Number(project.id)
-            )
+            const { donationId, savedDonation, saveDonationErrors } =
+              await saveDonation(
+                account,
+                toAddress,
+                transactionHash,
+                networkId,
+                Number(subtotal),
+                tokenSymbol,
+                Number(project.id)
+              )
             console.log('DONATION RESPONSE: ', {
               donationId,
               savedDonation,

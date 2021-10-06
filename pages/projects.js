@@ -13,7 +13,7 @@ const Project = (props) => {
 
   return (
     <Layout>
-      <Seo title='Projects' />
+      <Seo title="Projects" />
       {projects && !errors ? (
         <ProjectsList
           query={props?.query}
