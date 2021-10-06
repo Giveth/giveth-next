@@ -171,6 +171,7 @@ const ProjectDonatorView = ({
       return (
         <Image
           src={project.image}
+          alt='project picture'
           onError={ev =>
             (ev.target.src =
               'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
@@ -188,8 +189,11 @@ const ProjectDonatorView = ({
     } else {
       return (
         <NoImage>
-          <Image src='/images/no-image-available.jpg' width={250} />
-          <h2>No Image Available</h2>
+          <Image
+            src='/images/no-image-available.jpg'
+            width={250}
+            alt='no-image-available image'
+          />
         </NoImage>
       )
     }
@@ -699,6 +703,7 @@ const ProjectDonatorView = ({
   )
 }
 
+
 const FloatingDonateView = styled(Flex)`
   @media screen and (max-width: 800px) {
     width: 80%;
@@ -717,15 +722,6 @@ const NoImage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  img {
-    margin-left: -50px;
-  }
-  @media screen and (max-width: 576px) {
-    img {
-      margin-left: 0;
-    }
-  }
 `
 
 export default ProjectDonatorView

@@ -3,7 +3,6 @@ import Seo from "../src/components/seo"
 import ErrorPage from "../src/components/errorPage"
 import { client } from "../src/apollo/client"
 import Layout from "../src/components/layout"
-import GR11 from "../src/components/GR11"
 import ProjectsList from "../src/components/ProjectsList"
 
 import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from "../src/apollo/gql/projects"
@@ -14,10 +13,7 @@ const Project = (props) => {
 
   return (
     <Layout>
-      <Seo title="Projects" />
-      <div style={{ marginTop: "-3%" }}>
-        <GR11 />
-      </div>
+      <Seo title='Projects' />
       {projects && !errors ? (
         <ProjectsList
           query={props?.query}
