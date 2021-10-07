@@ -59,67 +59,67 @@ const IconDrop = styled(DropIcon)`
   right: 1rem;
   top: 0.563rem;
 `
-const SelectMenu = props => {
-  const { caption, options = {}, onChange = () => {}, defaultValue } = props
-  return (
-    <div
-      style={{
-        flexGrow: 1,
-        margin: '10px'
-      }}
-    >
-      <Text
-        pl={3}
-        sx={{
-          variant: 'text.default',
-          color: 'secondary',
-          fontSize: 3,
-          fontWeight: 'medium',
-          textDecoration: 'none',
-          textTransform: 'uppercase'
-        }}
-      >
-        {caption}
-      </Text>
-      <IconDrop />
-      <Text
-        sx={{
-          variant: 'text.medium',
-          fontWeight: 'bold',
-          color: 'secondary'
-        }}
-      ></Text>
-      <Select
-        pl={3}
-        sx={{
-          variant: 'text.default',
-          color: 'secondary',
-          fontSize: 3,
-          fontWeight: 'medium',
-          textDecoration: 'none',
-          width: '100%'
-        }}
-        defaultValue={defaultValue}
-        onChange={e => onChange(e.target.value)}
-        mb={3}
-        name='sortBy'
-        id='sortBy'
-      >
-        {Object.entries(options).map(([key, value]) => (
-          <option
-            sx={{
-              variant: 'text.medium',
-              fontWeight: 'bold',
-              color: 'secondary'
-            }}
-          >
-            {value}
-          </option>
-        ))}
-      </Select>
-    </div>
-  )
-}
+// const SelectMenu = props => {
+//   const { caption, options = {}, onChange = () => {}, defaultValue } = props
+//   return (
+//     <div
+//       style={{
+//         flexGrow: 1,
+//         margin: '10px'
+//       }}
+//     >
+//       <Text
+//         pl={3}
+//         sx={{
+//           variant: 'text.default',
+//           color: 'secondary',
+//           fontSize: 3,
+//           fontWeight: 'medium',
+//           textDecoration: 'none',
+//           textTransform: 'uppercase'
+//         }}
+//       >
+//         {caption}
+//       </Text>
+//       <IconDrop />
+//       <Text
+//         sx={{
+//           variant: 'text.medium',
+//           fontWeight: 'bold',
+//           color: 'secondary'
+//         }}
+//       ></Text>
+//       <Select
+//         pl={3}
+//         sx={{
+//           variant: 'text.default',
+//           color: 'secondary',
+//           fontSize: 3,
+//           fontWeight: 'medium',
+//           textDecoration: 'none',
+//           width: '100%'
+//         }}
+//         defaultValue={defaultValue}
+//         onChange={e => onChange(e.target.value)}
+//         mb={3}
+//         name='sortBy'
+//         id='sortBy'
+//       >
+//         {Object.entries(options).map(([key, value]) => (
+//           <option
+//             sx={{
+//               variant: 'text.medium',
+//               fontWeight: 'bold',
+//               color: 'secondary'
+//             }}
+//           >
+//             {value}
+//           </option>
+//         ))}
+//       </Select>
+//     </div>
+//   )
+// }
 
 const orderBySelectOptions = {}
 orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'

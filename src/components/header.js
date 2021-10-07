@@ -209,7 +209,7 @@ const CategoriesList = () => {
   )
   const categories = currentProjectView?.globalCategories
 
-  if (!categories) return null
+  if (!categories || categories?.length == 0) return null
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <CategoriesListView>
@@ -282,7 +282,7 @@ const Header = ({ siteTitle, isHomePage }) => {
 
   const MainLogo = () => {
     return (
-      <Link href="/">
+      <Link href='/'>
         <LogoSpan
           className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
         >
@@ -291,7 +291,7 @@ const Header = ({ siteTitle, isHomePage }) => {
             <Text
               pl={3}
               sx={{
-                fontWeight: 'medium',
+                fontWeight: 'medium'
               }}
             >
               GIVETH
@@ -406,7 +406,11 @@ const Header = ({ siteTitle, isHomePage }) => {
               </Flex>
             )}
             {pathname !== 'projects' && (
-              <img style={{ margin: '0 10px'}} src={'/images/icon-vertical-line.svg'} alt='' />
+              <img
+                style={{ margin: '0 10px' }}
+                src={'/images/icon-vertical-line.svg'}
+                alt=''
+              />
             )}
             <Login />
           </UserSpan>

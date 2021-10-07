@@ -52,7 +52,7 @@
     "js-search": "^2.0.0",
     "key-did-resolver": "^1.2.1",
     "lodash": "^4.17.21",
-    "next": "^11.0.0",
+    "next": "^11.1.2",
     "next-seo": "^4.24.0",
     "nextjs-progressbar": "^0.0.9",
     "nextjs-redirect": "^5.0.2",
