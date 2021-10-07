@@ -13,7 +13,8 @@
     "cy:e2e": "npx cypress run --spec cypress/integration/e2e/**/*.spec.js",
     "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js",
     "cy:open:ganache": "ganache-cli -p 8545 && npx cypress open",
-    "start-ganache": "ganache-cli -p 8545"
+    "start-ganache": "ganache-cli -p 8545",
+    "lint": "next lint"
   },
   "dependencies": {
     "@3id/connect": "^0.1.6",

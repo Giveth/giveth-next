@@ -23,12 +23,12 @@ module.exports = {
       'feathers.develop.giveth.io',
       'ipfs.giveth.io'
     ]
-  }
+  },
   // cleanDistDir: false,
   // webpack5: false,
-  // eslint: {
-  //   // Warning: Dangerously allow production builds to successfully complete even if
-  //   // your project has ESLint errors.
-  //   ignoreDuringBuilds: true
-  // }
+  eslint: {
+    // Warning: Dangerously allow production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true
+  }
 }

@@ -1,6 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { InitializeColorMode } from 'theme-ui'
-import Script from 'next/script'
 
 // global.Buffer = global.Buffer || require("buffer").Buffer;
 

@@ -13,7 +13,7 @@ const XDAIPopupClosed = props => {
     if (!issueAlreadyClosed) {
       setShowIssuePopup(true)
     }
-  })
+  }, [])
 
   if (!showIssuePopup) return null
   let style = {
