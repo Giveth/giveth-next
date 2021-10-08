@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Label, Textarea, Button, Text, Flex } from 'theme-ui';
-import { animated } from 'react-spring';
-import { DescriptionInstructionModal } from '../modals';
+import React, { useEffect, useState } from 'react'
+import { Label, Textarea, Button, Text, Flex } from 'theme-ui'
+import { animated } from 'react-spring'
+import { DescriptionInstructionModal } from '../modals'
 
-const RichTextInput = React.lazy(() => import('../../richTextInput'));
+const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
 export const ProjectDescriptionInput = ({
   register,
@@ -12,21 +12,21 @@ export const ProjectDescriptionInput = ({
   animationStyle,
   goBack
 }) => {
-  const [showInstructions, setShowInstructions] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false)
   const [characterLength, setCharacterLength] = useState(
     currentValue ? currentValue.length : 0
-  );
+  )
 
   useEffect(() => {
-    register('projectDescription');
-    setValue('projectDescription', currentValue);
-  }, []);
+    register('projectDescription')
+    setValue('projectDescription', currentValue)
+  }, [])
 
   const getLength = e => {
-    console.log({ e });
-  };
+    console.log({ e })
+  }
 
-  const isSSR = typeof window === 'undefined';
+  const isSSR = typeof window === 'undefined'
 
   return (
     <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
@@ -90,9 +90,9 @@ export const ProjectDescriptionInput = ({
               onChange={newValue => {
                 try {
                   // console.log({ setValue, newValue, delta, source })
-                  setValue('projectDescription', newValue);
+                  setValue('projectDescription', newValue)
                 } catch (error) {
-                  console.log({ error });
+                  console.log({ error })
                 }
               }}
               // onChange={e => getLength(e)}
@@ -118,7 +118,7 @@ export const ProjectDescriptionInput = ({
           justifyContent: 'flex-end',
           flexDirection: 'row-reverse',
           marginTop: '10px',
-          marginBottom: '50px',
+          marginBottom: '50px'
         }}
       >
         <Button
@@ -174,5 +174,5 @@ export const ProjectDescriptionInput = ({
         />
       )}
     </animated.section>
-  );
-};
+  )
+}

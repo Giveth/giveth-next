@@ -1,5 +1,5 @@
 import React from 'react'
-import Head from 'next/head'
+import Script from 'next/script'
 import 'react-quill/dist/quill.snow.css'
 import PropTypes from 'prop-types'
 import { Link, Flex, Text, Image } from 'theme-ui'
@@ -188,10 +188,18 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
 
   return (
     <>
-      <Head>
-        <script type='text/javascript'>
-          {`
-          let map;
+      <Script
+        src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'
+        strategy='lazyOnload'
+      />
+      {/* Autopilot */}
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `(function(o){var b="https://speedyfox.io/anywhere/",t="d7a64f71ff094b21890b3c44d1e568e895a0d71affc14ed79923afe6c341ccfd",a=window.AutopilotAnywhere={_runQueue:[],run:function(){this._runQueue.push(arguments);}},c=encodeURIComponent,s="SCRIPT",d=document,l=d.getElementsByTagName(s)[0],p="t="+c(d.title||"")+"&u="+c(d.location.href||"")+"&r="+c(d.referrer||""),j="text/javascript",z,y;if(!window.Autopilot) window.Autopilot=a;if(o.app) p="devmode=true&"+p;z=function(src,asy){var e=d.createElement(s);e.src=src;e.type=j;e.async=asy;l.parentNode.insertBefore(e,l);};y=function(){z(b+t+'?'+p,true);};if(window.attachEvent){window.attachEvent("onload",y);}else{window.addEventListener("load",y,false);}})({"app":true});`
+        }}
+      />
+      <Script type='text/javascript' strategy='lazyOnload'>
+        {`
           function initMap(setLocation) {
               map = new google.maps.Map(document.getElementById('map'), {
                   center: {lat: 0, lng: 0 },
@@ -231,8 +239,16 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
             }
           }
         `}
-        </script>
-      </Head>
+      </Script>
+      <Script
+        src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed'
+        crossOrigin='anonymous'
+      />
+      <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
+        defer
+      />
+      {/* <Script src='/node_modules/quill-video-resize-module/video-resize.min.js' /> */}
 
       <Web3Provider>
         <WalletProvider>

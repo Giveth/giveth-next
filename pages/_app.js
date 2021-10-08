@@ -25,15 +25,6 @@ function MyApp ({ Component, pageProps }) {
         stopDelayMs={200}
         height='3'
       />
-      <Head>
-        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>{' '}
-        {/* Autopilot */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(o){var b="https://speedyfox.io/anywhere/",t="d7a64f71ff094b21890b3c44d1e568e895a0d71affc14ed79923afe6c341ccfd",a=window.AutopilotAnywhere={_runQueue:[],run:function(){this._runQueue.push(arguments);}},c=encodeURIComponent,s="SCRIPT",d=document,l=d.getElementsByTagName(s)[0],p="t="+c(d.title||"")+"&u="+c(d.location.href||"")+"&r="+c(d.referrer||""),j="text/javascript",z,y;if(!window.Autopilot) window.Autopilot=a;if(o.app) p="devmode=true&"+p;z=function(src,asy){var e=d.createElement(s);e.src=src;e.type=j;e.async=asy;l.parentNode.insertBefore(e,l);};y=function(){z(b+t+'?'+p,true);};if(window.attachEvent){window.attachEvent("onload",y);}else{window.addEventListener("load",y,false);}})({"app":true});`
-          }}
-        ></script>
-      </Head>
       <ThemeProvider theme={theme}>
         <Web3ReactProvider getLibrary={getLibrary}>
           <ApolloProvider client={client}>

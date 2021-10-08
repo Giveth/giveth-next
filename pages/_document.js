@@ -26,21 +26,13 @@ export default class extends Document {
   }
 
   render () {
-    // Replace html lang attribute value with your language.
-    const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-
     return (
       <Html>
         <Head>
-          <script
-            src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed'
-            crossOrigin='anonymous'
+          <link
+            href='https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&family=Red+Hat+Text:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap'
+            rel='stylesheet'
           />
-          <script
-            src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
-            defer
-          />
-          <script src='/node_modules/quill-video-resize-module/video-resize.min.js' />
         </Head>
         <body>
           <InitializeColorMode />
