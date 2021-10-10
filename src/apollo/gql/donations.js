@@ -24,10 +24,7 @@ const SAVE_DONATION = gql`
 `
 const SAVE_DONATION_TRANSACTION = gql`
   mutation ($transactionId: String!, $donationId: Float!) {
-    saveDonationTransaction(
-      transactionId: $transactionId
-      donationId: $donationId
-    )
+    saveDonationTransaction(transactionId: $transactionId, donationId: $donationId)
   }
 `
 const WALLET_DONATIONS = gql`

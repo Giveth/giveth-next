@@ -112,10 +112,7 @@ const Footer = () => {
           }}
         >
           Support us{' '}
-          <FooterLink
-            href={`/donate/${theme.donationSlug}`}
-            sx={{ variant: 'links.nav' }}
-          >
+          <FooterLink href={`/donate/${theme.donationSlug}`} sx={{ variant: 'links.nav' }}>
             with your donation
           </FooterLink>
         </Text>

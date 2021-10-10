@@ -46,9 +46,7 @@ function IndexPage() {
       <main>
         <h1>
           Welcome to{" "}
-          <a href="https://github.com/mirshko/next-web3-boilerplate">
-            Next Web3 Boilerplate
-          </a>
+          <a href="https://github.com/mirshko/next-web3-boilerplate">Next Web3 Boilerplate</a>
         </h1>
 
         {isConnected && (
@@ -74,8 +72,8 @@ function IndexPage() {
           margin: 0;
         }
         html {
-          font-family: sans-serif, Apple Color Emoji, Segoe UI Emoji,
-            Segoe UI Symbol, Noto Color Emoji;
+          font-family: sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
+            Noto Color Emoji;
           line-height: 1.5;
         }
         *,

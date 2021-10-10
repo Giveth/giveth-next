@@ -58,13 +58,9 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
           variant: 'text.default'
         }}
       >
-        Transaction has been submitted but we can`&apos;t get a confirmation at
-        the moment.
+        Transaction has been submitted but we can`&apos;t get a confirmation at the moment.
         <Link href={`https://${etherscanPrefix}etherscan.io/tx/${txHash}`}>
-          <a style={{ textDecoration: 'none', color: theme.colors.primary }}>
-            {' '}
-            View on Etherscan
-          </a>
+          <a style={{ textDecoration: 'none', color: theme.colors.primary }}> View on Etherscan</a>
         </Link>
       </Text>
       <Text sx={{ mt: 2, mx: 5, textAlign: 'center', variant: 'text.default' }}>
@@ -74,9 +70,7 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
           transaction will show in ${' '}`}
         {isLoggedIn && (
           <Link href='/account?view=donations'>
-            <a style={{ textDecoration: 'none', color: theme.colors.primary }}>
-              My Account.
-            </a>
+            <a style={{ textDecoration: 'none', color: theme.colors.primary }}>My Account.</a>
           </Link>
         )}
       </Text>

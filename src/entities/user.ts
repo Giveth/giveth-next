@@ -71,23 +71,16 @@ export default class User {
 
   getName() {
     function truncAddress(address) {
-      return `${address.substring(0, 5)}...${address.substring(
-        address.length - 4,
-        address.length
-      )}`
+      return `${address.substring(0, 5)}...${address.substring(address.length - 4, address.length)}`
     }
 
-    return this.name
-      ? this.name.toUpperCase()
-      : truncAddress(this.getWalletAddress())
+    return this.name ? this.name.toUpperCase() : truncAddress(this.getWalletAddress())
     // return /(.+)@(.+){2,}\.(.+){2,}/.test(this.name)
     //         ? this.name?.toUpperCase()
     //         : this.name
   }
   getWalletAddress() {
-    return this.walletAddresses && this.walletAddresses.length > 0
-      ? this.walletAddresses[0]
-      : ''
+    return this.walletAddresses && this.walletAddresses.length > 0 ? this.walletAddresses[0] : ''
   }
   // organisations: Organisation[]
 

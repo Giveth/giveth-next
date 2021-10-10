@@ -44,9 +44,7 @@ export async function getServerSideProps(props) {
       query: FETCH_ALL_PROJECTS,
       fetchPolicy: "no-cache",
     })
-    projects = Array.from(fetchProject?.projects).filter(
-      (i) => i?.status?.id === "5"
-    )
+    projects = Array.from(fetchProject?.projects).filter((i) => i?.status?.id === "5")
 
     const { data: categoriesData } = await client.query({
       query: GET_CATEGORIES,
@@ -69,9 +67,7 @@ export async function getServerSideProps(props) {
     //Check io2trace projects
     traceProjects = traceProjects?.data?.filter((i) => {
       if (i?.givethIoProjectId) {
-        const foundIndex = projects?.findIndex(
-          (x) => x.id == i?.givethIoProjectId
-        )
+        const foundIndex = projects?.findIndex((x) => x.id == i?.givethIoProjectId)
         if (foundIndex) {
           projects[foundIndex] = { ...projects[foundIndex], IOTraceable: true }
         }
@@ -87,8 +83,7 @@ export async function getServerSideProps(props) {
   return {
     props: {
       projects: projects || [],
-      traceProjects:
-        traceProjects?.map((i) => ({ ...i, fromTrace: true })) || [],
+      traceProjects: traceProjects?.map((i) => ({ ...i, fromTrace: true })) || [],
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,

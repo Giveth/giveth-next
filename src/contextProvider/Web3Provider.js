@@ -83,24 +83,19 @@ const Web3Provider = props => {
       }
     })
 
-    const previouslySelectedWallet =
-      window.localStorage.getItem('selectedWallet')
+    const previouslySelectedWallet = window.localStorage.getItem('selectedWallet')
     if (previouslySelectedWallet) {
       _onboard
         .walletSelect(previouslySelectedWallet)
         .then(selected => selected && _onboard.walletCheck().then())
     } else {
-      _onboard
-        .walletSelect()
-        .then(selected => selected && _onboard.walletCheck().then())
+      _onboard.walletSelect().then(selected => selected && _onboard.walletCheck().then())
     }
     setOnboard(_onboard)
   }
 
   const switchWallet = () => {
-    onboard
-      .walletSelect()
-      .then(selected => selected && onboard.walletCheck().then())
+    onboard.walletSelect().then(selected => selected && onboard.walletCheck().then())
   }
 
   const switchToXdai = () => {

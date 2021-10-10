@@ -95,9 +95,7 @@ const Header = ({ isHomePage }) => {
   const MainLogo = () => {
     return (
       <Link href='/'>
-        <LogoSpan
-          className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
-        >
+        <LogoSpan className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}>
           <Logo />
           {siteId === 'giveth' && !isXsWindow ? (
             <Text
@@ -127,9 +125,7 @@ const Header = ({ isHomePage }) => {
           marginBottom: '1.45rem'
         }}
       >
-        <HeaderSpan
-          className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
-        >
+        <HeaderSpan className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}>
           <Decorator>
             <img
               src={'/images/decorator-cloud1.svg'}
@@ -161,9 +157,7 @@ const Header = ({ isHomePage }) => {
                 <NavLink
                   style={{
                     display: ['none', 'block', 'block'],
-                    color: isHomePage
-                      ? theme.colors.primary
-                      : theme.colors.secondary
+                    color: isHomePage ? theme.colors.primary : theme.colors.secondary
                   }}
                 >
                   Home
@@ -174,10 +168,7 @@ const Header = ({ isHomePage }) => {
               <Link href='/projects' passHref>
                 <NavLink
                   style={{
-                    color:
-                      pathname === 'projects'
-                        ? theme.colors.primary
-                        : theme.colors.secondary
+                    color: pathname === 'projects' ? theme.colors.primary : theme.colors.secondary
                   }}
                 >
                   Projects
@@ -192,10 +183,7 @@ const Header = ({ isHomePage }) => {
             <Link href='/join' passHref>
               <NavLink
                 style={{
-                  color:
-                    pathname === 'join'
-                      ? theme.colors.primary
-                      : theme.colors.secondary
+                  color: pathname === 'join' ? theme.colors.primary : theme.colors.secondary
                 }}
               >
                 Join{' '}
@@ -218,11 +206,7 @@ const Header = ({ isHomePage }) => {
               </Flex>
             )}
             {pathname !== 'projects' && (
-              <img
-                style={{ margin: '0 10px' }}
-                src={'/images/icon-vertical-line.svg'}
-                alt=''
-              />
+              <img style={{ margin: '0 10px' }} src={'/images/icon-vertical-line.svg'} alt='' />
             )}
             <Login />
           </UserSpan>

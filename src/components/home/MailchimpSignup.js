@@ -67,10 +67,7 @@ const MailchimpSignup = () => {
             placeholder='Your email address'
             onChange={handleChange}
           />
-          <Button
-            sx={{ variant: 'buttons.default', minWidth: '180px' }}
-            type='submit'
-          >
+          <Button sx={{ variant: 'buttons.default', minWidth: '180px' }} type='submit'>
             Subscribe
           </Button>
         </Grid>
@@ -83,10 +80,7 @@ const MailchimpSignup = () => {
             placeholder='Your email address'
             onChange={handleChange}
           />
-          <Button
-            sx={{ variant: 'buttons.default', minWidth: '180px' }}
-            type='submit'
-          >
+          <Button sx={{ variant: 'buttons.default', minWidth: '180px' }} type='submit'>
             Subscribe
           </Button>
         </Grid>

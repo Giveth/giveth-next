@@ -75,47 +75,39 @@ const ViewStyles = () => {
               <Text sx={{ variant: "text.styleGuide" }}>Bodytext</Text>
               <Container>
                 <Text sx={{ variant: "text.default" }}>
-                  DEFAULT: Contrary to popular belief, Lorem Ipsum is not simply
-                  random text. It has roots in a piece of classical Latin
-                  literature from 45 BC, making it over 2000 years old. Richard
-                  McClintock, a Latin professor at Hampden-Sydney College in
-                  Virginia, looked up one of the more obscure Latin words,
-                  consectetur, from a Lorem Ipsum passage, and going through the
-                  cites of the word in classical literature, discovered the
-                  undoubtable source.
+                  DEFAULT: Contrary to popular belief, Lorem Ipsum is not simply random text. It has
+                  roots in a piece of classical Latin literature from 45 BC, making it over 2000
+                  years old. Richard McClintock, a Latin professor at Hampden-Sydney College in
+                  Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem
+                  Ipsum passage, and going through the cites of the word in classical literature,
+                  discovered the undoubtable source.
                 </Text>
                 <br />
                 <Text sx={{ variant: "text.small" }}>
-                  SMALL: Contrary to popular belief, Lorem Ipsum is not simply
-                  random text. It has roots in a piece of classical Latin
-                  literature from 45 BC, making it over 2000 years old. Richard
-                  McClintock, a Latin professor at Hampden-Sydney College in
-                  Virginia, looked up one of the more obscure Latin words,
-                  consectetur, from a Lorem Ipsum passage, and going through the
-                  cites of the word in classical literature, discovered the
-                  undoubtable source.
+                  SMALL: Contrary to popular belief, Lorem Ipsum is not simply random text. It has
+                  roots in a piece of classical Latin literature from 45 BC, making it over 2000
+                  years old. Richard McClintock, a Latin professor at Hampden-Sydney College in
+                  Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem
+                  Ipsum passage, and going through the cites of the word in classical literature,
+                  discovered the undoubtable source.
                 </Text>
                 <br />
                 <Text sx={{ variant: "text.medium" }}>
-                  MEDIUM: Contrary to popular belief, Lorem Ipsum is not simply
-                  random text. It has roots in a piece of classical Latin
-                  literature from 45 BC, making it over 2000 years old. Richard
-                  McClintock, a Latin professor at Hampden-Sydney College in
-                  Virginia, looked up one of the more obscure Latin words,
-                  consectetur, from a Lorem Ipsum passage, and going through the
-                  cites of the word in classical literature, discovered the
-                  undoubtable source.
+                  MEDIUM: Contrary to popular belief, Lorem Ipsum is not simply random text. It has
+                  roots in a piece of classical Latin literature from 45 BC, making it over 2000
+                  years old. Richard McClintock, a Latin professor at Hampden-Sydney College in
+                  Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem
+                  Ipsum passage, and going through the cites of the word in classical literature,
+                  discovered the undoubtable source.
                 </Text>
                 <br />
                 <Text sx={{ variant: "text.large" }}>
-                  LARGE: Contrary to popular belief, Lorem Ipsum is not simply
-                  random text. It has roots in a piece of classical Latin
-                  literature from 45 BC, making it over 2000 years old. Richard
-                  McClintock, a Latin professor at Hampden-Sydney College in
-                  Virginia, looked up one of the more obscure Latin words,
-                  consectetur, from a Lorem Ipsum passage, and going through the
-                  cites of the word in classical literature, discovered the
-                  undoubtable source.
+                  LARGE: Contrary to popular belief, Lorem Ipsum is not simply random text. It has
+                  roots in a piece of classical Latin literature from 45 BC, making it over 2000
+                  years old. Richard McClintock, a Latin professor at Hampden-Sydney College in
+                  Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem
+                  Ipsum passage, and going through the cites of the word in classical literature,
+                  discovered the undoubtable source.
                 </Text>
               </Container>
             </StyleGuide>
@@ -125,9 +117,7 @@ const ViewStyles = () => {
               <Container>
                 <Text sx={{ variant: "text.quote" }}>Quote</Text>
                 <Text sx={{ variant: "text.overline" }}>Overline</Text>
-                <Text sx={{ variant: "text.overlineSmall" }}>
-                  Overline small
-                </Text>
+                <Text sx={{ variant: "text.overlineSmall" }}>Overline small</Text>
                 <Text sx={{ variant: "text.caption" }}>Caption</Text>
                 <Text sx={{ variant: "text.microbold" }}>Microbold</Text>
               </Container>
@@ -137,12 +127,8 @@ const ViewStyles = () => {
               <Text sx={{ variant: "text.styleGuide" }}>Buttons</Text>
               <Container>
                 <Button sx={{ variant: "buttons.default" }}>default</Button>
-                <Button sx={{ variant: "buttons.small", bg: "accent" }}>
-                  small
-                </Button>
-                <Button sx={{ variant: "buttons.tiny", bg: "secondary" }}>
-                  tiny
-                </Button>
+                <Button sx={{ variant: "buttons.small", bg: "accent" }}>small</Button>
+                <Button sx={{ variant: "buttons.tiny", bg: "secondary" }}>tiny</Button>
                 <Button sx={{ variant: "buttons.tertiary" }}>tertiary</Button>
               </Container>
             </StyleGuide>
@@ -196,9 +182,7 @@ const ViewStyles = () => {
             </StyleGuide>
 
             <StyleGuide>
-              <Text sx={{ variant: "text.styleGuide" }}>
-                Illustrations - People
-              </Text>
+              <Text sx={{ variant: "text.styleGuide" }}>Illustrations - People</Text>
               <Container>
                 <img src={imgPeopleHeader} alt="" width="400px" />
                 <br />
@@ -211,9 +195,7 @@ const ViewStyles = () => {
             </StyleGuide>
 
             <StyleGuide>
-              <Text sx={{ variant: "text.styleGuide" }}>
-                Illustrations - Elements
-              </Text>
+              <Text sx={{ variant: "text.styleGuide" }}>Illustrations - Elements</Text>
               <Container>
                 <img src={imgDecoratorCloud1} alt="" />
                 <br />

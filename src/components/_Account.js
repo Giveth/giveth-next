@@ -35,9 +35,7 @@ const Account = ({ triedToEagerConnect }) => {
 
   if (typeof account !== 'string') {
     const hasMetaMaskOrWeb3Available =
-      MetaMaskOnboarding.isMetaMaskInstalled() ||
-      window?.ethereum ||
-      window?.web3
+      MetaMaskOnboarding.isMetaMaskInstalled() || window?.ethereum || window?.web3
 
     return (
       <div>
@@ -52,14 +50,10 @@ const Account = ({ triedToEagerConnect }) => {
               })
             }}
           >
-            {MetaMaskOnboarding.isMetaMaskInstalled()
-              ? 'Connect to MetaMask'
-              : 'Connect to Wallet'}
+            {MetaMaskOnboarding.isMetaMaskInstalled() ? 'Connect to MetaMask' : 'Connect to Wallet'}
           </button>
         ) : (
-          <button onClick={() => onboarding.current?.startOnboarding()}>
-            Install Metamask
-          </button>
+          <button onClick={() => onboarding.current?.startOnboarding()}>Install Metamask</button>
         )}
       </div>
     )

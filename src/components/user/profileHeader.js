@@ -51,11 +51,7 @@ export const ProfileHeader = props => {
           alignItems: ['left', null, null]
         }}
       >
-        <Avatar
-          img={user?.profileImage || user?.avatar}
-          size={100}
-          address={user?.walletAddress}
-        />
+        <Avatar img={user?.profileImage || user?.avatar} size={100} address={user?.walletAddress} />
         <Flex sx={{ flexDirection: 'column', ml: [0, '27px', '27px'] }}>
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
           <Link
@@ -75,11 +71,7 @@ export const ProfileHeader = props => {
           </Link>
           <Link
             sx={{ textDecoration: 'none' }}
-            href={
-              /^(?:f|ht)tps?:\/\//.test(user?.url)
-                ? user?.url
-                : `//${user?.url}`
-            }
+            href={/^(?:f|ht)tps?:\/\//.test(user?.url) ? user?.url : `//${user?.url}`}
             target='_blank'
           >
             <Text

@@ -1,10 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import gql from 'graphql-tag'
-import {
-  getLocalStorageTokenLabel,
-  getLocalStorageUserLabel
-} from '../services/auth'
+import { getLocalStorageTokenLabel, getLocalStorageUserLabel } from '../services/auth'
 import { createUploadLink } from 'apollo-upload-client'
 
 function createApolloClient() {

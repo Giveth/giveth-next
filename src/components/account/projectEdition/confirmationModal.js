@@ -42,11 +42,7 @@ const ConfirmationModal = ({
     >
       Close
     </Button>
-    <Text
-      sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}
-    >
-      {title}
-    </Text>
+    <Text sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}>{title}</Text>
     {subtitle && (
       <Text
         sx={{

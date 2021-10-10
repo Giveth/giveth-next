@@ -35,9 +35,7 @@ export const CloseModal = ({ showModal, setShowModal }) => (
     >
       Close
     </Button>
-    <Text
-      sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}
-    >
+    <Text sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}>
       Are you sure?
     </Text>
     <Flex

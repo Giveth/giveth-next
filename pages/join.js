@@ -10,10 +10,7 @@ const JoinPage = ({ joinChat, joinConsume }) => {
     <Layout>
       <Seo title="Join our community" />
       <Hero />
-      <Grid
-        rows={2}
-        sx={{ justifyContent: "center", backgroundColor: "lightestBlue" }}
-      >
+      <Grid rows={2} sx={{ justifyContent: "center", backgroundColor: "lightestBlue" }}>
         <Text
           sx={{
             variant: "headings.h4",
@@ -24,19 +21,12 @@ const JoinPage = ({ joinChat, joinConsume }) => {
         >
           Engage
         </Text>
-        <Grid
-          p={[1, 2, 2]}
-          columns={[1, 1, 2]}
-          sx={{ paddingLeft: "10vw", paddingRight: "10vw" }}
-        >
+        <Grid p={[1, 2, 2]} columns={[1, 1, 2]} sx={{ paddingLeft: "10vw", paddingRight: "10vw" }}>
           <JoinChatCard data={joinChat} />
         </Grid>
       </Grid>
       <div style={{ height: "10vh" }} />
-      <Grid
-        rows={2}
-        sx={{ justifyContent: "center", backgroundColor: "lightestBlue" }}
-      >
+      <Grid rows={2} sx={{ justifyContent: "center", backgroundColor: "lightestBlue" }}>
         <Text
           sx={{
             variant: "headings.h4",
@@ -47,11 +37,7 @@ const JoinPage = ({ joinChat, joinConsume }) => {
         >
           Consume
         </Text>
-        <Grid
-          p={[1, 2, 2]}
-          columns={[1, 1, 2]}
-          sx={{ paddingLeft: "10vw", paddingRight: "10vw" }}
-        >
+        <Grid p={[1, 2, 2]} columns={[1, 1, 2]} sx={{ paddingLeft: "10vw", paddingRight: "10vw" }}>
           <JoinChatCard data={joinConsume} />
         </Grid>
       </Grid>

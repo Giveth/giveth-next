@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import fetch from 'isomorphic-fetch'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
@@ -49,15 +43,7 @@ const POLL_DELAY_TOKENS = 5000
 
 const OnlyCrypto = props => {
   const {
-    state: {
-      validProvider,
-      balance,
-      web3,
-      account,
-      isEnabled,
-      networkId,
-      provider
-    },
+    state: { validProvider, balance, web3, account, isEnabled, networkId, provider },
     actions: { switchWallet, enableProvider, initOnBoard, switchToXdai }
   } = useContext(Web3Context)
 
@@ -65,8 +51,7 @@ const OnlyCrypto = props => {
 
   const usePopup = React.useContext(PopupContext)
 
-  const { ref, isComponentVisible, setIsComponentVisible } =
-    useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
   const { triggerPopup } = usePopup
 
@@ -148,13 +133,9 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     let img = ''
-    const found = iconManifest?.find(
-      i => i.symbol === tokenSymbol?.toUpperCase()
-    )
+    const found = iconManifest?.find(i => i.symbol === tokenSymbol?.toUpperCase())
     if (found) {
-      img = `/assets/cryptocurrency-icons/32/color/${
-        tokenSymbol?.toLowerCase() || 'eth'
-      }.png`
+      img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() || 'eth'}.png`
       setIcon(img)
     } else {
       setIcon(`/assets/cryptocurrency-icons/32/color/eth.png`)
@@ -180,14 +161,8 @@ const OnlyCrypto = props => {
       () => ({
         request: async () => {
           try {
-            const instance = new web3.eth.Contract(
-              tokenAbi,
-              selectedToken.address
-            )
-            return (
-              (await instance.methods.balanceOf(account).call()) /
-              10 ** selectedToken.decimals
-            )
+            const instance = new web3.eth.Contract(tokenAbi, selectedToken.address)
+            return (await instance.methods.balanceOf(account).call()) / 10 ** selectedToken.decimals
           } catch (e) {
             return 0
           }
@@ -218,9 +193,7 @@ const OnlyCrypto = props => {
   }
 
   const fetchEthPrice = () => {
-    return fetch(
-      'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
-    )
+    return fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
       .then(response => response.json())
       .then(data => data.ethereum.usd)
       .catch(err => {
@@ -230,8 +203,7 @@ const OnlyCrypto = props => {
   }
 
   const donation = parseFloat(amountTyped)
-  const givethFee =
-    Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
+  const givethFee = Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
 
   const subtotal = donation + (donateToGiveth === true ? givethFee : 0)
 
@@ -371,16 +343,15 @@ const OnlyCrypto = props => {
         {
           onTransactionHash: async transactionHash => {
             // Save initial txn details to db
-            const { donationId, savedDonation, saveDonationErrors } =
-              await saveDonation(
-                account,
-                toAddress,
-                transactionHash,
-                networkId,
-                Number(subtotal),
-                tokenSymbol,
-                Number(project.id)
-              )
+            const { donationId, savedDonation, saveDonationErrors } = await saveDonation(
+              account,
+              toAddress,
+              transactionHash,
+              networkId,
+              Number(subtotal),
+              tokenSymbol,
+              Number(project.id)
+            )
             console.log('DONATION RESPONSE: ', {
               donationId,
               savedDonation,
@@ -494,11 +465,7 @@ const OnlyCrypto = props => {
           setShowModal={val => setUnconfirmed(val)}
           txHash={txHash}
         />
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={() => setIsOpen(false)}
-          contentLabel='QR Modal'
-        >
+        <Modal isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)} contentLabel='QR Modal'>
           <Flex
             sx={{
               flexDirection: 'column',
@@ -592,9 +559,7 @@ const OnlyCrypto = props => {
                   color: 'anotherGrey'
                 }}
               >
-                {!isNaN(tokenPrice) && !!tokenSymbol
-                  ? `1 ${tokenSymbol} ≈ ${tokenPrice} USD`
-                  : ''}
+                {!isNaN(tokenPrice) && !!tokenSymbol ? `1 ${tokenSymbol} ≈ ${tokenPrice} USD` : ''}
               </Text>
 
               <Text
@@ -648,10 +613,7 @@ const OnlyCrypto = props => {
                 value={amountTyped}
                 onChange={e => {
                   e.preventDefault()
-                  if (
-                    parseFloat(e.target.value) !== 0 &&
-                    parseFloat(e.target.value) < 0.001
-                  ) {
+                  if (parseFloat(e.target.value) !== 0 && parseFloat(e.target.value) < 0.001) {
                     return
                   }
                   setAmountTyped(e.target.value)
@@ -668,9 +630,7 @@ const OnlyCrypto = props => {
                 }}
               >
                 <Image
-                  src={
-                    icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`
-                  }
+                  src={icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
                   alt={tokenSymbol || ''}
                   onError={ev => {
                     ev.target.src = ETHIcon
@@ -729,9 +689,9 @@ const OnlyCrypto = props => {
                     title: 'Support Giveth',
                     amount: [
                       `$${GIVETH_DONATION_AMOUNT}`,
-                      `≈ ${selectedToken.symbol} ${(
-                        GIVETH_DONATION_AMOUNT / tokenPrice
-                      ).toFixed(2)}`
+                      `≈ ${selectedToken.symbol} ${(GIVETH_DONATION_AMOUNT / tokenPrice).toFixed(
+                        2
+                      )}`
                     ]
                   })}
 
@@ -749,15 +709,11 @@ const OnlyCrypto = props => {
                     title: 'Network fee',
                     logo: { iconQuestionMark },
                     amount: [
-                      `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(
-                        gasPrice
-                      )} GWEI`,
+                      `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(gasPrice)} GWEI`,
                       `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 6
-                      })} ${
-                        isXdai ? xdaiChain.mainToken : ethereumChain.mainToken
-                      }`
+                      })} ${isXdai ? xdaiChain.mainToken : ethereumChain.mainToken}`
                     ]
                   })}
               </Summary>
@@ -793,9 +749,7 @@ const OnlyCrypto = props => {
               // )}
             }
             {!switchTraceable && !isXdai && (
-              <SaveGasMessage
-                sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
-              >
+              <SaveGasMessage sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}>
                 <Image
                   src='/images/icon-streamline-gas.svg'
                   height='18px'

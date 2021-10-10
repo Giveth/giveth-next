@@ -85,9 +85,7 @@ const DonateIndex = props => {
           >
             {title}
           </Text>
-          <Text sx={{ variant: 'text.small', color: textColor }}>
-            {subtitle}
-          </Text>
+          <Text sx={{ variant: 'text.small', color: textColor }}>{subtitle}</Text>
         </OptionTypesBox>
       )
     }
@@ -96,16 +94,8 @@ const DonateIndex = props => {
       <>
         <Text sx={{ variant: 'headings.h5', color: 'white' }}>Donate With</Text>
         <Options>
-          <OptionType
-            title={CRYPTO}
-            subtitle='Zero Fees'
-            style={RIGHT_BOX_STYLE}
-          />
-          <OptionType
-            title={CREDIT}
-            subtitle='Bank Fees'
-            style={LEFT_BOX_STYLE}
-          />
+          <OptionType title={CRYPTO} subtitle='Zero Fees' style={RIGHT_BOX_STYLE} />
+          <OptionType title={CREDIT} subtitle='Bank Fees' style={LEFT_BOX_STYLE} />
         </Options>
         {ShowPaymentOption()}
       </>
@@ -130,18 +120,10 @@ const DonateIndex = props => {
             }
           }}
         >
-          <TwitterShareButton
-            title={shareTitle}
-            url={url}
-            hashtags={['giveth']}
-          >
+          <TwitterShareButton title={shareTitle} url={url} hashtags={['giveth']}>
             <TwitterIcon size={40} round />
           </TwitterShareButton>
-          <LinkedinShareButton
-            title={shareTitle}
-            summary={project?.description}
-            url={url}
-          >
+          <LinkedinShareButton title={shareTitle} summary={project?.description} url={url}>
             <LinkedinIcon size={40} round />
           </LinkedinShareButton>
           <FacebookShareButton quote={shareTitle} url={url} hashtag='#giveth'>
@@ -153,9 +135,7 @@ const DonateIndex = props => {
   }
 
   if (project?.fromTrace) {
-    const Redirect = redirect(
-      `https://trace.giveth.io/campaign/${project?.slug}`
-    )
+    const Redirect = redirect(`https://trace.giveth.io/campaign/${project?.slug}`)
     return (
       <Redirect>
         <h3 style={{ color: 'white' }}>Redirecting to Giveth TRACE...</h3>
@@ -191,11 +171,7 @@ const DonateIndex = props => {
           />
         </ProjectContainer>
         <Payment>
-          <Success
-            sessionId={paymentSessionId}
-            hash={hashSent}
-            currentChainId={currentChainId}
-          />
+          <Success sessionId={paymentSessionId} hash={hashSent} currentChainId={currentChainId} />
           <div style={{ margin: '3rem 0', zIndex: 2 }}>
             <ShareIcons message='Share this with your friends!' centered />
           </div>

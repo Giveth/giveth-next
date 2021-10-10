@@ -11,12 +11,7 @@ const SupportPage = ({ support }) => {
       <Seo title="Support" />
       <Hero />
       <Flex sx={{ justifyContent: "center" }}>
-        <Grid
-          mt="2rem"
-          p={[1, 2, 2]}
-          columns={[1, 1, 2]}
-          sx={{ maxWidth: "80vw" }}
-        >
+        <Grid mt="2rem" p={[1, 2, 2]} columns={[1, 1, 2]} sx={{ maxWidth: "80vw" }}>
           <SupportCard data={support} />
         </Grid>
       </Flex>

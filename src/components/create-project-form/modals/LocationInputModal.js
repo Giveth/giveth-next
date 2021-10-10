@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react'
 import { Button, Input } from 'theme-ui'
 
-export const LocationInputModal = ({
-  showModal,
-  setShowModal,
-  setLocation
-}) => {
+export const LocationInputModal = ({ showModal, setShowModal, setLocation }) => {
   useEffect(() => {
     console.log('change')
   })

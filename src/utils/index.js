@@ -73,15 +73,10 @@ export const getImageFile = async (base64Data, projectName) => {
   return imageFile
 }
 
-export async function getEtherscanTxs(
-  address,
-  apolloClient = false,
-  isDonor = false
-) {
+export async function getEtherscanTxs(address, apolloClient = false, isDonor = false) {
   try {
     const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
-    const api =
-      process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
+    const api = process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
     const balance = await fetch(
       `https://${api}.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
     )

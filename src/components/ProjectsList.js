@@ -115,8 +115,7 @@ const ProjectsList = props => {
   }
 
   const searchedResults = searchQuery === '' ? projects : searchResults
-  const projectsFiltered =
-    category === 0 ? searchedResults : filterCategory(searchedResults)
+  const projectsFiltered = category === 0 ? searchedResults : filterCategory(searchedResults)
 
   //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Old Projects']
   const sortFunctions = [
@@ -133,16 +132,10 @@ const ProjectsList = props => {
       return b.reactions?.length - a.reactions?.length
     },
     function recentlyAdded(a, b) {
-      return (
-        new Date(b?.creationDate)?.valueOf() -
-        new Date(a?.creationDate)?.valueOf()
-      )
+      return new Date(b?.creationDate)?.valueOf() - new Date(a?.creationDate)?.valueOf()
     },
     function earlyAdded(a, b) {
-      return (
-        new Date(a?.creationDate)?.valueOf() -
-        new Date(b?.creationDate)?.valueOf()
-      )
+      return new Date(a?.creationDate)?.valueOf() - new Date(b?.creationDate)?.valueOf()
     }
   ]
   const filterFunctions = [
@@ -385,9 +378,7 @@ const ProjectsList = props => {
                             name={project.title}
                             slug={project.slug}
                             donateAddress={project.donateAddress}
-                            image={
-                              project.image || '/images/no-image-available.jpg'
-                            }
+                            image={project.image || '/images/no-image-available.jpg'}
                             raised={project.balance}
                             project={project}
                           />

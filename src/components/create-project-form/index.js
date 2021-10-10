@@ -5,10 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 
-import {
-  GET_PROJECT_BY_ADDRESS,
-  WALLET_ADDRESS_IS_VALID
-} from '../../apollo/gql/projects'
+import { GET_PROJECT_BY_ADDRESS, WALLET_ADDRESS_IS_VALID } from '../../apollo/gql/projects'
 import { getProjectWallet } from './utils'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
@@ -25,10 +22,7 @@ import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
 import { maxSelectedCategory } from '../../utils/constants'
-import {
-  invalidProjectTitleToast,
-  isProjectTitleValid
-} from '../../validation/projectValidation'
+import { invalidProjectTitleToast, isProjectTitleValid } from '../../validation/projectValidation'
 
 const CreateProjectForm = props => {
   const router = useRouter()
@@ -125,8 +119,7 @@ const CreateProjectForm = props => {
             : null
         }
         walletUsed={
-          typeof walletUsed !== 'boolean' &&
-          formData?.projectWalletAddress === walletUsed
+          typeof walletUsed !== 'boolean' && formData?.projectWalletAddress === walletUsed
         }
         register={register}
         goBack={goBack}
@@ -183,8 +176,7 @@ const CreateProjectForm = props => {
 
       if (isDescriptionStep(submitCurrentStep)) {
         // check if file is too large
-        const stringSize =
-          encodeURI(data?.projectDescription).split(/%..|./).length - 1
+        const stringSize = encodeURI(data?.projectDescription).split(/%..|./).length - 1
         if (stringSize > 4000000) {
           // 4Mb tops max maybe?
           return Toast({
@@ -205,9 +197,7 @@ const CreateProjectForm = props => {
         }
         if (didEnterWalletAddress) {
           setInputLoading(true)
-          projectWalletAddress = await getProjectWallet(
-            data?.projectWalletAddress
-          )
+          projectWalletAddress = await getProjectWallet(data?.projectWalletAddress)
         } else {
           projectWalletAddress = user.addresses[0]
         }
@@ -339,9 +329,7 @@ const CreateProjectForm = props => {
   //     </Flex>
   //   )
   // }
-  const progressPercentage = Object.keys(formData).filter(v =>
-    v.startsWith('proj')
-  )?.length
+  const progressPercentage = Object.keys(formData).filter(v => v.startsWith('proj'))?.length
 
   return (
     <>
@@ -381,9 +369,7 @@ const CreateProjectForm = props => {
           {currentStep === steps.length ? (
             <p>Creating project, please wait</p>
           ) : (
-            <form
-              onSubmit={handleSubmit(onSubmit(formData, currentStep, nextStep))}
-            >
+            <form onSubmit={handleSubmit(onSubmit(formData, currentStep, nextStep))}>
               <>
                 {currentStep !== steps.length - 1 ? (
                   <EditButtonSection

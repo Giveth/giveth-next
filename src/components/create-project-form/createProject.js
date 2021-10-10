@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import * as queryString from 'query-string'
 import Web3 from 'web3'
 import fetch from 'isomorphic-fetch'
 import { useMutation } from '@apollo/client'
-import { Flex, Text, Spinner, Image } from 'theme-ui'
+import { Flex, Image, Spinner, Text } from 'theme-ui'
 
 import Seo from '../../components/seo'
-import { FETCH_PROJECTS, ADD_PROJECT } from '../../apollo/gql/projects'
+import { ADD_PROJECT, FETCH_PROJECTS } from '../../apollo/gql/projects'
 import Layout from '../../components/layout'
 import HighFive from '../../components/create-project-form/highFive'
 import GithubIssue from '../../components/GithubIssue'
@@ -84,19 +84,13 @@ const CreateProject = props => {
         impactLocation: values.projectImpactLocation,
         categories: projectCategories,
         organisationId,
-        walletAddress: Web3.utils.toChecksumAddress(
-          values.projectWalletAddress
-        ),
+        walletAddress: Web3.utils.toChecksumAddress(values.projectWalletAddress),
         projectImage: values.pro
       }
       if (values?.projectImage?.length === 1) {
         projectData.imageStatic = values.projectImage
       } else if (values.projectImage) {
-        const imageFile = await getImageFile(
-          values.projectImage,
-          values.projectName
-        )
-        projectData.imageUpload = imageFile
+        projectData.imageUpload = await getImageFile(values.projectImage, values.projectName)
       }
       try {
         const project = await addProjectQuery({
@@ -118,9 +112,7 @@ const CreateProject = props => {
           logout(
             setErrorMessage(
               <>
-                <Text
-                  sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}
-                >
+                <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
                   {`We're so sorry but ${error.message}`}
                 </Text>
                 <Text sx={{ variant: 'text.default' }}>
@@ -263,9 +255,7 @@ const CreateProject = props => {
             <Text
               onClick={() => (
                 typeof window !== 'undefined' &&
-                  window?.open(
-                    'https://github.com/Giveth/giveth-2/issues/new/choose'
-                  ),
+                  window?.open('https://github.com/Giveth/giveth-2/issues/new/choose'),
                 '_blank'
               )}
               sx={{

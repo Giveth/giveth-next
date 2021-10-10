@@ -12,9 +12,7 @@ const Donate = (props) => {
     <Layout asDialog>
       <Seo
         title={
-          props?.project?.title
-            ? `Donate to ${props?.project?.title}`
-            : "Donate to this project!"
+          props?.project?.title ? `Donate to ${props?.project?.title}` : "Donate to this project!"
         }
         image={props?.project?.image}
       />

@@ -68,9 +68,7 @@ const IndexContent = ({
 const IndexPage = (props) => {
   const { query, content, mediumPosts, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
-  const hideInfo = process.env.HIDE_INFO_SECTION
-    ? process.env.HIDE_INFO_SECTION
-    : false
+  const hideInfo = process.env.HIDE_INFO_SECTION ? process.env.HIDE_INFO_SECTION : false
 
   // const ceramicTest = async () => {
   //   try {

@@ -8,13 +8,9 @@ import { FiExternalLink } from 'react-icons/fi'
 const formatTitle = (title, projectsList, userDonations) => {
   switch (title) {
     case 'My Projects':
-      return `My Projects ${
-        projectsList?.length ? `(${projectsList?.length})` : ''
-      }`
+      return `My Projects ${projectsList?.length ? `(${projectsList?.length})` : ''}`
     case 'My Donations':
-      return `My Donations ${
-        userDonations?.length ? `(${userDonations?.length})` : ''
-      }`
+      return `My Donations ${userDonations?.length ? `(${userDonations?.length})` : ''}`
     default:
       return title
   }
@@ -66,8 +62,7 @@ const AccountNav = props => {
                 sx={{
                   mb: '8px',
                   color:
-                    query?.view === i.route ||
-                    (!query?.view && i.route === 'account')
+                    query?.view === i.route || (!query?.view && i.route === 'account')
                       ? 'primary'
                       : 'secondary'
                 }}
@@ -86,10 +81,7 @@ const AccountNav = props => {
         }}
       >
         <Link
-          href={formatEtherscanLink('Account', [
-            currentChainId,
-            user.getWalletAddress()
-          ])}
+          href={formatEtherscanLink('Account', [currentChainId, user.getWalletAddress()])}
           target='_blank'
           rel='noopener noreferrer'
           sx={{ textDecoration: 'none' }}

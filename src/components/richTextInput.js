@@ -82,12 +82,7 @@ const modules = projectId => {
       [{ header: '1' }, { header: '2' }],
       [{ size: [] }],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [
-        { list: 'ordered' },
-        { list: 'bullet' },
-        { indent: '-1' },
-        { indent: '+1' }
-      ],
+      [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
       ['link', 'image', 'video'],
       ['emoji'],
       ['clean']
@@ -117,17 +112,12 @@ const modules = projectId => {
               }
             }
           })
-          const cachedImgs = JSON.parse(
-            window?.localStorage.getItem('cached-uploaded-imgs')
-          )
+          const cachedImgs = JSON.parse(window?.localStorage.getItem('cached-uploaded-imgs'))
           const cachedImgsArray = cachedImgs ? cachedImgs : []
           cachedImgsArray.push(imageUploaded?.uploadImage?.projectImageId)
           // TODO: THIS NEEDS TO HAPPEN FOR UPDATE ONLY
           if (window.location.pathname.split('/')[1] === 'create') {
-            window?.localStorage.setItem(
-              'cached-uploaded-imgs',
-              JSON.stringify(cachedImgsArray)
-            )
+            window?.localStorage.setItem('cached-uploaded-imgs', JSON.stringify(cachedImgsArray))
           }
 
           return imageUploaded?.uploadImage?.url

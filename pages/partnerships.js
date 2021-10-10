@@ -142,9 +142,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
               alignSelf: "center",
             }}
           >
-            <Text sx={{ variant: "headings.h4", color: "background" }}>
-              Partner with us
-            </Text>
+            <Text sx={{ variant: "headings.h4", color: "background" }}>Partner with us</Text>
           </Box>
 
           <Text

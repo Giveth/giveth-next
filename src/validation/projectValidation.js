@@ -6,8 +6,7 @@ export const isProjectTitleValid = title => {
 
 export const invalidProjectTitleToast = () => {
   return Toast({
-    content:
-      "Your project name isn't valid, please only use letters and numbers",
+    content: "Your project name isn't valid, please only use letters and numbers",
     type: 'error'
   })
 }

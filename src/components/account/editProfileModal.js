@@ -12,14 +12,7 @@ import Avatar from '../avatar'
 import Toast from '../../components/toast'
 
 const InputBox = props => {
-  const {
-    title,
-    placeholderText,
-    name,
-    register,
-    errors,
-    refExtras = null
-  } = props
+  const { title, placeholderText, name, register, errors, refExtras = null } = props
   return (
     <Box sx={{ mt: 3, mb: 2, width: '100%' }}>
       <Text
@@ -46,9 +39,7 @@ const InputBox = props => {
         // defaultValue={defaultValue}
         // onChange={e => setCharacterLength(e.target.value.length)}
       />
-      {errors && errors[name] && (
-        <Text sx={{ mt: 1, color: 'red' }}>{errors[name].message}</Text>
-      )}
+      {errors && errors[name] && <Text sx={{ mt: 1, color: 'red' }}>{errors[name].message}</Text>}
     </Box>
   )
 }
@@ -137,12 +128,8 @@ function EditProfileModal(props) {
               address={user.getWalletAddress()}
             />
             <Flex sx={{ flexDirection: 'column', ml: '27px' }}>
-              <Text sx={{ color: 'secondary', fontSize: 7 }}>
-                {wallet?.user?.name}
-              </Text>
-              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>
-                {wallet?.user?.email}
-              </Text>
+              <Text sx={{ color: 'secondary', fontSize: 7 }}>{wallet?.user?.name}</Text>
+              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{wallet?.user?.email}</Text>
             </Flex>
           </Flex>
           <InputBox
@@ -187,9 +174,7 @@ function EditProfileModal(props) {
             errors={errors}
             register={register}
           />
-          <Flex
-            sx={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
-          >
+          <Flex sx={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
             <Button
               aria-label='edit profile'
               variant='small'

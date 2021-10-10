@@ -28,16 +28,11 @@ const Donate = props => {
   const maxAmount = new BigNumber(props.maxAmount || 0)
 
   return (
-    <DonationForm
-      onSubmit={handleSubmit(onSubmit)}
-      gap={1}
-      columns={['0px 1fr 1fr']}
-    >
+    <DonationForm onSubmit={handleSubmit(onSubmit)} gap={1} columns={['0px 1fr 1fr']}>
       <Label htmlFor='title' />
       <Input
         ref={register({
-          validate: value =>
-            maxAmount.gte(value) || 'Donation amount is more than your balance'
+          validate: value => maxAmount.gte(value) || 'Donation amount is more than your balance'
         })}
         name='amount'
         mb={3}

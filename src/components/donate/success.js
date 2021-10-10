@@ -48,9 +48,8 @@ const Success = props => {
           Thank you for supporting <strong> {project?.title} </strong>.
         </Text>
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: -1 }}>
-          Your{' '}
-          <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong>{' '}
-          contribution goes a long way!
+          Your <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong> contribution goes
+          a long way!
         </Text>
         {hash?.transactionHash ? (
           <Receipt sx={{ my: 4 }}>
@@ -92,10 +91,7 @@ const Success = props => {
         {!isLoggedIn ? (
           <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
             Stay a Giver?{' '}
-            <span
-              style={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
-              onClick={login}
-            >
+            <span style={{ color: 'yellow', ml: 2, cursor: 'pointer' }} onClick={login}>
               Register an account.
             </span>
           </Text>

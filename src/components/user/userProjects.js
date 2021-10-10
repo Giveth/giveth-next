@@ -22,9 +22,7 @@ export const UserProjects = props => {
           Don`&apos;t stop here! There are other projects you can donate to.
         </Text>
         <Link href='/projects'>
-          <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: 4 }}>
-            BROWSE PROJECTS
-          </Button>
+          <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: 4 }}>BROWSE PROJECTS</Button>
         </Link>
       </Flex>
     )
@@ -54,12 +52,7 @@ export const UserProjects = props => {
             ?.slice()
             .sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
             .map(project => (
-              <ProjectCard
-                key={project.id}
-                shadowed
-                project={project}
-                raised={0}
-              />
+              <ProjectCard key={project.id} shadowed project={project} raised={0} />
             ))}
         </Grid>
       ) : (

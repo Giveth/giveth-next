@@ -26,13 +26,10 @@ const CookiesBanner = () => {
   const [cookiesAccepted, setCookiesAccepted] = React.useState('none')
   const [softLaunchSeen, setSoftLaunchSeen] = React.useState('none')
   React.useEffect(() => {
-    const cookies =
-      typeof window !== 'undefined' &&
-      window.localStorage.getItem('cookiesAccepted')
+    const cookies = typeof window !== 'undefined' && window.localStorage.getItem('cookiesAccepted')
     setCookiesAccepted(cookies)
     const softLaunch =
-      typeof window !== 'undefined' &&
-      window.localStorage.getItem('softLaunchSeen')
+      typeof window !== 'undefined' && window.localStorage.getItem('softLaunchSeen')
     if (!softLaunch) {
       setSoftLaunchSeen('false')
       // now the user has seen it
@@ -56,13 +53,11 @@ const CookiesBanner = () => {
         width: '100%'
       }}
     >
-      <Flex
-        sx={{ alignItems: 'center', flexDirection: ['column', 'row', 'row'] }}
-      >
+      <Flex sx={{ alignItems: 'center', flexDirection: ['column', 'row', 'row'] }}>
         <Image src={'/images/info_outline.png'} sx={{ mb: [2, 0, 0] }} />
         <Text sx={{ color: 'blue', ml: 2, mb: [2, 0, 0] }}>
-          This site uses cookies to provide you with an awesome user experience.
-          By using it, you accept our{' '}
+          This site uses cookies to provide you with an awesome user experience. By using it, you
+          accept our{' '}
           <Link
             sx={{
               color: 'blue',

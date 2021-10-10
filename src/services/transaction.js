@@ -80,9 +80,7 @@ export function notify(hash) {
 export async function getHashInfo(txHash, isXDAI) {
   try {
     const web3 = new Web3(
-      isXDAI
-        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
-        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
+      isXDAI ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
     const txInfo = await web3.eth.getTransaction(txHash)
     console.log({ txInfo })
@@ -96,12 +94,9 @@ export async function getHashInfo(txHash, isXDAI) {
 export async function getTxFromHash(transactionHash, isXDAI) {
   try {
     const web3 = new Web3(
-      isXDAI
-        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
-        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
+      isXDAI ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
-    const tx = await web3.eth.getTransaction(transactionHash)
-    return tx
+    return await web3.eth.getTransaction(transactionHash)
   } catch (error) {
     return false
   }
@@ -115,9 +110,7 @@ export async function confirmEtherTransaction(
 ) {
   try {
     const web3 = new Web3(
-      isXDAI
-        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
-        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
+      isXDAI ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
     const MAX_INTENTS = 20 // one every second
     web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
@@ -135,12 +128,7 @@ export async function confirmEtherTransaction(
       } else {
         // Try again in 1 second
         setTimeout(function () {
-          confirmEtherTransaction(
-            transactionHash,
-            callbackFunction,
-            ++count,
-            isXDAI
-          )
+          confirmEtherTransaction(transactionHash, callbackFunction, ++count, isXDAI)
         }, 1000)
       }
     })

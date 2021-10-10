@@ -1,10 +1,9 @@
 import { Flex } from 'theme-ui'
 import React from 'react'
 import MyProjects from './myProjects'
+
 const MyAccount = React.lazy(() => import('../../components/account/myAccount'))
-const MyDonations = React.lazy(() =>
-  import('../../components/account/myDonations')
-)
+const MyDonations = React.lazy(() => import('../../components/account/myDonations'))
 
 const SetView = props => {
   const { query, projectsList, isSSR, userDonations } = props

@@ -48,6 +48,7 @@ module.exports = {
       "error",
       {
         semi: false,
+        printWidth: 100,
       },
     ],
   },

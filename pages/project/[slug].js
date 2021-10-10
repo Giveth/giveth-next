@@ -18,9 +18,7 @@ const Project = (props) => {
     <Layout>
       <Seo
         title={
-          props.project?.title
-            ? `Check out ${props.project?.title}`
-            : "Check out this project!"
+          props.project?.title ? `Check out ${props.project?.title}` : "Check out this project!"
         }
         image={props.project?.image}
       />

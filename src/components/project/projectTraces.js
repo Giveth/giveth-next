@@ -49,12 +49,7 @@ const ProjectTraces = () => {
 
     const some = searchData?.filter(trace => {
       const val = trace?.title
-      return (
-        val
-          ?.toString()
-          .toLowerCase()
-          .indexOf(search.toString().toLowerCase()) === 0
-      )
+      return val?.toString().toLowerCase().indexOf(search.toString().toLowerCase()) === 0
     })
     setCurrentTraces(some)
   }
@@ -151,9 +146,7 @@ const ProjectTraces = () => {
           <Spinner variant='spinner.medium' />
         </Flex>
       ) : tracesData?.data?.length === 0 ? (
-        <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-          No Traces
-        </Text>
+        <Text sx={{ variant: 'text.large', color: 'secondary' }}>No Traces</Text>
       ) : (
         <TableToShow />
       )}

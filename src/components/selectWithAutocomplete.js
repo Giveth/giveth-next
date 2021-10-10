@@ -32,9 +32,7 @@ const SelectWithAutocomplete = ({
     let toShow = children
     // Special render for tokens, showing extra info
     if (isTokenList) {
-      const found = iconManifest.find(
-        i => i.symbol === value.symbol?.toUpperCase()
-      )
+      const found = iconManifest.find(i => i.symbol === value.symbol?.toUpperCase())
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
           {found ? (

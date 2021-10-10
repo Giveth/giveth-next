@@ -4,10 +4,7 @@ import styled from '@emotion/styled'
 const Hero = () => {
   return (
     <HeroSection>
-      <HeroText
-        p={['10px', null, '80px 80px 0px 80px']}
-        sx={{ width: ['95%', '50%', '80%'] }}
-      >
+      <HeroText p={['10px', null, '80px 80px 0px 80px']} sx={{ width: ['95%', '50%', '80%'] }}>
         {' '}
         <Heading
           sx={{

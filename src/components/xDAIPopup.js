@@ -8,8 +8,7 @@ const XDAIPopupClosed = props => {
   useEffect(() => {
     // Commenting this as we want to show the popup everywhere even after closed
     const issueAlreadyClosed =
-      typeof window !== 'undefined' &&
-      window.localStorage.getItem('xDAIPopupClosed')
+      typeof window !== 'undefined' && window.localStorage.getItem('xDAIPopupClosed')
     if (!issueAlreadyClosed) {
       setShowIssuePopup(true)
     }
@@ -90,8 +89,7 @@ const XDAIPopupClosed = props => {
         aria-label='edit project name'
         variant='nofill'
         onClick={() => {
-          typeof window !== 'undefined' &&
-            window.localStorage.setItem('xDAIPopupClosed', 'true')
+          typeof window !== 'undefined' && window.localStorage.setItem('xDAIPopupClosed', 'true')
           setShowIssuePopup(false)
         }}
         sx={{

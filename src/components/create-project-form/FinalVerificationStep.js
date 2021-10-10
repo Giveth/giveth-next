@@ -11,21 +11,12 @@ const RichTextViewer = dynamic(() => import('../richTextViewer'), {
   ssr: false
 })
 
-const FinalVerificationStep = ({
-  formData,
-  setStep,
-  animationStyle,
-  categoryList
-}) => {
+const FinalVerificationStep = ({ formData, setStep, animationStyle, categoryList }) => {
   const chosenCategories = []
   for (const category in formData.projectCategory) {
-    if (
-      !!formData.projectCategory[category] &&
-      formData.projectCategory[category]?.length !== 0
-    ) {
+    if (!!formData.projectCategory[category] && formData.projectCategory[category]?.length !== 0) {
       chosenCategories.push(
-        categoryList?.filter(categoryItem => categoryItem.name === category)[0]
-          ?.value
+        categoryList?.filter(categoryItem => categoryItem.name === category)[0]?.value
       )
     }
   }

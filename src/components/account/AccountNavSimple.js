@@ -53,13 +53,13 @@ const AccountNav = props => {
               key={index}
               style={{ textDecoration: 'none', cursor: 'pointer' }}
               href=''
+              passHref
             >
               <Text
                 sx={{
                   mb: '8px',
                   color:
-                    query?.view === i.route ||
-                    (!query?.view && i.route === 'account')
+                    query?.view === i.route || (!query?.view && i.route === 'account')
                       ? 'primary'
                       : 'secondary'
                 }}

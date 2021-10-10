@@ -71,12 +71,7 @@ const EditButtonSection = ({ formData, currentStep, setStep }) => {
             wasSet={formData.projectImpactLocation}
             sx={{ ml: '7%' }}
           />
-          <EditBtn
-            step={4}
-            title={'Image'}
-            wasSet={formData.ProjectImageInput}
-            sx={{ ml: '7%' }}
-          />
+          <EditBtn step={4} title={'Image'} wasSet={formData.ProjectImageInput} sx={{ ml: '7%' }} />
           <EditBtn
             step={5}
             title={'ETH Address'}

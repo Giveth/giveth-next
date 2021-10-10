@@ -14,10 +14,7 @@ const CopyToClipboard = ({ text, size = '18px', children }) => {
 
   if (children) {
     return (
-      <Flex
-        sx={{ flexDirection: 'column', mx: 2, cursor: 'pointer' }}
-        onClick={copyEvent}
-      >
+      <Flex sx={{ flexDirection: 'column', mx: 2, cursor: 'pointer' }} onClick={copyEvent}>
         {quickMsg && (
           <Flex
             sx={{
@@ -28,9 +25,7 @@ const CopyToClipboard = ({ text, size = '18px', children }) => {
               zIndex: 4
             }}
           >
-            <Text sx={{ variant: 'text.default', color: 'primary' }}>
-              copied!
-            </Text>
+            <Text sx={{ variant: 'text.default', color: 'primary' }}>copied!</Text>
           </Flex>
         )}
         {children}
@@ -49,9 +44,7 @@ const CopyToClipboard = ({ text, size = '18px', children }) => {
             zIndex: 4
           }}
         >
-          <Text sx={{ variant: 'text.default', color: 'primary' }}>
-            copied!
-          </Text>
+          <Text sx={{ variant: 'text.default', color: 'primary' }}>copied!</Text>
         </Flex>
       )}
       <FiCopy

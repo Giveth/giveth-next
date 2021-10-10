@@ -75,12 +75,7 @@ const FETCH_PROJECTS = gql`
 `
 
 const FETCH_USER_PROJECTS = gql`
-  query FetchProjects(
-    $limit: Int
-    $skip: Int
-    $orderBy: OrderBy
-    $admin: Float
-  ) {
+  query FetchProjects($limit: Int, $skip: Int, $orderBy: OrderBy, $admin: Float) {
     projects(take: $limit, skip: $skip, orderBy: $orderBy, admin: $admin) {
       id
       title
@@ -218,16 +213,8 @@ const ADD_BANK_ACCOUNT = gql`
 `
 
 const GET_LINK_BANK_CREATION = gql`
-  query SetProjectBankAccount(
-    $projectId: Float!
-    $returnUrl: String!
-    $refreshUrl: String!
-  ) {
-    setProjectBankAccount(
-      projectId: $projectId
-      returnUrl: $returnUrl
-      refreshUrl: $refreshUrl
-    )
+  query SetProjectBankAccount($projectId: Float!, $returnUrl: String!, $refreshUrl: String!) {
+    setProjectBankAccount(projectId: $projectId, returnUrl: $returnUrl, refreshUrl: $refreshUrl)
   }
 `
 const GET_DONATION_SESSION = gql`
@@ -359,11 +346,7 @@ const GET_PROJECT_UPDATES = gql`
 `
 
 const EDIT_PROJECT_UPDATE = gql`
-  mutation EditProjectUpdate(
-    $content: String!
-    $title: String!
-    $updateId: Float!
-  ) {
+  mutation EditProjectUpdate($content: String!, $title: String!, $updateId: Float!) {
     editProjectUpdate(content: $content, title: $title, updateId: $updateId) {
       id
       title

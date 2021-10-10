@@ -44,13 +44,7 @@ const LeftInfo = styled(Flex)`
   z-index: 1;
 `
 
-const Timeline = ({
-  content = [],
-  addUpdate,
-  project,
-  isOwner,
-  refreshQuery
-}) => {
+const Timeline = ({ content = [], addUpdate, project, isOwner, refreshQuery }) => {
   const isSSR = typeof window === 'undefined'
   const newUpdateOption = true
   const projectCreationDate = dayjs(project?.creationDate)
@@ -80,11 +74,7 @@ const Timeline = ({
           </LeftInfo>
           {!isSSR && (
             <React.Suspense fallback={<div />}>
-              <Card
-                newUpdateOption={addUpdate}
-                projectId={project?.id}
-                isOwner={isOwner}
-              />
+              <Card newUpdateOption={addUpdate} projectId={project?.id} isOwner={isOwner} />
             </React.Suspense>
           )}
         </Container>
@@ -92,9 +82,7 @@ const Timeline = ({
       {content
         ?.slice(0)
         ?.sort((a, b) => {
-          return (b?.projectUpdate?.createdAt).localeCompare(
-            a?.projectUpdate?.createdAt
-          )
+          return (b?.projectUpdate?.createdAt).localeCompare(a?.projectUpdate?.createdAt)
         })
         .map((i, index) => {
           const date = dayjs(i?.projectUpdate?.createdAt)
@@ -104,10 +92,7 @@ const Timeline = ({
                 <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
                   {date?.format('MMM') || ''}
                 </Text>
-                <Text sx={{ variant: 'headings.h4' }}>
-                  {' '}
-                  {date?.format('DD') || ''}
-                </Text>
+                <Text sx={{ variant: 'headings.h4' }}> {date?.format('DD') || ''}</Text>
                 <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
                   {date?.format('YYYY') || ''}
                 </Text>
@@ -132,9 +117,7 @@ const Timeline = ({
           <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
             {projectCreationDate?.format('MMM') || ''}
           </Text>
-          <Text sx={{ variant: 'headings.h4' }}>
-            {projectCreationDate?.format('DD') || ''}
-          </Text>
+          <Text sx={{ variant: 'headings.h4' }}>{projectCreationDate?.format('DD') || ''}</Text>
           <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
             {projectCreationDate?.format('YYYY') || ''}
           </Text>
