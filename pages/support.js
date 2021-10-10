@@ -1,9 +1,12 @@
 import { Flex, Grid } from 'theme-ui'
 import { fetchEntries } from '../src/utils/contentfulPosts'
-import Layout from '../src/components/layout'
-import Seo from '../src/components/seo'
-import Hero from '../src/components/content/SupportHero'
-import SupportCard from '../src/components/content/SupportCard'
+import dynamic from 'next/dynamic'
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
+const Hero = dynamic(() => import('../src/components/content/SupportHero'))
+const SupportCard = dynamic(() =>
+  import('../src/components/content/SupportCard')
+)
 
 const SupportPage = ({ support }) => {
   return (

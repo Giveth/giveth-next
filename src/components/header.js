@@ -322,6 +322,8 @@ const Header = ({ siteTitle, isHomePage }) => {
             <img
               src={'/images/decorator-cloud1.svg'}
               alt=''
+              width='100%'
+              height='100%'
               sx={{
                 position: 'absolute',
                 top: '-70px',

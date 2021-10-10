@@ -1,24 +1,16 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Flex,
-  Spinner,
-  jsx,
-  Text,
-  Input,
-  Select
-} from 'theme-ui'
+import { Box, Button, Grid, Flex, Spinner, Text, Input } from 'theme-ui'
 import React, { useState } from 'react'
-import ProjectCard from './projectCard'
-import SearchIcon from '../images/svg/general/search-icon.svg'
-import styled from '@emotion/styled'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import DropdownInput from '../components/dropdownInput'
+import styled from '@emotion/styled'
 import theme from '../utils/theme-ui'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import * as JsSearch from 'js-search'
 import DropIcon from '../images/svg/general/dropdown-arrow.svg'
+import SearchIcon from '../images/svg/general/search-icon.svg'
+
+const ProjectCard = dynamic(() => import('./projectCard'))
+const DropdownInput = dynamic(() => import('../components/dropdownInput'))
 
 const ProjectSection = styled(Box)``
 
@@ -126,14 +118,7 @@ orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
 orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
 
 const ProjectsList = props => {
-  const {
-    projects,
-    categories,
-    totalCount,
-    maxLimit,
-    fromHomePage,
-    selectOrderByField
-  } = props
+  const { projects, categories, totalCount, maxLimit, fromHomePage } = props
 
   const [search, setSearch] = useState()
   const [limit, setLimit] = useState(maxLimit)

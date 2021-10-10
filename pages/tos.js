@@ -1,43 +1,44 @@
-import { jsx, Text, Box } from "theme-ui";
-import Seo from "../src/components/seo";
-import styled from "@emotion/styled";
-import Layout from "../src/components/layout";
+import { Box } from 'theme-ui'
+import styled from '@emotion/styled'
+import dynamic from 'next/dynamic'
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
 
 const Main = styled(Box)`
   display: grid;
   grid-template-columns: 1fr;
   text-align: justify;
-`;
+`
 
 const Container = styled(Box)`
   max-width: 80vh;
   justify-self: center;
-`;
+`
 
 const Tos = ({ data }) => {
   // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
-      <Seo title="Terms of Use" />
-      <Main sx={{ fontFamily: "heading" }}>
+      <Seo title='Terms of Use' />
+      <Main sx={{ fontFamily: 'heading' }}>
         <Container>
           <h1>TERMS OF USE</h1>
           <h5>Last updated December 23, 2020</h5>
           <br />
           <h3>AGREEMENT TO TERMS</h3>
-          <section id="agreement">
+          <section id='agreement'>
             <p>
               These Terms of Use constitute a legally binding agreement made
               between you, whether personally or on behalf of an entity (“you”)
               and Giveth Foundation, doing business as Giveth ("Giveth", “we”,
-              “us”, or “our”), concerning your access to and use of the{" "}
+              “us”, or “our”), concerning your access to and use of the{' '}
               <a
-                href="https://giveth.io"
-                target="_blank"
-                rel="noopener noreferrer"
+                href='https://giveth.io'
+                target='_blank'
+                rel='noopener noreferrer'
               >
                 https://giveth.io
-              </a>{" "}
+              </a>{' '}
               website as well as any other media form, media channel, mobile
               website or mobile application related, linked, or otherwise
               connected thereto (collectively, the “Site”). The Site provides an
@@ -104,7 +105,7 @@ const Tos = ({ data }) => {
               for the Site or use the Marketplace Offerings.
             </p>
           </section>
-          <section id="intellectual">
+          <section id='intellectual'>
             <h3>INTELLECTUAL PROPERTY RIGHTS</h3>
             <p>
               Unless otherwise indicated, the Site and the Marketplace Offerings
@@ -134,7 +135,7 @@ const Tos = ({ data }) => {
               the Site, the Content and the Marks.
             </p>
           </section>
-          <section id="userrep">
+          <section id='userrep'>
             <h3>USER REPRESENTATIONS</h3>
             <p>
               By using the Site or the Marketplace Offerings, you represent and
@@ -181,7 +182,7 @@ const Tos = ({ data }) => {
               advertising purposes only.
             </p>
           </section>
-          <section id="registration">
+          <section id='registration'>
             <h3>USER REGISTRATION</h3>
             <p>
               You may be required to register with the Site in order to access
@@ -193,7 +194,7 @@ const Tos = ({ data }) => {
               objectionable.
             </p>
           </section>
-          <section id="offerings">
+          <section id='offerings'>
             <h3>MARKETPLACE OFFERINGS</h3>
             <p>
               We reserve the right to limit the quantities of the Marketplace
@@ -206,7 +207,7 @@ const Tos = ({ data }) => {
               or that any errors in the Site will be corrected.
             </p>
           </section>
-          <section id="payment">
+          <section id='payment'>
             <h3>PURCHASES AND PAYMENT</h3>
             <p>We accept the following forms of payment:</p>
             <ul>
@@ -235,11 +236,11 @@ const Tos = ({ data }) => {
               payment.
             </p>
           </section>
-          <section id="refunds">
+          <section id='refunds'>
             <h3>REFUNDS POLICY</h3>
             <p>All sales are final and no refund will be issued.</p>
           </section>
-          <section id="prohibited">
+          <section id='prohibited'>
             <h3>PROHIBITED ACTIVITIES</h3>
             <p>
               You may not access or use the Site for any purpose other than that
@@ -352,7 +353,7 @@ const Tos = ({ data }) => {
               </li>
             </ol>
           </section>
-          <section id="usercontributions">
+          <section id='usercontributions'>
             <h3>USER GENERATED CONTRIBUTIONS</h3>
             <p>
               The Site may invite you to chat, contribute to, or participate in
@@ -450,7 +451,7 @@ const Tos = ({ data }) => {
               Site and the Marketplace Offerings.
             </p>
           </section>
-          <section id="license">
+          <section id='license'>
             <h3>CONTRIBUTION LICENSE</h3>
             <p>
               By posting your Contributions to any part of the Site or making
@@ -468,7 +469,7 @@ const Tos = ({ data }) => {
               to prepare derivative works of, or incorporate into other works,
               such Contributions, and grant and authorize sublicenses of the
               foregoing. The use and distribution may occur in any media formats
-              and through any media channels.{" "}
+              and through any media channels.{' '}
             </p>
             <p>
               This license will apply to any form, media, or technology now
@@ -499,7 +500,7 @@ const Tos = ({ data }) => {
               have no obligation to monitor your Contributions.
             </p>
           </section>
-          <section id="socialmedia">
+          <section id='socialmedia'>
             <h3>SOCIAL MEDIA</h3>
             <p>
               As part of the functionality of the Site, you may link your
@@ -553,7 +554,7 @@ const Tos = ({ data }) => {
               profile picture that become associated with your account.
             </p>
           </section>
-          <section id="submissions">
+          <section id='submissions'>
             <h3>SUBMISSIONS</h3>
             <p>
               You acknowledge and agree that any questions, comments,
@@ -572,7 +573,7 @@ const Tos = ({ data }) => {
               in your Submissions.
             </p>
           </section>
-          <section id="3rdparty">
+          <section id='3rdparty'>
             <h3>THIRD-PARTY WEBSITES AND CONTENT</h3>
             <p>
               The Site may contain (or you may be sent via the Site or the
@@ -610,7 +611,7 @@ const Tos = ({ data }) => {
               Third-Party Content or any contact with Third-Party Websites.
             </p>
           </section>
-          <section id="sitemanagement">
+          <section id='sitemanagement'>
             <h3>SITE MANAGEMENT</h3>
             <p>
               We reserve the right, but not the obligation, to: (1) monitor the
@@ -630,7 +631,7 @@ const Tos = ({ data }) => {
               Offerings.
             </p>
           </section>
-          <section id="privacypolicy">
+          <section id='privacypolicy'>
             <h3>PRIVACY POLICY</h3>
             <p>
               We care about data privacy and security. By using the Site or the
@@ -646,7 +647,7 @@ const Tos = ({ data }) => {
               transferred to and processed in the United States.
             </p>
           </section>
-          <section id="termination">
+          <section id='termination'>
             <h3>TERM AND TERMINATION</h3>
             <p>
               These Terms of Use shall remain in full force and effect while you
@@ -672,7 +673,7 @@ const Tos = ({ data }) => {
               limitation pursuing civil, criminal, and injunctive redress.
             </p>
           </section>
-          <section id="interruptions">
+          <section id='interruptions'>
             <h3>MODIFICATIONS AND INTERRUPTIONS</h3>
             <p>
               We reserve the right to change, modify, or remove the contents of
@@ -701,7 +702,7 @@ const Tos = ({ data }) => {
               releases in connection therewith.
             </p>
           </section>
-          <section id="governinglaw">
+          <section id='governinglaw'>
             <h3>GOVERNING LAW</h3>
             <p>
               These Terms of Use and your use of the Site and the Marketplace
@@ -711,7 +712,7 @@ const Tos = ({ data }) => {
               to its conflict of law principles.
             </p>
           </section>
-          <section id="disputeresolution">
+          <section id='disputeresolution'>
             <h3>DISPUTE RESOLUTION</h3>
             <h5>Informal Negotiations</h5>
             <p>
@@ -736,8 +737,8 @@ const Tos = ({ data }) => {
               Commercial Arbitration Rules of the American Arbitration
               Association ("AAA") and, where appropriate, the AAA’s
               Supplementary Procedures for Consumer Related Disputes ("AAA
-              Consumer Rules"), both of which are available at the AAA website:{" "}
-              <a href="www.adr.org" target="_blank" rel="noopener noreferrer">
+              Consumer Rules"), both of which are available at the AAA website:{' '}
+              <a href='www.adr.org' target='_blank' rel='noopener noreferrer'>
                 www.adr.org
               </a>
               . Your arbitration fees and your share of arbitrator compensation
@@ -803,7 +804,7 @@ const Tos = ({ data }) => {
               submit to the personal jurisdiction of that court.
             </p>
           </section>
-          <section id="corrections">
+          <section id='corrections'>
             <h3>CORRECTIONS</h3>
             <p>
               There may be information on the Site that contains typographical
@@ -815,7 +816,7 @@ const Tos = ({ data }) => {
               notice.
             </p>
           </section>
-          <section id="disclaimer">
+          <section id='disclaimer'>
             <h3>DISCLAIMER</h3>
             <p>
               THE SITE AND THE MARKETPLACE OFFERINGS ARE PROVIDED ON AN AS-IS
@@ -852,7 +853,7 @@ const Tos = ({ data }) => {
               CAUTION WHERE APPROPRIATE.
             </p>
           </section>
-          <section id="liability">
+          <section id='liability'>
             <h3>LIMITATIONS OF LIABILITY</h3>
             <p>
               IN NO EVENT WILL WE OR OUR DIRECTORS, EMPLOYEES, OR AGENTS BE
@@ -872,7 +873,7 @@ const Tos = ({ data }) => {
               RIGHTS.
             </p>
           </section>
-          <section id="indemnification">
+          <section id='indemnification'>
             <h3>INDEMNIFICATION</h3>
             <p>
               You agree to defend, indemnify, and hold us harmless, including
@@ -896,7 +897,7 @@ const Tos = ({ data }) => {
               it.
             </p>
           </section>
-          <section id="userdata">
+          <section id='userdata'>
             <h3>USER DATA</h3>
             <p>
               We will maintain certain data that you transmit to the Site for
@@ -911,7 +912,7 @@ const Tos = ({ data }) => {
               corruption of such data.
             </p>
           </section>
-          <section id="transactions">
+          <section id='transactions'>
             <h3>ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES</h3>
             <p>
               Visiting the Site, sending us emails, and completing online forms
@@ -930,7 +931,7 @@ const Tos = ({ data }) => {
               granting of credits by any means other than electronic means.
             </p>
           </section>
-          <section id="california">
+          <section id='california'>
             <h3>CALIFORNIA USERS AND RESIDENTS</h3>
             <p>
               If any complaint with us is not satisfactorily resolved, you can
@@ -941,7 +942,7 @@ const Tos = ({ data }) => {
               445-1254.
             </p>
           </section>
-          <section id="misc">
+          <section id='misc'>
             <h3>MISCELLANEOUS</h3>
             <p>
               These Terms of Use and any policies or operating rules posted by
@@ -967,7 +968,7 @@ const Tos = ({ data }) => {
               by the parties hereto to execute these Terms of Use.
             </p>
           </section>
-          <section id="contact">
+          <section id='contact'>
             <h3>CONTACT US</h3>
             <p>
               In order to resolve a complaint regarding the Site or the
@@ -975,7 +976,7 @@ const Tos = ({ data }) => {
               use of the Site or the Marketplace Offerings, please contact us
               at:
             </p>
-            <ul style={{ listStyle: "none" }}>
+            <ul style={{ listStyle: 'none' }}>
               <strong>
                 <li>Giveth Foundation</li>
                 <li>475 E. Main Street</li>
@@ -986,13 +987,13 @@ const Tos = ({ data }) => {
               </strong>
             </ul>
           </section>
-          <section id="end">
+          <section id='end'>
             <p>
-              These terms of use were created using{" "}
+              These terms of use were created using{' '}
               <a
-                href="https://termly.io/products/terms-and-conditions-generator/?ftseo"
-                target="blank"
-                rel="noopener noreferrer"
+                href='https://termly.io/products/terms-and-conditions-generator/?ftseo'
+                target='blank'
+                rel='noopener noreferrer'
               >
                 Termly’s Terms and Conditions Generator
               </a>
@@ -1002,7 +1003,7 @@ const Tos = ({ data }) => {
         </Container>
       </Main>
     </Layout>
-  );
-};
+  )
+}
 
-export default Tos;
+export default Tos

@@ -1,8 +1,26 @@
-module.exports = {
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true'
+})
+
+module.exports = withBundleAnalyzer({
   // Uncomment this to allow eslint on build
   // experimental: {
   //   eslint: true,
   // },
+  async headers () {
+    return [
+      {
+        source: '/:all*(svg|jpg|png)',
+        locale: false,
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=9999999999, must-revalidate'
+          }
+        ]
+      }
+    ]
+  },
   typescript: {
     ignoreBuildErrors: true
   },
@@ -11,6 +29,10 @@ module.exports = {
       test: /\.md$/,
       use: 'raw-loader'
     })
+    config.optimization = {
+      ...config.optimization,
+      sideEffects: true
+    }
     return config
   },
   images: {
@@ -31,4 +53,4 @@ module.exports = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true
   }
-}
+})

@@ -1,27 +1,27 @@
 import { client } from '../../src/apollo/client'
-import DonationView from '../../src/components/donate'
-import Layout from '../../src/components/layout'
-import Seo from '../../src/components/seo'
+import dynamic from 'next/dynamic'
 import { FETCH_PROJECT_BY_SLUG } from '../../src/apollo/gql/projects'
-import NotFoundPage from "../404";
+
+const Seo = dynamic(() => import('../../src/components/seo'))
+const Layout = dynamic(() => import('../../src/components/layout'))
+const NotFoundPage = dynamic(() => import('../404'))
+const DonationView = dynamic(() => import('../../src/components/donate'))
 
 const Donate = props => {
-  return (
-    props.error ? (
-      <NotFoundPage />
-    ) : (
-      <Layout asDialog>
-        <Seo
-          title={
-            props?.project?.title
-              ? `Donate to ${props?.project?.title}`
-              : "Donate to this project!"
-          }
-          image={props?.project?.image}
-        />
-        <DonationView {...props} />
-      </Layout>
-    )
+  return props.error ? (
+    <NotFoundPage />
+  ) : (
+    <Layout asDialog>
+      <Seo
+        title={
+          props?.project?.title
+            ? `Donate to ${props?.project?.title}`
+            : 'Donate to this project!'
+        }
+        image={props?.project?.image}
+      />
+      <DonationView {...props} />
+    </Layout>
   )
 }
 

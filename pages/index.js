@@ -1,16 +1,22 @@
 import React, { useEffect } from 'react'
 import * as matter from 'gray-matter'
+import dynamic from 'next/dynamic'
 import { client } from '../src/apollo/client'
 import GivethContent from '../src/content/giveth.md'
-import Layout from '../src/components/layout'
-import Seo from '../src/components/seo'
-import Hero from '../src/components/home/HeroSection'
-import InfoSection from '../src/components/home/InfoSection'
-import UpdatesSection from '../src/components/home/UpdatesSection'
-import HomeTopProjects from '../src/components/home/HomeTopProjects'
 import { PopupContext } from '../src/contextProvider/popupProvider'
 
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
+
+const Hero = dynamic(() => import('../src/components/home/HeroSection'))
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
+const InfoSection = dynamic(() => import('../src/components/home/InfoSection'))
+const HomeTopProjects = dynamic(() =>
+  import('../src/components/home/HomeTopProjects')
+)
+const UpdatesSection = dynamic(() =>
+  import('../src/components/home/InfoSection')
+)
 
 // import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
 // import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
@@ -137,7 +143,7 @@ export async function getServerSideProps (props) {
       topProjects: response?.projects
         ?.filter(i => !i?.verified)
         ?.sort((a, b) => {
-          if (a?.totalHearts > b?.totalHearts) return -1
+          if (a?.qualityScore > b?.qualityScore) return -1
         })
         ?.slice(0, 3),
       content: mdContent?.data,

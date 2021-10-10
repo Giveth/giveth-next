@@ -1,23 +1,31 @@
-import React from 'react'
-import Script from 'next/script'
 import 'react-quill/dist/quill.snow.css'
+import React from 'react'
+import dynamic from 'next/dynamic'
+import Script from 'next/script'
 import PropTypes from 'prop-types'
 import { Link, Flex, Text, Image } from 'theme-ui'
 import { positions, Provider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 import theme from '../utils/theme-ui'
-import Header from './header'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
 import { QueryParamProvider } from '../contextProvider/queryParamProvider'
 
-import Dialog from './dialog'
-import GithubIssue from './GithubIssue'
-import XDAIPopup from './xDAIPopup'
-import Footer from './footer'
-import Popup from './popup'
-import { ToastContainer } from 'react-toastify'
+// import Header from './header'
+const Header = dynamic(() => import('./header'))
+// import Dialog from './dialog'
+const Dialog = dynamic(() => import('./dialog'))
+// import GithubIssue from './GithubIssue'
+const GithubIssue = dynamic(() => import('./GithubIssue'))
+// import XDAIPopup from './xDAIPopup'
+const XDAIPopup = dynamic(() => import('./xDAIPopup'))
+// import Footer from './footer'
+const Footer = dynamic(() => import('./footer'))
+// import Popup from './popup'
+const Popup = dynamic(() => import('./popup'))
+
 import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
 import styled from '@emotion/styled'
 import { WalletProvider } from '../contextProvider/WalletProvider'
 import Web3Provider from '../contextProvider/Web3Provider'

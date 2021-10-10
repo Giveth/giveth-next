@@ -1,10 +1,11 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 import { Label, Input, Grid, Text, Button, Textarea } from 'theme-ui'
 import theme from '../src/utils/theme-ui'
-import Seo from '../src/components/seo'
 import styled from '@emotion/styled'
 import useMediaQuery from 'react-responsive'
-import Layout from '../src/components/layout'
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
 
 const Main = styled(Grid)`
   justify-content: start;

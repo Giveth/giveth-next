@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import Seo from '../src/components/seo'
+import dynamic from 'next/dynamic'
 import ErrorPage from '../src/components/errorPage'
 import { client } from '../src/apollo/client'
-import Layout from '../src/components/layout'
 import ProjectsList, {
   OrderByDirection,
   OrderByField
 } from '../src/components/ProjectsList'
-
 import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from '../src/apollo/gql/projects'
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
 
 const Project = props => {
   const { projects, traceProjects, categories, totalCount, errors } = props

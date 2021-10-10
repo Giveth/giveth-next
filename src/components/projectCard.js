@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import styled from '@emotion/styled'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import theme from '../utils/theme-ui/index'
 // import Donate from '../components/donateForm'
 import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
@@ -149,7 +149,7 @@ const ProjectCard = props => {
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
   const strUserId = user?.id?.toString()
-  const initUserHearted =project?.reactions?.find(r => r?.userId === user?.id)
+  const initUserHearted = project?.reactions?.find(r => r?.userId === user?.id)
   const [hearted, setHearted] = useState(initUserHearted)
   const [heartedByUser, setHeartedByUser] = useState(null)
   const [heartedCount, setHeartedCount] = useState(null)

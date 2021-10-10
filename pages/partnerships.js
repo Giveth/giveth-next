@@ -1,16 +1,17 @@
-import { Flex, Grid, Text, Box, Button } from "theme-ui";
-import theme from "../src/utils/theme-ui";
-import { fetchEntries } from "../src/utils/contentfulPosts";
-import React from "react";
-import Seo from "../src/components/seo";
-import Link from "next/link";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { BLOCKS } from "@contentful/rich-text-types";
-import styled from "@emotion/styled";
+import { Flex, Grid, Text, Box, Button } from 'theme-ui'
+import dynamic from 'next/dynamic'
+import theme from '../src/utils/theme-ui'
+import { fetchEntries } from '../src/utils/contentfulPosts'
+import React from 'react'
+import Link from 'next/link'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import { BLOCKS } from '@contentful/rich-text-types'
+import styled from '@emotion/styled'
 
-import useMediaQuery from "react-responsive";
+import useMediaQuery from 'react-responsive'
 
-import Layout from "../src/components/layout";
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
 
 const Main = styled(Grid)`
   justify-content: start;
@@ -19,7 +20,7 @@ const Main = styled(Grid)`
     margin: 1rem;
     padding: 0vw;
   }
-`;
+`
 const ContentItem = styled(Grid)`
   grid-template-rows: auto auto 1fr;
   grid-gap: 1rem;
@@ -29,14 +30,14 @@ const ContentItem = styled(Grid)`
   height: 250px;
   border: 1px solid ${theme.colors.muted};
   border-radius: 12px;
-`;
+`
 
 const Decorator = styled.div`
   position: absolute;
   @media (max-width: 500px) {
     display: none;
   }
-`;
+`
 const RaisedHandsImg = styled.img`
   position: absolute;
   bottom: 0;
@@ -45,7 +46,7 @@ const RaisedHandsImg = styled.img`
     display: none;
     align-items: flex-start;
   }
-`;
+`
 
 const SpecialCardContainer = styled(Flex)`
   width: 100%;
@@ -59,75 +60,75 @@ const SpecialCardContainer = styled(Flex)`
   box-sizing: border-box;
   border-radius: 12px;
   margin: 0.5rem 0;
-`;
+`
 
 const Partnerships = ({ friendsLogos, partners }) => {
   const richTextOptions = {
     renderNode: {
-      [BLOCKS.EMBEDDED_ASSET]: (node) => {
-        const { title, description, file } = node.data.target.fields;
-        const mimeType = file["en-US"].contentType;
-        const mimeGroup = mimeType.split("/")[0];
+      [BLOCKS.EMBEDDED_ASSET]: node => {
+        const { title, description, file } = node.data.target.fields
+        const mimeType = file['en-US'].contentType
+        const mimeGroup = mimeType.split('/')[0]
 
         switch (mimeGroup) {
-          case "image":
+          case 'image':
             return (
               <img
-                title={title ? title["en-US"] : null}
-                alt={description ? description["en-US"] : null}
-                src={file["en-US"].url}
+                title={title ? title['en-US'] : null}
+                alt={description ? description['en-US'] : null}
+                src={file['en-US'].url}
               />
-            );
-          case "application":
+            )
+          case 'application':
             return (
               <a
-                alt={description ? description["en-US"] : null}
-                href={file["en-US"].url}
+                alt={description ? description['en-US'] : null}
+                href={file['en-US'].url}
               >
-                {title ? title["en-US"] : file["en-US"].details.fileName}
+                {title ? title['en-US'] : file['en-US'].details.fileName}
               </a>
-            );
+            )
           default:
             return (
-              <span style={{ backgroundColor: "black", color: "white" }}>
-                {" "}
-                {mimeType} embedded asset{" "}
+              <span style={{ backgroundColor: 'black', color: 'white' }}>
+                {' '}
+                {mimeType} embedded asset{' '}
               </span>
-            );
+            )
         }
-      },
-    },
-  };
-  console.log({ friendsLogos, partners });
+      }
+    }
+  }
+  console.log({ friendsLogos, partners })
   // return null;
-  const isMobile = useMediaQuery({ query: "(max-width: 825px)" });
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
-      <Seo title="Our partnerships" />
+      <Seo title='Our partnerships' />
       {!isMobile ? (
         <Decorator>
           <img
-            src={"/images/decorator-puzzlepieces.svg"}
-            alt=""
+            src={'/images/decorator-puzzlepieces.svg'}
+            alt=''
             style={{
-              position: "absolute",
-              right: "-90vw",
+              position: 'absolute',
+              right: '-90vw'
             }}
           />
         </Decorator>
       ) : null}
-      <Main sx={{ width: ["90%", "90%", "70%"] }}>
-        <Text sx={{ variant: "headings.h2" }}>{partners[0].title}</Text>
+      <Main sx={{ width: ['90%', '90%', '70%'] }}>
+        <Text sx={{ variant: 'headings.h2' }}>{partners[0].title}</Text>
         <Text
           sx={{
-            variant: "text.large",
+            variant: 'text.large'
           }}
         >
           {partners[0].subtitle}
         </Text>
         <Text
           sx={{
-            variant: "text.default",
+            variant: 'text.default'
           }}
         >
           {documentToReactComponents(partners[0].moreInfo.json)}
@@ -135,39 +136,39 @@ const Partnerships = ({ friendsLogos, partners }) => {
         <Text
           pt={5}
           sx={{
-            variant: "text.large",
+            variant: 'text.large'
           }}
         >
-          Our partners and friends{" "}
+          Our partners and friends{' '}
         </Text>
         <Grid
           columns={[1, 2, 3]}
           gap={4}
-          sx={{ justifySelf: ["center", "auto", "auto"], maxWidth: "800px" }}
+          sx={{ justifySelf: ['center', 'auto', 'auto'], maxWidth: '800px' }}
         >
-          {friendsLogos?.map((friend) => (
+          {friendsLogos?.map(friend => (
             <ContentItem key={friend.logo.sys.id}>
               <a
                 href={friend.link}
                 style={{
-                  textDecoration: "none",
-                  textAlign: "center",
-                  color: "secondaryDark",
+                  textDecoration: 'none',
+                  textAlign: 'center',
+                  color: 'secondaryDark'
                 }}
               >
-                <Flex sx={{ flexDirection: "column" }}>
+                <Flex sx={{ flexDirection: 'column' }}>
                   <img
-                    width="100%"
-                    height="50px"
-                    style={{ objectFit: "contain" }}
+                    width='100%'
+                    height='50px'
+                    style={{ objectFit: 'contain' }}
                     src={friend.logo.fields.file.url}
                     alt='friend logo'
                   />
 
-                  <Text pt={2} sx={{ variant: "headings.h6" }}>
+                  <Text pt={2} sx={{ variant: 'headings.h6' }}>
                     {friend.name}
                   </Text>
-                  <Text pt={3} sx={{ variant: "text.default" }}>
+                  <Text pt={3} sx={{ variant: 'text.default' }}>
                     {friend.description}
                   </Text>
                 </Flex>
@@ -176,71 +177,71 @@ const Partnerships = ({ friendsLogos, partners }) => {
           ))}
         </Grid>
 
-        <SpecialCardContainer sx={{ maxWidth: "800px" }}>
+        <SpecialCardContainer sx={{ maxWidth: '800px' }}>
           <img
-            src="/images/svg/general/decorators/dark-clouds.svg"
-            style={{ position: "absolute", top: "41px", right: "42px" }}
+            src='/images/svg/general/decorators/dark-clouds.svg'
+            style={{ position: 'absolute', top: '41px', right: '42px' }}
             alt='dark clouds img'
           />
           <Box
             sx={{
-              width: "60%",
+              width: '60%',
               pb: 2,
               pt: 4,
-              textAlign: "center",
-              alignSelf: "center",
+              textAlign: 'center',
+              alignSelf: 'center'
             }}
           >
-            <Text sx={{ variant: "headings.h4", color: "background" }}>
+            <Text sx={{ variant: 'headings.h4', color: 'background' }}>
               Partner with us
             </Text>
           </Box>
 
           <Text
             sx={{
-              variant: "text.default",
+              variant: 'text.default',
               pb: 4,
-              color: "bodyLight",
+              color: 'bodyLight'
             }}
           >
             We're always open for new partnerships
           </Text>
-          <Link href="/contact">
+          <Link href='/contact'>
             <Button
               mt={1}
               p={3}
               sx={{
-                width: "200px",
-                variant: "buttons.default",
+                width: '200px',
+                variant: 'buttons.default'
               }}
             >
               Contact Us
             </Button>
           </Link>
-          <RaisedHandsImg src={"/images/decorator-raised-one-hand.png"} />
+          <RaisedHandsImg src={'/images/decorator-raised-one-hand.png'} />
         </SpecialCardContainer>
       </Main>
     </Layout>
-  );
-};
+  )
+}
 
-export async function getServerSideProps() {
+export async function getServerSideProps () {
   // contentful
-  const friendsReq = await fetchEntries({ contentType: "friendslogos" });
-  const friendsLogos = friendsReq.map(f => f.fields);
+  const friendsReq = await fetchEntries({ contentType: 'friendslogos' })
+  const friendsLogos = friendsReq.map(f => f.fields)
 
   const partnershipsReq = await fetchEntries({
-    contentType: "contentPartnerships",
-  });
-  console.log(JSON.stringify(partnershipsReq));
-  const partnerships = partnershipsReq?.map(p => p.fields);
+    contentType: 'contentPartnerships'
+  })
+  console.log(JSON.stringify(partnershipsReq))
+  const partnerships = partnershipsReq?.map(p => p.fields)
 
   return {
     props: {
       friendsLogos: friendsLogos || {},
-      partners: partnerships || {},
-    },
-  };
+      partners: partnerships || {}
+    }
+  }
 }
 
-export default Partnerships;
+export default Partnerships
