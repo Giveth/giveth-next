@@ -15,7 +15,7 @@ const HomeTopProjects = dynamic(() =>
   import('../src/components/home/HomeTopProjects')
 )
 const UpdatesSection = dynamic(() =>
-  import('../src/components/home/InfoSection')
+  import('../src/components/home/UpdatesSection')
 )
 
 // import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'

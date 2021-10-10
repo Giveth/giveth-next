@@ -1,4 +1,5 @@
 import { client } from '../../src/apollo/client'
+import fetch from 'isomorphic-fetch'
 import dynamic from 'next/dynamic'
 import {
   GET_PROJECT_UPDATES,
@@ -7,13 +8,13 @@ import {
 } from '../../src/apollo/gql/projects'
 import { GET_USER } from '../../src/apollo/gql/auth'
 import { PROJECT_DONATIONS } from '../../src/apollo/gql/donations'
+import NotFoundPage from '../404'
 
 const Seo = dynamic(() => import('../../src/components/seo'))
 const Layout = dynamic(() => import('../../src/components/layout'))
 const DonatorView = dynamic(() =>
   import('../../src/components/project/donatorView')
 )
-const NotFoundPage = dynamic(() => import('../404'))
 
 const Project = props => {
   return props.error ? (

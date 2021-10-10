@@ -1,10 +1,11 @@
 import { client } from '../../src/apollo/client'
+import fetch from 'isomorphic-fetch'
 import dynamic from 'next/dynamic'
 import { FETCH_PROJECT_BY_SLUG } from '../../src/apollo/gql/projects'
+import NotFoundPage from '../404'
 
 const Seo = dynamic(() => import('../../src/components/seo'))
 const Layout = dynamic(() => import('../../src/components/layout'))
-const NotFoundPage = dynamic(() => import('../404'))
 const DonationView = dynamic(() => import('../../src/components/donate'))
 
 const Donate = props => {

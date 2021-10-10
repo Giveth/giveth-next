@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { client } from '../../src/apollo/client'
 import { jsx, Text, Flex, Spinner } from 'theme-ui'
 import dynamic from 'next/dynamic'
-import { PublicProfileView } from '../../src/components/user'
 import { FETCH_USER_PROJECTS } from '../../src/apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../../src/apollo/gql/auth'
 import { WALLET_DONATIONS } from '../../src/apollo/gql/donations'
 
 const Seo = dynamic(() => import('../../src/components/seo'))
 const Layout = dynamic(() => import('../../src/components/layout'))
+const PublicProfileView = dynamic(() => import('../../src/components/user'))
 
 const User = props => {
   const { user } = props
