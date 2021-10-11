@@ -14,7 +14,7 @@ const UpdatesSection = ({ mediumPosts }) => {
       <div
         style={{
           position: 'absolute',
-          right: '10px',
+          right: '10px'
         }}
       >
         <Image
@@ -26,14 +26,9 @@ const UpdatesSection = ({ mediumPosts }) => {
       </div>
       <Container p={[2, 3, 5]} sx={{ position: 'relative' }}>
         <Main>
-          <Heading sx={{ variant: 'headings.h3' }}>
-            Get the latest updates
-          </Heading>
-          <Text
-            sx={{ variant: 'text.larger', maxWidth: '780px', color: 'colors' }}
-          >
-            Subscribe to our newsletter and get all updates straight to your
-            mailbox!
+          <Heading sx={{ variant: 'headings.h3' }}>Get the latest updates</Heading>
+          <Text sx={{ variant: 'text.larger', maxWidth: '780px', color: 'colors' }}>
+            Subscribe to our newsletter and get all updates straight to your mailbox!
           </Text>
           <MailchimpSignup />
           <Text sx={{ variant: 'text.overline' }}>From our Blog</Text>
@@ -67,9 +62,7 @@ const UpdatesSection = ({ mediumPosts }) => {
                     {/* {previewContent.subtitle} */}
                   </Text>
                   <Grid rows={2} gap={0}>
-                    <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>
-                      {node.author}
-                    </Text>
+                    <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>{node.author}</Text>
 
                     <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>
                       {/* {new Intl.DateTimeFormat('en-US', {

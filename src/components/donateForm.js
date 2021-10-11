@@ -9,9 +9,8 @@ import theme from '../utils/theme-ui/index'
 const DonationForm = styled.form`
   display: grid;
   grid-gap: 0.5rem;
-  grid-template-columns: 0px auto auto;
-  align-items: bottom;
-  padding: 0.2rem 0px;
+  grid-template-columns: 0 auto auto;
+  padding: 0.2rem 0;
   .donatebutton {
     align-self: start;
     height: 36px;
@@ -29,16 +28,11 @@ const Donate = props => {
   const maxAmount = new BigNumber(props.maxAmount || 0)
 
   return (
-    <DonationForm
-      onSubmit={handleSubmit(onSubmit)}
-      gap={1}
-      columns={['0px 1fr 1fr']}
-    >
+    <DonationForm onSubmit={handleSubmit(onSubmit)} gap={1} columns={['0px 1fr 1fr']}>
       <Label htmlFor='title' />
       <Input
         ref={register({
-          validate: value =>
-            maxAmount.gte(value) || 'Donation amount is more than your balance'
+          validate: value => maxAmount.gte(value) || 'Donation amount is more than your balance'
         })}
         name='amount'
         mb={3}

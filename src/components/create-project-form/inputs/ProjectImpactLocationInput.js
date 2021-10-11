@@ -7,11 +7,9 @@ export const ProjectImpactLocationInput = ({
   currentValue,
   animationStyle,
   goBack,
-  setValue,
+  setValue
 }) => {
-  const [location, setLocation] = useState(
-    currentValue === 'Global' ? 'Global' : currentValue
-  )
+  const [location, setLocation] = useState(currentValue === 'Global' ? 'Global' : currentValue)
 
   const handleChange = value => {
     setValue('projectImpactLocation', value)
@@ -77,16 +75,12 @@ export const ProjectImpactLocationInput = ({
             defaultChecked={location === 'Global'}
             onChange={e => handleChange(e.target.checked ? 'Global' : '')}
           />
-          <Text sx={{ fontFamily: 'body', fontSize: 2 }}>
-            This project has a global impact
-          </Text>
+          <Text sx={{ fontFamily: 'body', fontSize: 2 }}>This project has a global impact</Text>
         </Label>
       </Flex>
 
       {location && (
-        <Text sx={{ fontFamily: 'body', color: 'muted', mt: 3, fontSize: 8 }}>
-          {location}
-        </Text>
+        <Text sx={{ fontFamily: 'body', color: 'muted', mt: 3, fontSize: 8 }}>{location}</Text>
       )}
 
       <div
@@ -125,7 +119,7 @@ export const ProjectImpactLocationInput = ({
               fontFamily: 'body',
               fontWeight: 'bold',
               fontSize: 2,
-              letterSpacing: '4%',
+              letterSpacing: '4%'
             }}
           >
             NEXT

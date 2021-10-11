@@ -5,26 +5,6 @@ import styled from '@emotion/styled'
 import HeroImage from '../content/HeroImage'
 import HeroSideImage from '../content/HeroSideImage'
 
-const HeroSection = styled(Grid)`
-  min-height: 100vh;
-  grid-template-columns: 1fr auto;
-  position: relative;
-  @media (max-width: 850px) {
-    grid-template-columns: 1fr;
-    min-height: 100vh;
-  }
-`
-
-const HeroText = styled(Box)`
-  position: absolute;
-  @media (max-width: 850px) {
-    position: static;
-    justify-content: center;
-    padding: 1rem;
-    text-align: center;
-  }
-`
-
 const Hero = ({ content }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
 
@@ -103,5 +83,25 @@ const Hero = ({ content }) => {
     </HeroSection>
   )
 }
+
+const HeroSection = styled(Grid)`
+  min-height: 100vh;
+  grid-template-columns: 1fr auto;
+  position: relative;
+  @media (max-width: 850px) {
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+  }
+`
+
+const HeroText = styled(Box)`
+  position: absolute;
+  @media (max-width: 850px) {
+    position: static;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+  }
+`
 
 export default Hero

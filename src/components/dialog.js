@@ -8,6 +8,32 @@ import Confetti from '../images/svg/donation/confetti.svg'
 
 import decoratorClouds from '../images/decorator-clouds.svg'
 
+export default function Dialog({ children }) {
+  return (
+    <DialogContainer p={4} color='white' bg={theme.colors.secondary}>
+      <LeftConfetti />
+      <Clouds src={decoratorClouds} alt='' className='hide' />
+      <BackButton href='/'>
+        <LeftArrow />
+        <Text
+          sx={{ variant: 'text.default' }}
+          style={{
+            fontSize: '16px',
+            fontWeight: '500',
+            color: 'white',
+            paddingLeft: '17px'
+          }}
+        >
+          Giveth
+        </Text>
+      </BackButton>
+      <Main>
+        <DialogContent>{children}</DialogContent>
+      </Main>
+    </DialogContainer>
+  )
+}
+
 const Main = styled.main`
   padding: 4.063rem 4.5rem 0 4.5rem;
   display: flex;
@@ -50,29 +76,3 @@ const BackButton = styled(NavLink)`
 const DialogContent = styled.div`
   margin: 3.813rem 0 0 0;
 `
-
-export default function Dialog({ children }) {
-  return (
-    <DialogContainer p={4} color='white' bg={theme.colors.secondary}>
-      <LeftConfetti />
-      <Clouds src={decoratorClouds} alt='' className='hide' />
-      <BackButton href='/'>
-        <LeftArrow />
-        <Text
-          sx={{ variant: 'text.default' }}
-          style={{
-            fontSize: '16px',
-            fontWeight: '500',
-            color: 'white',
-            paddingLeft: '17px'
-          }}
-        >
-          Giveth
-        </Text>
-      </BackButton>
-      <Main>
-        <DialogContent>{children}</DialogContent>
-      </Main>
-    </DialogContainer>
-  )
-}

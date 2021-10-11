@@ -1,14 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
-import * as Auth from '../services/auth'
+import Web3 from 'web3'
 import { client } from '../apollo/client'
 import { DO_LOGIN, VALIDATE_TOKEN } from '../apollo/gql/auth'
-import Web3 from 'web3'
 import Logger from '../Logger'
-/**
- * Ok the user has a token, but is it still valid?
- * @param {} user
- * @param {*} signedMessage
- */
+
 export async function validateAuthToken(token) {
   try {
     const { data } = await client.mutate({
@@ -18,14 +12,19 @@ export async function validateAuthToken(token) {
       }
     })
 
-    const isValid = data.validateToken
-    return isValid
+    return data.validateToken
   } catch (error) {
     console.error('Error in token login', error)
     Logger.captureException(error)
   }
 }
 
+/**
+ * Ok the user has a token, but is it still valid?
+ * @param {} user
+ * @param {*} signedMessage
+ * @param isXDAI
+ */
 export async function getToken(user, signedMessage, isXDAI) {
   if (signedMessage) {
     try {

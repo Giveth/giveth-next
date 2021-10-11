@@ -1,15 +1,152 @@
 import React from 'react'
-import { getEtherscanPrefix, titleCase } from '../../utils'
+import { titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
-import { Badge, Flex, Spinner, Text, jsx } from 'theme-ui'
-import { useQuery } from '@apollo/client'
+import { Badge, Flex, Text } from 'theme-ui'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
 dayjs.extend(localizedFormat)
+
+const DonationsTable = props => {
+  const options = ['All Donations', 'Fiat', 'Crypto']
+  const currentDonations = props?.donations
+  const filter = 0
+
+  const filterDonations = items => {
+    switch (options[filter]) {
+      case 'All Donations':
+        return items
+      case 'Fiat':
+        return items?.filter(item => item.currency === 'USD')
+      case 'Crypto':
+        return items?.filter(item => item.currency === 'ETH')
+      default:
+        return items
+    }
+  }
+
+  const filteredDonations = filterDonations(currentDonations)
+
+  const TableToShow = () => {
+    const paginationItems = filteredDonations
+
+    const [activeItem, setCurrentItem] = React.useState(1)
+
+    // Data to be rendered using pagination.
+    const itemsPerPage = 20
+
+    // Logic for displaying current items
+    const indexOfLastItem = activeItem * itemsPerPage
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage
+    const currentItems = paginationItems?.slice(indexOfFirstItem, indexOfLastItem)
+
+    const handlePageChange = pageNumber => {
+      setCurrentItem(pageNumber)
+    }
+
+    return (
+      <Flex sx={{ flexDirection: 'column', mx: [2, 5, 5] }}>
+        <Table>
+          <thead>
+            <tr>
+              {['Date', 'Project', 'Currency', 'Amount'].map((i, index) => {
+                return (
+                  <th scope='col' key={index}>
+                    <Text
+                      sx={{
+                        variant: 'text.small',
+                        fontWeight: 'bold',
+                        color: 'secondary'
+                      }}
+                    >
+                      {i}
+                    </Text>
+                  </th>
+                )
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {currentItems
+              ?.slice()
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map((i, key) => {
+                return (
+                  <tr key={key}>
+                    <td data-label='Account' sx={{ variant: 'text.small', color: 'secondary' }}>
+                      <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                        {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
+                      </Text>
+                    </td>
+                    <DonorBox
+                      data-label='Project'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Text
+                        sx={{
+                          variant: 'text.medium',
+                          color: 'primary',
+                          ml: 2
+                        }}
+                      >
+                        {titleCase(i?.project?.title) || i?.donor}
+                      </Text>
+                    </DonorBox>
+                    <td data-label='Currency' sx={{ variant: 'text.small', color: 'secondary' }}>
+                      <Badge variant='green'>{i.currency}</Badge>
+                    </td>
+                    <td data-label='Amount' sx={{ variant: 'text.small', color: 'secondary' }}>
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          // whiteSpace: 'pre-wrap',
+                          color: 'secondary'
+                        }}
+                      >
+                        {i?.currency === 'ETH' && i?.valueUsd
+                          ? `${
+                              i?.amount ? `${i?.amount} ETH` : ''
+                            } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
+                          : i?.amount}
+                      </Text>
+                    </td>
+                  </tr>
+                )
+              })}
+          </tbody>
+        </Table>
+        <PagesStyle>
+          <Pagination
+            hideNavigation
+            hideFirstLastPages
+            activePage={activeItem}
+            itemsCountPerPage={6}
+            totalItemsCount={paginationItems.length}
+            pageRangeDisplayed={3}
+            onChange={handlePageChange}
+            innerClass='inner-pagination'
+            itemClass='item-page'
+            activeClass='active-page'
+          />
+        </PagesStyle>
+      </Flex>
+    )
+  }
+
+  return (
+    <>
+      {!filteredDonations || filteredDonations?.length === 0 ? (
+        <Text sx={{ variant: 'headings.h5', color: 'secondary', mx: 5, mt: 4 }}>
+          No donations :(
+        </Text>
+      ) : (
+        <TableToShow />
+      )}
+    </>
+  )
+}
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -96,7 +233,6 @@ const Table = styled.table`
     }
 
     td::before {
-      content: attr(aria-label);
       content: attr(data-label);
       float: left;
       font-size: 0.8rem;
@@ -145,166 +281,5 @@ const DonorBox = styled.td`
   flex-direction: row;
   align-items: center;
 `
-
-const DonationsTable = props => {
-  const options = ['All Donations', 'Fiat', 'Crypto']
-  const [currentDonations, setCurrentDonations] = React.useState(
-    props?.donations
-  )
-  const [filter, setFilter] = React.useState(0)
-
-  const filterDonations = items => {
-    switch (options[filter]) {
-      case 'All Donations':
-        return items
-      case 'Fiat':
-        return items?.filter(item => item.currency === 'USD')
-      case 'Crypto':
-        return items?.filter(item => item.currency === 'ETH')
-      default:
-        return items
-    }
-  }
-
-  const filteredDonations = filterDonations(currentDonations)
-
-  const TableToShow = () => {
-    const paginationItems = filteredDonations
-
-    const [activeItem, setCurrentItem] = React.useState(1)
-
-    // Data to be rendered using pagination.
-    const itemsPerPage = 20
-
-    // Logic for displaying current items
-    const indexOfLastItem = activeItem * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = paginationItems?.slice(
-      indexOfFirstItem,
-      indexOfLastItem
-    )
-
-    const handlePageChange = pageNumber => {
-      setCurrentItem(pageNumber)
-    }
-
-    const copy = hash => {
-      navigator.clipboard.writeText(hash)
-    }
-
-    const etherscanPrefix = getEtherscanPrefix()
-
-    return (
-      <Flex sx={{ flexDirection: 'column', mx: [2, 5, 5] }}>
-        <Table>
-          <thead>
-            <tr>
-              {['Date', 'Project', 'Currency', 'Amount'].map((i, index) => {
-                return (
-                  <th scope='col' key={index}>
-                    <Text
-                      sx={{
-                        variant: 'text.small',
-                        fontWeight: 'bold',
-                        color: 'secondary'
-                      }}
-                    >
-                      {i}
-                    </Text>
-                  </th>
-                )
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems
-              ?.slice()
-              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-              .map((i, key) => {
-                return (
-                  <tr key={key}>
-                    <td
-                      data-label='Account'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
-                      <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                        {i?.createdAt
-                          ? dayjs(i.createdAt).format('ll')
-                          : 'null'}
-                      </Text>
-                    </td>
-                    <DonorBox
-                      data-label='Project'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
-                      <Text
-                        sx={{
-                          variant: 'text.medium',
-                          color: 'primary',
-                          ml: 2
-                        }}
-                      >
-                        {titleCase(i?.project?.title) || i?.donor}
-                      </Text>
-                    </DonorBox>
-                    <td
-                      data-label='Currency'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
-                      <Badge variant='green'>{i.currency}</Badge>
-                    </td>
-                    <td
-                      data-label='Amount'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
-                      <Text
-                        sx={{
-                          variant: 'text.small',
-                          // whiteSpace: 'pre-wrap',
-                          color: 'secondary'
-                        }}
-                      >
-                        {i?.currency === 'ETH' && i?.valueUsd
-                          ? `${
-                              i?.amount ? `${i?.amount} ETH` : ''
-                            } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
-                          : i?.amount}
-                      </Text>
-                    </td>
-                  </tr>
-                )
-              })}
-          </tbody>
-        </Table>
-        <PagesStyle>
-          <Pagination
-            hideNavigation
-            hideFirstLastPages
-            activePage={activeItem}
-            itemsCountPerPage={6}
-            totalItemsCount={paginationItems.length}
-            pageRangeDisplayed={3}
-            onChange={handlePageChange}
-            innerClass='inner-pagination'
-            itemClass='item-page'
-            activeClass='active-page'
-          />
-        </PagesStyle>
-      </Flex>
-    )
-  }
-
-  return (
-    <>
-      {!filteredDonations || filteredDonations?.length === 0 ? (
-        <Text sx={{ variant: 'headings.h5', color: 'secondary', mx: 5, mt: 4 }}>
-          No donations :(
-        </Text>
-      ) : (
-        <TableToShow />
-      )}
-    </>
-  )
-}
 
 export default DonationsTable

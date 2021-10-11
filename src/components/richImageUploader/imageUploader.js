@@ -7,11 +7,9 @@ class ImageUploader {
     this.range = null
 
     if (typeof this.options.upload !== 'function')
-      console.warn(
-        '[Missing config] upload function that returns a promise is required'
-      )
+      console.warn('[Missing config] upload function that returns a promise is required')
 
-    var toolbar = this.quill.getModule('toolbar')
+    const toolbar = this.quill.getModule('toolbar')
     toolbar.addHandler('image', this.selectLocalImage.bind(this))
 
     this.handleDrop = this.handleDrop.bind(this)
@@ -42,11 +40,7 @@ class ImageUploader {
   handleDrop(evt) {
     evt.stopPropagation()
     evt.preventDefault()
-    if (
-      evt.dataTransfer &&
-      evt.dataTransfer.files &&
-      evt.dataTransfer.files.length
-    ) {
+    if (evt.dataTransfer && evt.dataTransfer.files && evt.dataTransfer.files.length) {
       if (document.caretRangeFromPoint) {
         const selection = document.getSelection()
         const range = document.caretRangeFromPoint(evt.clientX, evt.clientY)
@@ -62,12 +56,7 @@ class ImageUploader {
         const selection = document.getSelection()
         const range = document.caretPositionFromPoint(evt.clientX, evt.clientY)
         if (selection && range) {
-          selection.setBaseAndExtent(
-            range.offsetNode,
-            range.offset,
-            range.offsetNode,
-            range.offset
-          )
+          selection.setBaseAndExtent(range.offsetNode, range.offset, range.offsetNode, range.offset)
         }
       }
 

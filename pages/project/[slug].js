@@ -1,39 +1,35 @@
-import { client } from '../../src/apollo/client'
-import DonatorView from '../../src/components/project/donatorView'
-import NotFoundPage from '../404'
-import Layout from '../../src/components/layout'
-import Seo from '../../src/components/seo'
+import { client } from "../../src/apollo/client"
+import DonatorView from "../../src/components/project/donatorView"
+import NotFoundPage from "../404"
+import Layout from "../../src/components/layout"
+import Seo from "../../src/components/seo"
 import {
   GET_PROJECT_UPDATES,
   FETCH_PROJECT_BY_SLUG,
-  GET_PROJECT_REACTIONS
-} from '../../src/apollo/gql/projects'
-import { GET_USER } from '../../src/apollo/gql/auth'
-import { PROJECT_DONATIONS } from '../../src/apollo/gql/donations'
+  GET_PROJECT_REACTIONS,
+} from "../../src/apollo/gql/projects"
+import { GET_USER } from "../../src/apollo/gql/auth"
+import { PROJECT_DONATIONS } from "../../src/apollo/gql/donations"
 
-const Project = props => {
-  return (
-    props.error ? (
-      <NotFoundPage />
-    ) : (
-      <Layout>
-        <Seo
-          title={
-            props.project?.title
-              ? `Check out ${props.project?.title}`
-              : 'Check out this project!'
-          }
-          image={props.project?.image}
-        />
-        <DonatorView {...props} />
-      </Layout>
-    )
+const Project = (props) => {
+  return props.error ? (
+    <NotFoundPage />
+  ) : (
+    <Layout>
+      <Seo
+        title={
+          props.project?.title ? `Check out ${props.project?.title}` : "Check out this project!"
+        }
+        image={props.project?.image}
+      />
+      <DonatorView {...props} />
+    </Layout>
   )
 }
 
-export async function getServerSideProps (props) {
+export async function getServerSideProps(props) {
   const { query } = props
-  const slug = decodeURI(query?.slug).replace(/\s/g, '')
+  const slug = decodeURI(query?.slug).replace(/\s/g, "")
 
   let errors,
     project,
@@ -46,16 +42,16 @@ export async function getServerSideProps (props) {
     const { data: fetchProject } = await client.query({
       query: FETCH_PROJECT_BY_SLUG,
       variables: { slug: slug },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: "no-cache",
     })
     project = fetchProject?.projectBySlug
     // Fetch Donations
     const { data: donationsToProject } = await client.query({
       query: PROJECT_DONATIONS,
       variables: {
-        toWalletAddresses: [fetchProject?.projectBySlug?.walletAddress]
+        toWalletAddresses: [fetchProject?.projectBySlug?.walletAddress],
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: "no-cache",
     })
     donations = donationsToProject?.donationsToWallets
 
@@ -65,9 +61,9 @@ export async function getServerSideProps (props) {
       variables: {
         projectId: parseInt(project?.id),
         take: 100,
-        skip: 0
+        skip: 0,
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: "no-cache",
     })
     updates = updatesOfProject?.getProjectUpdates
 
@@ -75,9 +71,9 @@ export async function getServerSideProps (props) {
     const { data: reactionsFetch } = await client?.query({
       query: GET_PROJECT_REACTIONS,
       variables: {
-        projectId: parseInt(project?.id)
+        projectId: parseInt(project?.id),
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: "no-cache",
     })
     reactions = reactionsFetch?.getProjectReactions
 
@@ -86,8 +82,8 @@ export async function getServerSideProps (props) {
       ? await client?.query({
           query: GET_USER,
           variables: {
-            userId: parseInt(project?.admin)
-          }
+            userId: parseInt(project?.admin),
+          },
         })
       : null
   } catch (e) {
@@ -100,7 +96,7 @@ export async function getServerSideProps (props) {
     `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?slug=${slug}`
   ).then(async function (response) {
     if (response.status >= 400) {
-      errors = new Error('Bad response from server')
+      errors = new Error("Bad response from server")
     }
     const res = await response.json()
     const traceProj = res?.data[0]
@@ -110,7 +106,7 @@ export async function getServerSideProps (props) {
       return { ...traceProj, ...project, IOTraceable: true }
     } else {
       // Only Traceable
-      return { ...traceProj, status: { id: '5' }, fromTrace: true }
+      return { ...traceProj, status: { id: "5" }, fromTrace: true }
     }
   })
 
@@ -125,8 +121,8 @@ export async function getServerSideProps (props) {
       updates: updates || null,
       reactions: reactions || null,
       admin: admin?.data?.user || {},
-      error: !!errors ? JSON.stringify(errors) : false
-    }
+      error: errors ? JSON.stringify(errors) : false,
+    },
   }
 }
 

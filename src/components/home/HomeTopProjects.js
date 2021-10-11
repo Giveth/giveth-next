@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/client'
 import { FETCH_ALL_PROJECTS } from '../../apollo/gql/projects'
 import { useRouter } from 'next/router'
-import ProjectsList, { OrderByDirection, OrderByField } from '../ProjectsList'
+import ProjectsList from '../ProjectsList'
 import { useState, useEffect } from 'react'
 
 const HomeTopProjects = props => {
@@ -9,8 +9,8 @@ const HomeTopProjects = props => {
   const { projects = [], categories, fromHomePage } = props
   const client = useApolloClient()
   const [showProjects, setShowProjects] = useState(projects)
-  const [orderByField, setOrderByField] = useState(OrderByField.Balance)
-  const [limit, setLimit] = useState(12)
+  // const [orderByField, setOrderByField] = useState(OrderByField.Balance)
+  // const [limit, setLimit] = useState(12)
   // const orderBy = {
   //   field: orderByField,
   //   direction: OrderByDirection.DESC
@@ -47,10 +47,10 @@ const HomeTopProjects = props => {
       totalCount={null}
       loadMore={() => router.push('/projects')}
       hasMore
-      selectOrderByField={orderByField => {
-        setLimit(2)
-        setOrderByField(orderByField)
-      }}
+      // selectOrderByField={orderByField => {
+      //   setLimit(2)
+      //   setOrderByField(orderByField)
+      // }}
     />
   )
 }

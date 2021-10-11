@@ -1,11 +1,10 @@
 import { useWallet } from '../../contextProvider/WalletProvider'
-import { Text, Button, jsx } from 'theme-ui'
+import { Button } from 'theme-ui'
 import { wallets } from '../../wallets'
 import LoginModal from './loginModal'
 import { useState } from 'react'
 
-const LoginButton = props => {
-  const [showOptions, setShowOptions] = useState(false)
+const LoginButton = () => {
   const [isComponentVisible, setIsComponentVisible] = useState(false)
 
   // const {
@@ -51,10 +50,7 @@ const LoginButton = props => {
         // </AccountDetails>
       }
       {isComponentVisible && wallets ? (
-        <LoginModal
-          close={() => setIsComponentVisible(false)}
-          isOpen={isComponentVisible}
-        />
+        <LoginModal close={() => setIsComponentVisible(false)} isOpen={isComponentVisible} />
       ) : null}
     </div>
   )

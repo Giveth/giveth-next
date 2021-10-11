@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import NextImage from 'next/image'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Flex, Image, Button, Text, jsx } from 'theme-ui'
+import { Grid, Box, Flex, Image, Button, Text } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import styled from '@emotion/styled'
 
@@ -62,11 +62,7 @@ const InfoSection = ({ content }) => {
         >
           {content?.infoSubtitle}
         </Text>
-        <a
-          href='https://docs.giveth.io/whatisgiveth/'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
+        <a href='https://docs.giveth.io/whatisgiveth/' target='_blank' rel='noopener noreferrer'>
           <Button
             sx={{
               variant: 'buttons.nofillGray',
@@ -85,16 +81,9 @@ const InfoSection = ({ content }) => {
           </Button>
         </a>
       </Flex>
-      <Grid
-        columns={[1, 3, 3]}
-        sx={{ justifyItems: 'center', textAlign: 'center' }}
-      >
+      <Grid columns={[1, 3, 3]} sx={{ justifyItems: 'center', textAlign: 'center' }}>
         <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
-          <NextImage
-            src='/images/svg/general/decorators/b.svg'
-            width='100%'
-            height='100%'
-          />
+          <NextImage src='/images/svg/general/decorators/b.svg' width='100%' height='100%' />
           <Text
             sx={{
               variant: 'headings.h4',
@@ -109,11 +98,7 @@ const InfoSection = ({ content }) => {
           </Text>
         </Flex>
         <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
-          <NextImage
-            src='/images/svg/general/decorators/a.svg'
-            width='100%'
-            height='100%'
-          />
+          <NextImage src='/images/svg/general/decorators/a.svg' width='100%' height='100%' />
           <Text
             sx={{
               variant: 'headings.h4',
@@ -133,11 +118,7 @@ const InfoSection = ({ content }) => {
           </Text>
         </Flex>
         <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
-          <NextImage
-            src='/images/svg/general/decorators/c.svg'
-            width='100%'
-            height='100%'
-          />
+          <NextImage src='/images/svg/general/decorators/c.svg' width='100%' height='100%' />
           <Text
             sx={{
               variant: 'headings.h4',
@@ -161,11 +142,7 @@ const InfoSection = ({ content }) => {
           textAlign: 'center'
         }}
       >
-        <a
-          href='https://giveth.io/join'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
+        <a href='https://giveth.io/join' target='_blank' rel='noopener noreferrer'>
           <Button
             sx={{
               variant: 'buttons.default',
@@ -187,10 +164,7 @@ const InfoSection = ({ content }) => {
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
           {content?.infoHead2}
         </Text>
-        <Text
-          pb={5}
-          sx={{ variant: 'text.large', maxWidth: '580px', color: 'background' }}
-        >
+        <Text pb={5} sx={{ variant: 'text.large', maxWidth: '580px', color: 'background' }}>
           {content?.infoSubtitle2}
         </Text>
       </Flex>
@@ -217,9 +191,7 @@ const InfoSection = ({ content }) => {
             and start raising funds.
           </Text>
           <Link href='/create'>
-            <Button
-              sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}
-            >
+            <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}>
               Create a project
             </Button>
           </Link>
@@ -241,21 +213,16 @@ const InfoSection = ({ content }) => {
             maxWidth: '360px'
           }}
         >
-          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
-            For Givers
-          </Text>
+          <Text sx={{ variant: 'headings.h4', color: 'background' }}>For Givers</Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            Use our platform to give donations to a cause or a project. Easily
-            donate to the{' '}
+            Use our platform to give donations to a cause or a project. Easily donate to the{' '}
             <Link href='/projects' className='intextlink'>
               project
             </Link>{' '}
             you most care about.
           </Text>
           <Link href='/projects'>
-            <Button
-              sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}
-            >
+            <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}>
               Donate to a project
             </Button>
           </Link>

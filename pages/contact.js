@@ -1,57 +1,13 @@
-import React from "react";
-import { Label, Input, Grid, Text, Button, Textarea } from "theme-ui";
-import theme from "../src/utils/theme-ui";
-import Seo from "../src/components/seo";
-import styled from "@emotion/styled";
-import useMediaQuery from "react-responsive";
-import Layout from "../src/components/layout";
+import React from "react"
+import { Label, Input, Grid, Text, Button, Textarea } from "theme-ui"
+import theme from "../src/utils/theme-ui"
+import Seo from "../src/components/seo"
+import styled from "@emotion/styled"
+import useMediaQuery from "react-responsive"
+import Layout from "../src/components/layout"
 
-const Main = styled(Grid)`
-  justify-content: start;
-  padding-left: 10vw;
-  @media (max-width: 500px) {
-    margin: 1rem;
-    padding: 0vw;
-  }
-`;
-
-const FormStyled = styled(Grid)`
-  max-width: 50vw;
-  grid-template-rows: repeat(5, auto);
-  @media (max-width: 500px) {
-    max-width: 100%;
-  }
-  & label {
-    text-transform: uppercase;
-    color: ${theme.colors.secondary};
-    display: grid;
-    grid-gap: 24px;
-  }
-  input {
-    &::placeholder {
-      color: ${theme.colors.bodyLight};
-    }
-  }
-  & textarea {
-    border: 2px solid ${theme.colors.bodyLight};
-    border-radius: 16px;
-    &::placeholder {
-      color: ${theme.colors.bodyLight};
-    }
-  }
-`;
-
-const MessageStyled = styled(Textarea)`
-  font-family: ${theme.fonts.body};
-  padding-left: 1rem;
-  &:focus {
-    outline: none;
-    border-color: ${theme.colors.primary};
-  }
-`;
-
-const Contact = ({ data }) => {
-  const isMobile = useMediaQuery({ query: "(max-width: 825px)" });
+const Contact = () => {
+  const isMobile = useMediaQuery({ query: "(max-width: 825px)" })
   return (
     <Layout>
       <Seo title="Contact us" />
@@ -81,12 +37,9 @@ const Contact = ({ data }) => {
         />
       ) : null}
       <Main>
-        <Text sx={{ variant: "headings.h2", color: "secondary", mt: 4 }}>
-          Contact us
-        </Text>
+        <Text sx={{ variant: "headings.h2", color: "secondary", mt: 4 }}>Contact us</Text>
         <Text pb={5} sx={{ variant: "text.large" }}>
-          Have a question, or just want to say hi? Please fill out the form
-          below to contact us.
+          Have a question, or just want to say hi? Please fill out the form below to contact us.
         </Text>
         <FormStyled
           as="form"
@@ -112,12 +65,7 @@ const Contact = ({ data }) => {
             }}
           >
             Your Email address
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Email Address"
-            />
+            <Input type="email" name="email" id="email" placeholder="Email Address" />
           </Label>
           <Label
             sx={{
@@ -125,12 +73,7 @@ const Contact = ({ data }) => {
             }}
           >
             Message
-            <MessageStyled
-              name="message"
-              id="message"
-              placeholder="Message"
-              rows="10"
-            />
+            <MessageStyled name="message" id="message" placeholder="Message" rows="10" />
           </Label>
           <Button
             type="submit"
@@ -149,7 +92,51 @@ const Contact = ({ data }) => {
         </FormStyled>
       </Main>
     </Layout>
-  );
-};
+  )
+}
 
-export default Contact;
+const Main = styled(Grid)`
+  justify-content: start;
+  padding-left: 10vw;
+  @media (max-width: 500px) {
+    margin: 1rem;
+    padding: 0;
+  }
+`
+
+const FormStyled = styled(Grid)`
+  max-width: 50vw;
+  grid-template-rows: repeat(5, auto);
+  @media (max-width: 500px) {
+    max-width: 100%;
+  }
+  & label {
+    text-transform: uppercase;
+    color: ${theme.colors.secondary};
+    display: grid;
+    grid-gap: 24px;
+  }
+  input {
+    &::placeholder {
+      color: ${theme.colors.bodyLight};
+    }
+  }
+  & textarea {
+    border: 2px solid ${theme.colors.bodyLight};
+    border-radius: 16px;
+    &::placeholder {
+      color: ${theme.colors.bodyLight};
+    }
+  }
+`
+
+const MessageStyled = styled(Textarea)`
+  font-family: ${theme.fonts.body};
+  padding-left: 1rem;
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.primary};
+  }
+`
+
+export default Contact

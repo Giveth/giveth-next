@@ -1,9 +1,8 @@
 import React from 'react'
 import { Text, Button, Flex } from 'theme-ui'
-import { FaCheckCircle, FaExclamationCircle } from 'react-icons/fa'
 
 const EditButtonSection = ({ formData, currentStep, setStep }) => {
-  const EditBtn = ({ step, title, wasSet, sx = {} }) => {
+  const EditBtn = ({ step, title, sx = {} }) => {
     return (
       <Flex sx={sx}>
         <Button
@@ -46,7 +45,7 @@ const EditButtonSection = ({ formData, currentStep, setStep }) => {
   return (
     <Flex
       sx={{
-        mt: '29px',
+        mt: '29px'
         // justifyContent: 'space-between',
       }}
       columns={[2, '3fr 1fr']}
@@ -72,12 +71,7 @@ const EditButtonSection = ({ formData, currentStep, setStep }) => {
             wasSet={formData.projectImpactLocation}
             sx={{ ml: '7%' }}
           />
-          <EditBtn
-            step={4}
-            title={'Image'}
-            wasSet={formData.ProjectImageInput}
-            sx={{ ml: '7%' }}
-          />
+          <EditBtn step={4} title={'Image'} wasSet={formData.ProjectImageInput} sx={{ ml: '7%' }} />
           <EditBtn
             step={5}
             title={'ETH Address'}

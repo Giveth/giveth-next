@@ -1,22 +1,17 @@
-import { Flex, Grid } from 'theme-ui'
-import { fetchEntries } from '../src/utils/contentfulPosts'
-import Layout from '../src/components/layout'
-import Seo from '../src/components/seo'
-import Hero from '../src/components/content/SupportHero'
-import SupportCard from '../src/components/content/SupportCard'
+import { Flex, Grid } from "theme-ui"
+import { fetchEntries } from "../src/utils/contentfulPosts"
+import Layout from "../src/components/layout"
+import Seo from "../src/components/seo"
+import Hero from "../src/components/content/SupportHero"
+import SupportCard from "../src/components/content/SupportCard"
 
 const SupportPage = ({ support }) => {
   return (
     <Layout>
-      <Seo title='Support' />
+      <Seo title="Support" />
       <Hero />
-      <Flex sx={{ justifyContent: 'center' }}>
-        <Grid
-          mt='2rem'
-          p={[1, 2, 2]}
-          columns={[1, 1, 2]}
-          sx={{ maxWidth: '80vw' }}
-        >
+      <Flex sx={{ justifyContent: "center" }}>
+        <Grid mt="2rem" p={[1, 2, 2]} columns={[1, 1, 2]} sx={{ maxWidth: "80vw" }}>
           <SupportCard data={support} />
         </Grid>
       </Flex>
@@ -24,17 +19,17 @@ const SupportPage = ({ support }) => {
   )
 }
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
   // contentful
   const supportReq = await fetchEntries({
-    contentType: 'contentSupportProvider'
+    contentType: "contentSupportProvider",
   })
-  const support = supportReq?.map(s => s.fields)
+  const support = supportReq?.map((s) => s.fields)
 
   return {
     props: {
-      support: support || {}
-    }
+      support: support || {},
+    },
   }
 }
 

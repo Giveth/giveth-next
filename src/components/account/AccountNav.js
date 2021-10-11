@@ -1,4 +1,4 @@
-import { jsx, Flex, Text, Box } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { formatEtherscanLink } from '../../util'
@@ -8,22 +8,20 @@ import { FiExternalLink } from 'react-icons/fi'
 const formatTitle = (title, projectsList, userDonations) => {
   switch (title) {
     case 'My Projects':
-      return `My Projects ${
-        projectsList?.length ? `(${projectsList?.length})` : ''
-      }`
+      return `My Projects ${projectsList?.length ? `(${projectsList?.length})` : ''}`
     case 'My Donations':
-      return `My Donations ${
-        userDonations?.length ? `(${userDonations?.length})` : ''
-      }`
+      return `My Donations ${userDonations?.length ? `(${userDonations?.length})` : ''}`
     default:
       return title
   }
 }
+
 const options = [
   { route: 'account', name: 'My Account' },
   { route: 'projects', name: 'My Projects' },
   { route: 'donations', name: 'My Donations' }
 ]
+
 const AccountNav = props => {
   const { setQuery, query, projectsList, userDonations } = props
   const { logout, user, currentChainId } = useWallet()
@@ -64,8 +62,7 @@ const AccountNav = props => {
                 sx={{
                   mb: '8px',
                   color:
-                    query?.view === i.route ||
-                    (!query?.view && i.route === 'account')
+                    query?.view === i.route || (!query?.view && i.route === 'account')
                       ? 'primary'
                       : 'secondary'
                 }}
@@ -84,10 +81,7 @@ const AccountNav = props => {
         }}
       >
         <Link
-          href={formatEtherscanLink('Account', [
-            currentChainId,
-            user.getWalletAddress()
-          ])}
+          href={formatEtherscanLink('Account', [currentChainId, user.getWalletAddress()])}
           target='_blank'
           rel='noopener noreferrer'
           sx={{ textDecoration: 'none' }}

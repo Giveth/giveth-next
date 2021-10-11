@@ -1,9 +1,9 @@
-import Layout from "../src/components/layout";
-import { Flex, Text } from "theme-ui";
+import Layout from "../src/components/layout"
+import { Flex, Text } from "theme-ui"
 
 function Error(props) {
-  const { statusCode, err } = props;
-  console.log({ err });
+  const { statusCode, err } = props
+  console.log({ err })
   return (
     <Layout>
       <Flex
@@ -22,12 +22,12 @@ function Error(props) {
         </Text>
       </Flex>
     </Layout>
-  );
+  )
 }
 
 Error.getInitialProps = ({ res, err }) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  return { statusCode, err };
-};
+  const statusCode = res ? res.statusCode : err ? err.statusCode : 404
+  return { statusCode, err }
+}
 
-export default Error;
+export default Error

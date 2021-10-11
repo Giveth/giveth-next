@@ -1,13 +1,8 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import gql from 'graphql-tag'
-import {
-  getLocalStorageUserLabel,
-  getLocalStorageTokenLabel
-} from '../services/auth'
+import { getLocalStorageTokenLabel, getLocalStorageUserLabel } from '../services/auth'
 import { createUploadLink } from 'apollo-upload-client'
-
-let apolloClient
 
 function createApolloClient() {
   // Declare variable to store authToken
@@ -46,7 +41,7 @@ function createApolloClient() {
     }
   })
 
-  const client = new ApolloClient({
+  return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
@@ -77,8 +72,6 @@ function createApolloClient() {
     `,
     fetch
   })
-
-  return client
 }
 
 export const client = createApolloClient()

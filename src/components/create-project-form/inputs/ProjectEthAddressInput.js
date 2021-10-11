@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Label, Input, Button, Text, Flex } from 'theme-ui'
 import theme from '../../../../src/utils/theme-ui'
 import { BsQuestionCircle } from 'react-icons/bs'
@@ -11,16 +11,16 @@ export const ProjectEthAddressInput = ({
   animationStyle,
   goBack
 }) => {
-  const [characterLength, setCharacterLength] = useState(
-    currentValue ? currentValue.length : 0
-  )
-  const [address, setAddress] = useState(null)
+  // const [characterLength, setCharacterLength] = useState(
+  //   currentValue ? currentValue.length : 0
+  // )
+  // const [address, setAddress] = useState(null)
 
-  const onChangeAddress = e => {
-    e.preventDefault()
-    setCharacterLength(e.target.value.length)
-    setAddress(true)
-  }
+  // const onChangeAddress = e => {
+  //   e.preventDefault()
+  //   setCharacterLength(e.target.value.length)
+  //   setAddress(true)
+  // }
   return (
     <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
       <Label
@@ -64,27 +64,18 @@ export const ProjectEthAddressInput = ({
           >
             What is an ETH address <BsQuestionCircle size={15} />
             <span className='tooltiptext'>
-              Your ETH address, also known as an ERC20 address, is the receiving
-              address for your Ethereum wallet. This is where funds raised by
-              your project will be sent.
+              Your ETH address, also known as an ERC20 address, is the receiving address for your
+              Ethereum wallet. This is where funds raised by your project will be sent.
               <br />
-              <br /> If you logged using Torus via your email or social media.
-              You can access your wallet{' '}
-              <a
-                href='https://app.tor.us/'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
+              <br /> If you logged using Torus via your email or social media. You can access your
+              wallet{' '}
+              <a href='https://app.tor.us/' target='_blank' rel='noopener noreferrer'>
                 here
               </a>
               .
               <br />
               <br /> Learn more about Ethereum wallets{' '}
-              <a
-                href='https://ethereum.org/en/wallets/'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
+              <a href='https://ethereum.org/en/wallets/' target='_blank' rel='noopener noreferrer'>
                 here
               </a>
               .
@@ -106,7 +97,7 @@ export const ProjectEthAddressInput = ({
           {...register('projectWalletAddress')}
           defaultValue={currentValue}
           placeholder='0x00000...'
-          onChange={e => onChangeAddress(e)}
+          // onChange={e => onChangeAddress(e)}
         />
         <Text
           sx={{
@@ -129,8 +120,7 @@ export const ProjectEthAddressInput = ({
             lineHeight: '19px'
           }}
         >
-          This is your default wallet address, you can choose another one if
-          desired*
+          This is your default wallet address, you can choose another one if desired*
         </Text>
       )}
       <Flex
@@ -157,7 +147,7 @@ export const ProjectEthAddressInput = ({
               fontFamily: 'body',
               fontWeight: 'bold',
               fontSize: 2,
-              letterSpacing: '4%',
+              letterSpacing: '4%'
             }}
           >
             NEXT
@@ -201,7 +191,7 @@ export const ProjectEthAddressInput = ({
           padding: 15px 10px;
           margin: 0 5px;
           border-radius: 6px;
-         
+
           position: absolute;
           z-index: 1;
         }
@@ -209,7 +199,7 @@ export const ProjectEthAddressInput = ({
         .tooltiptext a {
           text-decoration: underline
         }
-        
+
         .tooltip:hover .tooltiptext {
           visibility: visible;
         }
