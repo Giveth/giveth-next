@@ -6,10 +6,7 @@ export const getUser = () =>
     : {}
 
 export function setUser(user) {
-  return window.localStorage.setItem(
-    getLocalStorageUserLabel(),
-    JSON.stringify(user)
-  )
+  return window.localStorage.setItem(getLocalStorageUserLabel(), JSON.stringify(user))
 }
 
 export function handleLogout() {

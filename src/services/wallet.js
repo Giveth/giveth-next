@@ -1,8 +1,6 @@
 import Web3 from 'web3'
-import React from 'react'
-
-// import dynamic from 'next/dynamic'
 import { getWallet } from '../wallets'
+// import dynamic from 'next/dynamic'
 
 // const getWallet = dynamic(() => import('../wallets').then(md => md.getWallet), {
 //   ssr: false
@@ -12,11 +10,7 @@ export function isAddressENS(address) {
   return address.toLowerCase().indexOf('.eth') > -1
 }
 export function isWalletAddressValid(address) {
-  if (address.length !== 42 || !Web3.utils.isAddress(address)) {
-    return false
-  } else {
-    return true
-  }
+  return !(address.length !== 42 || !Web3.utils.isAddress(address))
 }
 export async function getAddressFromENS(address) {
   const wallet = await getWallet('torus')

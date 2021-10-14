@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Label, Textarea, Button, Text, Flex } from 'theme-ui'
+import { Label, Button, Text, Flex } from 'theme-ui'
 import { animated } from 'react-spring'
 import { DescriptionInstructionModal } from '../modals'
 
@@ -13,18 +13,11 @@ export const ProjectDescriptionInput = ({
   goBack
 }) => {
   const [showInstructions, setShowInstructions] = useState(false)
-  const [characterLength, setCharacterLength] = useState(
-    currentValue ? currentValue.length : 0
-  )
 
   useEffect(() => {
     register('projectDescription')
     setValue('projectDescription', currentValue)
   }, [])
-
-  const getLength = e => {
-    console.log({ e })
-  }
 
   const isSSR = typeof window === 'undefined'
 
@@ -63,21 +56,6 @@ export const ProjectDescriptionInput = ({
         </Text>
       </Button>
       <Flex sx={{ width: '90%' }}>
-        {/* <Textarea
-          sx={{
-            width: '800px',
-            mt: '40px',
-            resize: 'none',
-            fontFamily: 'body'
-          }}
-          id='projectDescription'
-          name='projectDescription'
-          ref={register}
-          defaultValue={currentValue}
-          rows={12}
-          maxLength={2000}
-          onChange={e => getLength(e)}
-        /> */}
         {!isSSR && (
           <React.Suspense fallback={<div />}>
             <RichTextInput
@@ -85,31 +63,15 @@ export const ProjectDescriptionInput = ({
                 marginTop: '40px',
                 fontFamily: 'body'
               }}
-              defaultValue={currentValue}
+              defaultValue={currentValue || ''}
               rows={12}
               onChange={newValue => {
-                try {
-                  // console.log({ setValue, newValue, delta, source })
-                  setValue('projectDescription', newValue)
-                } catch (error) {
-                  console.log({ error })
-                }
+                // console.log({ setValue, newValue, delta, source })
+                setValue('projectDescription', newValue)
               }}
-              // onChange={e => getLength(e)}
-              // maxLength={2000}
             />
           </React.Suspense>
         )}
-        {/* <Text
-          sx={{
-            marginTop: '40px',
-            paddingLeft: '40px',
-            fontFamily: 'body',
-            color: 'muted'
-          }}
-        >
-          {characterLength}/2000
-        </Text> */}
       </Flex>
       <Flex
         sx={{

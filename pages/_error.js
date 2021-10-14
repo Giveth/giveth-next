@@ -1,5 +1,5 @@
-import Layout from '../src/components/layout'
-import { Flex, Text } from 'theme-ui'
+import Layout from "../src/components/layout"
+import { Flex, Text } from "theme-ui"
 
 function Error (props) {
   const { statusCode, err } = props

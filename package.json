@@ -1,7 +1,6 @@
 {
   "name": "giveth-2",
   "description": "Peer to peer donations",
-  "author": "Mateo Daza <mateo@giveth.io>",
   "version": "0.1.0",
   "private": false,
   "scripts": {
@@ -15,7 +14,8 @@
     "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js",
     "cy:open:ganache": "ganache-cli -p 8545 && npx cypress open",
     "start-ganache": "ganache-cli -p 8545",
-    "lint": "next lint",
+    "lint": "eslint . --ext .ts --ext .tsx --ext .js --quiet",
+    "lint:fix": "eslint . --ext .ts --ext .tsx --ext .js --fix --quiet",
     "check:unimported": "npx unimported"
   },
   "dependencies": {
@@ -93,12 +93,12 @@
     "eslint-config-next": "^11.1.2",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "ganache-cli": "^6.12.2",
     "netlify-plugin-cypress": "^2.2.0",
-    "prettier": "^2.2.1",
+    "prettier": "2.4.1",
     "typescript": "^4.3.2"
   },
   "repository": {

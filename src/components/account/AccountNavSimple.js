@@ -1,23 +1,9 @@
 /** @jsx jsx */
-import React from 'react'
-import { jsx, Text, Flex, Box } from 'theme-ui'
+import { Text, Box } from 'theme-ui'
 import Link from 'next/link'
-import { BsArrowLeft } from 'react-icons/bs'
-import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
-const UserSpan = styled.span`
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  align-items: center;
-  justify-self: end;
-  @media (max-width: 1030px) {
-    grid-row: 1;
-    grid-column: 3;
-  }
-`
-const formatTitle = (title, projectsList, userDonations) => {
+const formatTitle = title => {
   switch (title) {
     case 'My Projects':
       // return `My Projects ${
@@ -33,11 +19,13 @@ const formatTitle = (title, projectsList, userDonations) => {
       return title
   }
 }
+
 const options = [
   { route: 'account', name: 'My Account' },
   { route: 'projects', name: 'My Projects' },
   { route: 'donations', name: 'My Donations' }
 ]
+
 const AccountNav = props => {
   const { projectsList, userDonations, query } = props
   const { logout } = useWallet()
@@ -65,13 +53,13 @@ const AccountNav = props => {
               key={index}
               style={{ textDecoration: 'none', cursor: 'pointer' }}
               href=''
+              passHref
             >
               <Text
                 sx={{
                   mb: '8px',
                   color:
-                    query?.view === i.route ||
-                    (!query?.view && i.route === 'account')
+                    query?.view === i.route || (!query?.view && i.route === 'account')
                       ? 'primary'
                       : 'secondary'
                 }}

@@ -30,7 +30,7 @@ const VIDEO_ATTRIBUTES = ['height', 'width']
 
 // provides a custom div wrapper around the default Video blot
 class Video extends BlockEmbed {
-  static create (value) {
+  static create(value) {
     const iframeNode = QuillVideo.create(value)
     const node = super.create()
     node.appendChild(iframeNode)
@@ -82,12 +82,7 @@ const modules = projectId => {
       [{ header: '1' }, { header: '2' }],
       [{ size: [] }],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [
-        { list: 'ordered' },
-        { list: 'bullet' },
-        { indent: '-1' },
-        { indent: '+1' }
-      ],
+      [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
       ['link', 'image', 'video'],
       ['emoji'],
       ['clean']
@@ -108,7 +103,7 @@ const modules = projectId => {
           Toast({
             content: 'Uploading image, please wait'
           })
-          const { data: imageUploaded, error } = await client.mutate({
+          const { data: imageUploaded } = await client.mutate({
             mutation: UPLOAD_IMAGE,
             variables: {
               imageUpload: {
@@ -117,17 +112,12 @@ const modules = projectId => {
               }
             }
           })
-          const cachedImgs = JSON.parse(
-            window?.localStorage.getItem('cached-uploaded-imgs')
-          )
+          const cachedImgs = JSON.parse(window?.localStorage.getItem('cached-uploaded-imgs'))
           const cachedImgsArray = cachedImgs ? cachedImgs : []
           cachedImgsArray.push(imageUploaded?.uploadImage?.projectImageId)
           // TODO: THIS NEEDS TO HAPPEN FOR UPDATE ONLY
           if (window.location.pathname.split('/')[1] === 'create') {
-            window?.localStorage.setItem(
-              'cached-uploaded-imgs',
-              JSON.stringify(cachedImgsArray)
-            )
+            window?.localStorage.setItem('cached-uploaded-imgs', JSON.stringify(cachedImgsArray))
           }
 
           return imageUploaded?.uploadImage?.url
@@ -159,7 +149,7 @@ const formats = [
   'emoji'
 ]
 
-function TextRichWithQuill (props) {
+function TextRichWithQuill(props) {
   const [content, setContent] = useState('')
   const [mod, setMod] = useState(null)
 
@@ -173,7 +163,7 @@ function TextRichWithQuill (props) {
   }, [])
 
   useEffect(() => {
-    setContent(props.value)
+    props.value && setContent(props.value)
   }, [props.value])
 
   if (!mod) return null

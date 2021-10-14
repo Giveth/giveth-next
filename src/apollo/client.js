@@ -3,10 +3,7 @@ import { concatPagination } from '@apollo/client/utilities'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import gql from 'graphql-tag'
-import {
-  getLocalStorageUserLabel,
-  getLocalStorageTokenLabel
-} from '../services/auth'
+import { getLocalStorageTokenLabel, getLocalStorageUserLabel } from '../services/auth'
 import { createUploadLink } from 'apollo-upload-client'
 import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
@@ -52,7 +49,7 @@ function createApolloClient () {
     }
   })
 
-  const client = new ApolloClient({
+  return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
@@ -83,8 +80,6 @@ function createApolloClient () {
     `,
     fetch
   })
-
-  return client
 }
 
 export function initializeApollo (initialState = null) {

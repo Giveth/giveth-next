@@ -13,6 +13,7 @@ if (siteId === 'giveth') {
 } else if (siteId === 'co2ken') {
   heroSide = '/images/decorator-leaf.svg'
 }
+
 const HeroSide = () => {
   //if (!heroSide) return null
   // return null
@@ -26,4 +27,5 @@ const HeroSide = () => {
     />
   )
 }
+
 export default HeroSide

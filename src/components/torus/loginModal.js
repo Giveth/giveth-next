@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Flex, Text } from 'theme-ui'
 import Image from 'next/image'
 import styled from '@emotion/styled'
@@ -10,64 +10,6 @@ import { SiFacebook, SiTwitter, SiReddit, SiDiscord } from 'react-icons/si'
 import { MdEmail } from 'react-icons/md'
 import DecoratorClouds from '../../images/decorator-clouds.svg'
 import MetamaskLogo from '../../images/logos/metamask-fox.svg'
-
-const customStyles = {
-  overlay: {
-    position: 'fixed',
-    zIndex: 4,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.25)',
-    backdropFilter: 'blur(2px)',
-    '-webkit-backdrop-filter': 'blur(2px)'
-  },
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    borderRadius: '12px',
-    borderColor: 'transparent',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-}
-
-const LongBtn = styled(Flex)`
-  flex-direction: row;
-  cursor: pointer;
-  justify-content: center;
-  width: 80%;
-  padding: 15px;
-  margin: 10px 0;
-  align-items: center;
-
-  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.2);
-  transition: box-shadow 0.3s ease-in-out;
-  ::after {
-    transition: opacity 0.3s ease-in-out;
-  }
-  :hover {
-    box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.4);
-  }
-`
-
-const TinyBtn = styled(Box)`
-  cursor: pointer;
-  align-items: center;
-  padding: 15px;
-  margin: 20px 0;
-  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.2);
-  transition: box-shadow 0.3s ease-in-out;
-  ::after {
-    transition: opacity 0.3s ease-in-out;
-  }
-  :hover {
-    box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.4);
-  }
-`
 
 function LoginModal(props) {
   const { login } = useWallet()
@@ -88,11 +30,7 @@ function LoginModal(props) {
     }
   }
   return (
-    <Modal
-      isOpen={props?.isOpen}
-      onRequestClose={() => props?.close()}
-      contentLabel='Login Modal'
-    >
+    <Modal isOpen={props?.isOpen} onRequestClose={() => props?.close()} contentLabel='Login Modal'>
       <Flex
         sx={{
           flexDirection: 'column',
@@ -126,12 +64,8 @@ function LoginModal(props) {
             py: 4
           }}
         >
-          <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>
-            Welcome to Giveth
-          </Text>
-          <Text
-            sx={{ variant: 'text.large', color: 'secondary', mt: 2, mb: 4 }}
-          >
+          <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>Welcome to Giveth</Text>
+          <Text sx={{ variant: 'text.large', color: 'secondary', mt: 2, mb: 4 }}>
             Please sign in to your account and start using Giveth.
           </Text>
 
@@ -179,10 +113,7 @@ function LoginModal(props) {
                 key={index}
                 icon={i.logo}
                 action={() =>
-                  initLogin(
-                    'torus',
-                    i.name === 'email' || i.name === 'twitter' ? null : i.name
-                  )
+                  initLogin('torus', i.name === 'email' || i.name === 'twitter' ? null : i.name)
                 }
               />
             ))}
@@ -193,9 +124,7 @@ function LoginModal(props) {
             height='32px'
             objectFit='contain'
           />
-          <Text
-            sx={{ variant: 'text.default', color: 'secondary', mt: 5, mb: 2 }}
-          >
+          <Text sx={{ variant: 'text.default', color: 'secondary', mt: 5, mb: 2 }}>
             Already have a crypto wallet?
           </Text>
           <LongBtn onClick={() => initLogin('metamask')}>
@@ -221,5 +150,39 @@ function LoginModal(props) {
     </Modal>
   )
 }
+
+const LongBtn = styled(Flex)`
+  flex-direction: row;
+  cursor: pointer;
+  justify-content: center;
+  width: 80%;
+  padding: 15px;
+  margin: 10px 0;
+  align-items: center;
+
+  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
+  ::after {
+    transition: opacity 0.3s ease-in-out;
+  }
+  :hover {
+    box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.4);
+  }
+`
+
+const TinyBtn = styled(Box)`
+  cursor: pointer;
+  align-items: center;
+  padding: 15px;
+  margin: 20px 0;
+  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
+  ::after {
+    transition: opacity 0.3s ease-in-out;
+  }
+  :hover {
+    box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.4);
+  }
+`
 
 export default LoginModal

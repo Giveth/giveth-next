@@ -2,7 +2,6 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 
-// import ProjectsList from '../ProjectsList'
 const ProjectsList = dynamic(() => import('../ProjectsList'))
 
 const HomeTopProjects = props => {
@@ -18,10 +17,10 @@ const HomeTopProjects = props => {
       totalCount={null}
       loadMore={() => router.push('/projects')}
       hasMore
-      selectOrderByField={orderByField => {
-        setLimit(2)
-        setOrderByField(orderByField)
-      }}
+      // selectOrderByField={orderByField => {
+      //   setLimit(2)
+      //   setOrderByField(orderByField)
+      // }}
     />
   )
 }

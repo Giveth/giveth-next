@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { Image, Text } from 'theme-ui'
 import { FiExternalLink } from 'react-icons/fi'
-import { useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from 'react-responsive'
 
 import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
@@ -10,89 +10,12 @@ import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { formatEtherscanLink } from '../../util'
 
-const AccountDetails = styled.div`
-  width: 200px;
-  position: absolute;
-  padding: 5px 0;
-  background: ${theme.colors.background};
-  border: 1px solid ${theme.colors.background};
-  box-sizing: border-box;
-  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
-  border-radius: 6px;
-  z-index: 205;
-  right: 0px;
-  top: 60px;
-  display: grid;
-  grid-template-rows: repeat(7, auto);
-  grid-gap: 0px 1rem;
-  .shadow {
-    box-shadow: 0px 1px 0px #f5f5f5;
-  }
-  .boxheight {
-    display: flex;
-    align-self: center;
-    padding-top: 11px;
-    padding-bottom: 11px;
-  }
-  & :hover .balance {
-    opacity: 1;
-  }
-`
-
-const MenuItem = styled(Text)`
-  align-self: center;
-  padding-left: 16px;
-  cursor: pointer;
-  align-content: center;
-  color: ${theme.colors.secondary};
-  :hover {
-    color: ${theme.colors.primary};
-  }
-`
-
-const MenuTitle = styled(Text)`
-  align-self: center;
-  padding-left: 16px;
-  align-content: center;
-  color: ${theme.colors.secondary};
-`
-
-const MenuLink = styled.a`
-  text-decoration: none;
-`
-
-const Dot = styled.div`
-  height: 8px;
-  width: 8px;
-  border-radius: 50%;
-  display: inline-block;
-  margin: 0 4px 0 0;
-`
-const StyledButton = styled.a`
-  display: flex;
-  flex-direction: row;
-  cursor: pointer;
-  align-items: center;
-  padding: 0.5rem;
-`
 const UserDetails = () => {
   const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
 
-  const {
-    ref,
-    isComponentVisible,
-    setIsComponentVisible
-  } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
-  const {
-    isLoggedIn,
-    logout,
-    user,
-    balance,
-    currentNetwork,
-    currentChainId,
-    wallet
-  } = useWallet()
+  const { isLoggedIn, logout, user, balance, currentNetwork, currentChainId, wallet } = useWallet()
   const address = isLoggedIn ? user.getWalletAddress() : '?'
   const truncAddress = `${address.substring(0, 10)}...${address.substring(
     address.length - 4,
@@ -155,8 +78,8 @@ const UserDetails = () => {
           <Image
             alt=''
             sx={{
-              width: '30px',
-              height: '30px',
+              width: '30',
+              height: '30',
               borderRadius: '15px'
             }}
             onerror={`this.onerror=null;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqenVtmZ7dQULkiedSFuZ_YPmNonJGLDYGHA&usqp=CAU';`}
@@ -184,14 +107,10 @@ const UserDetails = () => {
       </StyledButton>
       {isComponentVisible ? (
         <AccountDetails>
-          <MenuTitle
-            sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}
-          >
+          <MenuTitle sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}>
             Wallet Address
           </MenuTitle>
-          <MenuTitle sx={{ variant: 'text.medium', color: 'secondary' }}>
-            {truncAddress}
-          </MenuTitle>
+          <MenuTitle sx={{ variant: 'text.medium', color: 'secondary' }}>{truncAddress}</MenuTitle>
           {balance ? (
             <MenuTitle
               sx={{
@@ -210,20 +129,11 @@ const UserDetails = () => {
                 : ''}
             </MenuTitle>
           ) : null}
-          <MenuTitle
-            sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}
-          >
-            {wallet
-              ? wallet.isTorus
-                ? 'Torus Network'
-                : 'Metamask Network'
-              : 'No network'}
+          <MenuTitle sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}>
+            {wallet ? (wallet.isTorus ? 'Torus Network' : 'Metamask Network') : 'No network'}
           </MenuTitle>
           {parseNetwork()}
-          <Link
-            href='/account'
-            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
-          >
+          <Link href='/account' sx={{ textDecoration: 'none', textDecorationLine: 'none' }}>
             <MenuItem
               sx={{
                 variant: 'text.medium'
@@ -234,10 +144,7 @@ const UserDetails = () => {
             </MenuItem>
           </Link>
           <a
-            href={formatEtherscanLink('Account', [
-              currentChainId,
-              user.getWalletAddress()
-            ])}
+            href={formatEtherscanLink('Account', [currentChainId, user.getWalletAddress()])}
             target='_blank'
             rel='noopener noreferrer'
             sx={{ textDecoration: 'none' }}
@@ -264,10 +171,7 @@ const UserDetails = () => {
               My Projects
             </MenuItem>
           </Link>
-          <Link
-            href='/create'
-            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
-          >
+          <Link href='/create' sx={{ textDecoration: 'none', textDecorationLine: 'none' }}>
             <MenuItem
               sx={{
                 variant: 'text.medium'
@@ -304,11 +208,7 @@ const UserDetails = () => {
               Report a bug
             </MenuItem>
           </MenuLink>
-          <MenuLink
-            href='https://discord.gg/JYNBDuFUpG'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
+          <MenuLink href='https://discord.gg/JYNBDuFUpG' target='_blank' rel='noopener noreferrer'>
             <MenuItem
               sx={{
                 variant: 'text.medium'
@@ -332,5 +232,71 @@ const UserDetails = () => {
     </div>
   )
 }
+
+const AccountDetails = styled.div`
+  width: 200px;
+  position: absolute;
+  padding: 5px 0;
+  background: ${theme.colors.background};
+  border: 1px solid ${theme.colors.background};
+  box-sizing: border-box;
+  box-shadow: 0 5px 12px rgba(107, 117, 167, 0.3);
+  border-radius: 6px;
+  z-index: 205;
+  right: 0;
+  top: 60px;
+  display: grid;
+  grid-template-rows: repeat(7, auto);
+  grid-gap: 0 1rem;
+  .shadow {
+    box-shadow: 0 1px 0 #f5f5f5;
+  }
+  .boxheight {
+    display: flex;
+    align-self: center;
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+  & :hover .balance {
+    opacity: 1;
+  }
+`
+
+const MenuItem = styled(Text)`
+  align-self: center;
+  padding-left: 16px;
+  cursor: pointer;
+  align-content: center;
+  color: ${theme.colors.secondary};
+  :hover {
+    color: ${theme.colors.primary};
+  }
+`
+
+const MenuTitle = styled(Text)`
+  align-self: center;
+  padding-left: 16px;
+  align-content: center;
+  color: ${theme.colors.secondary};
+`
+
+const MenuLink = styled.a`
+  text-decoration: none;
+`
+
+const Dot = styled.div`
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 4px 0 0;
+`
+const StyledButton = styled.a`
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+  padding: 0.5rem;
+`
 
 export default UserDetails

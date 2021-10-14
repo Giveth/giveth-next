@@ -43,3 +43,5 @@ export default class extends Document {
     )
   }
 }
+
+export default MyDocument

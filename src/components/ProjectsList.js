@@ -1,4 +1,12 @@
-import { Box, Button, Grid, Flex, Spinner, Text, Input } from 'theme-ui'
+import {
+  Box,
+  Button,
+  Grid,
+  Flex,
+  Spinner,
+  Text,
+  Input
+} from 'theme-ui'
 import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -19,110 +27,22 @@ export const OrderByField = {
   CreationDate: 'CreationDate'
 }
 
-export const OrderByDirection = {
-  ASC: 'ASC',
-  DESC: 'DESC'
-}
-
-const CreateLink = styled.a`
-  cursor: pointer;
-  text-align: right;
-  text-decoration: none;
-  font-family: 'Red Hat Display', sans-serif;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: ${theme.colors.primary};
-  align-self: center;
-  :hover {
-    color: ${theme.colors.hover};
-  }
-`
-const IconSearch = styled(SearchIcon)`
-  margin-left: -2.5rem;
-`
-const DropItem = styled.div`
-  padding: 1rem 0 1rem 1rem;
-  :hover {
-    background-color: ${theme.colors.lightestBlue};
-  }
-`
-const IconDrop = styled(DropIcon)`
-  position: absolute;
-  right: 1rem;
-  top: 0.563rem;
-`
-// const SelectMenu = props => {
-//   const { caption, options = {}, onChange = () => {}, defaultValue } = props
-//   return (
-//     <div
-//       style={{
-//         flexGrow: 1,
-//         margin: '10px'
-//       }}
-//     >
-//       <Text
-//         pl={3}
-//         sx={{
-//           variant: 'text.default',
-//           color: 'secondary',
-//           fontSize: 3,
-//           fontWeight: 'medium',
-//           textDecoration: 'none',
-//           textTransform: 'uppercase'
-//         }}
-//       >
-//         {caption}
-//       </Text>
-//       <IconDrop />
-//       <Text
-//         sx={{
-//           variant: 'text.medium',
-//           fontWeight: 'bold',
-//           color: 'secondary'
-//         }}
-//       ></Text>
-//       <Select
-//         pl={3}
-//         sx={{
-//           variant: 'text.default',
-//           color: 'secondary',
-//           fontSize: 3,
-//           fontWeight: 'medium',
-//           textDecoration: 'none',
-//           width: '100%'
-//         }}
-//         defaultValue={defaultValue}
-//         onChange={e => onChange(e.target.value)}
-//         mb={3}
-//         name='sortBy'
-//         id='sortBy'
-//       >
-//         {Object.entries(options).map(([key, value]) => (
-//           <option
-//             sx={{
-//               variant: 'text.medium',
-//               fontWeight: 'bold',
-//               color: 'secondary'
-//             }}
-//           >
-//             {value}
-//           </option>
-//         ))}
-//       </Select>
-//     </div>
-//   )
-// }
-
 const orderBySelectOptions = {}
 orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
 orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
 
 const ProjectsList = props => {
-  const { projects, categories, totalCount, maxLimit, fromHomePage } = props
+  const {
+    projects,
+    categories,
+    totalCount,
+    maxLimit,
+    fromHomePage
+    // selectOrderByField
+  } = props
 
   const [search, setSearch] = useState()
   const [limit, setLimit] = useState(maxLimit)
-  const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState()
   const [searchResults, setSearchResults] = useState(projects)
   const [category, setCategory] = useState(0)
@@ -145,7 +65,7 @@ const ProjectsList = props => {
     checkCategory()
   }, [])
 
-  function checkCategory () {
+  function checkCategory() {
     const categoryFromQuery = props?.query?.category
     if (categoryFromQuery) {
       categoryList?.map((i, index) => {
@@ -156,7 +76,7 @@ const ProjectsList = props => {
     }
   }
 
-  function searchProjects (e) {
+  function searchProjects(e) {
     const queryResult = search.search(e.target.value)
     setSearchQuery(e.target.value)
     setSearchResults(queryResult)
@@ -164,7 +84,7 @@ const ProjectsList = props => {
   // handleSubmit = e => {
   //   e.preventDefault()
   // }
-  function rebuildIndex () {
+  function rebuildIndex() {
     const dataToSearch = new JsSearch.Search('id')
     /**
      *  defines a indexing strategy for the data
@@ -187,10 +107,9 @@ const ProjectsList = props => {
     dataToSearch.addIndex('impactLocation') // sets the index attribute for the data
     dataToSearch.addDocuments(projects) // adds the data to be searched
     setSearch(dataToSearch)
-    setIsLoading(false)
   }
 
-  function filterCategory (searchedResults) {
+  function filterCategory(searchedResults) {
     const categoryName = categoryList[category].toLowerCase()
 
     return searchedResults.filter(
@@ -199,47 +118,35 @@ const ProjectsList = props => {
   }
 
   const searchedResults = searchQuery === '' ? projects : searchResults
-  const projectsFiltered =
-    category === 0 ? searchedResults : filterCategory(searchedResults)
+  const projectsFiltered = category === 0 ? searchedResults : filterCategory(searchedResults)
 
-  function sum (items, prop) {
-    return items.reduce(function (a, b) {
-      return a + b[prop]
-    }, 0)
-  }
   //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Old Projects']
   const sortFunctions = [
-    function qualityScore (a, b) {
+    function qualityScore(a, b) {
       return b.verified - a.verified || b.qualityScore - a.qualityScore
     },
     a => a,
     a => a,
-    function amountRaised (a, b) {
+    function amountRaised(a, b) {
       console.log({ b, a })
       return b.totalDonations - a.totalDonations
     },
-    function hearts (a, b) {
+    function hearts(a, b) {
       return b.reactions?.length - a.reactions?.length
     },
-    function recentlyAdded (a, b) {
-      return (
-        new Date(b?.creationDate)?.valueOf() -
-        new Date(a?.creationDate)?.valueOf()
-      )
+    function recentlyAdded(a, b) {
+      return new Date(b?.creationDate)?.valueOf() - new Date(a?.creationDate)?.valueOf()
     },
-    function earlyAdded (a, b) {
-      return (
-        new Date(a?.creationDate)?.valueOf() -
-        new Date(b?.creationDate)?.valueOf()
-      )
+    function earlyAdded(a, b) {
+      return new Date(a?.creationDate)?.valueOf() - new Date(b?.creationDate)?.valueOf()
     }
   ]
   const filterFunctions = [
     a => a,
-    function verified (a) {
+    function verified(a) {
       return !!a?.verified
     },
-    function traceable (a) {
+    function traceable(a) {
       // !!a?.fromTrace && console.log({ a })
       return !!a?.fromTrace || a?.IOTraceable
     },
@@ -301,7 +208,7 @@ const ProjectsList = props => {
           <CreateLink>Create a project</CreateLink>
         </Link>
       </Flex>
-      <ProjectSection p={0} sx={{ variant: 'grayBox' }}>
+      <Box p={0} sx={{ variant: 'grayBox' }}>
         <div
           style={{
             alignItems: 'center',
@@ -474,9 +381,7 @@ const ProjectsList = props => {
                             name={project.title}
                             slug={project.slug}
                             donateAddress={project.donateAddress}
-                            image={
-                              project.image || '/images/no-image-available.jpg'
-                            }
+                            image={project.image || '/images/no-image-available.jpg'}
                             raised={project.balance}
                             project={project}
                           />
@@ -509,9 +414,96 @@ const ProjectsList = props => {
             </div>
           </Flex>
         </div>
-      </ProjectSection>
+      </Box>
     </>
   )
 }
+
+const CreateLink = styled.a`
+  cursor: pointer;
+  text-align: right;
+  text-decoration: none;
+  font-family: 'Red Hat Display', sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: ${theme.colors.primary};
+  align-self: center;
+  :hover {
+    color: ${theme.colors.hover};
+  }
+`
+
+const IconSearch = styled(SearchIcon)`
+  margin-left: -2.5rem;
+`
+
+// const IconDrop = styled(DropIcon)`
+//   position: absolute;
+//   right: 1rem;
+//   top: 0.563rem;
+// `
+
+// const SelectMenu = props => {
+//   const { caption, options = {}, onChange = () => {}, defaultValue } = props
+//   return (
+//     <div
+//       style={{
+//         flexGrow: 1,
+//         margin: '10px'
+//       }}
+//     >
+//       <Text
+//         pl={3}
+//         sx={{
+//           variant: 'text.default',
+//           color: 'secondary',
+//           fontSize: 3,
+//           fontWeight: 'medium',
+//           textDecoration: 'none',
+//           textTransform: 'uppercase'
+//         }}
+//       >
+//         {caption}
+//       </Text>
+//       <IconDrop />
+//       <Text
+//         sx={{
+//           variant: 'text.medium',
+//           fontWeight: 'bold',
+//           color: 'secondary'
+//         }}
+//       />
+//       <Select
+//         pl={3}
+//         sx={{
+//           variant: 'text.default',
+//           color: 'secondary',
+//           fontSize: 3,
+//           fontWeight: 'medium',
+//           textDecoration: 'none',
+//           width: '100%'
+//         }}
+//         defaultValue={defaultValue}
+//         onChange={e => onChange(e.target.value)}
+//         mb={3}
+//         name='sortBy'
+//         id='sortBy'
+//       >
+//         {Object.entries(options).map(([key, value]) => (
+//           <option
+//             style={{
+//               variant: 'text.medium',
+//               fontWeight: 'bold',
+//               color: 'secondary'
+//             }}
+//             key={key}
+//           >
+//             {value}
+//           </option>
+//         ))}
+//       </Select>
+//     </div>
+//   )
+// }
 
 export default ProjectsList

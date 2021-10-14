@@ -1,11 +1,6 @@
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { client } from '../../apollo/client'
-import {
-  getAddressFromENS,
-  isWalletAddressValid,
-  isAddressENS
-} from '../../services/wallet'
-import Web3 from 'web3'
+import { getAddressFromENS, isWalletAddressValid, isAddressENS } from '../../services/wallet'
 import { ethers } from 'ethers'
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID
@@ -38,10 +33,7 @@ export async function projectWalletAlreadyUsed(projectWalletAddress) {
       address: projectWalletAddress
     }
   })
-  if (res?.data?.projectByAddress) {
-    return true
-  }
-  return false
+  return !!res?.data?.projectByAddress
 }
 
 export async function isSmartContract(projectWalletAddress) {

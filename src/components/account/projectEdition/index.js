@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-  Flex,
-  Box,
-  Button,
-  Checkbox,
-  Label,
-  Text,
-  Input,
-} from 'theme-ui'
+import { Flex, Box, Button, Checkbox, Label, Text, Input } from 'theme-ui'
 import Web3 from 'web3'
 import { BiArrowBack } from 'react-icons/bi'
 import styled from '@emotion/styled'
@@ -16,8 +8,8 @@ import { useApolloClient, useQuery } from '@apollo/client'
 
 import theme from '../../../utils/theme-ui/index'
 import {
-  GET_LINK_BANK_CREATION,
-  EDIT_PROJECT,
+  // GET_LINK_BANK_CREATION,
+  // EDIT_PROJECT,
   FETCH_PROJECT_BY_SLUG,
   WALLET_ADDRESS_IS_VALID
 } from '../../../apollo/gql/projects'
@@ -29,7 +21,10 @@ import { categoryList } from '../../../utils/constants'
 import ImageSection from './imageSection'
 import Toast from '../../toast'
 import { maxSelectedCategory } from '../../../utils/constants'
-import {invalidProjectTitleToast, isProjectTitleValid} from '../../../validation/projectValidation';
+import {
+  invalidProjectTitleToast,
+  isProjectTitleValid
+} from '../../../validation/projectValidation'
 
 // import dynamic from 'next/dynamic'
 // import { getWallet } from '../../../wallets'
@@ -53,7 +48,7 @@ function ProjectEditionForm(props) {
     setCancelModal,
     updateProject,
     project,
-    client,
+    // client,
     mapLocation,
     setMapLocation
   } = props
@@ -62,34 +57,34 @@ function ProjectEditionForm(props) {
   const [desc, setDesc] = useState('')
   const [isActive, setIsActive] = useState(null)
 
-  const { register, handleSubmit, setValue, errors } = useForm() // initialize the hook
+  const { register, handleSubmit, setValue } = useForm() // initialize the hook
   useEffect(() => {
     setCategories(project?.categories)
     setDesc(project?.description || '')
     setIsActive(project?.status?.id === '5')
   }, [project])
 
-  const connectBankAccount = async () => {
-    try {
-      const projectId = project?.id
-      if (!projectId) return alert('no project here')
-      const connectLink = await client.query({
-        query: GET_LINK_BANK_CREATION,
-        variables: {
-          projectId: parseInt(projectId),
-          returnUrl: `${window.location.origin}/account?projectId=${projectId}`,
-          refreshUrl: `${window.location.origin}/account?projectId=${projectId}`
-        }
-      })
-      if (connectLink?.data?.setProjectBankAccount) {
-        window.location.href = connectLink.data.setProjectBankAccount
-      } else {
-        alert('error')
-      }
-    } catch (error) {
-      console.log({ error })
-    }
-  }
+  // const connectBankAccount = async () => {
+  //   try {
+  //     const projectId = project?.id
+  //     if (!projectId) return alert('no project here')
+  //     const connectLink = await client.query({
+  //       query: GET_LINK_BANK_CREATION,
+  //       variables: {
+  //         projectId: parseInt(projectId),
+  //         returnUrl: `${window.location.origin}/account?projectId=${projectId}`,
+  //         refreshUrl: `${window.location.origin}/account?projectId=${projectId}`
+  //       }
+  //     })
+  //     if (connectLink?.data?.setProjectBankAccount) {
+  //       window.location.href = connectLink.data.setProjectBankAccount
+  //     } else {
+  //       alert('error')
+  //     }
+  //   } catch (error) {
+  //     console.log({ error })
+  //   }
+  // }
 
   const CustomLabel = ({ title, htmlFor, style, variant }) => {
     return (
@@ -111,20 +106,14 @@ function ProjectEditionForm(props) {
     <>
       <Flex sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <Flex sx={{ alignItems: 'center' }}>
-          <BiArrowBack
-            color={theme.colors.secondary}
-            style={{ marginRight: 2 }}
-          />
-          <Text
-            onClick={goBack}
-            sx={{ fontFamily: 'body', color: 'secondary', cursor: 'pointer' }}
-          >
+          <BiArrowBack color={theme.colors.secondary} style={{ marginRight: 2 }} />
+          <Text onClick={goBack} sx={{ fontFamily: 'body', color: 'secondary', cursor: 'pointer' }}>
             My Projects
           </Text>
         </Flex>
 
         <form
-          onSubmit={handleSubmit((data, e) => {
+          onSubmit={handleSubmit(() => {
             const res = toggleProjectActivation(project?.id, isActive, msg =>
               Toast({ content: msg, type: 'success' })
             )
@@ -171,7 +160,7 @@ function ProjectEditionForm(props) {
         </form>
       </Flex>
       <form
-        onSubmit={handleSubmit((data, e) => {
+        onSubmit={handleSubmit(data => {
           console.log({ data, desc })
           updateProject({ ...data, desc })
         })}
@@ -191,11 +180,7 @@ function ProjectEditionForm(props) {
             />{' '}
             {/* <CustomLabel title='Project Admin' htmlFor='editAdmin' />
             <CustomInput name='editAdmin' ref={register} defaultValue={admin} /> */}
-            <CustomLabel
-              title='Project Description'
-              htmlFor='editDescription'
-            />
-
+            <CustomLabel title='Project Description' htmlFor='editDescription' />
             {!isSSR && (
               <React.Suspense fallback={<div />}>
                 <RichTextInput
@@ -231,9 +216,7 @@ function ProjectEditionForm(props) {
             <Box sx={{ height: '320px', overflow: 'scroll' }}>
               {categories &&
                 categoryList.map(category => {
-                  const categoryFound = categories?.find(
-                    i => i.name === category.name
-                  )
+                  const categoryFound = categories?.find(i => i.name === category.name)
                   return (
                     <Label
                       sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}
@@ -249,9 +232,7 @@ function ProjectEditionForm(props) {
                           categoryFound
                             ? setCategories(
                                 // remove
-                                categories?.filter(
-                                  i => i.name !== category.name
-                                )
+                                categories?.filter(i => i.name !== category.name)
                               )
                             : setCategories(
                                 categories?.length > 0
@@ -272,9 +253,7 @@ function ProjectEditionForm(props) {
             </Box>
             <CustomLabel title='Impact Location' htmlFor='editImpactLocation' />
             {mapLocation && (
-              <Text sx={{ fontFamily: 'body', color: 'muted', fontSize: 8 }}>
-                {mapLocation}
-              </Text>
+              <Text sx={{ fontFamily: 'body', color: 'muted', fontSize: 8 }}>{mapLocation}</Text>
             )}
             <div id='locationField'>
               <Input
@@ -285,7 +264,6 @@ function ProjectEditionForm(props) {
                 onChange={e => setMapLocation(e.target.value)}
               />
             </div>
-
             <Label
               sx={{
                 display: 'flex',
@@ -295,19 +273,14 @@ function ProjectEditionForm(props) {
               }}
             >
               <Checkbox
-                checked={ mapLocation === 'Global' }
+                checked={mapLocation === 'Global'}
                 onChange={e => {
                   const checked = e.target.checked
-                  checked
-                    ? setMapLocation('Global')
-                    : setMapLocation('')
+                  checked ? setMapLocation('Global') : setMapLocation('')
                 }}
               />
-              <Text sx={{ fontFamily: 'body', fontSize: 2 }}>
-                This project has a global impact
-              </Text>
+              <Text sx={{ fontFamily: 'body', fontSize: 2 }}>This project has a global impact</Text>
             </Label>
-
             <div
               css={{
                 display: 'flex',
@@ -399,12 +372,9 @@ function ProjectEdition(props) {
   const [showCancelModal, setCancelModal] = useState(false)
   const [mapLocation, setMapLocation] = useState(null)
 
-  const { data: fetchedProject, loadingProject } = useQuery(
-    FETCH_PROJECT_BY_SLUG,
-    {
-      variables: { slug: props?.project }
-    }
-  )
+  const { data: fetchedProject, loadingProject } = useQuery(FETCH_PROJECT_BY_SLUG, {
+    variables: { slug: props?.project }
+  })
 
   useEffect(() => {
     if (fetchedProject?.projectBySlug) {
@@ -419,12 +389,11 @@ function ProjectEdition(props) {
 
   useEffect(() => {
     if (project && updateProjectOnServer) {
-      const projectId = fetchedProject?.projectBySlug?.id
+      // const projectId = fetchedProject?.projectBySlug?.id
       const editProjectMutation = async () => {
         setLoading(true)
         try {
-          const contentSize =
-            encodeURI(project?.description).split(/%..|./).length - 1
+          const contentSize = encodeURI(project?.description).split(/%..|./).length - 1
           console.log({ contentSize })
           if (contentSize > 4000000) {
             Toast({
@@ -433,13 +402,13 @@ function ProjectEdition(props) {
             })
             return false
           }
-          const edit = await client.mutate({
-            mutation: EDIT_PROJECT,
-            variables: {
-              newProjectData: project,
-              projectId: parseFloat(projectId)
-            }
-          })
+          // const edit = await client.mutate({
+          //   mutation: EDIT_PROJECT,
+          //   variables: {
+          //     newProjectData: project,
+          //     projectId: parseFloat(projectId)
+          //   }
+          // })
           setUpdateProjectOnServer(false)
           setLoading(false)
           setShowModal(true)
@@ -478,7 +447,7 @@ function ProjectEdition(props) {
         }
       }
       if (!isProjectTitleValid(data.editTitle)) {
-        return invalidProjectTitleToast();
+        return invalidProjectTitleToast()
       }
       const projectCategories = []
       for (const category in categoryList) {
@@ -549,10 +518,7 @@ function ProjectEdition(props) {
         title='Success!'
         subtitle='Please allow a few minutes for your changes to be displayed.'
         confirmation={{
-          do: () =>
-            window.location.replace(
-              `/project/${fetchedProject?.projectBySlug?.slug}`
-            ),
+          do: () => window.location.replace(`/project/${fetchedProject?.projectBySlug?.slug}`),
           title: 'View Project'
         }}
         secondary={{

@@ -53,7 +53,7 @@ const IndexContent = ({
   // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
   useEffect(() => {
     if (isWelcome) {
-      popup.triggerPopup('WelcomeLoggedOut')
+      popup.triggerPopup("WelcomeLoggedOut")
     }
   }, [])
 
@@ -72,8 +72,8 @@ const IndexContent = ({
   )
 }
 
-const IndexPage = props => {
-  const { data, query, content, mediumPosts, topProjects } = props
+const IndexPage = (props) => {
+  const { query, content, mediumPosts, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION
     ? process.env.HIDE_INFO_SECTION
@@ -112,8 +112,8 @@ const IndexPage = props => {
   // }
 
   return (
-    <Layout isHomePage='true'>
-      <Seo title='Home' />
+    <Layout isHomePage="true">
+      <Seo title="Home" />
       {/* <button onClick={() => ceramicTest()}> idx test </button> */}
       <IndexContent
         hideInfo={hideInfo}
@@ -130,18 +130,23 @@ const IndexPage = props => {
   )
 }
 
-export async function getServerSideProps (props) {
+export async function getServerSideProps(props) {
   const { data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
-    variables: { limit: 20 }
+    variables: { limit: 20 },
   })
 
   const mdContent = matter(GivethContent)
 
+  const medium = await fetch(
+    "https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth"
+  )
+  const mediumPosts = await medium.json()
+
   return {
     props: {
       topProjects: response?.projects
-        ?.filter(i => !i?.verified)
+        ?.filter((i) => !i?.verified)
         ?.sort((a, b) => {
           if (a?.qualityScore > b?.qualityScore) return -1
         })

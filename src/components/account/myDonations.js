@@ -11,152 +11,17 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
 // import DropdownInput from '../dropdownInput'
 // import { ProjectContext } from '../../contextProvider/projectProvider'
+// import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json
 
-import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 dayjs.extend(localizedFormat)
-
-const Table = styled.table`
-  border-collapse: collapse;
-  margin: 4rem 0;
-  padding: 0;
-  table-layout: fixed;
-  width: 100%;
-
-  thead {
-    text-align: left;
-  }
-
-  caption {
-    font-size: 1.5em;
-    margin: 0.5em 0 0.75em;
-  }
-
-  tr {
-    border-bottom: 1px solid #eaebee;
-    padding: 0.35em;
-  }
-  thead th {
-    border-left: none;
-    width: 10em;
-    min-width: 10em;
-    max-width: 10em;
-  }
-  th,
-  td {
-    padding: 0.625em;
-    width: 80%;
-    overflow: auto;
-  }
-  th {
-    padding: 1rem 0;
-    font-size: 0.625rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  td {
-    padding: 1rem 0;
-  }
-  @media screen and (max-width: 800px) {
-    border: 0;
-
-    caption {
-      font-size: 1.3em;
-    }
-
-    thead {
-      border: none;
-      clip: rect(0 0 0 0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      width: 1px;
-    }
-
-    tr {
-      border-bottom: 5px solid #eaebee;
-      display: block;
-      margin: 1rem 0 4rem 0;
-    }
-    tr:last-child {
-      margin: 1rem 0 0 0;
-    }
-
-    td {
-      border-bottom: 1px solid #eaebee;
-      display: block;
-      font-size: 0.8em;
-      text-align: right;
-    }
-
-    td::before {
-      content: attr(aria-label);
-      content: attr(data-label);
-      float: left;
-      font-size: 0.8rem;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    td:last-child {
-      border-bottom: 0;
-    }
-  }
-`
-const PagesStyle = styled.div`
-  .inner-pagination {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    list-style-type: none;
-    font-family: ${theme.fonts.body};
-    margin: 0 0 3rem 0;
-    a {
-      text-decoration: none;
-    }
-  }
-  .item-page {
-    padding: 0.4rem 1rem;
-    margin: 0 0.3rem;
-    a {
-      color: ${theme.colors.secondary};
-    }
-  }
-  .active-page {
-    padding: 0.4rem 1rem;
-    margin: 0 0.3rem;
-    text-align: center;
-    background-color: ${theme.colors.secondary};
-    border-radius: 4px;
-    a {
-      color: white;
-    }
-  }
-`
-
-const IconSearch = styled(SearchIcon)`
-  margin-left: -2.5rem;
-`
-const SearchInput = styled(Flex)`
-  align-items: center;
-`
-// const FilterInput = styled(Flex)`
-//   align-items: center;
-// `
-
-const FilterBox = styled(Flex)`
-  width: 100%;
-  justify-content: space-between;
-`
 
 const MyDonations = props => {
   const router = useRouter()
   const options = ['All Donations', 'Crypto']
   const [currentDonations, setCurrentDonations] = React.useState([])
-  const [filter, setFilter] = React.useState(0)
+  const filter = 0
   const [loading, setLoading] = React.useState(true)
   // TODO: Set this context for the user
   // const { currentProjectView, setCurrentProjectView } = React.useContext(
@@ -184,12 +49,7 @@ const MyDonations = props => {
     }
     const some = donations?.filter(donation => {
       const val = donation?.project?.title
-      return (
-        val
-          ?.toString()
-          .toLowerCase()
-          .indexOf(search.toString().toLowerCase()) === 0
-      )
+      return val?.toString().toLowerCase().indexOf(search.toString().toLowerCase()) === 0
     })
     setCurrentDonations(some)
   }
@@ -207,20 +67,16 @@ const MyDonations = props => {
     }
   }
 
-  const filteredDonations = [...filterDonations(currentDonations)].sort(
-    (a, b) => {
-      return new Date(b?.createdAt) - new Date(a?.createdAt)
-    }
-  )
+  const filteredDonations = [...filterDonations(currentDonations)].sort((a, b) => {
+    return new Date(b?.createdAt) - new Date(a?.createdAt)
+  })
 
-  const populateIcons = async item => {
-    const found = iconManifest?.find(
-      i => i?.symbol === item?.currency?.toUpperCase()
-    )
+  const populateIcons = item => {
+    // const found = iconManifest?.find(
+    //   i => i?.symbol === item?.currency?.toUpperCase()
+    // )
 
-    let icon = `/assets/cryptocurrency-icons/32/color/${
-      item?.currency?.toLowerCase() || 'eth'
-    }.png`
+    let icon = `/assets/cryptocurrency-icons/32/color/${item?.currency?.toLowerCase() || 'eth'}.png`
     // let icon = found
     //   ? `/assets/cryptocurrency-icons/32/color/${
     //       item?.currency?.toLowerCase() || 'eth'
@@ -235,25 +91,17 @@ const MyDonations = props => {
     const [currentItems, setCurrentItems] = React.useState([])
 
     useEffect(() => {
-      const getItems = async () => {
-        // Data to be rendered using pagination.
-        const itemsPerPage = 6
+      // Data to be rendered using pagination.
+      const itemsPerPage = 6
 
-        // Logic for displaying current items
-        const indexOfLastItem = activeItem * itemsPerPage
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage
-        const tmpItems = paginationItems?.slice(
-          indexOfFirstItem,
-          indexOfLastItem
-        )
+      // Logic for displaying current items
+      const indexOfLastItem = activeItem * itemsPerPage
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage
+      const tmpItems = paginationItems?.slice(indexOfFirstItem, indexOfLastItem)
 
-        const items = await Promise.all(
-          tmpItems.map(item => populateIcons(item))
-        )
+      const items = tmpItems.map(item => populateIcons(item))
 
-        setCurrentItems(items)
-      }
-      getItems()
+      setCurrentItems(items)
     }, [activeItem, paginationItems])
 
     const handlePageChange = pageNumber => {
@@ -269,23 +117,21 @@ const MyDonations = props => {
         <Table>
           <thead>
             <tr>
-              {['Date', 'Project', 'Currency', 'Amount', 'Transaction'].map(
-                (i, index) => {
-                  return (
-                    <th scope='col' key={index}>
-                      <Text
-                        sx={{
-                          variant: 'text.small',
-                          fontWeight: 'bold',
-                          color: 'secondary'
-                        }}
-                      >
-                        {i}
-                      </Text>
-                    </th>
-                  )
-                }
-              )}
+              {['Date', 'Project', 'Currency', 'Amount', 'Transaction'].map((i, index) => {
+                return (
+                  <th scope='col' key={index}>
+                    <Text
+                      sx={{
+                        variant: 'text.small',
+                        fontWeight: 'bold',
+                        color: 'secondary'
+                      }}
+                    >
+                      {i}
+                    </Text>
+                  </th>
+                )
+              })}
             </tr>
           </thead>
           <tbody>
@@ -295,45 +141,32 @@ const MyDonations = props => {
               .map((i, key) => {
                 return (
                   <tr key={key}>
-                    <td
-                      data-label='Account'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
+                    <td data-label='Account' style={{ variant: 'text.small', color: 'secondary' }}>
                       <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                        {i?.createdAt
-                          ? dayjs(i.createdAt).format('ll')
-                          : 'null'}
+                        {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
                       </Text>
                     </td>
-                    <td
-                      data-label='Project'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
+                    <td data-label='Project' style={{ variant: 'text.small', color: 'secondary' }}>
                       <Text
                         sx={{
                           variant: 'text.medium',
                           color: 'primary',
                           cursor: 'pointer'
                         }}
-                        onClick={() =>
-                          router.push(`/project/${i?.project?.slug}`)
-                        }
+                        onClick={() => router.push(`/project/${i?.project?.slug}`)}
                       >
                         {titleCase(i?.project?.title) || i?.donor}
                       </Text>
                     </td>
                     <td
                       data-label='Currency'
-                      sx={{
+                      style={{
                         variant: 'text.small',
                         color: 'secondary'
                       }}
                     >
                       <img
-                        src={
-                          i?.icon ||
-                          `/assets/tokens/${i?.currency?.toUpperCase()}.png`
-                        }
+                        src={i?.icon || `/assets/tokens/${i?.currency?.toUpperCase()}.png`}
                         alt={i.currency}
                         onError={ev => {
                           ev.target.src = ETHIcon
@@ -346,10 +179,7 @@ const MyDonations = props => {
                         }}
                       />
                     </td>
-                    <td
-                      data-label='Amount'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                    >
+                    <td data-label='Amount' style={{ variant: 'text.small', color: 'secondary' }}>
                       <Text
                         sx={{
                           variant: 'text.small',
@@ -365,7 +195,7 @@ const MyDonations = props => {
                     </td>
                     <td
                       data-label='Transaction'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
+                      style={{ variant: 'text.small', color: 'secondary' }}
                     >
                       <div
                         style={{
@@ -454,9 +284,7 @@ const MyDonations = props => {
         </Flex>
       ) : !filteredDonations || filteredDonations?.length === 0 ? (
         <Table>
-          <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-            No donations :(
-          </Text>
+          <Text sx={{ variant: 'text.large', color: 'secondary' }}>No donations :(</Text>
         </Table>
       ) : (
         <TableToShow />
@@ -464,5 +292,140 @@ const MyDonations = props => {
     </>
   )
 }
+
+const Table = styled.table`
+  border-collapse: collapse;
+  margin: 4rem 0;
+  padding: 0;
+  table-layout: fixed;
+  width: 100%;
+
+  thead {
+    text-align: left;
+  }
+
+  caption {
+    font-size: 1.5em;
+    margin: 0.5em 0 0.75em;
+  }
+
+  tr {
+    border-bottom: 1px solid #eaebee;
+    padding: 0.35em;
+  }
+  thead th {
+    border-left: none;
+    width: 10em;
+    min-width: 10em;
+    max-width: 10em;
+  }
+  th,
+  td {
+    padding: 0.625em;
+    width: 80%;
+    overflow: auto;
+  }
+  th {
+    padding: 1rem 0;
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  td {
+    padding: 1rem 0;
+  }
+  @media screen and (max-width: 800px) {
+    border: 0;
+
+    caption {
+      font-size: 1.3em;
+    }
+
+    thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    tr {
+      border-bottom: 5px solid #eaebee;
+      display: block;
+      margin: 1rem 0 4rem 0;
+    }
+    tr:last-child {
+      margin: 1rem 0 0 0;
+    }
+
+    td {
+      border-bottom: 1px solid #eaebee;
+      display: block;
+      font-size: 0.8em;
+      text-align: right;
+    }
+
+    td::before {
+      content: attr(data-label);
+      float: left;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    td:last-child {
+      border-bottom: 0;
+    }
+  }
+`
+
+const PagesStyle = styled.div`
+  .inner-pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    list-style-type: none;
+    font-family: ${theme.fonts.body};
+    margin: 0 0 3rem 0;
+    a {
+      text-decoration: none;
+    }
+  }
+  .item-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    a {
+      color: ${theme.colors.secondary};
+    }
+  }
+  .active-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    text-align: center;
+    background-color: ${theme.colors.secondary};
+    border-radius: 4px;
+    a {
+      color: white;
+    }
+  }
+`
+
+const IconSearch = styled(SearchIcon)`
+  margin-left: -2.5rem;
+`
+const SearchInput = styled(Flex)`
+  align-items: center;
+`
+
+const FilterBox = styled(Flex)`
+  width: 100%;
+  justify-content: space-between;
+`
+// const FilterInput = styled(Flex)`
+//   align-items: center;
+// `
 
 export default MyDonations

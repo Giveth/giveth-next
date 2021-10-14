@@ -1,7 +1,7 @@
 import MetaMaskOnboarding from '@metamask/onboarding'
 import { useWeb3React } from '@web3-react/core'
 import { UserRejectedRequestError } from '@web3-react/injected-connector'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import useLayoutEffect from '../lib/user-isomorphic-layout-effect'
 import { injected } from '../connectors'
 import useENSName from '../hooks/useENSName'
@@ -17,11 +17,8 @@ const Account = ({ triedToEagerConnect }) => {
     onboarding.current = new MetaMaskOnboarding()
   }, [])
 
-  // manage connecting state for injected connector
-  const [connecting, setConnecting] = useState(false)
   useEffect(() => {
     if (active || error) {
-      setConnecting(false)
       onboarding.current?.stopOnboarding()
     }
   }, [active, error])
@@ -38,35 +35,25 @@ const Account = ({ triedToEagerConnect }) => {
 
   if (typeof account !== 'string') {
     const hasMetaMaskOrWeb3Available =
-      MetaMaskOnboarding.isMetaMaskInstalled() ||
-      window?.ethereum ||
-      window?.web3
+      MetaMaskOnboarding.isMetaMaskInstalled() || window?.ethereum || window?.web3
 
     return (
       <div>
         {hasMetaMaskOrWeb3Available ? (
           <button
             onClick={() => {
-              setConnecting(true)
-
               activate(injected, undefined, true).catch(error => {
                 // ignore the error if it's a user rejected request
-                if (error instanceof UserRejectedRequestError) {
-                  setConnecting(false)
-                } else {
+                if (!(error instanceof UserRejectedRequestError)) {
                   setError(error)
                 }
               })
             }}
           >
-            {MetaMaskOnboarding.isMetaMaskInstalled()
-              ? 'Connect to MetaMask'
-              : 'Connect to Wallet'}
+            {MetaMaskOnboarding.isMetaMaskInstalled() ? 'Connect to MetaMask' : 'Connect to Wallet'}
           </button>
         ) : (
-          <button onClick={() => onboarding.current?.startOnboarding()}>
-            Install Metamask
-          </button>
+          <button onClick={() => onboarding.current?.startOnboarding()}>Install Metamask</button>
         )}
       </div>
     )

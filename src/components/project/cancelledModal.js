@@ -3,6 +3,36 @@ import { Flex, Text } from 'theme-ui'
 import Modal from 'react-modal'
 import Link from 'next/link'
 
+function CancelledModal(props) {
+  return (
+    <Modal
+      isOpen={props.isOpen}
+      onRequestClose={props.onRequestClose}
+      style={customStyles}
+      contentLabel={props.contentLabel}
+    >
+      <Flex sx={{ p: 3, flexDirection: 'column' }}>
+        <Text variant='headings.h6' color='secondary' sx={{ mb: 2 }}>
+          This project is currently cancelled...
+        </Text>
+
+        <Text variant='headings.h5' color='secondary'>
+          Check out these other{' '}
+          <Link sx={{ textDecoration: 'none', textDecorationLine: 'none' }} href='/projects'>
+            <Text
+              variant='headings.h5'
+              color='primary'
+              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+            >
+              projects!
+            </Text>
+          </Link>
+        </Text>
+      </Flex>
+    </Modal>
+  )
+}
+
 const customStyles = {
   overlay: {
     position: 'fixed',
@@ -25,39 +55,6 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)'
   }
-}
-
-function CancelledModal(props) {
-  return (
-    <Modal
-      isOpen={props.isOpen}
-      onRequestClose={props.onRequestClose}
-      style={customStyles}
-      contentLabel={props.contentLabel}
-    >
-      <Flex sx={{ p: 3, flexDirection: 'column' }}>
-        <Text variant='headings.h6' color='secondary' sx={{ mb: 2 }}>
-          This project is currently cancelled...
-        </Text>
-
-        <Text variant='headings.h5' color='secondary'>
-          Check out these other{' '}
-          <Link
-            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
-            href='/projects'
-          >
-            <Text
-              variant='headings.h5'
-              color='primary'
-              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
-            >
-              projects!
-            </Text>
-          </Link>
-        </Text>
-      </Flex>
-    </Modal>
-  )
 }
 
 export default CancelledModal

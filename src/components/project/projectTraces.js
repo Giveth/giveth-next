@@ -7,85 +7,25 @@ import ProjectCard from '../projectCard'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
-import { Avatar, Box, Input, Flex, Spinner, Text } from 'theme-ui'
-import Jdenticon from 'react-jdenticon'
+import { Box, Input, Flex, Spinner, Text } from 'theme-ui'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import { parseBalance } from '../../util'
 
 dayjs.extend(localizedFormat)
 
-const PagesStyle = styled.div`
-  .inner-pagination {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    list-style-type: none;
-    font-family: ${theme.fonts.body};
-    margin: 0 0 3rem 0;
-    a {
-      text-decoration: none;
-    }
-  }
-  .item-page {
-    padding: 0.4rem 1rem;
-    margin: 0 0.3rem;
-    a {
-      color: ${theme.colors.secondary};
-    }
-  }
-  .active-page {
-    padding: 0.4rem 1rem;
-    margin: 0 0.3rem;
-    text-align: center;
-    background-color: ${theme.colors.secondary};
-    border-radius: 4px;
-    a {
-      color: white;
-    }
-  }
-`
-
-const DonorBox = styled.td`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
-const IconSearch = styled(SearchIcon)`
-  margin-left: -2.5rem;
-`
-const SearchInput = styled(Flex)`
-  align-items: center;
-`
-const FilterInput = styled(Flex)`
-  align-items: center;
-`
-
-const FilterBox = styled(Flex)`
-  width: 100%;
-  justify-content: space-between;
-`
 const fetcher = url => axios.get(url).then(res => res.data)
 
-const ProjectTraces = ({ donations }) => {
+const ProjectTraces = () => {
   const [currentTraces, setCurrentTraces] = React.useState([])
-  const [donationsFromTrace, setDonationsFromTrace] = React.useState([])
   const [limit, setLimit] = React.useState(50)
   const [skip, setSkip] = React.useState(0)
-  const [traces, setTraces] = React.useState([])
-  const [loading, setLoading] = React.useState(true)
   const [isSearching, setIsSearching] = React.useState(false)
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  const { currentProjectView } = React.useContext(ProjectContext)
 
-  const tracesFetch =
-    currentProjectView?.project?.fromTrace &&
-    useSWR(
-      `${process.env.NEXT_PUBLIC_FEATHERS}/traces?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView?.project?._id}`,
-      fetcher
-    )
+  const tracesFetch = useSWR(
+    `${process.env.NEXT_PUBLIC_FEATHERS}/traces?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView.project._id}`,
+    fetcher
+  )
   const tracesData = tracesFetch?.data
 
   const [activeItem, setCurrentItem] = React.useState(1)
@@ -109,12 +49,7 @@ const ProjectTraces = ({ donations }) => {
 
     const some = searchData?.filter(trace => {
       const val = trace?.title
-      return (
-        val
-          ?.toString()
-          .toLowerCase()
-          .indexOf(search.toString().toLowerCase()) === 0
-      )
+      return val?.toString().toLowerCase().indexOf(search.toString().toLowerCase()) === 0
     })
     setCurrentTraces(some)
   }
@@ -156,10 +91,10 @@ const ProjectTraces = ({ donations }) => {
             marginTop: 4
           }}
         >
-          {currentItems?.slice().map((project, index) => {
+          {currentItems?.slice().map(project => {
             if (!project) return null
             return (
-              <Box sx={{ width: '30%', px: 0.5 }}>
+              <Box sx={{ width: '30%', px: 0.5 }} key={project.slug}>
                 <ProjectCard
                   disabled
                   image={project.image || '/images/no-image-available.jpg'}
@@ -211,14 +146,56 @@ const ProjectTraces = ({ donations }) => {
           <Spinner variant='spinner.medium' />
         </Flex>
       ) : tracesData?.data?.length === 0 ? (
-        <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-          No Traces
-        </Text>
+        <Text sx={{ variant: 'text.large', color: 'secondary' }}>No Traces</Text>
       ) : (
         <TableToShow />
       )}
     </>
   )
 }
+
+const PagesStyle = styled.div`
+  .inner-pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    list-style-type: none;
+    font-family: ${theme.fonts.body};
+    margin: 0 0 3rem 0;
+    a {
+      text-decoration: none;
+    }
+  }
+  .item-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    a {
+      color: ${theme.colors.secondary};
+    }
+  }
+  .active-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    text-align: center;
+    background-color: ${theme.colors.secondary};
+    border-radius: 4px;
+    a {
+      color: white;
+    }
+  }
+`
+
+const IconSearch = styled(SearchIcon)`
+  margin-left: -2.5rem;
+`
+
+const SearchInput = styled(Flex)`
+  align-items: center;
+`
+
+const FilterBox = styled(Flex)`
+  width: 100%;
+  justify-content: space-between;
+`
 
 export default ProjectTraces

@@ -11,27 +11,14 @@ import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery
 import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
 
-const Selection = styled(Box)`
-  cursor: pointer;
-  width: 80px;
-  height: 80px;
-  padding: 0;
-  margin: 4% 2% 0 0;
-  border: 2px solid #dfdae8;
-  border-radius: 8px;
-  background-color: ${theme.colors.background};
-`
-
 function ImageSection({ image, register, setValue }) {
   const [displayImage, setDisplayImage] = useState(null)
-  const [fullImage, setFullImage] = useState(null)
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
     onDrop: async acceptedFile => {
       try {
-        setFullImage(acceptedFile)
         setDisplayImage(await toBase64(acceptedFile[0]))
       } catch (error) {
         console.log({ error })
@@ -104,12 +91,8 @@ function ImageSection({ image, register, setValue }) {
               objectFit='cover'
               // sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
-          ) : displayImage?.startsWith('data:') ||
-            displayImage?.startsWith('http') ? (
-            <Image
-              src={displayImage}
-              sx={{ objectFit: 'cover', maxHeight: '150px' }}
-            />
+          ) : displayImage?.startsWith('data:') || displayImage?.startsWith('http') ? (
+            <Image src={displayImage} sx={{ objectFit: 'cover', maxHeight: '150px' }} />
           ) : (
             <Flex sx={{ justifyContent: 'center' }}>
               {displayImage === '1' && (
@@ -128,9 +111,7 @@ function ImageSection({ image, register, setValue }) {
           )}
           <Text sx={{ marginTop: '30px' }}>
             Drag & drop an image here or{' '}
-            <Text sx={{ display: 'inline-block', color: 'primary' }}>
-              Upload from computer
-            </Text>
+            <Text sx={{ display: 'inline-block', color: 'primary' }}>Upload from computer</Text>
           </Text>
           <Text
             sx={{
@@ -159,5 +140,16 @@ function ImageSection({ image, register, setValue }) {
     </>
   )
 }
+
+const Selection = styled(Box)`
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  padding: 0;
+  margin: 4% 2% 0 0;
+  border: 2px solid #dfdae8;
+  border-radius: 8px;
+  background-color: ${theme.colors.background};
+`
 
 export default ImageSection

@@ -1,6 +1,7 @@
+import dynamic from 'next/dynamic'
 import { Flex, Grid } from 'theme-ui'
 import { fetchEntries } from '../src/utils/contentfulPosts'
-import dynamic from 'next/dynamic'
+
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
 const Hero = dynamic(() => import('../src/components/content/SupportHero'))
@@ -11,15 +12,10 @@ const SupportCard = dynamic(() =>
 const SupportPage = ({ support }) => {
   return (
     <Layout>
-      <Seo title='Support' />
+      <Seo title="Support" />
       <Hero />
-      <Flex sx={{ justifyContent: 'center' }}>
-        <Grid
-          mt='2rem'
-          p={[1, 2, 2]}
-          columns={[1, 1, 2]}
-          sx={{ maxWidth: '80vw' }}
-        >
+      <Flex sx={{ justifyContent: "center" }}>
+        <Grid mt="2rem" p={[1, 2, 2]} columns={[1, 1, 2]} sx={{ maxWidth: "80vw" }}>
           <SupportCard data={support} />
         </Grid>
       </Flex>
@@ -27,17 +23,17 @@ const SupportPage = ({ support }) => {
   )
 }
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
   // contentful
   const supportReq = await fetchEntries({
-    contentType: 'contentSupportProvider'
+    contentType: "contentSupportProvider",
   })
-  const support = supportReq?.map(s => s.fields)
+  const support = supportReq?.map((s) => s.fields)
 
   return {
     props: {
-      support: support || {}
-    }
+      support: support || {},
+    },
   }
 }
 
