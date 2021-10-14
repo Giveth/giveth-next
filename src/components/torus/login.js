@@ -1,14 +1,14 @@
-import { useWallet } from '../../contextProvider/WalletProvider';
-import LoginButton from './loginButton';
-import UserDetails from './userDetails';
+import { useWallet } from '../../contextProvider/WalletProvider'
+import LoginButton from './loginButton'
+import UserDetails from './userDetails'
 
 const Login = () => {
-  const { isLoggedIn } = useWallet();
+  const { isLoggedIn } = useWallet()
   if (!isLoggedIn) {
-    return <LoginButton />;
+    return <LoginButton />
   } else {
-    return <UserDetails />;
+    return <UserDetails />
   }
-};
+}
 
-export default Login;
+export default Login

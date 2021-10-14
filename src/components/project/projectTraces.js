@@ -76,9 +76,7 @@ const ProjectTraces = ({ donations }) => {
   const [traces, setTraces] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   const [isSearching, setIsSearching] = React.useState(false)
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  const { currentProjectView, setCurrentProjectView } = React.useContext(ProjectContext)
 
   const tracesFetch =
     currentProjectView?.project?.fromTrace &&
@@ -109,12 +107,7 @@ const ProjectTraces = ({ donations }) => {
 
     const some = searchData?.filter(trace => {
       const val = trace?.title
-      return (
-        val
-          ?.toString()
-          .toLowerCase()
-          .indexOf(search.toString().toLowerCase()) === 0
-      )
+      return val?.toString().toLowerCase().indexOf(search.toString().toLowerCase()) === 0
     })
     setCurrentTraces(some)
   }
@@ -211,9 +204,7 @@ const ProjectTraces = ({ donations }) => {
           <Spinner variant='spinner.medium' />
         </Flex>
       ) : tracesData?.data?.length === 0 ? (
-        <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-          No Traces
-        </Text>
+        <Text sx={{ variant: 'text.large', color: 'secondary' }}>No Traces</Text>
       ) : (
         <TableToShow />
       )}

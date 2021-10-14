@@ -145,7 +145,7 @@ const ProjectsList = props => {
     checkCategory()
   }, [])
 
-  function checkCategory () {
+  function checkCategory() {
     const categoryFromQuery = props?.query?.category
     if (categoryFromQuery) {
       categoryList?.map((i, index) => {
@@ -156,7 +156,7 @@ const ProjectsList = props => {
     }
   }
 
-  function searchProjects (e) {
+  function searchProjects(e) {
     const queryResult = search.search(e.target.value)
     setSearchQuery(e.target.value)
     setSearchResults(queryResult)
@@ -164,7 +164,7 @@ const ProjectsList = props => {
   // handleSubmit = e => {
   //   e.preventDefault()
   // }
-  function rebuildIndex () {
+  function rebuildIndex() {
     const dataToSearch = new JsSearch.Search('id')
     /**
      *  defines a indexing strategy for the data
@@ -190,7 +190,7 @@ const ProjectsList = props => {
     setIsLoading(false)
   }
 
-  function filterCategory (searchedResults) {
+  function filterCategory(searchedResults) {
     const categoryName = categoryList[category].toLowerCase()
 
     return searchedResults.filter(
@@ -199,47 +199,40 @@ const ProjectsList = props => {
   }
 
   const searchedResults = searchQuery === '' ? projects : searchResults
-  const projectsFiltered =
-    category === 0 ? searchedResults : filterCategory(searchedResults)
+  const projectsFiltered = category === 0 ? searchedResults : filterCategory(searchedResults)
 
-  function sum (items, prop) {
+  function sum(items, prop) {
     return items.reduce(function (a, b) {
       return a + b[prop]
     }, 0)
   }
   //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Old Projects']
   const sortFunctions = [
-    function qualityScore (a, b) {
+    function qualityScore(a, b) {
       return b.verified - a.verified || b.qualityScore - a.qualityScore
     },
     a => a,
     a => a,
-    function amountRaised (a, b) {
+    function amountRaised(a, b) {
       console.log({ b, a })
       return b.totalDonations - a.totalDonations
     },
-    function hearts (a, b) {
+    function hearts(a, b) {
       return b.reactions?.length - a.reactions?.length
     },
-    function recentlyAdded (a, b) {
-      return (
-        new Date(b?.creationDate)?.valueOf() -
-        new Date(a?.creationDate)?.valueOf()
-      )
+    function recentlyAdded(a, b) {
+      return new Date(b?.creationDate)?.valueOf() - new Date(a?.creationDate)?.valueOf()
     },
-    function earlyAdded (a, b) {
-      return (
-        new Date(a?.creationDate)?.valueOf() -
-        new Date(b?.creationDate)?.valueOf()
-      )
+    function earlyAdded(a, b) {
+      return new Date(a?.creationDate)?.valueOf() - new Date(b?.creationDate)?.valueOf()
     }
   ]
   const filterFunctions = [
     a => a,
-    function verified (a) {
+    function verified(a) {
       return !!a?.verified
     },
-    function traceable (a) {
+    function traceable(a) {
       // !!a?.fromTrace && console.log({ a })
       return !!a?.fromTrace || a?.IOTraceable
     },
@@ -474,9 +467,7 @@ const ProjectsList = props => {
                             name={project.title}
                             slug={project.slug}
                             donateAddress={project.donateAddress}
-                            image={
-                              project.image || '/images/no-image-available.jpg'
-                            }
+                            image={project.image || '/images/no-image-available.jpg'}
                             raised={project.balance}
                             project={project}
                           />

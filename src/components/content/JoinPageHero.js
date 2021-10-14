@@ -25,10 +25,7 @@ const Hero = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
   return (
     <HeroSection>
-      <HeroText
-        p={['10px', null, '80px']}
-        sx={{ width: ['95%', '50%', '80%'] }}
-      >
+      <HeroText p={['10px', null, '80px']} sx={{ width: ['95%', '50%', '80%'] }}>
         {' '}
         <Heading
           sx={{
@@ -52,20 +49,17 @@ const Hero = () => {
           Building the Future of Giving
         </Text>
         <Text pt={4} sx={{ variant: 'text.default' }}>
-          Giveth is first and foremost a community of givers and changemakers.
-          We are passionate people working together to build a crypto-economic
-          system that can reward giving to good causes. Our project is
-          open-source, decentralized, altruistic, and community-led. Want to get
-          more involved?
+          Giveth is first and foremost a community of givers and changemakers. We are passionate
+          people working together to build a crypto-economic system that can reward giving to good
+          causes. Our project is open-source, decentralized, altruistic, and community-led. Want to
+          get more involved?
           <br />
           <br />
-          Follow our social media and come say hello in a channel below, we look
-          forward to welcoming you!
+          Follow our social media and come say hello in a channel below, we look forward to
+          welcoming you!
         </Text>
       </HeroText>
-      {isMobile ? null : (
-        <HeroImage src='/images/people-highfive.svg' alt='' />
-      )}
+      {isMobile ? null : <HeroImage src='/images/people-highfive.svg' alt='' />}
     </HeroSection>
   )
 }

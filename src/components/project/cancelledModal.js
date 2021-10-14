@@ -42,10 +42,7 @@ function CancelledModal(props) {
 
         <Text variant='headings.h5' color='secondary'>
           Check out these other{' '}
-          <Link
-            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
-            href='/projects'
-          >
+          <Link sx={{ textDecoration: 'none', textDecorationLine: 'none' }} href='/projects'>
             <Text
               variant='headings.h5'
               color='primary'

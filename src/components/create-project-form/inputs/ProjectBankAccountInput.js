@@ -53,15 +53,11 @@ export const ProjectBankAccountInput = ({
           </Text>
         </li>
       </ul>
-      <Text
-        mt={3}
-        sx={{ variant: 'text.paragraph', color: 'secondary', width: '70%' }}
-      >
-        If you don't connect your bank account you will receive donations in
-        crypto to your Giveth account. You an transfer your crypto funds or
-        convert them to FIAT outside the Giveth platform. By connecting a bank
-        account in addition to crypto donations, your project will be accepting
-        donations in FIAT.
+      <Text mt={3} sx={{ variant: 'text.paragraph', color: 'secondary', width: '70%' }}>
+        If you don't connect your bank account you will receive donations in crypto to your Giveth
+        account. You an transfer your crypto funds or convert them to FIAT outside the Giveth
+        platform. By connecting a bank account in addition to crypto donations, your project will be
+        accepting donations in FIAT.
       </Text>
       <Button
         aria-label='Next'

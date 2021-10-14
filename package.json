@@ -15,7 +15,8 @@
     "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js",
     "cy:open:ganache": "ganache-cli -p 8545 && npx cypress open",
     "start-ganache": "ganache-cli -p 8545",
-    "lint": "next lint",
+    "lint": "eslint . --ext .ts --ext .tsx --ext .js --quiet",
+    "lint:fix": "eslint . --ext .ts --ext .tsx --ext .js --fix --quiet",
     "check:unimported": "npx unimported"
   },
   "dependencies": {

@@ -82,12 +82,9 @@ const Contact = ({ data }) => {
         />
       ) : null}
       <Main>
-        <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 4 }}>
-          Contact us
-        </Text>
+        <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 4 }}>Contact us</Text>
         <Text pb={5} sx={{ variant: 'text.large' }}>
-          Have a question, or just want to say hi? Please fill out the form
-          below to contact us.
+          Have a question, or just want to say hi? Please fill out the form below to contact us.
         </Text>
         <FormStyled
           as='form'
@@ -113,12 +110,7 @@ const Contact = ({ data }) => {
             }}
           >
             Your Email address
-            <Input
-              type='email'
-              name='email'
-              id='email'
-              placeholder='Email Address'
-            />
+            <Input type='email' name='email' id='email' placeholder='Email Address' />
           </Label>
           <Label
             sx={{
@@ -126,12 +118,7 @@ const Contact = ({ data }) => {
             }}
           >
             Message
-            <MessageStyled
-              name='message'
-              id='message'
-              placeholder='Message'
-              rows='10'
-            />
+            <MessageStyled name='message' id='message' placeholder='Message' rows='10' />
           </Label>
           <Button
             type='submit'

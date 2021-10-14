@@ -7,7 +7,7 @@ module.exports = withBundleAnalyzer({
   // experimental: {
   //   eslint: true,
   // },
-  async headers () {
+  async headers() {
     return [
       {
         source: '/:all*(svg|jpg|png)',
@@ -24,7 +24,7 @@ module.exports = withBundleAnalyzer({
   typescript: {
     ignoreBuildErrors: true
   },
-  webpack: config => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.md$/,
       use: 'raw-loader'

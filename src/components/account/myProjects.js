@@ -86,9 +86,7 @@ const MyProjects = props => {
         <Link href='/create'>
           <SpecialCard sx={{ cursor: 'pointer', textDecoration: 'none' }}>
             {' '}
-            <DarkClouds
-              style={{ position: 'absolute', top: '41px', right: '34px' }}
-            />
+            <DarkClouds style={{ position: 'absolute', top: '41px', right: '34px' }} />
             <Flex
               sx={{
                 flexDirection: 'column',

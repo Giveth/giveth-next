@@ -127,10 +127,7 @@ const ContentFaq = ({ faqs, isopen }) => {
             )
           case 'application':
             return (
-              <a
-                alt={description ? description['en-US'] : null}
-                href={file['en-US'].url}
-              >
+              <a alt={description ? description['en-US'] : null} href={file['en-US'].url}>
                 {title ? title['en-US'] : file['en-US'].details.fileName}
               </a>
             )
@@ -187,9 +184,7 @@ const ContentFaq = ({ faqs, isopen }) => {
                 }
                 open={true}
               >
-                <LongDescription
-                  sx={{ variant: 'text.default', color: 'colors.secondary' }}
-                >
+                <LongDescription sx={{ variant: 'text.default', color: 'colors.secondary' }}>
                   {documentToReactComponents(edges?.answer.content[0])}
                 </LongDescription>
               </Collapsible>
@@ -209,13 +204,8 @@ const ContentFaq = ({ faqs, isopen }) => {
                 }
                 open={false}
               >
-                <LongDescription
-                  sx={{ variant: 'text.default', color: 'colors.secondary' }}
-                >
-                  {documentToReactComponents(
-                    edges?.answer.content[0],
-                    richTextOptions
-                  )}
+                <LongDescription sx={{ variant: 'text.default', color: 'colors.secondary' }}>
+                  {documentToReactComponents(edges?.answer.content[0], richTextOptions)}
                 </LongDescription>
               </Collapsible>
             )}

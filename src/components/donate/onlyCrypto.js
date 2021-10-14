@@ -1,15 +1,15 @@
-import React, {useCallback, useContext, useEffect, useRef, useState} from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import fetch from 'isomorphic-fetch'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import {Button, Flex, Label, Text} from 'theme-ui'
+import { Button, Flex, Label, Text } from 'theme-ui'
 import QRCode from 'qrcode.react'
-import {BsCaretDownFill} from 'react-icons/bs'
-import {ethers} from "ethers";
+import { BsCaretDownFill } from 'react-icons/bs'
+import { ethers } from 'ethers'
 
 import Modal from '../modal'
-import {checkNetwork, ensRegex, getERC20List, pollEvery} from '../../utils'
+import { checkNetwork, ensRegex, getERC20List, pollEvery } from '../../utils'
 import useComponentVisible from '../../utils/useComponentVisible'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
@@ -18,15 +18,15 @@ import theme from '../../utils/theme-ui'
 import tokenAbi from 'human-standard-token-abi'
 import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 import * as transaction from '../../services/transaction'
-import {saveDonation, saveDonationTransaction} from '../../services/donation'
+import { saveDonation, saveDonationTransaction } from '../../services/donation'
 import InProgressModal from './inProgressModal'
 import UnconfirmedModal from './unconfirmedModal'
-import {Context as Web3Context} from "../../contextProvider/Web3Provider";
-import {PopupContext} from '../../contextProvider/popupProvider'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+import { PopupContext } from '../../contextProvider/popupProvider'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
-import {useWallet} from "../../contextProvider/WalletProvider";
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
@@ -45,21 +45,17 @@ const OnlyCrypto = props => {
   const {
     state: { validProvider, balance, web3, account, isEnabled, networkId, provider },
     actions: { switchWallet, enableProvider, initOnBoard, switchToXdai }
-  } = useContext(Web3Context);
+  } = useContext(Web3Context)
 
   const { sendTransaction, isLoggedIn } = useWallet()
 
   const usePopup = React.useContext(PopupContext)
 
-  const {
-    ref,
-    isComponentVisible,
-    setIsComponentVisible
-  } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
   const { triggerPopup } = usePopup
 
-  const stopPolling = useRef();
+  const stopPolling = useRef()
 
   const { project } = props
   const [selectedToken, setSelectedToken] = useState({})
@@ -91,7 +87,7 @@ const OnlyCrypto = props => {
   useEffect(() => {
     if (networkId) {
       const tokens = getERC20List(networkId).tokens.map(token => {
-        token.value = {symbol: token.symbol}
+        token.value = { symbol: token.symbol }
         token.label = token.symbol
         return token
       })
@@ -129,8 +125,7 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     web3?.eth.getGasPrice().then(wei => {
-      const gwei =
-        isXdai ? 1 : web3.utils.fromWei(wei, 'gwei')
+      const gwei = isXdai ? 1 : web3.utils.fromWei(wei, 'gwei')
       const ethFromGwei = web3.utils.fromWei(wei, 'ether')
       gwei && setGasPrice(Number(gwei))
       ethFromGwei && setGasETHPrice(Number(ethFromGwei) * 21000)
@@ -141,8 +136,7 @@ const OnlyCrypto = props => {
     let img = ''
     const found = iconManifest?.find(i => i.symbol === tokenSymbol?.toUpperCase())
     if (found) {
-      img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() ||
-      'eth'}.png`
+      img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() || 'eth'}.png`
       setIcon(img)
     } else {
       setIcon(`/assets/cryptocurrency-icons/32/color/eth.png`)
@@ -169,20 +163,23 @@ const OnlyCrypto = props => {
         request: async () => {
           try {
             const instance = new web3.eth.Contract(tokenAbi, selectedToken.address)
-            return await instance.methods.balanceOf(account).call() / 10 ** selectedToken.decimals
+            return (await instance.methods.balanceOf(account).call()) / 10 ** selectedToken.decimals
           } catch (e) {
-            return 0;
+            return 0
           }
         },
         onResult: _balance => {
-          if (_balance !== undefined && (!selectedTokenBalance || selectedTokenBalance !== _balance)) {
+          if (
+            _balance !== undefined &&
+            (!selectedTokenBalance || selectedTokenBalance !== _balance)
+          ) {
             setSelectedTokenBalance(_balance)
           }
-        },
+        }
       }),
-      POLL_DELAY_TOKENS,
-    )();
-  }, [account, networkId, tokenSymbol, balance]);
+      POLL_DELAY_TOKENS
+    )()
+  }, [account, networkId, tokenSymbol, balance])
 
   const fetchPrices = (chain, tokenAddress) => {
     return fetch(
@@ -207,8 +204,7 @@ const OnlyCrypto = props => {
   }
 
   const donation = parseFloat(amountTyped)
-  const givethFee =
-    Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
+  const givethFee = Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
 
   const subtotal = donation + (donateToGiveth === true ? givethFee : 0)
 
@@ -348,11 +344,7 @@ const OnlyCrypto = props => {
         {
           onTransactionHash: async transactionHash => {
             // Save initial txn details to db
-            const {
-              donationId,
-              savedDonation,
-              saveDonationErrors
-            } = await saveDonation(
+            const { donationId, savedDonation, saveDonationErrors } = await saveDonation(
               account,
               toAddress,
               transactionHash,
@@ -474,11 +466,7 @@ const OnlyCrypto = props => {
           setShowModal={val => setUnconfirmed(val)}
           txHash={txHash}
         />
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={() => setIsOpen(false)}
-          contentLabel='QR Modal'
-        >
+        <Modal isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)} contentLabel='QR Modal'>
           <Flex
             sx={{
               flexDirection: 'column',
@@ -572,9 +560,7 @@ const OnlyCrypto = props => {
                   color: 'anotherGrey'
                 }}
               >
-                {!isNaN(tokenPrice) && !!tokenSymbol
-                  ? `1 ${tokenSymbol} ≈ ${tokenPrice} USD`
-                  : ''}
+                {!isNaN(tokenPrice) && !!tokenSymbol ? `1 ${tokenSymbol} ≈ ${tokenPrice} USD` : ''}
               </Text>
 
               <Text
@@ -628,10 +614,7 @@ const OnlyCrypto = props => {
                 value={amountTyped}
                 onChange={e => {
                   e.preventDefault()
-                  if (
-                    parseFloat(e.target.value) !== 0 &&
-                    parseFloat(e.target.value) < 0.001
-                  ) {
+                  if (parseFloat(e.target.value) !== 0 && parseFloat(e.target.value) < 0.001) {
                     return
                   }
                   setAmountTyped(e.target.value)
@@ -648,9 +631,7 @@ const OnlyCrypto = props => {
                 }}
               >
                 <Image
-                  src={
-                    icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`
-                  }
+                  src={icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
                   alt={tokenSymbol || ''}
                   onError={ev => {
                     ev.target.src = ETHIcon
@@ -704,15 +685,16 @@ const OnlyCrypto = props => {
           </Label> */}
             {amountTyped && (
               <Summary>
-                {donateToGiveth && (
+                {donateToGiveth &&
                   SummaryRow({
                     title: 'Support Giveth',
                     amount: [
                       `$${GIVETH_DONATION_AMOUNT}`,
-                      `≈ ${selectedToken.symbol} ${(GIVETH_DONATION_AMOUNT / tokenPrice).toFixed(2)}`,
+                      `≈ ${selectedToken.symbol} ${(GIVETH_DONATION_AMOUNT / tokenPrice).toFixed(
+                        2
+                      )}`
                     ]
-                  })
-                )}
+                  })}
 
                 {SummaryRow({
                   title: 'Donation amount',
@@ -723,21 +705,18 @@ const OnlyCrypto = props => {
                   ]
                 })}
 
-                {gasPrice && (
+                {gasPrice &&
                   SummaryRow({
                     title: 'Network fee',
-                    logo: {iconQuestionMark},
+                    logo: { iconQuestionMark },
                     amount: [
-                      `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(
-                        gasPrice
-                      )} GWEI`,
+                      `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(gasPrice)} GWEI`,
                       `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 6
                       })} ${isXdai ? xdaiChain.mainToken : ethereumChain.mainToken}`
                     ]
-                  })
-                )}
+                  })}
               </Summary>
             )}
             {
@@ -771,9 +750,7 @@ const OnlyCrypto = props => {
               // )}
             }
             {!switchTraceable && !isXdai && (
-              <SaveGasMessage
-                sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
-              >
+              <SaveGasMessage sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}>
                 <Image
                   src='/images/icon-streamline-gas.svg'
                   height='18px'
@@ -812,7 +789,7 @@ const OnlyCrypto = props => {
                 alignItems: 'center',
                 textAlign: 'center',
                 justifyContent: 'space-between',
-                my: 3,
+                my: 3
               }}
             >
               {isEnabled && (
@@ -831,7 +808,11 @@ const OnlyCrypto = props => {
               )}
 
               <Flex
-                sx={{ cursor: 'pointer', width: isEnabled ? '25px' : '100%', justifyContent: 'center' }}
+                sx={{
+                  cursor: 'pointer',
+                  width: isEnabled ? '25px' : '100%',
+                  justifyContent: 'center'
+                }}
                 onClick={() => setIsOpen(true)}
               >
                 <SVGLogo />
@@ -857,7 +838,7 @@ const OnlyCrypto = props => {
                 sx={{
                   variant: 'buttons.default',
                   my: 2,
-                  textTransform: 'uppercase',
+                  textTransform: 'uppercase'
                 }}
               >
                 Connect Wallet

@@ -14,7 +14,7 @@ import SEO from '../next-seo.config'
 //   return new Web3Provider(provider)
 // }
 
-function MyApp ({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps)
 
   return (

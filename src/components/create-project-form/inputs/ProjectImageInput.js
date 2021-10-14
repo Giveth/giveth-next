@@ -23,13 +23,7 @@ const Selection = styled(Box)`
   background-color: ${theme.colors.background};
 `
 
-export const ProjectImageInput = ({
-  register,
-  currentValue,
-  setValue,
-  animationStyle,
-  goBack
-}) => {
+export const ProjectImageInput = ({ register, currentValue, setValue, animationStyle, goBack }) => {
   const [image, setImage] = useState()
   const [displayImage, setDisplayImage] = useState(currentValue)
   const { getRootProps, getInputProps } = useDropzone({
@@ -109,17 +103,9 @@ export const ProjectImageInput = ({
             {...register('projectImage')}
           />
           {displayImage === undefined ? (
-            <NextImage
-              src={'/placeholder.png'}
-              width='100%'
-              height='100%'
-              objectFit='cover'
-            />
+            <NextImage src={'/placeholder.png'} width='100%' height='100%' objectFit='cover' />
           ) : displayImage?.startsWith('data:') ? (
-            <Image
-              src={displayImage}
-              sx={{ objectFit: 'cover', maxHeight: '150px' }}
-            />
+            <Image src={displayImage} sx={{ objectFit: 'cover', maxHeight: '150px' }} />
           ) : (
             <Flex sx={{ justifyContent: 'center' }}>
               {displayImage === '1' && (
@@ -139,9 +125,7 @@ export const ProjectImageInput = ({
 
           <Text sx={{ marginTop: '30px' }}>
             Drag & drop an image here or{' '}
-            <Text sx={{ display: 'inline-block', color: 'primary' }}>
-              Upload from computer
-            </Text>
+            <Text sx={{ display: 'inline-block', color: 'primary' }}>Upload from computer</Text>
           </Text>
           <Text
             sx={{

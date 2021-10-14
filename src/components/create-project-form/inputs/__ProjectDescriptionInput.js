@@ -3,16 +3,9 @@ import { Label, Textarea, Button, Text, Flex } from 'theme-ui'
 import { animated } from 'react-spring'
 import { DescriptionInstructionModal } from '../modals'
 
-export const ProjectDescriptionInput = ({
-  register,
-  currentValue,
-  animationStyle,
-  goBack
-}) => {
+export const ProjectDescriptionInput = ({ register, currentValue, animationStyle, goBack }) => {
   const [showInstructions, setShowInstructions] = useState(false)
-  const [characterLength, setCharacterLength] = useState(
-    currentValue ? currentValue.length : 0
-  )
+  const [characterLength, setCharacterLength] = useState(currentValue ? currentValue.length : 0)
   const getLength = e => {
     setCharacterLength(e.target.value.length)
   }

@@ -65,7 +65,7 @@ const SpecialCardContainer = styled(Flex)`
 const Partnerships = ({ friendsLogos, partners }) => {
   const richTextOptions = {
     renderNode: {
-      [BLOCKS.EMBEDDED_ASSET]: node => {
+      [BLOCKS.EMBEDDED_ASSET]: (node) => {
         const { title, description, file } = node.data.target.fields
         const mimeType = file['en-US'].contentType
         const mimeGroup = mimeType.split('/')[0]
@@ -81,10 +81,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
             )
           case 'application':
             return (
-              <a
-                alt={description ? description['en-US'] : null}
-                href={file['en-US'].url}
-              >
+              <a alt={description ? description['en-US'] : null} href={file['en-US'].url}>
                 {title ? title['en-US'] : file['en-US'].details.fileName}
               </a>
             )
@@ -146,7 +143,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
           gap={4}
           sx={{ justifySelf: ['center', 'auto', 'auto'], maxWidth: '800px' }}
         >
-          {friendsLogos?.map(friend => (
+          {friendsLogos?.map((friend) => (
             <ContentItem key={friend.logo.sys.id}>
               <a
                 href={friend.link}
@@ -192,9 +189,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
               alignSelf: 'center'
             }}
           >
-            <Text sx={{ variant: 'headings.h4', color: 'background' }}>
-              Partner with us
-            </Text>
+            <Text sx={{ variant: 'headings.h4', color: 'background' }}>Partner with us</Text>
           </Box>
 
           <Text
@@ -225,16 +220,16 @@ const Partnerships = ({ friendsLogos, partners }) => {
   )
 }
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
   // contentful
   const friendsReq = await fetchEntries({ contentType: 'friendslogos' })
-  const friendsLogos = friendsReq.map(f => f.fields)
+  const friendsLogos = friendsReq.map((f) => f.fields)
 
   const partnershipsReq = await fetchEntries({
     contentType: 'contentPartnerships'
   })
   console.log(JSON.stringify(partnershipsReq))
-  const partnerships = partnershipsReq?.map(p => p.fields)
+  const partnerships = partnershipsReq?.map((p) => p.fields)
 
   return {
     props: {

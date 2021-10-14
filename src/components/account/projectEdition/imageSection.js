@@ -104,12 +104,8 @@ function ImageSection({ image, register, setValue }) {
               objectFit='cover'
               // sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
-          ) : displayImage?.startsWith('data:') ||
-            displayImage?.startsWith('http') ? (
-            <Image
-              src={displayImage}
-              sx={{ objectFit: 'cover', maxHeight: '150px' }}
-            />
+          ) : displayImage?.startsWith('data:') || displayImage?.startsWith('http') ? (
+            <Image src={displayImage} sx={{ objectFit: 'cover', maxHeight: '150px' }} />
           ) : (
             <Flex sx={{ justifyContent: 'center' }}>
               {displayImage === '1' && (
@@ -128,9 +124,7 @@ function ImageSection({ image, register, setValue }) {
           )}
           <Text sx={{ marginTop: '30px' }}>
             Drag & drop an image here or{' '}
-            <Text sx={{ display: 'inline-block', color: 'primary' }}>
-              Upload from computer
-            </Text>
+            <Text sx={{ display: 'inline-block', color: 'primary' }}>Upload from computer</Text>
           </Text>
           <Text
             sx={{

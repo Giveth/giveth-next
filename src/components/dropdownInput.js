@@ -37,11 +37,7 @@ const DropItem = styled.div`
 `
 
 const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
-  const {
-    ref,
-    isComponentVisible,
-    setIsComponentVisible
-  } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
   return (
     <Flex sx={{ width: '100%', flexDirection: 'column' }}>
@@ -93,9 +89,7 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
 
         {isComponentVisible && (
           <DropdownContent id='dropdownContent'>
-            <DropList
-              onMouseLeave={() => setIsComponentVisible(!isComponentVisible)}
-            >
+            <DropList onMouseLeave={() => setIsComponentVisible(!isComponentVisible)}>
               {options?.map((i, index) => {
                 return (
                   <DropItem

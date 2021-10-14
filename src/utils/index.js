@@ -8,28 +8,28 @@ const xDaiChainId = 100
 const appNetworkId = process.env.NEXT_PUBLIC_NETWORK_ID
 
 export function pollEvery(fn, delay) {
-  let timer = -1;
-  let stop = false;
+  let timer = -1
+  let stop = false
   const poll = async (request, onResult) => {
-    const result = await request();
+    const result = await request()
     if (!stop) {
-      onResult(result);
-      timer = setTimeout(poll.bind(null, request, onResult), delay);
+      onResult(result)
+      timer = setTimeout(poll.bind(null, request, onResult), delay)
     }
-  };
+  }
   return (...params) => {
-    const { request, onResult } = fn(...params);
-    poll(request, onResult).then();
+    const { request, onResult } = fn(...params)
+    poll(request, onResult).then()
     return () => {
-      stop = true;
-      clearTimeout(timer);
-    };
-  };
+      stop = true
+      clearTimeout(timer)
+    }
+  }
 }
 
 export function checkNetwork(networkId) {
   const isXdai = networkId === xDaiChainId
-  return networkId?.toString() === appNetworkId || isXdai;
+  return networkId?.toString() === appNetworkId || isXdai
 }
 
 export function titleCase(str) {
@@ -73,15 +73,10 @@ export const getImageFile = async (base64Data, projectName) => {
   return imageFile
 }
 
-export async function getEtherscanTxs(
-  address,
-  apolloClient = false,
-  isDonor = false
-) {
+export async function getEtherscanTxs(address, apolloClient = false, isDonor = false) {
   try {
     const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
-    const api =
-      process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
+    const api = process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
     const balance = await fetch(
       `https://${api}.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
     )

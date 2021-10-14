@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Avatar,
-  Heading,
-  Badge,
-  Box,
-  Button,
-  Card,
-  IconButton,
-  Input,
-  Flex,
-  Text
-} from 'theme-ui'
+import { Avatar, Heading, Badge, Box, Button, Card, IconButton, Input, Flex, Text } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -150,7 +139,8 @@ const TimelineCard = props => {
 
   const editUpdate = async () => {
     try {
-      if (editInput === props?.content?.content && editTitle === props?.content?.title) return setOpenEdit(false)
+      if (editInput === props?.content?.content && editTitle === props?.content?.title)
+        return setOpenEdit(false)
       await client?.mutate({
         mutation: EDIT_PROJECT_UPDATE,
         variables: {
@@ -336,9 +326,7 @@ const TimelineCard = props => {
     return (
       <Box style={{ width: '100%' }}>
         <SpecialCardContainer>
-          <DarkClouds
-            style={{ position: 'absolute', top: '41px', left: '42px' }}
-          />
+          <DarkClouds style={{ position: 'absolute', top: '41px', left: '42px' }} />
           <Box
             sx={{
               width: '60%',
@@ -396,9 +384,7 @@ const TimelineCard = props => {
           key={props.listingId + '_heading'}
         >
           <Top>
-            <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
-              Update # {number}
-            </Text>
+            <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>Update # {number}</Text>
           </Top>
           {!openEdit && content?.title}
         </Heading>
@@ -507,9 +493,7 @@ const TimelineCard = props => {
                   }
                 }}
               >
-                <Text variant='text.bold'>
-                  {openEdit ? 'CANCEL' : 'DELETE'}
-                </Text>
+                <Text variant='text.bold'>{openEdit ? 'CANCEL' : 'DELETE'}</Text>
               </Button>
               <Button
                 sx={{

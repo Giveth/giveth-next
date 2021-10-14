@@ -5,9 +5,7 @@ import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'
 import MyProjects from './myProjects'
 const MyAccount = React.lazy(() => import('../../components/account/myAccount'))
-const MyDonations = React.lazy(() =>
-  import('../../components/account/myDonations')
-)
+const MyDonations = React.lazy(() => import('../../components/account/myDonations'))
 const UserSpan = styled.span`
   position: relative;
   display: grid;

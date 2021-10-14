@@ -8,16 +8,14 @@ const Seo = dynamic(() => import('../../src/components/seo'))
 const Layout = dynamic(() => import('../../src/components/layout'))
 const DonationView = dynamic(() => import('../../src/components/donate'))
 
-const Donate = props => {
+const Donate = (props) => {
   return props.error ? (
     <NotFoundPage />
   ) : (
     <Layout asDialog>
       <Seo
         title={
-          props?.project?.title
-            ? `Donate to ${props?.project?.title}`
-            : 'Donate to this project!'
+          props?.project?.title ? `Donate to ${props?.project?.title}` : 'Donate to this project!'
         }
         image={props?.project?.image}
       />
@@ -26,7 +24,7 @@ const Donate = props => {
   )
 }
 
-export async function getServerSideProps (props) {
+export async function getServerSideProps(props) {
   const { query } = props
   const slug = decodeURI(query?.slug).replace(/\s/g, '')
 
@@ -34,7 +32,11 @@ export async function getServerSideProps (props) {
     errors = null
   try {
     // Fetch Project
-    const { loading, error, data: fetchProject } = await client.query({
+    const {
+      loading,
+      error,
+      data: fetchProject
+    } = await client.query({
       query: FETCH_PROJECT_BY_SLUG,
       variables: { slug: slug },
       fetchPolicy: 'network-only'

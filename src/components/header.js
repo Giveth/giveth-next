@@ -204,9 +204,7 @@ const siteId = process.env.NEXT_PUBLIC_SITE_ID
 const projectSearch = process.env.PROJECT_SEARCH
 
 const CategoriesList = () => {
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  const { currentProjectView, setCurrentProjectView } = React.useContext(ProjectContext)
   const categories = currentProjectView?.globalCategories
 
   if (!categories || categories?.length == 0) return null
@@ -256,7 +254,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const pathname = router.pathname?.split('/')[1]
 
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -267,7 +265,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -283,9 +281,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const MainLogo = () => {
     return (
       <Link href='/'>
-        <LogoSpan
-          className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
-        >
+        <LogoSpan className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}>
           <Logo />
           {siteId === 'giveth' && !isXsWindow ? (
             <Text
@@ -315,9 +311,7 @@ const Header = ({ siteTitle, isHomePage }) => {
           marginBottom: '1.45rem'
         }}
       >
-        <HeaderSpan
-          className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
-        >
+        <HeaderSpan className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}>
           <Decorator>
             <img
               src={'/images/decorator-cloud1.svg'}
@@ -351,9 +345,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                 <NavLink
                   style={{
                     display: ['none', 'block', 'block'],
-                    color: isHomePage
-                      ? theme.colors.primary
-                      : theme.colors.secondary
+                    color: isHomePage ? theme.colors.primary : theme.colors.secondary
                   }}
                 >
                   Home
@@ -364,10 +356,7 @@ const Header = ({ siteTitle, isHomePage }) => {
               <Link href='/projects' passHref>
                 <NavLink
                   style={{
-                    color:
-                      pathname === 'projects'
-                        ? theme.colors.primary
-                        : theme.colors.secondary
+                    color: pathname === 'projects' ? theme.colors.primary : theme.colors.secondary
                   }}
                 >
                   Projects
@@ -382,10 +371,7 @@ const Header = ({ siteTitle, isHomePage }) => {
             <Link href='/join' passHref>
               <NavLink
                 style={{
-                  color:
-                    pathname === 'join'
-                      ? theme.colors.primary
-                      : theme.colors.secondary
+                  color: pathname === 'join' ? theme.colors.primary : theme.colors.secondary
                 }}
               >
                 Join{' '}
@@ -408,11 +394,7 @@ const Header = ({ siteTitle, isHomePage }) => {
               </Flex>
             )}
             {pathname !== 'projects' && (
-              <img
-                style={{ margin: '0 10px' }}
-                src={'/images/icon-vertical-line.svg'}
-                alt=''
-              />
+              <img style={{ margin: '0 10px' }} src={'/images/icon-vertical-line.svg'} alt='' />
             )}
             <Login />
           </UserSpan>

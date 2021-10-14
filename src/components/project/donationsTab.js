@@ -42,11 +42,7 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
   }
 
   if (donations?.length === 0)
-    return (
-      <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-        No donations yet :(
-      </Text>
-    )
+    return <Text sx={{ variant: 'text.large', color: 'secondary' }}>No donations yet :(</Text>
   return (
     <div>
       {!project?.fromTrace && (
@@ -57,9 +53,7 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
                 flexDirection: 'column'
               }}
             >
-              <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-                TOTAL FUNDS RAISED:
-              </Text>
+              <Text sx={{ variant: 'text.large', color: 'secondary' }}>TOTAL FUNDS RAISED:</Text>
               <Flex
                 sx={{
                   flexDirection: 'row',
@@ -88,9 +82,7 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
                     color: 'secondary'
                   }}
                 >
-                  {totalETHDonations
-                    ? `${parseFloat(totalETHDonations).toFixed(4)} ETH`
-                    : null}
+                  {totalETHDonations ? `${parseFloat(totalETHDonations).toFixed(4)} ETH` : null}
                 </Text>
               </Flex>
             </Flex>
@@ -110,9 +102,7 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
                   mt: -2
                 }}
                 onClick={() =>
-                  window.open(
-                    `https://etherscan.io/address/${project?.walletAddress}`
-                  )
+                  window.open(`https://etherscan.io/address/${project?.walletAddress}`)
                 }
               >
                 {project?.walletAddress}

@@ -30,14 +30,14 @@ const VIDEO_ATTRIBUTES = ['height', 'width']
 
 // provides a custom div wrapper around the default Video blot
 class Video extends BlockEmbed {
-  static create (value) {
+  static create(value) {
     const iframeNode = QuillVideo.create(value)
     const node = super.create()
     node.appendChild(iframeNode)
     return node
   }
 
-  static formats (domNode) {
+  static formats(domNode) {
     if (typeof window === 'undefined') {
       return
     }
@@ -50,14 +50,14 @@ class Video extends BlockEmbed {
     }, {})
   }
 
-  static value (domNode) {
+  static value(domNode) {
     if (typeof window === 'undefined') {
       return
     }
     return domNode?.getElementsByTagName('iframe')[0]?.getAttribute('src')
   }
 
-  format (name, value) {
+  format(name, value) {
     if (VIDEO_ATTRIBUTES.indexOf(name) > -1) {
       if (value) {
         this.domNode.setAttribute(name, value)
@@ -82,12 +82,7 @@ const modules = projectId => {
       [{ header: '1' }, { header: '2' }],
       [{ size: [] }],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [
-        { list: 'ordered' },
-        { list: 'bullet' },
-        { indent: '-1' },
-        { indent: '+1' }
-      ],
+      [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
       ['link', 'image', 'video'],
       ['emoji'],
       ['clean']
@@ -117,17 +112,12 @@ const modules = projectId => {
               }
             }
           })
-          const cachedImgs = JSON.parse(
-            window?.localStorage.getItem('cached-uploaded-imgs')
-          )
+          const cachedImgs = JSON.parse(window?.localStorage.getItem('cached-uploaded-imgs'))
           const cachedImgsArray = cachedImgs ? cachedImgs : []
           cachedImgsArray.push(imageUploaded?.uploadImage?.projectImageId)
           // TODO: THIS NEEDS TO HAPPEN FOR UPDATE ONLY
           if (window.location.pathname.split('/')[1] === 'create') {
-            window?.localStorage.setItem(
-              'cached-uploaded-imgs',
-              JSON.stringify(cachedImgsArray)
-            )
+            window?.localStorage.setItem('cached-uploaded-imgs', JSON.stringify(cachedImgsArray))
           }
 
           return imageUploaded?.uploadImage?.url
@@ -159,7 +149,7 @@ const formats = [
   'emoji'
 ]
 
-function TextRichWithQuill (props) {
+function TextRichWithQuill(props) {
   const [content, setContent] = useState('')
   const [mod, setMod] = useState(null)
 

@@ -1,10 +1,6 @@
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { client } from '../../apollo/client'
-import {
-  getAddressFromENS,
-  isWalletAddressValid,
-  isAddressENS
-} from '../../services/wallet'
+import { getAddressFromENS, isWalletAddressValid, isAddressENS } from '../../services/wallet'
 import Web3 from 'web3'
 import { ethers } from 'ethers'
 

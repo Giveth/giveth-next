@@ -11,12 +11,8 @@ const Hero = dynamic(() => import('../src/components/home/HeroSection'))
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
 const InfoSection = dynamic(() => import('../src/components/home/InfoSection'))
-const HomeTopProjects = dynamic(() =>
-  import('../src/components/home/HomeTopProjects')
-)
-const UpdatesSection = dynamic(() =>
-  import('../src/components/home/UpdatesSection')
-)
+const HomeTopProjects = dynamic(() => import('../src/components/home/HomeTopProjects'))
+const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSection'))
 
 // import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
 // import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
@@ -41,14 +37,7 @@ const UpdatesSection = dynamic(() =>
 
 // ceramic.did = did
 
-const IndexContent = ({
-  hideInfo,
-  content,
-  topProjects,
-  categories,
-  allProject,
-  isWelcome
-}) => {
+const IndexContent = ({ hideInfo, content, topProjects, categories, allProject, isWelcome }) => {
   const popup = React.useContext(PopupContext)
   // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
   useEffect(() => {
@@ -72,12 +61,10 @@ const IndexContent = ({
   )
 }
 
-const IndexPage = props => {
+const IndexPage = (props) => {
   const { data, query, content, mediumPosts, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
-  const hideInfo = process.env.HIDE_INFO_SECTION
-    ? process.env.HIDE_INFO_SECTION
-    : false
+  const hideInfo = process.env.HIDE_INFO_SECTION ? process.env.HIDE_INFO_SECTION : false
 
   // const ceramicTest = async () => {
   //   try {
@@ -130,7 +117,7 @@ const IndexPage = props => {
   )
 }
 
-export async function getServerSideProps (props) {
+export async function getServerSideProps(props) {
   const { data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
     variables: { limit: 20 }
@@ -141,7 +128,7 @@ export async function getServerSideProps (props) {
   return {
     props: {
       topProjects: response?.projects
-        ?.filter(i => !i?.verified)
+        ?.filter((i) => !i?.verified)
         ?.sort((a, b) => {
           if (a?.qualityScore > b?.qualityScore) return -1
         })

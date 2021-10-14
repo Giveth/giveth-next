@@ -88,11 +88,7 @@ function LoginModal(props) {
     }
   }
   return (
-    <Modal
-      isOpen={props?.isOpen}
-      onRequestClose={() => props?.close()}
-      contentLabel='Login Modal'
-    >
+    <Modal isOpen={props?.isOpen} onRequestClose={() => props?.close()} contentLabel='Login Modal'>
       <Flex
         sx={{
           flexDirection: 'column',
@@ -126,12 +122,8 @@ function LoginModal(props) {
             py: 4
           }}
         >
-          <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>
-            Welcome to Giveth
-          </Text>
-          <Text
-            sx={{ variant: 'text.large', color: 'secondary', mt: 2, mb: 4 }}
-          >
+          <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>Welcome to Giveth</Text>
+          <Text sx={{ variant: 'text.large', color: 'secondary', mt: 2, mb: 4 }}>
             Please sign in to your account and start using Giveth.
           </Text>
 
@@ -179,10 +171,7 @@ function LoginModal(props) {
                 key={index}
                 icon={i.logo}
                 action={() =>
-                  initLogin(
-                    'torus',
-                    i.name === 'email' || i.name === 'twitter' ? null : i.name
-                  )
+                  initLogin('torus', i.name === 'email' || i.name === 'twitter' ? null : i.name)
                 }
               />
             ))}
@@ -193,9 +182,7 @@ function LoginModal(props) {
             height='32px'
             objectFit='contain'
           />
-          <Text
-            sx={{ variant: 'text.default', color: 'secondary', mt: 5, mb: 2 }}
-          >
+          <Text sx={{ variant: 'text.default', color: 'secondary', mt: 5, mb: 2 }}>
             Already have a crypto wallet?
           </Text>
           <LongBtn onClick={() => initLogin('metamask')}>

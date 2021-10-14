@@ -46,7 +46,7 @@ const EditButtonSection = ({ formData, currentStep, setStep }) => {
   return (
     <Flex
       sx={{
-        mt: '29px',
+        mt: '29px'
         // justifyContent: 'space-between',
       }}
       columns={[2, '3fr 1fr']}
@@ -72,12 +72,7 @@ const EditButtonSection = ({ formData, currentStep, setStep }) => {
             wasSet={formData.projectImpactLocation}
             sx={{ ml: '7%' }}
           />
-          <EditBtn
-            step={4}
-            title={'Image'}
-            wasSet={formData.ProjectImageInput}
-            sx={{ ml: '7%' }}
-          />
+          <EditBtn step={4} title={'Image'} wasSet={formData.ProjectImageInput} sx={{ ml: '7%' }} />
           <EditBtn
             step={5}
             title={'ETH Address'}

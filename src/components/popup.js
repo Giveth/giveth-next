@@ -47,13 +47,8 @@ function ChangeNetworkPopup({ close }) {
         <Text color='secondary' variant='headings.h4' sx={{ mx: 4, pt: 4 }}>
           Please change the Network
         </Text>
-        <Text
-          color='secondary'
-          variant='text.default'
-          sx={{ mx: 4, width: '50%' }}
-        >
-          Please select the Ethereum Mainnet or xDAI network in your wallet and
-          try again
+        <Text color='secondary' variant='text.default' sx={{ mx: 4, width: '50%' }}>
+          Please select the Ethereum Mainnet or xDAI network in your wallet and try again
         </Text>
       </Flex>
       <Button
@@ -88,9 +83,7 @@ function WelcomeLoggedOutPopup(props) {
   if (isLoggedIn) {
     return null
   }
-  return (
-    <LoginModal isOpen={value} close={() => clearPopup(false)} login={login} />
-  )
+  return <LoginModal isOpen={value} close={() => clearPopup(false)} login={login} />
 }
 
 function IncompleteProfilePopup({ close }) {
@@ -119,8 +112,8 @@ function IncompleteProfilePopup({ close }) {
           width: '60%'
         }}
       >
-        Please finish setting up your public profile with at least your name and
-        e-mail before proceeding
+        Please finish setting up your public profile with at least your name and e-mail before
+        proceeding
       </Text>
       <Link href='/account'>
         <a>
@@ -194,9 +187,7 @@ function InsufficientFundsPopup({ close }) {
             width: '110px'
           }}
         />
-        <Text sx={{ variant: 'headings.h4', color: 'secondary', py: 2 }}>
-          Insufficient Funds
-        </Text>
+        <Text sx={{ variant: 'headings.h4', color: 'secondary', py: 2 }}>Insufficient Funds</Text>
         <Text sx={{ variant: 'text.default', color: 'secondary' }}>
           Please add funds to your wallet or switch to a different wallet.
         </Text>
@@ -241,9 +232,7 @@ function SharePopup() {
         textAlign: 'center'
       }}
     >
-      <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-        Share this project!
-      </Text>
+      <Text sx={{ variant: 'text.large', color: 'secondary' }}>Share this project!</Text>
       <Flex
         sx={{
           pt: 4,
@@ -265,9 +254,7 @@ function SharePopup() {
       </Flex>
       <br />
       <CopyToClipboard size='18px' text={url}>
-        <Text sx={{ variant: 'text.medium', color: 'bodyLight' }}>
-          click to copy url
-        </Text>
+        <Text sx={{ variant: 'text.medium', color: 'bodyLight' }}>click to copy url</Text>
       </CopyToClipboard>
     </Flex>
   )
@@ -286,12 +273,7 @@ function Popup() {
       case 'WrongNetwork':
         return <ChangeNetworkPopup close={clearPopup} />
       case 'share':
-        return (
-          <SharePopup
-            title={value?.extra?.title}
-            description={value?.extra?.description}
-          />
-        )
+        return <SharePopup title={value?.extra?.title} description={value?.extra?.description} />
       default:
         return null
     }
