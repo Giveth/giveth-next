@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { Image, Text } from 'theme-ui'
 import { FiExternalLink } from 'react-icons/fi'
-import { useMediaQuery } from 'react-responsive'
+import { useMediaQuery } from 'react-responsive';
 
 import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
@@ -78,9 +78,21 @@ const StyledButton = styled.a`
 const UserDetails = () => {
   const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
 
-  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
+  const {
+    ref,
+    isComponentVisible,
+    setIsComponentVisible
+  } = useComponentVisible(false)
 
-  const { isLoggedIn, logout, user, balance, currentNetwork, currentChainId, wallet } = useWallet()
+  const {
+    isLoggedIn,
+    logout,
+    user,
+    balance,
+    currentNetwork,
+    currentChainId,
+    wallet
+  } = useWallet()
   const address = isLoggedIn ? user.getWalletAddress() : '?'
   const truncAddress = `${address.substring(0, 10)}...${address.substring(
     address.length - 4,
@@ -172,10 +184,14 @@ const UserDetails = () => {
       </StyledButton>
       {isComponentVisible ? (
         <AccountDetails>
-          <MenuTitle sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}>
+          <MenuTitle
+            sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}
+          >
             Wallet Address
           </MenuTitle>
-          <MenuTitle sx={{ variant: 'text.medium', color: 'secondary' }}>{truncAddress}</MenuTitle>
+          <MenuTitle sx={{ variant: 'text.medium', color: 'secondary' }}>
+            {truncAddress}
+          </MenuTitle>
           {balance ? (
             <MenuTitle
               sx={{
@@ -194,11 +210,20 @@ const UserDetails = () => {
                 : ''}
             </MenuTitle>
           ) : null}
-          <MenuTitle sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}>
-            {wallet ? (wallet.isTorus ? 'Torus Network' : 'Metamask Network') : 'No network'}
+          <MenuTitle
+            sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}
+          >
+            {wallet
+              ? wallet.isTorus
+                ? 'Torus Network'
+                : 'Metamask Network'
+              : 'No network'}
           </MenuTitle>
           {parseNetwork()}
-          <Link href='/account' sx={{ textDecoration: 'none', textDecorationLine: 'none' }}>
+          <Link
+            href='/account'
+            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+          >
             <MenuItem
               sx={{
                 variant: 'text.medium'
@@ -209,7 +234,10 @@ const UserDetails = () => {
             </MenuItem>
           </Link>
           <a
-            href={formatEtherscanLink('Account', [currentChainId, user.getWalletAddress()])}
+            href={formatEtherscanLink('Account', [
+              currentChainId,
+              user.getWalletAddress()
+            ])}
             target='_blank'
             rel='noopener noreferrer'
             sx={{ textDecoration: 'none' }}
@@ -236,7 +264,10 @@ const UserDetails = () => {
               My Projects
             </MenuItem>
           </Link>
-          <Link href='/create' sx={{ textDecoration: 'none', textDecorationLine: 'none' }}>
+          <Link
+            href='/create'
+            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+          >
             <MenuItem
               sx={{
                 variant: 'text.medium'
@@ -273,7 +304,11 @@ const UserDetails = () => {
               Report a bug
             </MenuItem>
           </MenuLink>
-          <MenuLink href='https://discord.gg/JYNBDuFUpG' target='_blank' rel='noopener noreferrer'>
+          <MenuLink
+            href='https://discord.gg/JYNBDuFUpG'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
             <MenuItem
               sx={{
                 variant: 'text.medium'

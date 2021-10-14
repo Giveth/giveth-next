@@ -90,13 +90,18 @@ const CreateProject = props => {
         impactLocation: values.projectImpactLocation,
         categories: projectCategories,
         organisationId,
-        walletAddress: Web3.utils.toChecksumAddress(values.projectWalletAddress),
+        walletAddress: Web3.utils.toChecksumAddress(
+          values.projectWalletAddress
+        ),
         projectImage: values.pro
       }
       if (values?.projectImage?.length === 1) {
         projectData.imageStatic = values.projectImage
       } else if (values.projectImage) {
-        const imageFile = await getImageFile(values.projectImage, values.projectName)
+        const imageFile = await getImageFile(
+          values.projectImage,
+          values.projectName
+        )
         projectData.imageUpload = imageFile
       }
       try {
@@ -119,7 +124,9 @@ const CreateProject = props => {
           logout(
             setErrorMessage(
               <>
-                <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
+                <Text
+                  sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}
+                >
                   {`We're so sorry but ${error.message}`}
                 </Text>
                 <Text sx={{ variant: 'text.default' }}>
@@ -143,10 +150,10 @@ const CreateProject = props => {
     }
   }
 
-  function newProject() {
+  function newProject () {
     setAddedProject(null)
   }
-  function AfterCreation() {
+  function AfterCreation () {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -262,7 +269,9 @@ const CreateProject = props => {
             <Text
               onClick={() => (
                 typeof window !== 'undefined' &&
-                  window?.open('https://github.com/Giveth/giveth-2/issues/new/choose'),
+                  window?.open(
+                    'https://github.com/Giveth/giveth-2/issues/new/choose'
+                  ),
                 '_blank'
               )}
               sx={{
@@ -281,7 +290,7 @@ const CreateProject = props => {
     )
   }
 
-  function ProjectForm() {
+  function ProjectForm () {
     if (!projectAdded && !projectId) {
       return (
         <>

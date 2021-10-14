@@ -22,7 +22,8 @@ class UncheckedJsonRpcSigner extends ethers.Signer {
       chainId: null,
       confirmations: 0,
       from: null,
-      wait: confirmations => this.provider.waitForTransaction(hash, confirmations)
+      wait: confirmations =>
+        this.provider.waitForTransaction(hash, confirmations)
     }))
   }
 }

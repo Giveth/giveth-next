@@ -61,12 +61,17 @@ const AccountNav = props => {
       <Box>
         {options.map((i, index) => {
           return (
-            <Link key={index} style={{ textDecoration: 'none', cursor: 'pointer' }} href=''>
+            <Link
+              key={index}
+              style={{ textDecoration: 'none', cursor: 'pointer' }}
+              href=''
+            >
               <Text
                 sx={{
                   mb: '8px',
                   color:
-                    query?.view === i.route || (!query?.view && i.route === 'account')
+                    query?.view === i.route ||
+                    (!query?.view && i.route === 'account')
                       ? 'primary'
                       : 'secondary'
                 }}

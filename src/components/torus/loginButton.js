@@ -51,7 +51,10 @@ const LoginButton = props => {
         // </AccountDetails>
       }
       {isComponentVisible && wallets ? (
-        <LoginModal close={() => setIsComponentVisible(false)} isOpen={isComponentVisible} />
+        <LoginModal
+          close={() => setIsComponentVisible(false)}
+          isOpen={isComponentVisible}
+        />
       ) : null}
     </div>
   )

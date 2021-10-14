@@ -8,7 +8,7 @@ const Seo = dynamic(() => import('../src/components/seo'))
 
 const Main = styled(Box)``
 
-const About = (props) => {
+const About = props => {
   // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <>
@@ -20,7 +20,7 @@ const About = (props) => {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps () {
   // contentful
   const teamReq = await fetchEntries({
     contentType: 'contentTeam'
@@ -29,8 +29,8 @@ export async function getServerSideProps() {
     contentType: 'contentAbout'
   })
 
-  const team = teamReq?.map((f) => f.fields)
-  const about = aboutReq?.map((f) => f.fields)
+  const team = teamReq?.map(f => f.fields)
+  const about = aboutReq?.map(f => f.fields)
   console.log({ team: JSON.stringify(team) })
   return {
     props: {

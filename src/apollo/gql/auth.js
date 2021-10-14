@@ -74,7 +74,14 @@ const GET_USER_BY_ADDRESS = gql`
 
 const DO_REGISTER = gql`
   mutation DoRegister($name: String!, $email: String!, $password: String!) {
-    register(data: { firstName: $name, lastName: "", email: $email, password: $password }) {
+    register(
+      data: {
+        firstName: $name
+        lastName: ""
+        email: $email
+        password: $password
+      }
+    ) {
       firstName
       email
       lastName
@@ -102,4 +109,11 @@ const UPDATE_USER = gql`
   }
 `
 
-export { DO_LOGIN, DO_REGISTER, GET_USER, UPDATE_USER, GET_USER_BY_ADDRESS, VALIDATE_TOKEN }
+export {
+  DO_LOGIN,
+  DO_REGISTER,
+  GET_USER,
+  UPDATE_USER,
+  GET_USER_BY_ADDRESS,
+  VALIDATE_TOKEN
+}

@@ -111,7 +111,11 @@ export const wallets = {
     },
     login: async verifier => {
       console.log(
-        ` typeof wallets.torus.torus : ${JSON.stringify(typeof wallets.torus.torus, null, 2)}`
+        ` typeof wallets.torus.torus : ${JSON.stringify(
+          typeof wallets.torus.torus,
+          null,
+          2
+        )}`
       )
       await wallets.torus.torus.login({
         verifier

@@ -2,12 +2,15 @@ import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import ErrorPage from '../src/components/errorPage'
 import { client } from '../src/apollo/client'
-import ProjectsList, { OrderByDirection, OrderByField } from '../src/components/ProjectsList'
+import ProjectsList, {
+  OrderByDirection,
+  OrderByField
+} from '../src/components/ProjectsList'
 import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from '../src/apollo/gql/projects'
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
 
-const Project = (props) => {
+const Project = props => {
   const { projects, traceProjects, categories, totalCount, errors } = props
   const [limit, setLimit] = useState(12)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
@@ -23,7 +26,7 @@ const Project = (props) => {
           categories={categories}
           totalCount={totalCount}
           maxLimit={limit}
-          selectOrderByField={(orderByField) => {
+          selectOrderByField={orderByField => {
             setLimit(2)
             setOrderByField(orderByField)
           }}
@@ -35,22 +38,20 @@ const Project = (props) => {
   )
 }
 
-export async function getServerSideProps(props) {
+export async function getServerSideProps (props) {
   // Fetch Project
   let projects,
     traceProjects,
     categories = null
   let errors = null
   try {
-    const {
-      loading,
-      error,
-      data: fetchProject
-    } = await client.query({
+    const { loading, error, data: fetchProject } = await client.query({
       query: FETCH_ALL_PROJECTS,
       fetchPolicy: 'no-cache'
     })
-    projects = Array.from(fetchProject?.projects).filter((i) => i?.status?.id === '5')
+    projects = Array.from(fetchProject?.projects).filter(
+      i => i?.status?.id === '5'
+    )
 
     const { data: categoriesData } = await client.query({
       query: GET_CATEGORIES,
@@ -58,7 +59,7 @@ export async function getServerSideProps(props) {
     })
     categories = categoriesData?.categories
 
-    if (process.env.NEXT_PUBLIC_FEATHERS) {
+    if (!!process.env.NEXT_PUBLIC_FEATHERS) {
       // only fetch if there's a route
       // https://feathers.beta.giveth.io/campaigns?verified=true
       traceProjects = await fetch(
@@ -71,9 +72,11 @@ export async function getServerSideProps(props) {
       })
     }
     //Check io2trace projects
-    traceProjects = traceProjects?.data?.filter((i) => {
-      if (i?.givethIoProjectId) {
-        const foundIndex = projects?.findIndex((x) => x.id == i?.givethIoProjectId)
+    traceProjects = traceProjects?.data?.filter(i => {
+      if (!!i?.givethIoProjectId) {
+        const foundIndex = projects?.findIndex(
+          x => x.id == i?.givethIoProjectId
+        )
         if (foundIndex) {
           projects[foundIndex] = { ...projects[foundIndex], IOTraceable: true }
         }
@@ -89,7 +92,7 @@ export async function getServerSideProps(props) {
   return {
     props: {
       projects: projects || [],
-      traceProjects: traceProjects?.map((i) => ({ ...i, fromTrace: true })) || [],
+      traceProjects: traceProjects?.map(i => ({ ...i, fromTrace: true })) || [],
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,

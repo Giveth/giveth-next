@@ -49,7 +49,9 @@ export const ProjectCategoryInput = ({
                 id={category.name}
                 name={category.name}
                 {...register(category.name)}
-                defaultChecked={currentValue ? (currentValue[category.name] ? 1 : 0) : 0}
+                defaultChecked={
+                  currentValue ? (!!currentValue[category.name] ? 1 : 0) : 0
+                }
               />
               <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
             </Label>

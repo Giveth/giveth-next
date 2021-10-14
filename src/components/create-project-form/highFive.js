@@ -65,7 +65,9 @@ const HighFive = ({
           flexDirection: ['column', 'row', 'row']
         }}
       >
-        <Box sx={{ minWidth: '20vw', mt: '100px', width: ['80%', '40%', '30%'] }}>
+        <Box
+          sx={{ minWidth: '20vw', mt: '100px', width: ['80%', '40%', '30%'] }}
+        >
           <ProjectListing
             disabled
             shadowed
@@ -98,13 +100,21 @@ const HighFive = ({
             Tell everyone about it.
           </Text>
           <Flex sx={{ my: '30px', justifyContent: 'space-evenly' }}>
-            <TwitterShareButton title={shareTitle} url={url} hashtags={['giveth']}>
+            <TwitterShareButton
+              title={shareTitle}
+              url={url}
+              hashtags={['giveth']}
+            >
               <FaTwitter size='24px' />
             </TwitterShareButton>
             <FacebookShareButton quote={shareTitle} url={url} hashtag='#giveth'>
               <FaFacebook size='24px' />
             </FacebookShareButton>
-            <LinkedinShareButton title={shareTitle} summary={project?.description} url={url}>
+            <LinkedinShareButton
+              title={shareTitle}
+              summary={project?.description}
+              url={url}
+            >
               <FaLinkedin size='24px' />
             </LinkedinShareButton>
           </Flex>

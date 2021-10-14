@@ -104,7 +104,8 @@ const OnlyFiat = props => {
   const amounts = [500, 100, 50, 30]
 
   const donation = parseFloat(amountTyped || amountSelect)
-  const donationPlusFee = donation + (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0)
+  const donationPlusFee =
+    donation + (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0)
   const subtotal = (donationPlusFee + 0.3) / 0.971
 
   const goCheckout = async event => {
@@ -171,14 +172,20 @@ const OnlyFiat = props => {
                 setAmountSelect(i)
               }}
               style={{
-                backgroundColor: isSelected ? theme.colors.background : 'transparent',
-                color: isSelected ? theme.colors.secondary : theme.colors.background
+                backgroundColor: isSelected
+                  ? theme.colors.background
+                  : 'transparent',
+                color: isSelected
+                  ? theme.colors.secondary
+                  : theme.colors.background
               }}
             >
               <Text
                 sx={{
                   variant: 'text.large',
-                  color: isSelected ? theme.colors.secondary : theme.colors.background,
+                  color: isSelected
+                    ? theme.colors.secondary
+                    : theme.colors.background,
                   fontWeight: '700'
                 }}
               >
@@ -194,8 +201,12 @@ const OnlyFiat = props => {
   const SummaryRow = ({ title, amount, style }) => {
     return (
       <SmRow style={style}>
-        <Text sx={{ variant: 'text.medium', color: 'background' }}>{title}</Text>
-        <Text sx={{ variant: 'text.medium', color: 'background' }}>${amount}</Text>
+        <Text sx={{ variant: 'text.medium', color: 'background' }}>
+          {title}
+        </Text>
+        <Text sx={{ variant: 'text.medium', color: 'background' }}>
+          ${amount}
+        </Text>
       </SmRow>
     )
   }
@@ -214,7 +225,10 @@ const OnlyFiat = props => {
           Coming Soon
         </Text>
         <Flex>
-          <img src={'/images/coming-soon-gear.png'} style={{ marginLeft: -6 }} />
+          <img
+            src={'/images/coming-soon-gear.png'}
+            style={{ marginLeft: -6 }}
+          />
           <img
             src={'/images/coming-soon.png'}
             style={{ position: 'absolute', marginTop: 5, marginLeft: 4 }}
@@ -229,7 +243,9 @@ const OnlyFiat = props => {
       <AmountSection>
         <AmountSelection />
         <AmountContainer>
-          <Text sx={{ variant: 'text.medium', color: 'background' }}>Or enter your amount:</Text>
+          <Text sx={{ variant: 'text.medium', color: 'background' }}>
+            Or enter your amount:
+          </Text>
           <OpenAmount>
             <Text sx={{ variant: 'text.large', color: 'background' }}>$</Text>
             <InputComponent
@@ -264,14 +280,20 @@ const OnlyFiat = props => {
                   color: 'white'
                 }}
               >
-                Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to help sustain Giveth
+                Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
+                help sustain Giveth
               </Text>
             </div>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
           </CheckboxLabel>
-          <CheckboxLabel sx={{ mb: '12px', alignItems: 'center', color: 'white' }}>
+          <CheckboxLabel
+            sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
+          >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox defaultChecked={anonymous} onClick={() => setAnonymous(!anonymous)} />
+              <Checkbox
+                defaultChecked={anonymous}
+                onClick={() => setAnonymous(!anonymous)}
+              />
               <Text
                 sx={{
                   variant: 'text.medium',
@@ -295,7 +317,10 @@ const OnlyFiat = props => {
                 amount={parseFloat(donation).toFixed(2)}
               />
               {donateToGiveth && (
-                <SummaryRow title='Support Giveth' amount={GIVETH_DONATION_AMOUNT} />
+                <SummaryRow
+                  title='Support Giveth'
+                  amount={GIVETH_DONATION_AMOUNT}
+                />
               )}
               <SummaryRow
                 title='Coming Soon'

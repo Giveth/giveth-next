@@ -14,7 +14,9 @@ const MyAccount = ({ info }) => {
 
   useEffect(() => {
     const init = async () => {
-      fetch('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP')
+      fetch(
+        'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP'
+      )
         .then(response => response.json())
         .then(data => setEthPrice(data.USD))
     }
@@ -22,7 +24,11 @@ const MyAccount = ({ info }) => {
   })
   return (
     <>
-      <EditProfileModal isOpen={openModal} onRequestClose={() => setOpenModal(false)} user={user} />
+      <EditProfileModal
+        isOpen={openModal}
+        onRequestClose={() => setOpenModal(false)}
+        user={user}
+      />
       {!user?.name && (
         <Notification
           content='Please finish setting up your public profile.'
@@ -37,7 +43,9 @@ const MyAccount = ({ info }) => {
           size={100}
           address={user.getWalletAddress()}
         />
-        <Flex sx={{ flexDirection: 'column', ml: '27px', textAlign: 'flex-end' }}>
+        <Flex
+          sx={{ flexDirection: 'column', ml: '27px', textAlign: 'flex-end' }}
+        >
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
           <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
           <Text
@@ -54,7 +62,9 @@ const MyAccount = ({ info }) => {
         </Flex>
       </Flex>
       <Flex sx={{ mt: '40px', alignItems: 'center' }}>
-        <Text sx={{ textTransform: 'uppercase', fontSize: 0 }}>Wallet Address</Text>
+        <Text sx={{ textTransform: 'uppercase', fontSize: 0 }}>
+          Wallet Address
+        </Text>
         {/* <Button
           type='button'
           sx={{
@@ -91,7 +101,9 @@ const MyAccount = ({ info }) => {
           >
             My donations
           </Text>
-          <Text sx={{ color: 'primary', fontSize: 7 }}>{info?.myDonations}</Text>
+          <Text sx={{ color: 'primary', fontSize: 7 }}>
+            {info?.myDonations}
+          </Text>
         </Flex>
         <Flex
           sx={{
@@ -114,7 +126,9 @@ const MyAccount = ({ info }) => {
           >
             My projects
           </Text>
-          <Text sx={{ color: 'primary', fontSize: 7 }}>{info?.myProjects || 0}</Text>
+          <Text sx={{ color: 'primary', fontSize: 7 }}>
+            {info?.myProjects || 0}
+          </Text>
         </Flex>
       </Flex>
       {/* <Box

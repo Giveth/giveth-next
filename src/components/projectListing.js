@@ -151,10 +151,14 @@ const ProjectListing = props => {
           onClick={() => {
             if (props.withEditHover) return
             if (props.wholeClickable)
-              return router.push(`/project/${props?.project?.slug || props?.slug}`)
+              return router.push(
+                `/project/${props?.project?.slug || props?.slug}`
+              )
             if (hoverStyle) return
             !props.disabled &&
-              (props?.action ? props.action() : router.push(`/donate/${props?.id}`))
+              (props?.action
+                ? props.action()
+                : router.push(`/donate/${props?.id}`))
           }}
           style={{
             cursor: props.wholeClickable
@@ -163,8 +167,13 @@ const ProjectListing = props => {
               ? 'default'
               : 'pointer',
             border:
-              props.disabled || props.transparentBorders ? null : `1px solid ${theme.colors.muted}`,
-            boxShadow: props.shadowed || hoverStyle ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
+              props.disabled || props.transparentBorders
+                ? null
+                : `1px solid ${theme.colors.muted}`,
+            boxShadow:
+              props.shadowed || hoverStyle
+                ? '0px 28px 52px rgba(44, 13, 83, 0.2)'
+                : null
           }}
         >
           {/* need to add options from the gallery. */}
@@ -184,7 +193,7 @@ const ProjectListing = props => {
                   position: 'relative'
                 }}
               />
-            ) : props.image ? (
+            ) : !!props.image ? (
               <div
                 style={{
                   width: '100%',
@@ -198,7 +207,12 @@ const ProjectListing = props => {
                   position: 'relative'
                 }}
               >
-                <StyledImage src={image} layout='fill' priority={true} quality={40} />
+                <StyledImage
+                  src={image}
+                  layout='fill'
+                  priority={true}
+                  quality={40}
+                />
               </div>
             ) : (
               <div
@@ -220,7 +234,9 @@ const ProjectListing = props => {
               key={props.listingId + '_card'}
               style={{
                 backgroundColor:
-                  props.raised === 0 ? theme.colors.attention : theme.colors.secondary
+                  props.raised === 0
+                    ? theme.colors.attention
+                    : theme.colors.secondary
               }}
             >
               {props.raised === 0 ? (
@@ -304,7 +320,10 @@ const ProjectListing = props => {
               >
                 EDIT
               </Button>
-              <Link href={!props.disabled && `/project/${props?.slug}`} passHref>
+              <Link
+                href={!props.disabled && `/project/${props?.slug}`}
+                passHref
+              >
                 <a style={{ margin: 'auto', zIndex: 10 }}>
                   <Text
                     sx={{
@@ -340,7 +359,9 @@ const ProjectListing = props => {
               }}
             >
               <RichTextViewer
-                content={props?.description?.replace(/<img .*?>/g, '').replace(/<iframe .*?>/g, '')}
+                content={props?.description
+                  ?.replace(/<img .*?>/g, '')
+                  .replace(/<iframe .*?>/g, '')}
               />
               {
                 /* Description String */

@@ -22,13 +22,13 @@ const Faq = ({ faqs }) => {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps () {
   // contentful
   const faqReq = await fetchEntries({
     contentType: 'faqEntry'
   })
 
-  const faqs = faqReq?.map((f) => f.fields)
+  const faqs = faqReq?.map(f => f.fields)
 
   return {
     props: {

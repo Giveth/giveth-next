@@ -2,8 +2,14 @@ import React, { useState } from 'react'
 import { Label, Input, Text, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
-export const ProjectNameInput = ({ register, currentValue, animationStyle }) => {
-  const [characterLength, setCharacterLength] = useState(currentValue ? currentValue.length : 0)
+export const ProjectNameInput = ({
+  register,
+  currentValue,
+  animationStyle
+}) => {
+  const [characterLength, setCharacterLength] = useState(
+    currentValue ? currentValue.length : 0
+  )
   return (
     <animated.section style={{ ...animationStyle, marginTop: '50px' }}>
       <Label

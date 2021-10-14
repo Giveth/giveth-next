@@ -27,7 +27,9 @@ export async function toggleProjectActivation(projectId, isActive, onSuccess) {
         projectId: parseFloat(projectId)
       }
     })
-    const response = !isActive ? edit?.data?.activateProject : edit?.data?.deactivateProject
+    const response = !isActive
+      ? edit?.data?.activateProject
+      : edit?.data?.deactivateProject
     if (response) {
       onSuccess(!isActive ? 'Project Activated' : 'Project Deactivated')
     }

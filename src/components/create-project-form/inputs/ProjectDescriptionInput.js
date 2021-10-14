@@ -13,7 +13,9 @@ export const ProjectDescriptionInput = ({
   goBack
 }) => {
   const [showInstructions, setShowInstructions] = useState(false)
-  const [characterLength, setCharacterLength] = useState(currentValue ? currentValue.length : 0)
+  const [characterLength, setCharacterLength] = useState(
+    currentValue ? currentValue.length : 0
+  )
 
   useEffect(() => {
     register('projectDescription')

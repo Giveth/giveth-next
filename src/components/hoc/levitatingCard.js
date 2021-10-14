@@ -2,12 +2,17 @@ import React from 'react'
 import { Flex, Button, Text, Image } from 'theme-ui'
 import { useSpring, animated, to } from '@react-spring/web'
 
-const calcXY = (x, y) => [-(y - window.innerHeight / 2) / 20, (x - window.innerWidth / 2) / 10, 1]
+const calcXY = (x, y) => [
+  -(y - window.innerHeight / 2) / 20,
+  (x - window.innerWidth / 2) / 10,
+  1
+]
 const calcXYsteady = (x, y) => [-0.5, 0.5, 1]
 // TODO understand this
-const perspective = (x, y, s) => `perspective(500px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
+const perspective = (x, y, s) =>
+  `perspective(500px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`
 
-function LevitatingCard({ children, steady, style }) {
+function LevitatingCard ({ children, steady, style }) {
   const [props, set] = useSpring(() => ({
     xys: [0, 0, 1],
     config: { mass: 5, tension: 200, friction: 100 }

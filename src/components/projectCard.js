@@ -208,7 +208,11 @@ const ProjectCard = props => {
             //     ? `https://trace.giveth.io/campaign/${project?.slug}`
             //     : `/project/${props?.slug || project?.slug || ''}`
             // }
-            href={isATrace ? isATrace : `/project/${props?.slug || project?.slug || ''}`}
+            href={
+              isATrace
+                ? isATrace
+                : `/project/${props?.slug || project?.slug || ''}`
+            }
             passHref
           >
             <a
@@ -324,11 +328,15 @@ const ProjectCard = props => {
                   <BsHeartFill
                     style={{ cursor: 'pointer' }}
                     size='18px'
-                    color={heartedByUser ? theme.colors.red : theme.colors.muted}
+                    color={
+                      heartedByUser ? theme.colors.red : theme.colors.muted
+                    }
                     onClick={reactToProject}
                   />
                   {heartedCount && (
-                    <Text sx={{ variant: 'text.default', ml: 2 }}>{heartedCount}</Text>
+                    <Text sx={{ variant: 'text.default', ml: 2 }}>
+                      {heartedCount}
+                    </Text>
                   )}
                 </Flex>
 
@@ -388,14 +396,20 @@ const ProjectCard = props => {
                 //     ? `https://trace.giveth.io/campaign/${project?.slug}`
                 //     : `/project/${props?.slug || project?.slug || ''}`
                 // }
-                href={isATrace ? isATrace : `/project/${props?.slug || project?.slug || ''}`}
+                href={
+                  isATrace
+                    ? isATrace
+                    : `/project/${props?.slug || project?.slug || ''}`
+                }
                 passHref
               >
                 <a
                   target={project?.fromTrace ? '_blank' : null}
                   rel={project?.fromTrace ? 'noopener noreferrer' : null}
                 >
-                  <Button sx={{ width: '100%', variant: 'buttons.default', mt: 2 }}>
+                  <Button
+                    sx={{ width: '100%', variant: 'buttons.default', mt: 2 }}
+                  >
                     Learn More
                   </Button>
                 </a>
@@ -405,7 +419,8 @@ const ProjectCard = props => {
                   href={
                     project?.fromTrace
                       ? `https://trace.giveth.io/campaign/${project?.slug}`
-                      : !props.disabled && `/donate/${props?.slug || project?.slug}`
+                      : !props.disabled &&
+                        `/donate/${props?.slug || project?.slug}`
                   }
                   passHref
                 >

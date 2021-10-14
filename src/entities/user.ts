@@ -1,4 +1,8 @@
-import { getLocalStorageUserLabel, getLocalStorageTokenLabel } from '../services/auth'
+
+import {
+  getLocalStorageUserLabel,
+  getLocalStorageTokenLabel
+} from '../services/auth'
 
 const gatsbyUser = getLocalStorageUserLabel()
 const tokenLabel = getLocalStorageTokenLabel()
@@ -20,19 +24,19 @@ export default class User {
   loginType: string
   confirmed: boolean
   walletType: string
-
+  
   constructor(walletType, initUser) {
     this.walletType = walletType
     this.walletAddresses = []
 
-    if (initUser) {
+    if(initUser) {
       this.parseInitUser(initUser)
     }
   }
 
   parseInitUser(initUser) {
-    if (this.walletType === 'torus') {
-      this.parseTorusUser(initUser)
+    if(this.walletType === 'torus') {
+      this.parseTorusUser(initUser) 
     } else {
       this.walletType = initUser.walletType
       this.walletAddresses = initUser.walletAddresses
@@ -44,9 +48,9 @@ export default class User {
 
   /**
    * From the database
-   * @param initUser
+   * @param initUser 
    */
-  parseDbUser(dbUser) {
+  parseDbUser(dbUser) {   
     this.avatar = dbUser.avatar
     this.email = dbUser.email
     this.id = dbUser.id
@@ -63,29 +67,34 @@ export default class User {
 
   setToken(token) {
     this.token = token
-
+    
     localStorage.setItem(tokenLabel, token)
   }
 
   addWalletAddress(address, activeWallet) {
     this.walletAddresses.push(address)
-
-    if (activeWallet) {
+  
+    if(activeWallet) {
       this.activeWalletIndex = this.walletAddresses.indexOf(address)
     }
+    
+    
   }
 
   getAuthObject() {
     return {
-      addresses: this.walletAddresses
+        addresses: this.walletAddresses
     }
   }
 
   getName() {
-    function truncAddress(address) {
-      return `${address.substring(0, 5)}...${address.substring(address.length - 4, address.length)}`
+    function truncAddress (address) {
+      return `${address.substring(0, 5)}...${address.substring(
+        address.length - 4,
+        address.length
+      )}`
     }
-
+    
     return this.name ? this.name.toUpperCase() : truncAddress(this.getWalletAddress())
     // return /(.+)@(.+){2,}\.(.+){2,}/.test(this.name)
     //         ? this.name?.toUpperCase()
@@ -93,11 +102,11 @@ export default class User {
   }
   getWalletAddress() {
     return this.walletAddresses && this.walletAddresses.length > 0 ? this.walletAddresses[0] : ''
-  }
+  }  
   // organisations: Organisation[]
-
+  
   parseTorusUser(torusUser) {
-    if (this.walletType !== 'torus') throw Error('Only valid for Torus wallets')
+    if(this.walletType !== 'torus') throw Error ('Only valid for Torus wallets')
     this.avatar = torusUser.profileImage || torusUser.avatar
     this.name = torusUser.name
     this.email = torusUser.email

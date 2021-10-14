@@ -3,7 +3,10 @@ import { concatPagination } from '@apollo/client/utilities'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import gql from 'graphql-tag'
-import { getLocalStorageUserLabel, getLocalStorageTokenLabel } from '../services/auth'
+import {
+  getLocalStorageUserLabel,
+  getLocalStorageTokenLabel
+} from '../services/auth'
 import { createUploadLink } from 'apollo-upload-client'
 import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
@@ -12,7 +15,7 @@ let apolloClient
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 
-function createApolloClient() {
+function createApolloClient () {
   // Declare variable to store authToken
   let token
 
@@ -84,7 +87,7 @@ function createApolloClient() {
   return client
 }
 
-export function initializeApollo(initialState = null) {
+export function initializeApollo (initialState = null) {
   const _apolloClient = apolloClient ?? createApolloClient()
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
@@ -113,7 +116,7 @@ export function initializeApollo(initialState = null) {
   return _apolloClient
 }
 
-export function addApolloState(client, pageProps) {
+export function addApolloState (client, pageProps) {
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract()
   }
@@ -121,7 +124,7 @@ export function addApolloState(client, pageProps) {
   return pageProps
 }
 
-export function useApollo(pageProps) {
+export function useApollo (pageProps) {
   const state = pageProps[APOLLO_STATE_PROP_NAME]
   const store = useMemo(() => initializeApollo(state), [state])
   return store

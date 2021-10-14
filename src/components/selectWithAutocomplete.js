@@ -9,13 +9,13 @@ import iconManifest from '../../public/assets/cryptocurrency-icons/manifest.json
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 const StyledOption = styled.div`
-  &:hover {
-    div {
-      color: ${theme.colors.background};
+    &:hover {
+      div {
+        color: ${theme.colors.background};
+      }
+      background-color: ${theme.colors.hover};
     }
-    background-color: ${theme.colors.hover};
-  }
-`
+  `
 
 const SelectWithAutocomplete = ({
   content,

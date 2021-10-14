@@ -148,7 +148,9 @@ const DonorBox = styled.td`
 
 const DonationsTable = props => {
   const options = ['All Donations', 'Fiat', 'Crypto']
-  const [currentDonations, setCurrentDonations] = React.useState(props?.donations)
+  const [currentDonations, setCurrentDonations] = React.useState(
+    props?.donations
+  )
   const [filter, setFilter] = React.useState(0)
 
   const filterDonations = items => {
@@ -177,7 +179,10 @@ const DonationsTable = props => {
     // Logic for displaying current items
     const indexOfLastItem = activeItem * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = paginationItems?.slice(indexOfFirstItem, indexOfLastItem)
+    const currentItems = paginationItems?.slice(
+      indexOfFirstItem,
+      indexOfLastItem
+    )
 
     const handlePageChange = pageNumber => {
       setCurrentItem(pageNumber)
@@ -218,9 +223,14 @@ const DonationsTable = props => {
               .map((i, key) => {
                 return (
                   <tr key={key}>
-                    <td data-label='Account' sx={{ variant: 'text.small', color: 'secondary' }}>
+                    <td
+                      data-label='Account'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
                       <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                        {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
+                        {i?.createdAt
+                          ? dayjs(i.createdAt).format('ll')
+                          : 'null'}
                       </Text>
                     </td>
                     <DonorBox
@@ -237,10 +247,16 @@ const DonationsTable = props => {
                         {titleCase(i?.project?.title) || i?.donor}
                       </Text>
                     </DonorBox>
-                    <td data-label='Currency' sx={{ variant: 'text.small', color: 'secondary' }}>
+                    <td
+                      data-label='Currency'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
                       <Badge variant='green'>{i.currency}</Badge>
                     </td>
-                    <td data-label='Amount' sx={{ variant: 'text.small', color: 'secondary' }}>
+                    <td
+                      data-label='Amount'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
                       <Text
                         sx={{
                           variant: 'text.small',

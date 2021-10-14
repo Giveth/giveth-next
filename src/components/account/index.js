@@ -34,13 +34,12 @@ const AccountPage = props => {
   })
   const userDonations = donations?.donationsByDonor
 
-  const {
-    data: userProjects,
-    loading: projectsLoading,
-    error
-  } = useQuery(FETCH_MY_PROJECTS, {
-    fetchPolicy: 'network-only'
-  })
+  const { data: userProjects, loading: projectsLoading, error } = useQuery(
+    FETCH_MY_PROJECTS,
+    {
+      fetchPolicy: 'network-only'
+    }
+  )
   const projectsList = userProjects?.myProjects
   const [query, setQuery] = useQueryParams({
     view: StringParam,

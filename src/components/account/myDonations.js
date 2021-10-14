@@ -184,7 +184,12 @@ const MyDonations = props => {
     }
     const some = donations?.filter(donation => {
       const val = donation?.project?.title
-      return val?.toString().toLowerCase().indexOf(search.toString().toLowerCase()) === 0
+      return (
+        val
+          ?.toString()
+          .toLowerCase()
+          .indexOf(search.toString().toLowerCase()) === 0
+      )
     })
     setCurrentDonations(some)
   }
@@ -202,14 +207,20 @@ const MyDonations = props => {
     }
   }
 
-  const filteredDonations = [...filterDonations(currentDonations)].sort((a, b) => {
-    return new Date(b?.createdAt) - new Date(a?.createdAt)
-  })
+  const filteredDonations = [...filterDonations(currentDonations)].sort(
+    (a, b) => {
+      return new Date(b?.createdAt) - new Date(a?.createdAt)
+    }
+  )
 
   const populateIcons = async item => {
-    const found = iconManifest?.find(i => i?.symbol === item?.currency?.toUpperCase())
+    const found = iconManifest?.find(
+      i => i?.symbol === item?.currency?.toUpperCase()
+    )
 
-    let icon = `/assets/cryptocurrency-icons/32/color/${item?.currency?.toLowerCase() || 'eth'}.png`
+    let icon = `/assets/cryptocurrency-icons/32/color/${
+      item?.currency?.toLowerCase() || 'eth'
+    }.png`
     // let icon = found
     //   ? `/assets/cryptocurrency-icons/32/color/${
     //       item?.currency?.toLowerCase() || 'eth'
@@ -231,9 +242,14 @@ const MyDonations = props => {
         // Logic for displaying current items
         const indexOfLastItem = activeItem * itemsPerPage
         const indexOfFirstItem = indexOfLastItem - itemsPerPage
-        const tmpItems = paginationItems?.slice(indexOfFirstItem, indexOfLastItem)
+        const tmpItems = paginationItems?.slice(
+          indexOfFirstItem,
+          indexOfLastItem
+        )
 
-        const items = await Promise.all(tmpItems.map(item => populateIcons(item)))
+        const items = await Promise.all(
+          tmpItems.map(item => populateIcons(item))
+        )
 
         setCurrentItems(items)
       }
@@ -253,21 +269,23 @@ const MyDonations = props => {
         <Table>
           <thead>
             <tr>
-              {['Date', 'Project', 'Currency', 'Amount', 'Transaction'].map((i, index) => {
-                return (
-                  <th scope='col' key={index}>
-                    <Text
-                      sx={{
-                        variant: 'text.small',
-                        fontWeight: 'bold',
-                        color: 'secondary'
-                      }}
-                    >
-                      {i}
-                    </Text>
-                  </th>
-                )
-              })}
+              {['Date', 'Project', 'Currency', 'Amount', 'Transaction'].map(
+                (i, index) => {
+                  return (
+                    <th scope='col' key={index}>
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          fontWeight: 'bold',
+                          color: 'secondary'
+                        }}
+                      >
+                        {i}
+                      </Text>
+                    </th>
+                  )
+                }
+              )}
             </tr>
           </thead>
           <tbody>
@@ -277,19 +295,29 @@ const MyDonations = props => {
               .map((i, key) => {
                 return (
                   <tr key={key}>
-                    <td data-label='Account' sx={{ variant: 'text.small', color: 'secondary' }}>
+                    <td
+                      data-label='Account'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
                       <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                        {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
+                        {i?.createdAt
+                          ? dayjs(i.createdAt).format('ll')
+                          : 'null'}
                       </Text>
                     </td>
-                    <td data-label='Project' sx={{ variant: 'text.small', color: 'secondary' }}>
+                    <td
+                      data-label='Project'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
                       <Text
                         sx={{
                           variant: 'text.medium',
                           color: 'primary',
                           cursor: 'pointer'
                         }}
-                        onClick={() => router.push(`/project/${i?.project?.slug}`)}
+                        onClick={() =>
+                          router.push(`/project/${i?.project?.slug}`)
+                        }
                       >
                         {titleCase(i?.project?.title) || i?.donor}
                       </Text>
@@ -302,7 +330,10 @@ const MyDonations = props => {
                       }}
                     >
                       <img
-                        src={i?.icon || `/assets/tokens/${i?.currency?.toUpperCase()}.png`}
+                        src={
+                          i?.icon ||
+                          `/assets/tokens/${i?.currency?.toUpperCase()}.png`
+                        }
                         alt={i.currency}
                         onError={ev => {
                           ev.target.src = ETHIcon
@@ -315,7 +346,10 @@ const MyDonations = props => {
                         }}
                       />
                     </td>
-                    <td data-label='Amount' sx={{ variant: 'text.small', color: 'secondary' }}>
+                    <td
+                      data-label='Amount'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
                       <Text
                         sx={{
                           variant: 'text.small',
@@ -329,7 +363,10 @@ const MyDonations = props => {
                           : `${i?.amount} ${i?.currency}`}
                       </Text>
                     </td>
-                    <td data-label='Transaction' sx={{ variant: 'text.small', color: 'secondary' }}>
+                    <td
+                      data-label='Transaction'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
                       <div
                         style={{
                           display: 'flex',
@@ -417,7 +454,9 @@ const MyDonations = props => {
         </Flex>
       ) : !filteredDonations || filteredDonations?.length === 0 ? (
         <Table>
-          <Text sx={{ variant: 'text.large', color: 'secondary' }}>No donations :(</Text>
+          <Text sx={{ variant: 'text.large', color: 'secondary' }}>
+            No donations :(
+          </Text>
         </Table>
       ) : (
         <TableToShow />

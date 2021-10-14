@@ -9,7 +9,17 @@ import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
-import { Avatar, Badge, Button, Box, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
+import {
+  Avatar,
+  Badge,
+  Button,
+  Box,
+  Input,
+  Flex,
+  Spinner,
+  Text,
+  jsx
+} from 'theme-ui'
 import Jdenticon from 'react-jdenticon'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -161,11 +171,14 @@ const DonationsTable = ({ donations = [] }) => {
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
   const [isSearching, setIsSearching] = React.useState(false)
-  const { currentProjectView, setCurrentProjectView } = React.useContext(ProjectContext)
+  const { currentProjectView, setCurrentProjectView } = React.useContext(
+    ProjectContext
+  )
   const client = useApolloClient()
 
   const fromTrace =
-    currentProjectView?.project?.fromTrace || currentProjectView?.project?.IOTraceable
+    currentProjectView?.project?.fromTrace ||
+    currentProjectView?.project?.IOTraceable
 
   const traceDonationsFetch =
     fromTrace &&
@@ -183,7 +196,11 @@ const DonationsTable = ({ donations = [] }) => {
       setLoading(false)
     }
     setDonationsFromTrace([...donationsFromTrace, ...traceDonations?.data])
-    setCurrentDonations([...currentDonations, ...donationsFromTrace, ...traceDonations?.data])
+    setCurrentDonations([
+      ...currentDonations,
+      ...donationsFromTrace,
+      ...traceDonations?.data
+    ])
   }, [JSON.stringify(traceDonations)])
 
   React.useEffect(() => {
@@ -202,7 +219,9 @@ const DonationsTable = ({ donations = [] }) => {
   const searching = search => {
     setIsSearching(true)
 
-    const searchDonations = fromTrace ? [...donations, ...donationsFromTrace] : donations
+    const searchDonations = fromTrace
+      ? [...donations, ...donationsFromTrace]
+      : donations
 
     if (!search || search === '') {
       setIsSearching(false)
@@ -218,7 +237,12 @@ const DonationsTable = ({ donations = [] }) => {
         donation?.user?.firstName ||
         donation?.fromWalletAddress ||
         donation?.giverAddress
-      return val?.toString().toLowerCase().indexOf(search.toString().toLowerCase()) === 0
+      return (
+        val
+          ?.toString()
+          .toLowerCase()
+          .indexOf(search.toString().toLowerCase()) === 0
+      )
     })
     setCurrentDonations(some)
   }
@@ -255,7 +279,10 @@ const DonationsTable = ({ donations = [] }) => {
       }
     }
     const currentItems = paginationItems
-      ?.sort((a, b) => new Date(b.createdAt)?.valueOf() - new Date(a.createdAt)?.valueOf())
+      ?.sort(
+        (a, b) =>
+          new Date(b.createdAt)?.valueOf() - new Date(a.createdAt)?.valueOf()
+      )
       ?.slice(indexOfFirstItem, indexOfLastItem)
 
     const handlePageChange = pageNumber => {
@@ -304,7 +331,10 @@ const DonationsTable = ({ donations = [] }) => {
               if (!i) return null
               return (
                 <tr key={key}>
-                  <td data-label='Account' sx={{ variant: 'text.small', color: 'secondary' }}>
+                  <td
+                    data-label='Account'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
                       {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
                     </Text>
@@ -320,7 +350,10 @@ const DonationsTable = ({ donations = [] }) => {
                     {i?.user?.avatar ? (
                       <Avatar src={i?.user?.avatar} />
                     ) : (
-                      <Jdenticon size='32' value={i?.fromWalletAddress || i?.giverAddress} />
+                      <Jdenticon
+                        size='32'
+                        value={i?.fromWalletAddress || i?.giverAddress}
+                      />
                     )}
                     <Text
                       sx={{
@@ -333,13 +366,23 @@ const DonationsTable = ({ donations = [] }) => {
                         ? i.user.name
                         : i?.user?.firstName && i?.user?.lastName
                         ? `${i.user.firstName} ${i.user.lastName}`
-                        : i?.user?.walletAddress || i?.fromWalletAddress || i?.giverAddress}
+                        : i?.user?.walletAddress ||
+                          i?.fromWalletAddress ||
+                          i?.giverAddress}
                     </Text>
                   </DonorBox>
-                  <td data-label='Currency' sx={{ variant: 'text.small', color: 'secondary' }}>
-                    <Badge variant='green'>{i?.currency || i?.token?.symbol}</Badge>
+                  <td
+                    data-label='Currency'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Badge variant='green'>
+                      {i?.currency || i?.token?.symbol}
+                    </Badge>
                   </td>
-                  <td data-label='Amount' sx={{ variant: 'text.small', color: 'secondary' }}>
+                  <td
+                    data-label='Amount'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
                     <Text
                       sx={{
                         variant: 'text.small',
@@ -350,9 +393,9 @@ const DonationsTable = ({ donations = [] }) => {
                       {!!i?.token?.symbol && i?.amount
                         ? parseBalance(i?.amount, 18)
                         : i?.currency === 'ETH' && i?.valueUsd
-                        ? `${i?.amount ? `${i?.amount} ETH` : ''} \n ~ USD $ ${i?.valueUsd?.toFixed(
-                            2
-                          )}`
+                        ? `${
+                            i?.amount ? `${i?.amount} ETH` : ''
+                          } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
                         : i?.amount}
                     </Text>
                   </td>
@@ -410,7 +453,9 @@ const DonationsTable = ({ donations = [] }) => {
         </Flex>
       ) : !filteredDonations || filteredDonations?.length === 0 ? (
         <Table>
-          <Text sx={{ variant: 'text.large', color: 'secondary' }}>No donations yet :(</Text>
+          <Text sx={{ variant: 'text.large', color: 'secondary' }}>
+            No donations yet :(
+          </Text>
         </Table>
       ) : (
         <TableToShow />

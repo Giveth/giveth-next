@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { Flex, Button, Text, Image } from 'theme-ui'
 import LevitatingCard from './hoc/levitatingCard'
 
-function GR11() {
+function GR11 () {
   const router = useRouter()
 
   const today = new Date()

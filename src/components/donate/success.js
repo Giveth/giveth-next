@@ -1,25 +1,25 @@
-import React, { useState } from 'react'
-import { Box, Link, Flex, Text } from 'theme-ui'
-import { useMediaQuery } from 'react-responsive'
-import { base64ToBlob, getEtherscanPrefix } from '../../utils'
-import styled from '@emotion/styled'
-import ConfettiAnimation from '../animations/confetti'
-import { useWallet } from '../../contextProvider/WalletProvider'
-import BillIcon from '../../images/svg/donation/bill-icon.svg'
+import React, { useState } from 'react';
+import { Box, Link, Flex, Text } from 'theme-ui';
+import { useMediaQuery } from 'react-responsive';
+import { base64ToBlob, getEtherscanPrefix } from '../../utils';
+import styled from '@emotion/styled';
+import ConfettiAnimation from '../animations/confetti';
+import { useWallet } from '../../contextProvider/WalletProvider';
+import BillIcon from '../../images/svg/donation/bill-icon.svg';
 
 const Content = styled(Flex)`
   flex-direction: column;
   z-index: 10;
   min-width: 32vw;
   word-wrap: break-word;
-`
+`;
 
 const Receipt = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 const DownloadReceipt = styled(Box)`
   display: flex;
@@ -31,26 +31,26 @@ const DownloadReceipt = styled(Box)`
   padding: 20px 14px;
   align-items: center;
   cursor: pointer;
-`
+`;
 
 const Success = props => {
-  const { isLoggedIn, login } = useWallet()
-  const { project, hash, currentChainId } = props
-  const [pdfBase64, setPdfBase64] = useState(null)
+  const { isLoggedIn, login } = useWallet();
+  const { project, hash, currentChainId } = props;
+  const [pdfBase64, setPdfBase64] = useState(null);
 
   const downloadPDF = () => {
-    const blob = base64ToBlob(pdfBase64)
-    const filename = 'donation_invoice.pdf'
-    const uriContent = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.setAttribute('href', uriContent)
-    link.setAttribute('download', filename)
-    const event = new MouseEvent('click')
-    link.dispatchEvent(event)
-  }
+    const blob = base64ToBlob(pdfBase64);
+    const filename = 'donation_invoice.pdf';
+    const uriContent = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', uriContent);
+    link.setAttribute('download', filename);
+    const event = new MouseEvent('click');
+    link.dispatchEvent(event);
+  };
 
-  const etherscanPrefix = getEtherscanPrefix()
-  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+  const etherscanPrefix = getEtherscanPrefix();
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' });
   return (
     <>
       <Flex
@@ -78,8 +78,9 @@ const Success = props => {
           Thank you for supporting <strong> {project?.title} </strong>.
         </Text>
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: -1 }}>
-          Your <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong> contribution goes
-          a long way!
+          Your{' '}
+          <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong>{' '}
+          contribution goes a long way!
         </Text>
         {hash?.transactionHash ? (
           <Receipt sx={{ my: 4 }}>
@@ -121,7 +122,10 @@ const Success = props => {
         {!isLoggedIn ? (
           <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
             Stay a Giver?{' '}
-            <span sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }} onClick={login}>
+            <span
+              sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
+              onClick={login}
+            >
               Register an account.
             </span>
           </Text>
@@ -145,7 +149,7 @@ const Success = props => {
         )}
       </Content>
     </>
-  )
-}
+  );
+};
 
-export default Success
+export default Success;

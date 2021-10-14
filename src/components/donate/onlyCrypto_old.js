@@ -62,17 +62,28 @@ const OnlyCrypto = props => {
   return (
     <Content>
       <QRSection>
-        <Text sx={{ variant: 'text.medium' }}>Send ETH or any ERC20 to this address.</Text>
-        <Text sx={{ variant: 'text.medium' }}>100% of donations go directly to the project.</Text>
+        <Text sx={{ variant: 'text.medium' }}>
+          Send ETH or any ERC20 to this address.
+        </Text>
+        <Text sx={{ variant: 'text.medium' }}>
+          100% of donations go directly to the project.
+        </Text>
         <QRContainer p={4} color='white' bg='white'>
           <QRCode value={address} size={140} />
         </QRContainer>
       </QRSection>
       <AddressContainer>
-        <Text sx={{ variant: 'text.overlineSmall' }} style={{ fontSize: '16px' }}>
+        <Text
+          sx={{ variant: 'text.overlineSmall' }}
+          style={{ fontSize: '16px' }}
+        >
           {address}
         </Text>
-        <CopyButton sx={{ variant: 'buttons.default', mt: 2 }} onClick={copyAddress} type='submit'>
+        <CopyButton
+          sx={{ variant: 'buttons.default', mt: 2 }}
+          onClick={copyAddress}
+          type='submit'
+        >
           {copyMsg}
         </CopyButton>
       </AddressContainer>

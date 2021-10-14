@@ -10,7 +10,7 @@ const Seo = dynamic(() => import('../../src/components/seo'))
 const Layout = dynamic(() => import('../../src/components/layout'))
 const PublicProfileView = dynamic(() => import('../../src/components/user'))
 
-const User = (props) => {
+const User = props => {
   const { user } = props
 
   return (
@@ -29,7 +29,7 @@ const User = (props) => {
   )
 }
 
-export async function getServerSideProps(props) {
+export async function getServerSideProps (props) {
   const { query } = props
 
   const { data: userData } = await client.query({
@@ -47,7 +47,7 @@ export async function getServerSideProps(props) {
     fetchPolicy: 'network-only'
   })
   const projects = userProjects?.projects?.filter(
-    (i) => parseFloat(i?.admin) === parseFloat(user?.id)
+    i => parseFloat(i?.admin) === parseFloat(user?.id)
   )
 
   // GET DONATIONS

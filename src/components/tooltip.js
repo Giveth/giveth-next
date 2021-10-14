@@ -99,7 +99,13 @@ const Tooltip = styled.div`
   }
 `
 
-export default function ToolTip({ content, contentStyle, textStyle, isArrow, placement }) {
+export default function ToolTip ({
+  content,
+  contentStyle,
+  textStyle,
+  isArrow,
+  placement
+}) {
   return (
     <Tooltip
       sx={{

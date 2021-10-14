@@ -4,7 +4,7 @@ const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
 const AccountIndex = dynamic(() => import('../src/components/account'))
 
-const AccountPage = (props) => {
+const AccountPage = props => {
   return (
     <Layout noHeader>
       <Seo title='account' />

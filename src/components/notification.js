@@ -51,7 +51,9 @@ export default function Toast({ content = 'default msg', type, action }) {
       >
         <Flex sx={{ flex: action ? 0.8 : 1, alignItems: 'center' }}>
           <div style={{ marginRight: '10px' }}>{icon}</div>
-          <Text sx={{ wordBreak: 'break-word', color: borderColor }}>{content}</Text>
+          <Text sx={{ wordBreak: 'break-word', color: borderColor }}>
+            {content}
+          </Text>
         </Flex>
         {action && (
           <Flex sx={{ alignItems: 'center' }}>

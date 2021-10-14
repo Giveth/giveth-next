@@ -75,7 +75,12 @@ const FETCH_PROJECTS = gql`
 `
 
 const FETCH_USER_PROJECTS = gql`
-  query FetchProjects($limit: Int, $skip: Int, $orderBy: OrderBy, $admin: Float) {
+  query FetchProjects(
+    $limit: Int
+    $skip: Int
+    $orderBy: OrderBy
+    $admin: Float
+  ) {
     projects(take: $limit, skip: $skip, orderBy: $orderBy, admin: $admin) {
       id
       title
@@ -213,8 +218,16 @@ const ADD_BANK_ACCOUNT = gql`
 `
 
 const GET_LINK_BANK_CREATION = gql`
-  query SetProjectBankAccount($projectId: Float!, $returnUrl: String!, $refreshUrl: String!) {
-    setProjectBankAccount(projectId: $projectId, returnUrl: $returnUrl, refreshUrl: $refreshUrl)
+  query SetProjectBankAccount(
+    $projectId: Float!
+    $returnUrl: String!
+    $refreshUrl: String!
+  ) {
+    setProjectBankAccount(
+      projectId: $projectId
+      returnUrl: $returnUrl
+      refreshUrl: $refreshUrl
+    )
   }
 `
 const GET_DONATION_SESSION = gql`
@@ -296,7 +309,7 @@ const GET_STRIPE_PROJECT_DONATIONS = gql`
   }
 `
 const ADD_PROJECT = gql`
-  mutation ($project: ProjectInput!) {
+  mutation($project: ProjectInput!) {
     addProject(project: $project) {
       id
       title
@@ -316,7 +329,7 @@ const ADD_PROJECT = gql`
  ** PROJECT UPDATES
  */
 const ADD_PROJECT_UPDATE = gql`
-  mutation ($projectId: Float!, $title: String!, $content: String!) {
+  mutation($projectId: Float!, $title: String!, $content: String!) {
     addProjectUpdate(projectId: $projectId, title: $title, content: $content) {
       id
       projectId
@@ -346,7 +359,11 @@ const GET_PROJECT_UPDATES = gql`
 `
 
 const EDIT_PROJECT_UPDATE = gql`
-  mutation EditProjectUpdate($content: String!, $title: String!, $updateId: Float!) {
+  mutation EditProjectUpdate(
+    $content: String!
+    $title: String!
+    $updateId: Float!
+  ) {
     editProjectUpdate(content: $content, title: $title, updateId: $updateId) {
       id
       title
@@ -411,7 +428,7 @@ const GET_PROJECT_BY_ADDRESS = gql`
 `
 
 const REGISTER_PROJECT_DONATION = gql`
-  mutation ($txId: String!, $anonymous: Boolean!) {
+  mutation($txId: String!, $anonymous: Boolean!) {
     registerProjectDonation(txId: $txId, anonymous: $anonymous)
   }
 `
@@ -466,7 +483,7 @@ const GET_CATEGORIES = gql`
 `
 
 const UPLOAD_IMAGE = gql`
-  mutation ($imageUpload: ImageUpload!) {
+  mutation($imageUpload: ImageUpload!) {
     uploadImage(imageUpload: $imageUpload) {
       url
       projectId

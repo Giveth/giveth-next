@@ -117,11 +117,16 @@ const ContentTeam = ({ headerdata }) => (
               <Portrait src={edges?.portrait?.fields?.file.url} />
             </PortraitHelper>
             <ContentFooter className='placeholder'>
-              <Headline1 pt={1} sx={{ variant: 'headings.h6', color: 'secondary' }}>
+              <Headline1
+                pt={1}
+                sx={{ variant: 'headings.h6', color: 'secondary' }}
+              >
                 {edges.headline1}
               </Headline1>
 
-              <Badge sx={{ variant: 'text.overlineSmall' }}>{edges.headline2}</Badge>
+              <Badge sx={{ variant: 'text.overlineSmall' }}>
+                {edges.headline2}
+              </Badge>
 
               {/** Hide short bio
              <Text
@@ -135,10 +140,18 @@ const ContentTeam = ({ headerdata }) => (
             </Text>
             */}
 
-              <Social1 href={edges.socialTwitter} className='social' target='blank'>
+              <Social1
+                href={edges.socialTwitter}
+                className='social'
+                target='blank'
+              >
                 <FaTwitter size='24px' />
               </Social1>
-              <Social2 href={edges.socialMedium} className='social' target='blank'>
+              <Social2
+                href={edges.socialMedium}
+                className='social'
+                target='blank'
+              >
                 <FaGithub size='24px' />
               </Social2>
             </ContentFooter>

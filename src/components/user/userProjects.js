@@ -22,7 +22,9 @@ export const UserProjects = props => {
           Don't stop here! There are other projects you can donate to.
         </Text>
         <Link href='/projects'>
-          <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: 4 }}>BROWSE PROJECTS</Button>
+          <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: 4 }}>
+            BROWSE PROJECTS
+          </Button>
         </Link>
       </Flex>
     )
