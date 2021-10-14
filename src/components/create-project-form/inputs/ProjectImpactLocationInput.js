@@ -17,7 +17,7 @@ export const ProjectImpactLocationInput = ({
   }
 
   useEffect(() => {
-    typeof window !== 'undefined' && window.initMap(handleChange)
+    typeof window !== 'undefined' && window?.initMap(handleChange)
   }, [])
 
   return (

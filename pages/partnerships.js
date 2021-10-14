@@ -1,16 +1,18 @@
-import { Flex, Grid, Text, Box, Button } from "theme-ui"
-import theme from "../src/utils/theme-ui"
-import { fetchEntries } from "../src/utils/contentfulPosts"
-import React from "react"
-import Seo from "../src/components/seo"
-import Link from "next/link"
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
-import styled from "@emotion/styled"
+import React from 'react'
+import { Flex, Grid, Text, Box, Button } from 'theme-ui'
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import styled from '@emotion/styled'
+import useMediaQuery from 'react-responsive'
+
+import theme from '../src/utils/theme-ui'
+import { fetchEntries } from '../src/utils/contentfulPosts'
+
 // import { BLOCKS } from "@contentful/rich-text-types"
 
-import useMediaQuery from "react-responsive"
-
-import Layout from "../src/components/layout"
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
 
 const Partnerships = ({ friendsLogos, partners }) => {
   // const richTextOptions = {
@@ -51,34 +53,34 @@ const Partnerships = ({ friendsLogos, partners }) => {
   // }
   // console.log({ friendsLogos, partners })
   // return null;
-  const isMobile = useMediaQuery({ query: "(max-width: 825px)" })
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
-      <Seo title="Our partnerships" />
+      <Seo title='Our partnerships' />
       {!isMobile ? (
         <Decorator>
           <img
-            src={"/images/decorator-puzzlepieces.svg"}
-            alt=""
+            src={'/images/decorator-puzzlepieces.svg'}
+            alt=''
             style={{
-              position: "absolute",
-              right: "-90vw",
+              position: 'absolute',
+              right: '-90vw'
             }}
           />
         </Decorator>
       ) : null}
-      <Main sx={{ width: ["90%", "90%", "70%"] }}>
-        <Text sx={{ variant: "headings.h2" }}>{partners[0].title}</Text>
+      <Main sx={{ width: ['90%', '90%', '70%'] }}>
+        <Text sx={{ variant: 'headings.h2' }}>{partners[0].title}</Text>
         <Text
           sx={{
-            variant: "text.large",
+            variant: 'text.large'
           }}
         >
           {partners[0].subtitle}
         </Text>
         <Text
           sx={{
-            variant: "text.default",
+            variant: 'text.default'
           }}
         >
           {documentToReactComponents(partners[0].moreInfo.json)}
@@ -86,39 +88,39 @@ const Partnerships = ({ friendsLogos, partners }) => {
         <Text
           pt={5}
           sx={{
-            variant: "text.large",
+            variant: 'text.large'
           }}
         >
-          Our partners and friends{" "}
+          Our partners and friends{' '}
         </Text>
         <Grid
           columns={[1, 2, 3]}
           gap={4}
-          sx={{ justifySelf: ["center", "auto", "auto"], maxWidth: "800px" }}
+          sx={{ justifySelf: ['center', 'auto', 'auto'], maxWidth: '800px' }}
         >
-          {friendsLogos?.map((friend) => (
+          {friendsLogos?.map(friend => (
             <ContentItem key={friend.logo.sys.id}>
               <a
                 href={friend.link}
                 style={{
-                  textDecoration: "none",
-                  textAlign: "center",
-                  color: "secondaryDark",
+                  textDecoration: 'none',
+                  textAlign: 'center',
+                  color: 'secondaryDark'
                 }}
               >
-                <Flex sx={{ flexDirection: "column" }}>
+                <Flex sx={{ flexDirection: 'column' }}>
                   <img
-                    width="100%"
-                    height="50px"
-                    style={{ objectFit: "contain" }}
+                    width='100%'
+                    height='50px'
+                    style={{ objectFit: 'contain' }}
                     src={friend.logo.fields.file.url}
-                    alt="friend logo"
+                    alt='friend logo'
                   />
 
-                  <Text pt={2} sx={{ variant: "headings.h6" }}>
+                  <Text pt={2} sx={{ variant: 'headings.h6' }}>
                     {friend.name}
                   </Text>
-                  <Text pt={3} sx={{ variant: "text.default" }}>
+                  <Text pt={3} sx={{ variant: 'text.default' }}>
                     {friend.description}
                   </Text>
                 </Flex>
@@ -127,46 +129,46 @@ const Partnerships = ({ friendsLogos, partners }) => {
           ))}
         </Grid>
 
-        <SpecialCardContainer sx={{ maxWidth: "800px" }}>
+        <SpecialCardContainer sx={{ maxWidth: '800px' }}>
           <img
-            src="/images/svg/general/decorators/dark-clouds.svg"
-            style={{ position: "absolute", top: "41px", right: "42px" }}
-            alt="dark clouds img"
+            src='/images/svg/general/decorators/dark-clouds.svg'
+            style={{ position: 'absolute', top: '41px', right: '42px' }}
+            alt='dark clouds img'
           />
           <Box
             sx={{
-              width: "60%",
+              width: '60%',
               pb: 2,
               pt: 4,
-              textAlign: "center",
-              alignSelf: "center",
+              textAlign: 'center',
+              alignSelf: 'center'
             }}
           >
-            <Text sx={{ variant: "headings.h4", color: "background" }}>Partner with us</Text>
+            <Text sx={{ variant: 'headings.h4', color: 'background' }}>Partner with us</Text>
           </Box>
 
           <Text
             sx={{
-              variant: "text.default",
+              variant: 'text.default',
               pb: 4,
-              color: "bodyLight",
+              color: 'bodyLight'
             }}
           >
             We&apos;re always open for new partnerships
           </Text>
-          <Link href="/contact">
+          <Link href='/contact'>
             <Button
               mt={1}
               p={3}
               sx={{
-                width: "200px",
-                variant: "buttons.default",
+                width: '200px',
+                variant: 'buttons.default'
               }}
             >
               Contact Us
             </Button>
           </Link>
-          <RaisedHandsImg src={"/images/decorator-raised-one-hand.png"} />
+          <RaisedHandsImg src={'/images/decorator-raised-one-hand.png'} />
         </SpecialCardContainer>
       </Main>
     </Layout>
@@ -175,20 +177,20 @@ const Partnerships = ({ friendsLogos, partners }) => {
 
 export async function getServerSideProps() {
   // contentful
-  const friendsReq = await fetchEntries({ contentType: "friendslogos" })
-  const friendsLogos = friendsReq.map((f) => f.fields)
+  const friendsReq = await fetchEntries({ contentType: 'friendslogos' })
+  const friendsLogos = friendsReq.map(f => f.fields)
 
   const partnershipsReq = await fetchEntries({
-    contentType: "contentPartnerships",
+    contentType: 'contentPartnerships'
   })
   console.log(JSON.stringify(partnershipsReq))
-  const partnerships = partnershipsReq?.map((p) => p.fields)
+  const partnerships = partnershipsReq?.map(p => p.fields)
 
   return {
     props: {
       friendsLogos: friendsLogos || {},
-      partners: partnerships || {},
-    },
+      partners: partnerships || {}
+    }
   }
 }
 
