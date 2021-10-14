@@ -37,24 +37,13 @@
 // };
 
 module.exports = {
-  extends: [
-    'next/core-web-vitals',
-    'plugin:@next/next/recommended',
-    'eslint:recommended',
-    'plugin:prettier/recommended'
-  ],
+  extends: 'next',
   rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        semi: false,
-        printWidth: 100,
-        endOfLine: 'auto',
-        singleQuote: true,
-        jsxSingleQuote: true,
-        trailingComma: 'none'
-      }
-    ]
+    'react/no-unescaped-entities': 'off',
+    '@next/next/no-page-custom-font': 'off'
   },
-  env: { es6: true }
-}
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+};
