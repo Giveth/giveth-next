@@ -6,10 +6,10 @@ import { fetchEntries } from '../src/utils/contentfulPosts'
 const AboutPage = dynamic(() => import('../src/components/content/AboutPage'))
 const Seo = dynamic(() => import('../src/components/seo'))
 
-const About = (props) => {
+const About = props => {
   return (
     <>
-      <Seo title="FAQ" />
+      <Seo title='FAQ' />
       <Box>
         <AboutPage {...props} />
       </Box>
@@ -17,23 +17,23 @@ const About = (props) => {
   )
 }
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
   // contentful
   const teamReq = await fetchEntries({
-    contentType: "contentTeam",
+    contentType: 'contentTeam'
   })
   const aboutReq = await fetchEntries({
-    contentType: "contentAbout",
+    contentType: 'contentAbout'
   })
 
-  const team = teamReq?.map((f) => f.fields)
-  const about = aboutReq?.map((f) => f.fields)
+  const team = teamReq?.map(f => f.fields)
+  const about = aboutReq?.map(f => f.fields)
   console.log({ team: JSON.stringify(team) })
   return {
     props: {
       team: team || {},
-      about: about || {},
-    },
+      about: about || {}
+    }
   }
 }
 

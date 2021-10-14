@@ -9,7 +9,7 @@ const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
 
 const Contact = () => {
-  const isMobile = useMediaQuery({ query: "(max-width: 825px)" })
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
       <Seo title='Contact us' />
@@ -39,8 +39,8 @@ const Contact = () => {
         />
       ) : null}
       <Main>
-        <Text sx={{ variant: "headings.h2", color: "secondary", mt: 4 }}>Contact us</Text>
-        <Text pb={5} sx={{ variant: "text.large" }}>
+        <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 4 }}>Contact us</Text>
+        <Text pb={5} sx={{ variant: 'text.large' }}>
           Have a question, or just want to say hi? Please fill out the form below to contact us.
         </Text>
         <FormStyled
@@ -67,7 +67,7 @@ const Contact = () => {
             }}
           >
             Your Email address
-            <Input type="email" name="email" id="email" placeholder="Email Address" />
+            <Input type='email' name='email' id='email' placeholder='Email Address' />
           </Label>
           <Label
             sx={{
@@ -75,7 +75,7 @@ const Contact = () => {
             }}
           >
             Message
-            <MessageStyled name="message" id="message" placeholder="Message" rows="10" />
+            <MessageStyled name='message' id='message' placeholder='Message' rows='10' />
           </Label>
           <Button
             type='submit'

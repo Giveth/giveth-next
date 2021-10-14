@@ -8,14 +8,14 @@ const Seo = dynamic(() => import('../../src/components/seo'))
 const Layout = dynamic(() => import('../../src/components/layout'))
 const DonationView = dynamic(() => import('../../src/components/donate'))
 
-const Donate = (props) => {
+const Donate = props => {
   return props.error ? (
     <NotFoundPage />
   ) : (
     <Layout asDialog>
       <Seo
         title={
-          props?.project?.title ? `Donate to ${props?.project?.title}` : "Donate to this project!"
+          props?.project?.title ? `Donate to ${props?.project?.title}` : 'Donate to this project!'
         }
         image={props?.project?.image}
       />
@@ -26,7 +26,7 @@ const Donate = (props) => {
 
 export async function getServerSideProps(props) {
   const { query } = props
-  const slug = decodeURI(query?.slug).replace(/\s/g, "")
+  const slug = decodeURI(query?.slug).replace(/\s/g, '')
 
   let project,
     errors = null
@@ -35,7 +35,7 @@ export async function getServerSideProps(props) {
     const { error, data: fetchProject } = await client.query({
       query: FETCH_PROJECT_BY_SLUG,
       variables: { slug: slug },
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only'
     })
     project = fetchProject?.projectBySlug
     if (error) errors = JSON.stringify(error)
@@ -49,7 +49,7 @@ export async function getServerSideProps(props) {
     `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?slug=${slug}`
   ).then(async function (response) {
     if (response.status >= 400) {
-      errors = new Error("Bad response from server")
+      errors = new Error('Bad response from server')
     }
     const res = await response.json()
     const traceProj = res?.data[0]
@@ -59,7 +59,7 @@ export async function getServerSideProps(props) {
       return { ...traceProj, ...project, IOTraceable: true }
     } else {
       // Only Traceable
-      return { ...traceProj, status: { id: "5" }, fromTrace: true }
+      return { ...traceProj, status: { id: '5' }, fromTrace: true }
     }
   })
 
@@ -70,8 +70,8 @@ export async function getServerSideProps(props) {
   return {
     props: {
       project: traceProject || project || null,
-      error: errors,
-    },
+      error: errors
+    }
   }
 }
 

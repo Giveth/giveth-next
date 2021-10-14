@@ -95,6 +95,8 @@ const CookiesBanner = () => {
 }
 
 const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
+  const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+
   const Template = () => {
     if (asDialog) {
       return (
@@ -145,11 +147,13 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
         strategy='lazyOnload'
       />
       {/* Autopilot */}
+      {/* eslint-disable-next-line @next/next/inline-script-id */}
       <Script
         dangerouslySetInnerHTML={{
           __html: `(function(o){var b="https://speedyfox.io/anywhere/",t="d7a64f71ff094b21890b3c44d1e568e895a0d71affc14ed79923afe6c341ccfd",a=window.AutopilotAnywhere={_runQueue:[],run:function(){this._runQueue.push(arguments);}},c=encodeURIComponent,s="SCRIPT",d=document,l=d.getElementsByTagName(s)[0],p="t="+c(d.title||"")+"&u="+c(d.location.href||"")+"&r="+c(d.referrer||""),j="text/javascript",z,y;if(!window.Autopilot) window.Autopilot=a;if(o.app) p="devmode=true&"+p;z=function(src,asy){var e=d.createElement(s);e.src=src;e.type=j;e.async=asy;l.parentNode.insertBefore(e,l);};y=function(){z(b+t+'?'+p,true);};if(window.attachEvent){window.attachEvent("onload",y);}else{window.addEventListener("load",y,false);}})({"app":true});`
         }}
       />
+      {/* eslint-disable-next-line @next/next/inline-script-id */}
       <Script type='text/javascript' strategy='lazyOnload'>
         {`
           function initMap(setLocation) {
@@ -192,10 +196,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
           }
         `}
       </Script>
-      <Script
-        src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed'
-        crossOrigin='anonymous'
-      />
+      <Script src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed' crossOrigin='anonymous' />
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
         defer

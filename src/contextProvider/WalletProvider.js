@@ -302,20 +302,20 @@ function WalletProvider(props) {
     }
   }
 
-  async function sendEthersTransaction (toAddress, amount, provider) {
-    const transaction = {
-      to: toAddress,
-      value: ethers.utils.parseEther(amount.toString())
-    }
+  // async function sendEthersTransaction(toAddress, amount) {
+  //   const transaction = {
+  //     to: toAddress,
+  //     value: ethers.utils.parseEther(amount.toString())
+  //   }
+  //
+  //   // console.log(`JF wallet?.provider : ${JSON.stringify(wallet, null, 2)}`)
+  //
+  //   const signer = getSigner(wallet)
+  //   const signerTransaction = await signer.sendTransaction(transaction)
+  //   return signerTransaction
+  // }
 
-    // console.log(`JF wallet?.provider : ${JSON.stringify(wallet, null, 2)}`)
-
-    const signer = getSigner(wallet)
-    const signerTransaction = await signer.sendTransaction(transaction)
-    return signerTransaction
-  }
-
-  async function sendTransaction (
+  async function sendTransaction(
     params,
     txCallbacks,
     contractAddress,

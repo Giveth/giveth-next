@@ -1,7 +1,7 @@
-import { Box } from "theme-ui"
-import React from "react"
+import { Box } from 'theme-ui'
+import React from 'react'
 import dynamic from 'next/dynamic'
-import { fetchEntries } from "../src/utils/contentfulPosts"
+import { fetchEntries } from '../src/utils/contentfulPosts'
 
 const ContentFaq = dynamic(() => import('../src/components/content/ContentFaq'))
 const Layout = dynamic(() => import('../src/components/layout'))
@@ -10,7 +10,7 @@ const Seo = dynamic(() => import('../src/components/seo'))
 const Faq = ({ faqs }) => {
   return (
     <Layout>
-      <Seo title="FAQ" />
+      <Seo title='FAQ' />
       <Box>
         <ContentFaq faqs={faqs} isopen />
       </Box>
@@ -18,18 +18,18 @@ const Faq = ({ faqs }) => {
   )
 }
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
   // contentful
   const faqReq = await fetchEntries({
-    contentType: "faqEntry",
+    contentType: 'faqEntry'
   })
 
-  const faqs = faqReq?.map((f) => f.fields)
+  const faqs = faqReq?.map(f => f.fields)
 
   return {
     props: {
-      faqs: faqs || {},
-    },
+      faqs: faqs || {}
+    }
   }
 }
 

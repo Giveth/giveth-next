@@ -1,3 +1,4 @@
+// eslint-disable-next-line @next/next/no-document-import-in-page
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { InitializeColorMode } from 'theme-ui'
 
@@ -20,12 +21,12 @@ import { InitializeColorMode } from 'theme-ui'
 // }
 
 export default class extends Document {
-  static async getInitialProps (ctx) {
+  static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx)
     return { ...initialProps }
   }
 
-  render () {
+  render() {
     return (
       <Html>
         <Head>
@@ -43,5 +44,3 @@ export default class extends Document {
     )
   }
 }
-
-export default MyDocument

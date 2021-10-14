@@ -136,10 +136,10 @@ const CreateProject = props => {
     }
   }
 
-  function newProject () {
+  function newProject() {
     setAddedProject(null)
   }
-  function AfterCreation () {
+  function AfterCreation() {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -274,7 +274,7 @@ const CreateProject = props => {
     )
   }
 
-  function ProjectForm () {
+  function ProjectForm() {
     if (!projectAdded && !projectId) {
       return (
         <>

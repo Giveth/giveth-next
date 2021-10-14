@@ -7,7 +7,7 @@ module.exports = withBundleAnalyzer({
   // experimental: {
   //   eslint: true,
   // },
-  async headers () {
+  async headers() {
     return [
       {
         source: '/:all*(svg|jpg|png)',

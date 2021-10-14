@@ -2,22 +2,19 @@ import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import ErrorPage from '../src/components/errorPage'
 import { client } from '../src/apollo/client'
-import ProjectsList, {
-  OrderByDirection,
-  OrderByField
-} from '../src/components/ProjectsList'
+import ProjectsList from '../src/components/ProjectsList'
 import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from '../src/apollo/gql/projects'
 
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
 
-const Project = (props) => {
+const Project = props => {
   const { projects, traceProjects, categories, totalCount, errors } = props
   const [limit, setLimit] = useState(12)
 
   return (
     <Layout>
-      <Seo title="Projects" />
+      <Seo title='Projects' />
       {projects && !errors ? (
         <ProjectsList
           query={props?.query}
@@ -46,13 +43,13 @@ export async function getServerSideProps(props) {
   try {
     const { error, data: fetchProject } = await client.query({
       query: FETCH_ALL_PROJECTS,
-      fetchPolicy: "no-cache",
+      fetchPolicy: 'no-cache'
     })
-    projects = Array.from(fetchProject?.projects).filter((i) => i?.status?.id === "5")
+    projects = Array.from(fetchProject?.projects).filter(i => i?.status?.id === '5')
 
     const { data: categoriesData } = await client.query({
       query: GET_CATEGORIES,
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only'
     })
     categories = categoriesData?.categories
 
@@ -63,15 +60,15 @@ export async function getServerSideProps(props) {
         `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?verified=true`
       ).then(function (response) {
         if (response.status >= 400) {
-          errors = new Error("Bad response from server")
+          errors = new Error('Bad response from server')
         }
         return response.json()
       })
     }
     //Check io2trace projects
-    traceProjects = traceProjects?.data?.filter((i) => {
+    traceProjects = traceProjects?.data?.filter(i => {
       if (i?.givethIoProjectId) {
-        const foundIndex = projects?.findIndex((x) => x.id == i?.givethIoProjectId)
+        const foundIndex = projects?.findIndex(x => x.id == i?.givethIoProjectId)
         if (foundIndex) {
           projects[foundIndex] = { ...projects[foundIndex], IOTraceable: true }
         }
@@ -87,12 +84,12 @@ export async function getServerSideProps(props) {
   return {
     props: {
       projects: projects || [],
-      traceProjects: traceProjects?.map((i) => ({ ...i, fromTrace: true })) || [],
+      traceProjects: traceProjects?.map(i => ({ ...i, fromTrace: true })) || [],
       categories: categories || null,
       totalCount: projects?.length || null,
       errors: JSON.stringify(errors) || null,
-      query: props.query,
-    },
+      query: props.query
+    }
   }
 }
 

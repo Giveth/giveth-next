@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { client } from '../../src/apollo/client'
-import { jsx, Text, Flex, Spinner } from 'theme-ui'
+import { Text, Flex } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import { FETCH_USER_PROJECTS } from '../../src/apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../../src/apollo/gql/auth'
@@ -20,7 +20,7 @@ const User = props => {
         <PublicProfileView {...props} />
       ) : (
         <Flex sx={{ mx: 4 }}>
-          <Text variant="headings.h3" color="secondary">
+          <Text variant='headings.h3' color='secondary'>
             This user doesn&apos;t exist
           </Text>
         </Flex>
@@ -35,8 +35,8 @@ export async function getServerSideProps(props) {
   const { data: userData } = await client.query({
     query: GET_USER_BY_ADDRESS,
     variables: {
-      address: query?.address?.toLowerCase(),
-    },
+      address: query?.address?.toLowerCase()
+    }
   })
   const user = userData?.userByAddress
 
@@ -44,17 +44,17 @@ export async function getServerSideProps(props) {
   const { data: userProjects } = await client.query({
     query: FETCH_USER_PROJECTS,
     variables: { admin: parseFloat(user?.id) || -1 },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only'
   })
   const projects = userProjects?.projects?.filter(
-    (i) => parseFloat(i?.admin) === parseFloat(user?.id)
+    i => parseFloat(i?.admin) === parseFloat(user?.id)
   )
 
   // GET DONATIONS
   const { data: userDonations } = await client.query({
     query: WALLET_DONATIONS,
     variables: { fromWalletAddresses: [query?.address] },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only'
   })
   const donations = userDonations?.donationsFromWallets
 
@@ -62,8 +62,8 @@ export async function getServerSideProps(props) {
     props: {
       user,
       projects,
-      donations,
-    },
+      donations
+    }
   }
 }
 

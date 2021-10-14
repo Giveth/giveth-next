@@ -38,20 +38,24 @@
 
 module.exports = {
   extends: [
-    "next/core-web-vitals",
-    "plugin:@next/next/recommended",
-    "eslint:recommended",
-    "plugin:prettier/recommended",
+    'next/core-web-vitals',
+    'plugin:@next/next/recommended',
+    'eslint:recommended',
+    'plugin:prettier/recommended'
   ],
   rules: {
-    "prettier/prettier": [
-      "error",
+    'prettier/prettier': [
+      'error',
       {
         semi: false,
         printWidth: 100,
-        endOfLine: "auto",
-      },
-    ],
+        endOfLine: 'auto',
+        singleQuote: true,
+        jsxSingleQuote: true,
+        arrowParens: 'avoid',
+        trailingComma: 'none'
+      }
+    ]
   },
-  env: { es6: true },
+  env: { es6: true }
 }

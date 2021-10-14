@@ -1,13 +1,13 @@
-import React from "react"
-import { Flex, Grid, Text, Box, Button } from "theme-ui"
+import React from 'react'
+import { Flex, Grid, Text, Box, Button } from 'theme-ui'
 import dynamic from 'next/dynamic'
-import Link from "next/link"
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
-import styled from "@emotion/styled"
-import useMediaQuery from "react-responsive"
+import Link from 'next/link'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import styled from '@emotion/styled'
+import useMediaQuery from 'react-responsive'
 
-import theme from "../src/utils/theme-ui"
-import { fetchEntries } from "../src/utils/contentfulPosts"
+import theme from '../src/utils/theme-ui'
+import { fetchEntries } from '../src/utils/contentfulPosts'
 
 // import { BLOCKS } from "@contentful/rich-text-types"
 
@@ -53,7 +53,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
   // }
   // console.log({ friendsLogos, partners })
   // return null;
-  const isMobile = useMediaQuery({ query: "(max-width: 825px)" })
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
       <Seo title='Our partnerships' />
@@ -114,7 +114,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
                     height='50px'
                     style={{ objectFit: 'contain' }}
                     src={friend.logo.fields.file.url}
-                    alt="friend logo"
+                    alt='friend logo'
                   />
 
                   <Text pt={2} sx={{ variant: 'headings.h6' }}>
@@ -131,9 +131,9 @@ const Partnerships = ({ friendsLogos, partners }) => {
 
         <SpecialCardContainer sx={{ maxWidth: '800px' }}>
           <img
-            src="/images/svg/general/decorators/dark-clouds.svg"
-            style={{ position: "absolute", top: "41px", right: "42px" }}
-            alt="dark clouds img"
+            src='/images/svg/general/decorators/dark-clouds.svg'
+            style={{ position: 'absolute', top: '41px', right: '42px' }}
+            alt='dark clouds img'
           />
           <Box
             sx={{
@@ -144,7 +144,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
               alignSelf: 'center'
             }}
           >
-            <Text sx={{ variant: "headings.h4", color: "background" }}>Partner with us</Text>
+            <Text sx={{ variant: 'headings.h4', color: 'background' }}>Partner with us</Text>
           </Box>
 
           <Text
@@ -175,22 +175,22 @@ const Partnerships = ({ friendsLogos, partners }) => {
   )
 }
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
   // contentful
-  const friendsReq = await fetchEntries({ contentType: "friendslogos" })
-  const friendsLogos = friendsReq.map((f) => f.fields)
+  const friendsReq = await fetchEntries({ contentType: 'friendslogos' })
+  const friendsLogos = friendsReq.map(f => f.fields)
 
   const partnershipsReq = await fetchEntries({
-    contentType: "contentPartnerships",
+    contentType: 'contentPartnerships'
   })
   console.log(JSON.stringify(partnershipsReq))
-  const partnerships = partnershipsReq?.map((p) => p.fields)
+  const partnerships = partnershipsReq?.map(p => p.fields)
 
   return {
     props: {
       friendsLogos: friendsLogos || {},
-      partners: partnerships || {},
-    },
+      partners: partnerships || {}
+    }
   }
 }
 

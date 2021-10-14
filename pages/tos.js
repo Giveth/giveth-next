@@ -1,5 +1,5 @@
-import { Box } from "theme-ui"
-import styled from "@emotion/styled"
+import { Box } from 'theme-ui'
+import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
 
 const Seo = dynamic(() => import('../src/components/seo'))
@@ -20,10 +20,10 @@ const Tos = () => {
               These Terms of Use constitute a legally binding agreement made between you, whether
               personally or on behalf of an entity (“you”) and Giveth Foundation, doing business as
               Giveth (&quot;Giveth&quot;, “we”, “us”, or “our”), concerning your access to and use
-              of the{" "}
-              <a href="https://giveth.io" target="_blank" rel="noopener noreferrer">
+              of the{' '}
+              <a href='https://giveth.io' target='_blank' rel='noopener noreferrer'>
                 https://giveth.io
-              </a>{" "}
+              </a>{' '}
               website as well as any other media form, media channel, mobile website or mobile
               application related, linked, or otherwise connected thereto (collectively, the
               “Site”). The Site provides an online marketplace for the following goods, products,
@@ -377,7 +377,7 @@ const Tos = () => {
               without limitation, your image and voice) for any purpose, commercial, advertising, or
               otherwise, and to prepare derivative works of, or incorporate into other works, such
               Contributions, and grant and authorize sublicenses of the foregoing. The use and
-              distribution may occur in any media formats and through any media channels.{" "}
+              distribution may occur in any media formats and through any media channels.{' '}
             </p>
             <p>
               This license will apply to any form, media, or technology now known or hereafter
@@ -600,8 +600,8 @@ const Tos = () => {
               arbitration shall be commenced and conducted under the Commercial Arbitration Rules of
               the American Arbitration Association (&quot;AAA&quot;) and, where appropriate, the
               AAA’s Supplementary Procedures for Consumer Related Disputes (&quot;AAA Consumer
-              Rules&quot;), both of which are available at the AAA website:{" "}
-              <a href="www.adr.org" target="_blank" rel="noopener noreferrer">
+              Rules&quot;), both of which are available at the AAA website:{' '}
+              <a href='www.adr.org' target='_blank' rel='noopener noreferrer'>
                 www.adr.org
               </a>
               . Your arbitration fees and your share of arbitrator compensation shall be governed by

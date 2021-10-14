@@ -37,7 +37,7 @@ class Video extends BlockEmbed {
     return node
   }
 
-  static formats (domNode) {
+  static formats(domNode) {
     if (typeof window === 'undefined') {
       return
     }
@@ -50,14 +50,14 @@ class Video extends BlockEmbed {
     }, {})
   }
 
-  static value (domNode) {
+  static value(domNode) {
     if (typeof window === 'undefined') {
       return
     }
     return domNode?.getElementsByTagName('iframe')[0]?.getAttribute('src')
   }
 
-  format (name, value) {
+  format(name, value) {
     if (VIDEO_ATTRIBUTES.indexOf(name) > -1) {
       if (value) {
         this.domNode.setAttribute(name, value)

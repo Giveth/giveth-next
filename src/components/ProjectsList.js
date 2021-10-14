@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Flex,
-  Spinner,
-  Text,
-  Input
-} from 'theme-ui'
+import { Box, Button, Grid, Flex, Spinner, Text, Input } from 'theme-ui'
 import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -14,22 +6,20 @@ import styled from '@emotion/styled'
 import theme from '../utils/theme-ui'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import * as JsSearch from 'js-search'
-import DropIcon from '../images/svg/general/dropdown-arrow.svg'
 import SearchIcon from '../images/svg/general/search-icon.svg'
+// import DropIcon from '../images/svg/general/dropdown-arrow.svg'
 
 const ProjectCard = dynamic(() => import('./projectCard'))
 const DropdownInput = dynamic(() => import('../components/dropdownInput'))
 
-const ProjectSection = styled(Box)``
+// export const OrderByField = {
+//   Balance: 'Balance',
+//   CreationDate: 'CreationDate'
+// }
 
-export const OrderByField = {
-  Balance: 'Balance',
-  CreationDate: 'CreationDate'
-}
-
-const orderBySelectOptions = {}
-orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
-orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
+// const orderBySelectOptions = {}
+// orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
+// orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
 
 const ProjectsList = props => {
   const {
