@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import * as matter from "gray-matter"
+import React from 'react'
+import * as matter from 'gray-matter'
 // import KeyDidResolver from "key-did-resolver"
 // import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver"
 // import Ceramic from "@ceramicnetwork/http-client"
@@ -7,16 +7,15 @@ import * as matter from "gray-matter"
 // import { ThreeIdConnect, EthereumAuthProvider } from "@3id/connect"
 // import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 // import { IDX } from "@ceramicstudio/idx"
-import { client } from "../src/apollo/client"
-import GivethContent from "../src/content/giveth.md"
-import Layout from "../src/components/layout"
-import Seo from "../src/components/seo"
-import Hero from "../src/components/home/HeroSection"
-import InfoSection from "../src/components/home/InfoSection"
-import UpdatesSection from "../src/components/home/UpdatesSection"
-import HomeTopProjects from "../src/components/home/HomeTopProjects"
-import { PopupContext } from "../src/contextProvider/popupProvider"
-import { FETCH_ALL_PROJECTS } from "../src/apollo/gql/projects"
+import { client } from '../src/apollo/client'
+import GivethContent from '../src/content/giveth.md'
+import Layout from '../src/components/layout'
+import Seo from '../src/components/seo'
+import Hero from '../src/components/home/HeroSection'
+import InfoSection from '../src/components/home/InfoSection'
+import UpdatesSection from '../src/components/home/UpdatesSection'
+import HomeTopProjects from '../src/components/home/HomeTopProjects'
+import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
 
 // const aliases = {
 //   alias1: "0x00d18ca9782bE1CaEF611017c2Fbc1a39779A57C:1",
@@ -33,23 +32,7 @@ import { FETCH_ALL_PROJECTS } from "../src/apollo/gql/projects"
 //
 // ceramic.did = did
 
-const IndexContent = ({
-  hideInfo,
-  content,
-  topProjects,
-  categories,
-  allProject,
-  mediumPosts,
-  isWelcome,
-}) => {
-  const popup = React.useContext(PopupContext)
-  // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
-  useEffect(() => {
-    if (isWelcome) {
-      popup.triggerPopup("WelcomeLoggedOut")
-    }
-  }, [])
-
+const IndexContent = ({ hideInfo, content, topProjects, categories, allProject, mediumPosts }) => {
   return (
     <>
       <Hero content={content} />
@@ -65,7 +48,7 @@ const IndexContent = ({
   )
 }
 
-const IndexPage = (props) => {
+const IndexPage = props => {
   const { query, content, mediumPosts, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION ? process.env.HIDE_INFO_SECTION : false
@@ -103,8 +86,8 @@ const IndexPage = (props) => {
   // }
 
   return (
-    <Layout isHomePage="true">
-      <Seo title="Home" />
+    <Layout isHomePage='true'>
+      <Seo title='Home' />
       {/* <button onClick={() => ceramicTest()}> idx test </button> */}
       <IndexContent
         hideInfo={hideInfo}
@@ -124,20 +107,20 @@ const IndexPage = (props) => {
 export async function getServerSideProps(props) {
   const { data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
-    variables: { limit: 20 },
+    variables: { limit: 20 }
   })
 
   const mdContent = matter(GivethContent)
 
   const medium = await fetch(
-    "https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth"
+    'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth'
   )
   const mediumPosts = await medium.json()
 
   return {
     props: {
       topProjects: response?.projects
-        ?.filter((i) => !i?.verified)
+        ?.filter(i => !i?.verified)
         ?.sort((a, b) => {
           console.log({ a, b })
           if (a?.totalHearts > b?.totalHearts) return -1
@@ -145,8 +128,8 @@ export async function getServerSideProps(props) {
         ?.slice(0, 3),
       content: mdContent?.data,
       mediumPosts: mediumPosts?.items?.slice(0, 2) || {},
-      query: props.query,
-    },
+      query: props.query
+    }
   }
 }
 

@@ -1,30 +1,37 @@
+import { useContext } from 'react'
 import styled from '@emotion/styled'
-import { Image, Text } from 'theme-ui'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Text } from 'theme-ui'
 import { FiExternalLink } from 'react-icons/fi'
 import { useMediaQuery } from 'react-responsive'
+import Jdenticon from 'react-jdenticon'
 
 import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
-import Jdenticon from 'react-jdenticon'
-import Link from 'next/link'
-import { useWallet } from '../../contextProvider/WalletProvider'
-import { formatEtherscanLink } from '../../util'
+import { formatEtherscanLink } from '../../lib/util'
+import { shortenAddress } from '../../lib/helpers'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
 const UserDetails = () => {
   const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
+  const {
+    state: { balance, account, networkId, networkName, user, web3 }
+  } = useContext(Web3Context)
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
-  const { isLoggedIn, logout, user, balance, currentNetwork, currentChainId, wallet } = useWallet()
-  const address = isLoggedIn ? user.getWalletAddress() : '?'
-  const truncAddress = `${address.substring(0, 10)}...${address.substring(
-    address.length - 4,
-    address.length
-  )}`
+  let isXDai = false
+  let dotColor
+  if (networkId === 100) {
+    dotColor = 'greenishBlue'
+    isXDai = true
+  }
+
+  const truncAddress = shortenAddress(account)
 
   const parseNetwork = () => {
-    let dotColor
-    switch (currentNetwork) {
+    switch (networkName) {
       case 'main':
         dotColor = 'greenishBlue'
         break
@@ -43,12 +50,7 @@ const UserDetails = () => {
       default:
         dotColor = 'softGray'
     }
-    // special for xDAI
-    let isXDai = false
-    if (currentChainId === 100) {
-      dotColor = 'greenishBlue'
-      isXDai = true
-    }
+
     return (
       <MenuTitle
         sx={{
@@ -59,13 +61,9 @@ const UserDetails = () => {
         }}
       >
         <Dot sx={{ backgroundColor: dotColor }} />
-        {isXDai ? 'xDai' : currentNetwork}
+        {networkName}
       </MenuTitle>
     )
-  }
-
-  const handleLogout = () => {
-    logout()
   }
 
   return (
@@ -76,18 +74,17 @@ const UserDetails = () => {
       >
         {user?.avatar ? (
           <Image
-            alt=''
+            alt='user avatar'
             sx={{
               width: '30',
               height: '30',
               borderRadius: '15px'
             }}
-            onerror={`this.onerror=null;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqenVtmZ7dQULkiedSFuZ_YPmNonJGLDYGHA&usqp=CAU';`}
-            src={user?.avatar}
-            className='avatarimage'
+            src={user.avatar}
+            className='avatar image'
           />
         ) : (
-          <Jdenticon size='32' value={address} />
+          <Jdenticon size='32' value={account || ''} />
         )}
 
         {!isXsWindow && (
@@ -101,17 +98,20 @@ const UserDetails = () => {
               textTransform: 'capitalize'
             }}
           >
-            {user.getName()}
+            {user?.getName()}
           </Text>
         )}
       </StyledButton>
+
       {isComponentVisible ? (
         <AccountDetails>
           <MenuTitle sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}>
             Wallet Address
           </MenuTitle>
+
           <MenuTitle sx={{ variant: 'text.medium', color: 'secondary' }}>{truncAddress}</MenuTitle>
-          {balance ? (
+
+          {balance >= 0 && (
             <MenuTitle
               sx={{
                 variant: 'text.small',
@@ -121,19 +121,24 @@ const UserDetails = () => {
               className='balance'
             >
               Balance:{' '}
-              {balance
-                ? `${parseFloat(balance)?.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 6
-                  })} ${currentChainId === 100 ? 'xDAI' : 'ETH'}`
-                : ''}
+              {parseFloat(balance)?.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 6
+              })}{' '}
+              {isXDai ? 'xDAI' : 'ETH'}
             </MenuTitle>
-          ) : null}
+          )}
+
           <MenuTitle sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}>
-            {wallet ? (wallet.isTorus ? 'Torus Network' : 'Metamask Network') : 'No network'}
+            {web3?.Torus ? 'Torus Network' : web3?.MetaMask ? 'Metamask Network' : 'Wallet network'}
           </MenuTitle>
           {parseNetwork()}
-          <Link href='/account' sx={{ textDecoration: 'none', textDecorationLine: 'none' }}>
+
+          <Link
+            href='/account'
+            passHref
+            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+          >
             <MenuItem
               sx={{
                 variant: 'text.medium'
@@ -143,24 +148,27 @@ const UserDetails = () => {
               My Account
             </MenuItem>
           </Link>
-          <a
-            href={formatEtherscanLink('Account', [currentChainId, user.getWalletAddress()])}
+
+          <MenuItem
+            sx={{
+              variant: 'text.medium'
+            }}
+            className='shadow boxheight'
+            href={formatEtherscanLink('Account', [networkId, account])}
             target='_blank'
             rel='noopener noreferrer'
-            sx={{ textDecoration: 'none' }}
+            style={{ textDecoration: 'none' }}
           >
-            <MenuItem
-              sx={{
-                variant: 'text.medium'
-              }}
-              className='shadow boxheight'
-            >
-              My Wallet <FiExternalLink size='18px' />
-            </MenuItem>
-          </a>
+            My Wallet
+            <div style={{ marginLeft: '10px' }}>
+              <FiExternalLink size='18px' />
+            </div>
+          </MenuItem>
+
           <Link
             href='/account?data=all&view=projects'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+            passHref
           >
             <MenuItem
               sx={{
@@ -171,7 +179,8 @@ const UserDetails = () => {
               My Projects
             </MenuItem>
           </Link>
-          <Link href='/create' sx={{ textDecoration: 'none', textDecorationLine: 'none' }}>
+
+          <Link href='/create' sx={{ textDecoration: 'none', textDecorationLine: 'none' }} passHref>
             <MenuItem
               sx={{
                 variant: 'text.medium'
@@ -181,9 +190,11 @@ const UserDetails = () => {
               Create a Project
             </MenuItem>
           </Link>
+
           <Link
             href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+            passHref
           >
             <MenuItem
               sx={{
@@ -194,38 +205,29 @@ const UserDetails = () => {
               Project Verification
             </MenuItem>
           </Link>
-          <MenuLink
-            href='https://github.com/Giveth/giveth-2/issues/new/choose'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            <MenuItem
-              sx={{
-                variant: 'text.medium'
-              }}
-              className='shadow boxheight'
-            >
-              Report a bug
-            </MenuItem>
-          </MenuLink>
-          <MenuLink href='https://discord.gg/JYNBDuFUpG' target='_blank' rel='noopener noreferrer'>
-            <MenuItem
-              sx={{
-                variant: 'text.medium'
-              }}
-              className='shadow boxheight'
-            >
-              Support
-            </MenuItem>
-          </MenuLink>
+
           <MenuItem
             sx={{
               variant: 'text.medium'
             }}
-            onClick={handleLogout}
-            className='boxheight'
+            className='shadow boxheight'
+            href='https://github.com/Giveth/giveth-2/issues/new/choose'
+            target='_blank'
+            rel='noopener noreferrer'
           >
-            Sign out
+            Report a bug
+          </MenuItem>
+
+          <MenuItem
+            sx={{
+              variant: 'text.medium'
+            }}
+            className='shadow boxheight'
+            href='https://discord.gg/JYNBDuFUpG'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            Support
           </MenuItem>
         </AccountDetails>
       ) : null}
@@ -262,7 +264,7 @@ const AccountDetails = styled.div`
   }
 `
 
-const MenuItem = styled(Text)`
+const MenuItem = styled.a`
   align-self: center;
   padding-left: 16px;
   cursor: pointer;
@@ -280,10 +282,6 @@ const MenuTitle = styled(Text)`
   color: ${theme.colors.secondary};
 `
 
-const MenuLink = styled.a`
-  text-decoration: none;
-`
-
 const Dot = styled.div`
   height: 8px;
   width: 8px;
@@ -291,6 +289,7 @@ const Dot = styled.div`
   display: inline-block;
   margin: 0 4px 0 0;
 `
+
 const StyledButton = styled.a`
   display: flex;
   flex-direction: row;

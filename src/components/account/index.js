@@ -1,19 +1,30 @@
-import React from 'react'
-import { useRouter } from 'next/router'
+import React, { useContext } from 'react'
 import { Flex } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
-import { useWallet } from '../../contextProvider/WalletProvider'
+
 import LoadingModal from '../../components/loadingModal'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
 import { FETCH_MY_PROJECTS } from '../../apollo/gql/projects'
 import AccountTop from '../../components/account/AccountTop'
 import AccountNav from '../../components/account/AccountNav'
 import AccountBody from '../../components/account/AccountBody'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+
+const Main = () => {
+  const {
+    state: { user },
+    actions: { signModalContent }
+  } = useContext(Web3Context)
+
+  return user && user.token ? (
+    <AccountPage />
+  ) : (
+    <div style={{ margin: '150px 0', textAlign: 'center' }}>{signModalContent()}</div>
+  )
+}
 
 const AccountPage = () => {
-  const router = useRouter()
-  const { isLoggedIn } = useWallet()
   const { data: donations, loading: dataLoading } = useQuery(USERS_DONATIONS, {
     fetchPolicy: 'network-only'
   })
@@ -27,6 +38,7 @@ const AccountPage = () => {
     view: StringParam,
     data: StringParam
   })
+
   const isSSR = typeof window === 'undefined'
   if (dataLoading || projectsLoading) {
     return (
@@ -36,11 +48,6 @@ const AccountPage = () => {
         <LoadingModal isOpen />
       </>
     )
-  }
-
-  if (!isLoggedIn) {
-    router.push('/', { state: { welcome: true } })
-    return null
   }
 
   return (
@@ -71,4 +78,4 @@ const AccountPage = () => {
   )
 }
 
-export default AccountPage
+export default Main

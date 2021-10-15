@@ -1,31 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import 'react-quill/dist/quill.snow.css'
 import PropTypes from 'prop-types'
 import { Link, Flex, Text, Image } from 'theme-ui'
 import { positions, Provider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
+import styled from '@emotion/styled'
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
+
 import theme from '../utils/theme-ui'
 import Header from './header'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
 import { QueryParamProvider } from '../contextProvider/queryParamProvider'
-
 import Dialog from './dialog'
 import GithubIssue from './GithubIssue'
 import XDAIPopup from './xDAIPopup'
 import Footer from './footer'
 import Popup from './popup'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import styled from '@emotion/styled'
-import { WalletProvider } from '../contextProvider/WalletProvider'
-import Web3Provider from '../contextProvider/Web3Provider'
 
 const CookiesBanner = () => {
-  const [cookiesAccepted, setCookiesAccepted] = React.useState('none')
-  const [softLaunchSeen, setSoftLaunchSeen] = React.useState('none')
-  React.useEffect(() => {
+  const [cookiesAccepted, setCookiesAccepted] = useState('none')
+  const [softLaunchSeen, setSoftLaunchSeen] = useState('none')
+
+  useEffect(() => {
     const cookies = typeof window !== 'undefined' && window.localStorage.getItem('cookiesAccepted')
     setCookiesAccepted(cookies)
     const softLaunch =
@@ -38,12 +37,14 @@ const CookiesBanner = () => {
       setSoftLaunchSeen('true')
     }
   }, [])
+
   if (softLaunchSeen === 'false') {
     // Toast({
     //   content: `We're in Softlaunch mode`,
     //   type: 'info'
     // })
   }
+
   if (cookiesAccepted || cookiesAccepted === 'none') return null
   // TODO: We may build this reusable for possible future banners on the app
   return (
@@ -54,7 +55,7 @@ const CookiesBanner = () => {
       }}
     >
       <Flex sx={{ alignItems: 'center', flexDirection: ['column', 'row', 'row'] }}>
-        <Image src={'/images/info_outline.png'} sx={{ mb: [2, 0, 0] }} />
+        <Image src={'/images/info_outline.png'} sx={{ mb: [2, 0, 0] }} alt='info_outline' />
         <Text sx={{ color: 'blue', ml: 2, mb: [2, 0, 0] }}>
           This site uses cookies to provide you with an awesome user experience. By using it, you
           accept our{' '}
@@ -105,7 +106,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
             />
           ) : null}
           <div
-            sx={{
+            style={{
               // applies width 100% to all viewport widths,
               // width 50% above the first breakpoint,
               // and 25% above the next breakpoint
@@ -121,14 +122,6 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
       )
     }
   }
-
-  // const BrowserHOC = ({ children }) => {
-  //   if (typeof window === 'undefined') {
-  //     return <>{children}</>
-  //   } else {
-  //     return <WalletProvider>{children}</WalletProvider>
-  //   }
-  // }
 
   return (
     <>
@@ -178,23 +171,19 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
         </script>
       </Head>
 
-      <Web3Provider>
-        <WalletProvider>
-          <PopupProvider>
-            <GlobalProvider>
-              <QueryParamProvider>
-                <Provider template={AlertTemplate} {...AlertOptions}>
-                  <GithubIssue fixed={true} />
-                  <XDAIPopup />
-                  <Template />
-                  <Popup />
-                </Provider>
-              </QueryParamProvider>
-            </GlobalProvider>
-            <StyledToastContainer />
-          </PopupProvider>
-        </WalletProvider>
-      </Web3Provider>
+      <PopupProvider>
+        <GlobalProvider>
+          <QueryParamProvider>
+            <Provider template={AlertTemplate} {...AlertOptions}>
+              <GithubIssue fixed={true} />
+              <XDAIPopup />
+              <Template />
+              <Popup />
+            </Provider>
+          </QueryParamProvider>
+        </GlobalProvider>
+        <StyledToastContainer />
+      </PopupProvider>
     </>
   )
 }
@@ -204,7 +193,7 @@ const StyledToastContainer = styled(ToastContainer)`
     color: ${theme.colors.bodyDark};
   }
   .Toastify__toast {
-    border-radius: 4px 0px 0px 4px;
+    border-radius: 4px 0 0 4px;
     background-color: white;
   }
   .Toastify__toast--info {

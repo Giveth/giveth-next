@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
+import React, { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { IconButton, Text, Flex } from 'theme-ui'
+import { IconButton, Text, Flex, Button } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
+import Headroom from 'react-headroom'
+
 import theme from '../utils/theme-ui'
 import Logo from './content/Logo'
-import Headroom from 'react-headroom'
 import { ProjectContext } from '../contextProvider/projectProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
-import { useWallet } from '../contextProvider/WalletProvider'
-
-const Login = dynamic(() => import('./torus/login'))
+import { shortenAddress } from '../lib/helpers'
+import { Context as Web3Context } from '../contextProvider/Web3Provider'
+import UserDetails from './account/userDetails'
 
 const siteId = process.env.NEXT_PUBLIC_SITE_ID
 const projectSearch = process.env.PROJECT_SEARCH
@@ -25,7 +25,7 @@ const CategoriesList = () => {
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <CategoriesListView>
-        <Link href={'/projects'}>
+        <Link href={'/projects'} passHref>
           <li>
             <p>All</p>
           </li>
@@ -44,6 +44,7 @@ const CategoriesList = () => {
                   query: { category: c.name }
                 }}
                 key={c.name}
+                passHref
               >
                 <li>
                   <p>{c.value}</p>
@@ -57,14 +58,22 @@ const CategoriesList = () => {
 }
 
 const Header = ({ isHomePage }) => {
+  const {
+    state: { account, isEnabled, user, web3 },
+    actions: { switchWallet, enableProvider, initOnBoard }
+  } = useContext(Web3Context)
+
+  const usePopup = useContext(PopupContext)
+
   const router = useRouter()
-  const { isLoggedIn, user } = useWallet()
-  const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
+
   const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const isMobileForProjectBtn = useMediaQuery({ query: '(max-width: 1200px)' })
+
   const [hasScrolled, setScrollState] = useState(false)
+
   const pathname = router.pathname?.split('/')[1]
 
   useEffect(() => {
@@ -85,7 +94,6 @@ const Header = ({ isHomePage }) => {
   }, [])
 
   const goCreate = async () => {
-    if (!isLoggedIn) return triggerPopup('WelcomeLoggedOut')
     if (!user?.name || !user?.email || user.email === '') {
       return triggerPopup('IncompleteProfile')
     }
@@ -94,10 +102,10 @@ const Header = ({ isHomePage }) => {
 
   const MainLogo = () => {
     return (
-      <Link href='/'>
+      <Link href='/' passHref>
         <LogoSpan className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}>
           <Logo />
-          {siteId === 'giveth' && !isXsWindow ? (
+          {siteId === 'giveth' && !isXsWindow && (
             <Text
               pl={3}
               sx={{
@@ -106,8 +114,6 @@ const Header = ({ isHomePage }) => {
             >
               GIVETH
             </Text>
-          ) : (
-            ''
           )}
         </LogoSpan>
       </Link>
@@ -133,7 +139,7 @@ const Header = ({ isHomePage }) => {
               style={{
                 position: 'absolute',
                 top: '-70px',
-                left: '300px'
+                left: '33vw'
               }}
               className='hide'
             />
@@ -143,7 +149,7 @@ const Header = ({ isHomePage }) => {
               style={{
                 position: 'absolute',
                 top: '-80px',
-                left: '92vw'
+                left: '66vw'
               }}
               className='hide'
             />
@@ -206,9 +212,26 @@ const Header = ({ isHomePage }) => {
               </Flex>
             )}
             {pathname !== 'projects' && (
-              <img style={{ margin: '0 10px' }} src={'/images/icon-vertical-line.svg'} alt='' />
+              <img
+                style={{ margin: '0 10px' }}
+                src={'/images/icon-vertical-line.svg'}
+                alt='vertical line svg'
+              />
             )}
-            <Login />
+
+            {!!web3 && (
+              <Button onClick={switchWallet} style={{ marginRight: '10px', cursor: 'pointer' }}>
+                {account ? shortenAddress(account) : 'Switch Wallet'}
+              </Button>
+            )}
+
+            {!isEnabled && (
+              <Button onClick={web3 ? enableProvider : initOnBoard} style={{ cursor: 'pointer' }}>
+                Connect Wallet
+              </Button>
+            )}
+
+            {user && <UserDetails />}
           </UserSpan>
         </HeaderSpan>
       </HeaderContainer>
@@ -269,28 +292,11 @@ const HeaderSpan = styled.nav`
   }
 `
 
-const LogoSpan = styled.span`
-  cursor: pointer;
+const LogoSpan = styled.a`
   display: grid;
   grid-template-columns: repeat(2, auto);
   align-items: center;
   justify-content: start;
-
-  img {
-    width: 60px;
-    height: 60px;
-    transform: scale(1);
-    transition: 0.8s all ease;
-  }
-
-  &.HeaderLogoScrolled img {
-    transform: scale(0.7);
-  }
-
-  @media (max-width: 1030px) {
-    grid-column: 1;
-    grid-row: 1;
-  }
 `
 
 const MiddleSpan = styled.span`

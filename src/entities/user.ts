@@ -1,4 +1,5 @@
 import { getLocalStorageTokenLabel } from '../services/auth'
+import { shortenAddress } from '../lib/helpers'
 
 const tokenLabel = getLocalStorageTokenLabel()
 
@@ -7,6 +8,7 @@ export default class User {
   token: string
   activeWalletIndex: number
   walletAddresses: string[]
+  walletAddress: string
   email?: string
   firstName?: string
   lastName?: string
@@ -34,6 +36,7 @@ export default class User {
     } else {
       this.walletType = initUser.walletType
       this.walletAddresses = initUser.walletAddresses
+      this.walletAddress = initUser.walletAddress
       this.id = initUser.id
       this.token = initUser.token
       this.parseDbUser(initUser)
@@ -62,25 +65,21 @@ export default class User {
   }
 
   addWalletAddress(address, activeWallet) {
-    this.walletAddresses.push(address)
-
+    this.walletAddress = address
     if (activeWallet) {
       this.activeWalletIndex = this.walletAddresses.indexOf(address)
     }
   }
 
   getName() {
-    function truncAddress(address) {
-      return `${address.substring(0, 5)}...${address.substring(address.length - 4, address.length)}`
-    }
-
-    return this.name ? this.name.toUpperCase() : truncAddress(this.getWalletAddress())
+    return this.name ? this.name.toUpperCase() : shortenAddress(this.getWalletAddress())
     // return /(.+)@(.+){2,}\.(.+){2,}/.test(this.name)
     //         ? this.name?.toUpperCase()
     //         : this.name
   }
+
   getWalletAddress() {
-    return this.walletAddresses && this.walletAddresses.length > 0 ? this.walletAddresses[0] : ''
+    return this.walletAddress
   }
   // organisations: Organisation[]
 

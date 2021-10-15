@@ -1,6 +1,6 @@
 // eslint-disable-next-line @next/next/no-document-import-in-page
-import Document, { Html, Head, Main, NextScript } from "next/document"
-import { InitializeColorMode } from "theme-ui"
+import Document, { Html, Head, Main, NextScript } from 'next/document'
+import { InitializeColorMode } from 'theme-ui'
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -16,14 +16,10 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <script
-            src="https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed"
-            crossOrigin="anonymous"
-          />
-          <script
             src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
             defer
           />
-          <script src="/node_modules/quill-video-resize-module/video-resize.min.js" />
+          <script src='/node_modules/quill-video-resize-module/video-resize.min.js' />
         </Head>
         <body>
           <InitializeColorMode />

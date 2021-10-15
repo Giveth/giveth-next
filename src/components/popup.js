@@ -2,10 +2,6 @@ import React from 'react'
 import { Button, Image, Flex, Text } from 'theme-ui'
 import Modal from './modal'
 import Link from 'next/link'
-import { useWallet } from '../contextProvider/WalletProvider'
-import { PopupContext } from '../contextProvider/popupProvider'
-import LoginModal from '../components/torus/loginModal'
-import CopyToClipboard from '../components/copyToClipboard'
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -14,6 +10,8 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
+import { PopupContext } from '../contextProvider/popupProvider'
+import CopyToClipboard from '../components/copyToClipboard'
 
 function ChangeNetworkPopup({ close }) {
   return (
@@ -75,15 +73,6 @@ function ChangeNetworkPopup({ close }) {
       />
     </Flex>
   )
-}
-
-function WelcomeLoggedOutPopup(props) {
-  const { value, clearPopup } = props
-  const { isLoggedIn, login } = useWallet()
-  if (isLoggedIn) {
-    return null
-  }
-  return <LoginModal isOpen={value} close={() => clearPopup(false)} login={login} />
 }
 
 function IncompleteProfilePopup({ close }) {
@@ -277,10 +266,6 @@ function Popup() {
       default:
         return null
     }
-  }
-  // special case that is already a modal
-  if (value?.type === 'WelcomeLoggedOut') {
-    return <WelcomeLoggedOutPopup {...usePopup} />
   }
 
   return value ? (

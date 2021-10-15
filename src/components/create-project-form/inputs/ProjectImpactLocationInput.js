@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Input, Label, Button, Checkbox, Text } from 'theme-ui'
-import { animated } from 'react-spring'
 
-export const ProjectImpactLocationInput = ({
-  register,
-  currentValue,
-  animationStyle,
-  goBack,
-  setValue
-}) => {
+export const ProjectImpactLocationInput = ({ register, currentValue, goBack, setValue }) => {
   const [location, setLocation] = useState(currentValue === 'Global' ? 'Global' : currentValue)
 
   const handleChange = value => {
@@ -21,12 +14,7 @@ export const ProjectImpactLocationInput = ({
   }, [])
 
   return (
-    <animated.section
-      style={{
-        ...animationStyle,
-        marginTop: '30px'
-      }}
-    >
+    <div style={{ marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -148,6 +136,6 @@ export const ProjectImpactLocationInput = ({
           </Text>
         </Button>
       </Flex>
-    </animated.section>
+    </div>
   )
 }

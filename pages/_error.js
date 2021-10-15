@@ -1,5 +1,5 @@
-import Layout from "../src/components/layout"
-import { Flex, Text } from "theme-ui"
+import Layout from '../src/components/layout'
+import { Flex, Text } from 'theme-ui'
 
 function Error(props) {
   const { statusCode, err } = props
@@ -8,16 +8,16 @@ function Error(props) {
     <Layout>
       <Flex
         sx={{
-          flexDirection: "column",
-          mx: "5%",
-          backgroundColor: "background",
-          p: 4,
+          flexDirection: 'column',
+          mx: '5%',
+          backgroundColor: 'background',
+          p: 4
         }}
       >
-        <Text variant="headings.h4" sx={{ mb: 4, color: "secondary" }}>
-          There was an error {statusCode ? ` - code: ${statusCode}` : ""}
+        <Text variant='headings.h4' sx={{ mb: 4, color: 'secondary' }}>
+          There was an error {statusCode ? ` - code: ${statusCode}` : ''}
         </Text>
-        <Text variant="text.default" sx={{ mb: 4, color: "secondary" }}>
+        <Text variant='text.default' sx={{ mb: 4, color: 'secondary' }}>
           {err?.message}
         </Text>
       </Flex>

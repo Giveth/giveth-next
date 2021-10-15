@@ -5,13 +5,14 @@ import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
-import theme from '../utils/theme-ui/index'
-import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
 import { BsHeartFill } from 'react-icons/bs'
 import { FaShareAlt } from 'react-icons/fa'
+
+import theme from '../utils/theme-ui/index'
+import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
 import { PopupContext } from '../contextProvider/popupProvider'
-import { useWallet } from '../contextProvider/WalletProvider'
 import LevitatingCard from './hoc/levitatingCard'
+import { Context as Web3Context } from '../contextProvider/Web3Provider'
 // import Donate from '../components/donateForm'
 
 const RichTextViewer = dynamic(() => import('./richTextViewer'), {
@@ -43,7 +44,11 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectCard = props => {
-  const { user } = useWallet()
+  const {
+    state: { user },
+    actions: { showSign }
+  } = useContext(Web3Context)
+
   const { project, fromViewStyle, isATrace } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
@@ -64,19 +69,17 @@ const ProjectCard = props => {
       const { data } = reaction
       const { toggleProjectReaction } = data
       const { reaction: hearted, reactionCount } = toggleProjectReaction
-      console.log({ hearted, reactionCount })
       setHeartedCount(reactionCount)
       setHeartedByUser(hearted)
-    } catch (error) {
-      usePopup?.triggerPopup('WelcomeLoggedOut')
-      console.log({ error })
+    } catch (err) {
+      showSign()
     }
   }
 
   useEffect(() => {
-    setHeartedCount(project?.reactions?.length)
-    setHeartedByUser(project?.reactions?.find(r => r.userId === user?.id))
-  }, [project])
+    if (project) setHeartedCount(project.reactions?.length)
+    if (user) setHeartedByUser(project?.reactions?.find(r => r.userId === user.id))
+  }, [project, user])
 
   const image = props?.image || project?.image
   const currentTime = new Date()

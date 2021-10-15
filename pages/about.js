@@ -1,13 +1,13 @@
-import React from "react"
-import { Box } from "theme-ui"
-import { fetchEntries } from "../src/utils/contentfulPosts"
-import Seo from "../src/components/seo"
-import AboutPage from "../src/components/content/AboutPage"
+import React from 'react'
+import { Box } from 'theme-ui'
+import { fetchEntries } from '../src/utils/contentfulPosts'
+import Seo from '../src/components/seo'
+import AboutPage from '../src/components/content/AboutPage'
 
-const About = (props) => {
+const About = props => {
   return (
     <>
-      <Seo title="FAQ" />
+      <Seo title='FAQ' />
       <Box>
         <AboutPage {...props} />
       </Box>
@@ -18,20 +18,20 @@ const About = (props) => {
 export async function getServerSideProps() {
   // contentful
   const teamReq = await fetchEntries({
-    contentType: "contentTeam",
+    contentType: 'contentTeam'
   })
   const aboutReq = await fetchEntries({
-    contentType: "contentAbout",
+    contentType: 'contentAbout'
   })
 
-  const team = teamReq?.map((f) => f.fields)
-  const about = aboutReq?.map((f) => f.fields)
+  const team = teamReq?.map(f => f.fields)
+  const about = aboutReq?.map(f => f.fields)
   console.log({ team: JSON.stringify(team) })
   return {
     props: {
       team: team || {},
-      about: about || {},
-    },
+      about: about || {}
+    }
   }
 }
 

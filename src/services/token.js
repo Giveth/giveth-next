@@ -21,7 +21,7 @@ export async function validateAuthToken(token) {
 
 /**
  * Ok the user has a token, but is it still valid?
- * @param {} user
+ * @param user
  * @param {*} signedMessage
  * @param isXDAI
  */

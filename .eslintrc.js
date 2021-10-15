@@ -9,7 +9,7 @@
 //     sourceType: "module",
 //     allowImportExportEverywhere: true,
 //   },
-//   ignorePatterns: ["node_modules/*", ".next/*", ".out/*", "!.prettierrc.js"],
+//   ignorePatterns: ["node_modules/*", ".next/*", ".out/*"],
 //   extends: ["eslint:recommended", "plugin:prettier/recommended"],
 //   overrides: [
 //     {
@@ -47,13 +47,14 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
+        tabWidth: 2,
         semi: false,
         printWidth: 100,
         endOfLine: 'auto',
         singleQuote: true,
         jsxSingleQuote: true,
-        trailingComma: 'none',
-        arrowParens: 'avoid'
+        arrowParens: 'avoid',
+        trailingComma: 'none'
       }
     ]
   },

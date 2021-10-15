@@ -1,15 +1,15 @@
-import { Box } from "theme-ui"
-import { fetchEntries } from "../src/utils/contentfulPosts"
-import React from "react"
-import Seo from "../src/components/seo"
+import { Box } from 'theme-ui'
+import { fetchEntries } from '../src/utils/contentfulPosts'
+import React from 'react'
+import Seo from '../src/components/seo'
 
-import Layout from "../src/components/layout"
-import ContentFaq from "../src/components/content/ContentFaq"
+import Layout from '../src/components/layout'
+import ContentFaq from '../src/components/content/ContentFaq'
 
 const Faq = ({ faqs }) => {
   return (
     <Layout>
-      <Seo title="FAQ" />
+      <Seo title='FAQ' />
       <Box>
         <ContentFaq faqs={faqs} isopen />
       </Box>
@@ -20,15 +20,15 @@ const Faq = ({ faqs }) => {
 export async function getServerSideProps() {
   // contentful
   const faqReq = await fetchEntries({
-    contentType: "faqEntry",
+    contentType: 'faqEntry'
   })
 
-  const faqs = faqReq?.map((f) => f.fields)
+  const faqs = faqReq?.map(f => f.fields)
 
   return {
     props: {
-      faqs: faqs || {},
-    },
+      faqs: faqs || {}
+    }
   }
 }
 

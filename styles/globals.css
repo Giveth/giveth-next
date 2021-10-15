@@ -18,9 +18,9 @@ a {
   box-sizing: border-box;
 }
 
-.pac-item {  
-  /* For Google Autocomplete container*/  
-  cursor: pointer !important;  
+.pac-item {
+  /* For Google Autocomplete container*/
+  cursor: pointer !important;
 }
 
 /* Fix Google Autocomplete container border */
@@ -59,4 +59,7 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
+}
+.ql-container.ql-disabled .ql-tooltip {
+  display: none;
 }

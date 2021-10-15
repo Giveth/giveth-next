@@ -7,7 +7,6 @@ import { createUploadLink } from 'apollo-upload-client'
 function createApolloClient() {
   // Declare variable to store authToken
   let token
-
   const appUser = getLocalStorageUserLabel()
 
   const httpLink = createUploadLink({

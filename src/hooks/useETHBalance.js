@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core'
 import useSWR from 'swr'
-import { parseBalance } from '../util'
+import { parseBalance } from '../lib/util'
 import useKeepSWRDataLiveAsBlocksArrive from './useKeepSWRDataLiveAsBlocksArrive'
 
 function getETHBalance(library) {

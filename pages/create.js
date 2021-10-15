@@ -1,6 +1,6 @@
-import { client } from "../src/apollo/client"
-import { GET_CATEGORIES } from "../src/apollo/gql/projects"
-import CreateProject from "../src/components/create-project-form/createProject"
+import { client } from '../src/apollo/client'
+import { GET_CATEGORIES } from '../src/apollo/gql/projects'
+import CreateProject from '../src/components/create-project-form/createProject'
 
 function CreateIndex({ categories }) {
   return <CreateProject categories={categories} />
@@ -8,12 +8,12 @@ function CreateIndex({ categories }) {
 
 export async function getServerSideProps() {
   const { data: response } = await client.query({
-    query: GET_CATEGORIES,
+    query: GET_CATEGORIES
   })
   return {
     props: {
-      categories: response?.categories,
-    },
+      categories: response?.categories
+    }
   }
 }
 
