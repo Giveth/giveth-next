@@ -1,7 +1,9 @@
 import { Box } from 'theme-ui'
-import Seo from '../src/components/seo'
 import styled from '@emotion/styled'
-import Layout from '../src/components/layout'
+import dynamic from 'next/dynamic'
+
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
 
 const Tos = () => {
   return (

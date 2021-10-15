@@ -3,7 +3,7 @@ import { Flex, Text } from 'theme-ui'
 
 function Error(props) {
   const { statusCode, err } = props
-  console.log({ err })
+  console.log({ props })
   return (
     <Layout>
       <Flex

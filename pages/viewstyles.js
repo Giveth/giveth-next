@@ -1,6 +1,7 @@
 import React from 'react'
 import { Grid, Button, Heading, Text, IconButton } from 'theme-ui'
 import styled from '@emotion/styled'
+
 import ProjectCard from '../src/components/projectCard'
 import Web3Provider from '../src/contextProvider/Web3Provider'
 

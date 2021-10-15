@@ -1,9 +1,11 @@
 import { Grid, Text } from 'theme-ui'
+import dynamic from 'next/dynamic'
 import { fetchEntries } from '../src/utils/contentfulPosts'
-import Layout from '../src/components/layout'
-import Seo from '../src/components/seo'
-import Hero from '../src/components/content/JoinPageHero'
-import JoinChatCard from '../src/components/content/JoinPageCard'
+
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
+const Hero = dynamic(() => import('../src/components/content/JoinPageHero'))
+const JoinChatCard = dynamic(() => import('../src/components/content/JoinPageCard'))
 
 const JoinPage = ({ joinChat, joinConsume }) => {
   return (

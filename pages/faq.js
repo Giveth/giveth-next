@@ -1,10 +1,11 @@
 import { Box } from 'theme-ui'
-import { fetchEntries } from '../src/utils/contentfulPosts'
 import React from 'react'
-import Seo from '../src/components/seo'
+import dynamic from 'next/dynamic'
+import { fetchEntries } from '../src/utils/contentfulPosts'
 
-import Layout from '../src/components/layout'
-import ContentFaq from '../src/components/content/ContentFaq'
+const ContentFaq = dynamic(() => import('../src/components/content/ContentFaq'))
+const Layout = dynamic(() => import('../src/components/layout'))
+const Seo = dynamic(() => import('../src/components/seo'))
 
 const Faq = ({ faqs }) => {
   return (

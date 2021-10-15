@@ -3,7 +3,7 @@ import { Flex, Text, Button } from 'theme-ui'
 import { ProfileHeader, UserDonations, UserProjects } from './index'
 import { useQueryParams, StringParam } from 'use-query-params'
 
-export const PublicProfileView = props => {
+const PublicProfileView = props => {
   const [query, setQuery] = useQueryParams({
     tab: StringParam
   })
@@ -57,3 +57,5 @@ export const PublicProfileView = props => {
     </Flex>
   )
 }
+
+export default PublicProfileView

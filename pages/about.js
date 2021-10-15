@@ -1,8 +1,10 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 import { Box } from 'theme-ui'
 import { fetchEntries } from '../src/utils/contentfulPosts'
-import Seo from '../src/components/seo'
-import AboutPage from '../src/components/content/AboutPage'
+
+const AboutPage = dynamic(() => import('../src/components/content/AboutPage'))
+const Seo = dynamic(() => import('../src/components/seo'))
 
 const About = props => {
   return (

@@ -21,7 +21,7 @@ const CategoriesList = () => {
   const { currentProjectView } = React.useContext(ProjectContext)
   const categories = currentProjectView?.globalCategories
 
-  if (!categories) return null
+  if (!categories || categories?.length == 0) return null
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <CategoriesListView>
@@ -136,6 +136,8 @@ const Header = ({ isHomePage }) => {
             <img
               src={'/images/decorator-cloud1.svg'}
               alt='decorator-cloud1'
+              width='100%'
+              height='100%'
               style={{
                 position: 'absolute',
                 top: '-70px',

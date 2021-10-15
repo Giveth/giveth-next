@@ -1,16 +1,18 @@
-import { Flex, Grid, Text, Box, Button } from 'theme-ui'
-import theme from '../src/utils/theme-ui'
-import { fetchEntries } from '../src/utils/contentfulPosts'
 import React from 'react'
-import Seo from '../src/components/seo'
+import { Flex, Grid, Text, Box, Button } from 'theme-ui'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import styled from '@emotion/styled'
-// import { BLOCKS } from "@contentful/rich-text-types"
-
 import useMediaQuery from 'react-responsive'
 
-import Layout from '../src/components/layout'
+import theme from '../src/utils/theme-ui'
+import { fetchEntries } from '../src/utils/contentfulPosts'
+
+// import { BLOCKS } from "@contentful/rich-text-types"
+
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
 
 const Partnerships = ({ friendsLogos, partners }) => {
   // const richTextOptions = {

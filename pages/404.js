@@ -1,6 +1,7 @@
 import { Flex, Text } from 'theme-ui'
-import Layout from '../src/components/layout'
-import Seo from '../src/components/seo'
+import dynamic from 'next/dynamic'
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
 
 const NotFoundPage = () => {
   return (

@@ -10,7 +10,7 @@ export const ProjectImpactLocationInput = ({ register, currentValue, goBack, set
   }
 
   useEffect(() => {
-    typeof window !== 'undefined' && window.initMap(handleChange)
+    typeof window !== 'undefined' && window?.initMap(handleChange)
   }, [])
 
   return (

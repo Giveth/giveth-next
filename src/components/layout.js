@@ -1,6 +1,8 @@
+import 'react-quill/dist/quill.snow.css'
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
-import 'react-quill/dist/quill.snow.css'
+import dynamic from 'next/dynamic'
+import Script from 'next/script'
 import PropTypes from 'prop-types'
 import { Link, Flex, Text, Image } from 'theme-ui'
 import { positions, Provider } from 'react-alert'
@@ -10,15 +12,28 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 
 import theme from '../utils/theme-ui'
-import Header from './header'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
 import { QueryParamProvider } from '../contextProvider/queryParamProvider'
-import Dialog from './dialog'
-import GithubIssue from './GithubIssue'
-import XDAIPopup from './xDAIPopup'
-import Footer from './footer'
-import Popup from './popup'
+
+// import Header from './header'
+const Header = dynamic(() => import('./header'))
+// import Dialog from './dialog'
+const Dialog = dynamic(() => import('./dialog'))
+// import GithubIssue from './GithubIssue'
+const GithubIssue = dynamic(() => import('./GithubIssue'))
+// import XDAIPopup from './xDAIPopup'
+const XDAIPopup = dynamic(() => import('./xDAIPopup'))
+// import Footer from './footer'
+const Footer = dynamic(() => import('./footer'))
+// import Popup from './popup'
+const Popup = dynamic(() => import('./popup'))
+
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
+import styled from '@emotion/styled'
+import { WalletProvider } from '../contextProvider/WalletProvider'
+import Web3Provider from '../contextProvider/Web3Provider'
 
 const CookiesBanner = () => {
   const [cookiesAccepted, setCookiesAccepted] = useState('none')
@@ -88,6 +103,8 @@ const CookiesBanner = () => {
 }
 
 const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
+  const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+
   const Template = () => {
     if (asDialog) {
       return (
@@ -125,10 +142,20 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
 
   return (
     <>
-      <Head>
-        <script type='text/javascript'>
-          {`
-          let map;
+      <Script
+        src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'
+        strategy='lazyOnload'
+      />
+      {/* Autopilot */}
+      {/* eslint-disable-next-line @next/next/inline-script-id */}
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `(function(o){var b="https://speedyfox.io/anywhere/",t="d7a64f71ff094b21890b3c44d1e568e895a0d71affc14ed79923afe6c341ccfd",a=window.AutopilotAnywhere={_runQueue:[],run:function(){this._runQueue.push(arguments);}},c=encodeURIComponent,s="SCRIPT",d=document,l=d.getElementsByTagName(s)[0],p="t="+c(d.title||"")+"&u="+c(d.location.href||"")+"&r="+c(d.referrer||""),j="text/javascript",z,y;if(!window.Autopilot) window.Autopilot=a;if(o.app) p="devmode=true&"+p;z=function(src,asy){var e=d.createElement(s);e.src=src;e.type=j;e.async=asy;l.parentNode.insertBefore(e,l);};y=function(){z(b+t+'?'+p,true);};if(window.attachEvent){window.attachEvent("onload",y);}else{window.addEventListener("load",y,false);}})({"app":true});`
+        }}
+      />
+      {/* eslint-disable-next-line @next/next/inline-script-id */}
+      <Script type='text/javascript' strategy='lazyOnload'>
+        {`
           function initMap(setLocation) {
               map = new google.maps.Map(document.getElementById('map'), {
                   center: {lat: 0, lng: 0 },
@@ -168,8 +195,13 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
             }
           }
         `}
-        </script>
-      </Head>
+      </Script>
+      <Script src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed' crossOrigin='anonymous' />
+      <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
+        defer
+      />
+      {/* <Script src='/node_modules/quill-video-resize-module/video-resize.min.js' /> */}
 
       <PopupProvider>
         <GlobalProvider>
