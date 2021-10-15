@@ -1,9 +1,9 @@
-import { GivethBridge } from '@giveth/bridge-contract'
 import { ethers } from 'ethers'
 import tokenAbi from 'human-standard-token-abi'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
 import Toast from '../components/toast'
+// import { GivethBridge } from '@giveth/bridge-contract'
 
 export const shortenAddress = (address, charsLength = 4) => {
   const prefixLength = 2 // "0x"
@@ -21,8 +21,8 @@ export async function sendTransaction(
   params,
   txCallbacks,
   contractAddress,
-  fromSigner,
-  traceableDonation = false
+  fromSigner
+  // traceableDonation = false
 ) {
   try {
     let web3Provider = web3.eth
@@ -43,20 +43,20 @@ export async function sendTransaction(
 
     // TRACEABLE DONATION
 
-    if (traceableDonation) {
-      //
-      // DEV: 0x279277482F13aeF92914317a0417DD591145aDc9
-      // RELEASE: 0xC59dCE5CCC065A4b51A2321F857466A25ca49B40
-      // TRACE: 0x30f938fED5dE6e06a9A7Cd2Ac3517131C317B1E7
-
-      // TODO !!!!!!!!!!!!
-      const givethBridgeCurrent = new GivethBridge(
-        web3,
-        process.env.NEXT_PUBLIC_GIVETH_BRIDGE_ADDRESS
-      )
-      console.log({ givethBridgeCurrent })
-      return alert('This is a trace donation, do something NOW!')
-    }
+    // if (traceableDonation) {
+    //   //
+    //   // DEV: 0x279277482F13aeF92914317a0417DD591145aDc9
+    //   // RELEASE: 0xC59dCE5CCC065A4b51A2321F857466A25ca49B40
+    //   // TRACE: 0x30f938fED5dE6e06a9A7Cd2Ac3517131C317B1E7
+    //
+    //   // TODO !!!!!!!!!!!!
+    //   const givethBridgeCurrent = new GivethBridge(
+    //     web3,
+    //     process.env.NEXT_PUBLIC_GIVETH_BRIDGE_ADDRESS
+    //   )
+    //   console.log({ givethBridgeCurrent })
+    //   return alert('This is a trace donation, do something NOW!')
+    // }
 
     // ERC20 TRANSFER
     if (contractAddress) {

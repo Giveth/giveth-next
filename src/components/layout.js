@@ -1,6 +1,5 @@
 import 'react-quill/dist/quill.snow.css'
 import React, { useEffect, useState } from 'react'
-import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import Script from 'next/script'
 import PropTypes from 'prop-types'
@@ -28,12 +27,6 @@ const XDAIPopup = dynamic(() => import('./xDAIPopup'))
 const Footer = dynamic(() => import('./footer'))
 // import Popup from './popup'
 const Popup = dynamic(() => import('./popup'))
-
-import 'react-toastify/dist/ReactToastify.css'
-import { ToastContainer } from 'react-toastify'
-import styled from '@emotion/styled'
-import { WalletProvider } from '../contextProvider/WalletProvider'
-import Web3Provider from '../contextProvider/Web3Provider'
 
 const CookiesBanner = () => {
   const [cookiesAccepted, setCookiesAccepted] = useState('none')
