@@ -1,3 +1,4 @@
+import transakSDK from '@transak/transak-sdk'
 import { SAVE_DONATION, SAVE_DONATION_TRANSACTION } from '../apollo/gql/donations'
 import { client } from '../apollo/client'
 
@@ -59,4 +60,34 @@ export async function saveDonationTransaction(hash: string, donationId: Number) 
     savedDonationTransaction,
     saveDonationTransactionErrors
   }
+}
+
+export async function startTransakDonation({project, amount}) {
+  const request = await fetch(`/api/transak`)
+  const response = await request.json()
+  const apiKey = response?.apiKey
+
+  const transak = new transakSDK({
+    apiKey: apiKey,  // Your API Key
+    environment:  process.env.NEXT_PUBLIC_ENVIRONMENT == 'production' ? 'PRODUCTION' :'STAGING', // STAGING/PRODUCTION
+    defaultCryptoCurrency: 'DAI',
+    walletAddress: project.walletAddress, // Your customer's wallet address
+    themeColor: '000000', // App theme color
+    fiatCurrency: '', // INR/GBP
+    cryptoCurrencyList: 'ETH,DAI,USDT',
+    email: '', // Your customer's email address
+    redirectURL: '',
+    hostURL: window.location.origin,
+    widgetHeight: '550px',
+    widgetWidth: '450px',
+    fiatAmount: amount,
+    exchangeScreenTitle: `Donate to ${project.title}`,
+    hideMenu: true
+  });
+
+  transak.init();
+
+  transak.on(transak.ALL_EVENTS, (data) => {
+		console.log(data)
+  });
 }

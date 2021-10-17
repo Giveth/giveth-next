@@ -3,12 +3,14 @@ import { Button, Checkbox, Input, Flex, Label, Text } from 'theme-ui'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
+import { startTransakDonation } from '../../services/donation'
+
 // import { loadStripe } from '@stripe/stripe-js'
 // import { useApolloClient } from '@apollo/client'
 // import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 
 const GIVETH_DONATION_AMOUNT = 5
-const COMING_SOON = true
+const COMING_SOON = false
 
 const OnlyFiat = props => {
   const { project } = props
@@ -20,8 +22,10 @@ const OnlyFiat = props => {
   const amounts = [500, 100, 50, 30]
 
   const donation = parseFloat(amountTyped || amountSelect)
-  const donationPlusFee = donation + (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0)
-  const subtotal = (donationPlusFee + 0.3) / 0.971
+  // const donationPlusFee =
+  //   donation + (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0)
+  // const subtotal = (donation + 0.25) / 0.971
+  const subtotal = donation
 
   const goCheckout = async () => {
     try {
@@ -30,6 +34,13 @@ const OnlyFiat = props => {
       }
       const amount = amountTyped || amountSelect
       if (amount <= 0) return alert('Please set a valid amount')
+
+      // TRANSAK CALL
+      await startTransakDonation({
+        project,
+        amount
+      })
+
       // await getDonationSession({ variables: { amount: amountSelect } })
       // const projId = project?.id
       // const slug = project?.slug
@@ -85,14 +96,20 @@ const OnlyFiat = props => {
                 setAmountSelect(i)
               }}
               style={{
-                backgroundColor: isSelected ? theme.colors.background : 'transparent',
-                color: isSelected ? theme.colors.secondary : theme.colors.background
+                backgroundColor: isSelected
+                  ? theme.colors.background
+                  : 'transparent',
+                color: isSelected
+                  ? theme.colors.secondary
+                  : theme.colors.background
               }}
             >
               <Text
                 sx={{
                   variant: 'text.large',
-                  color: isSelected ? theme.colors.secondary : theme.colors.background,
+                  color: isSelected
+                    ? theme.colors.secondary
+                    : theme.colors.background,
                   fontWeight: '700'
                 }}
               >
@@ -105,11 +122,15 @@ const OnlyFiat = props => {
     )
   }
 
-  const SummaryRow = ({ title, amount, style }) => {
+  const SummaryRow = ({ title, amount, notice, style }) => {
     return (
       <SmRow style={style}>
-        <Text sx={{ variant: 'text.medium', color: 'background' }}>{title}</Text>
-        <Text sx={{ variant: 'text.medium', color: 'background' }}>${amount}</Text>
+        <Text sx={{ variant: 'text.medium', color: 'background' }}>
+          {title}
+        </Text>
+        <Text sx={{ variant: 'text.medium', color: 'background' }}>
+          {notice ? notice : `$${amount}`}
+        </Text>
       </SmRow>
     )
   }
@@ -128,7 +149,10 @@ const OnlyFiat = props => {
           Coming Soon
         </Text>
         <Flex>
-          <img src={'/images/coming-soon-gear.png'} style={{ marginLeft: -6 }} />
+          <img
+            src={'/images/coming-soon-gear.png'}
+            style={{ marginLeft: -6 }}
+          />
           <img
             src={'/images/coming-soon.png'}
             style={{ position: 'absolute', marginTop: 5, marginLeft: 4 }}
@@ -143,7 +167,9 @@ const OnlyFiat = props => {
       <AmountSection>
         <AmountSelection />
         <AmountContainer>
-          <Text sx={{ variant: 'text.medium', color: 'background' }}>Or enter your amount:</Text>
+          <Text sx={{ variant: 'text.medium', color: 'background' }}>
+            Or enter your amount:
+          </Text>
           <OpenAmount>
             <Text sx={{ variant: 'text.large', color: 'background' }}>$</Text>
             <InputComponent
@@ -165,7 +191,7 @@ const OnlyFiat = props => {
           </OpenAmount>
         </AmountContainer>
         <div>
-          <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
+          {/* <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <Checkbox
                 defaultChecked={donateToGiveth}
@@ -178,14 +204,20 @@ const OnlyFiat = props => {
                   color: 'white'
                 }}
               >
-                Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to help sustain Giveth
+                Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
+                help sustain Giveth
               </Text>
             </div>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
-          </CheckboxLabel>
-          <CheckboxLabel sx={{ mb: '12px', alignItems: 'center', color: 'white' }}>
+          </CheckboxLabel> */}
+          {/* <CheckboxLabel
+            sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
+          >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox defaultChecked={anonymous} onClick={() => setAnonymous(!anonymous)} />
+              <Checkbox
+                defaultChecked={anonymous}
+                onClick={() => setAnonymous(!anonymous)}
+              />
               <Text
                 sx={{
                   variant: 'text.medium',
@@ -197,7 +229,7 @@ const OnlyFiat = props => {
               </Text>
             </div>
             <Tooltip content='When you donate anonymously, your name will never appear in public as a donor. But, your name will be recorded so that we can send a tax donation receipt.' />
-          </CheckboxLabel>
+          </CheckboxLabel> */}
           {/* <Label sx={{ mb: '10px', alignItems: 'center' }}>
             <Checkbox defaultChecked={false} />
             <Text sx={{ variant: 'text.medium' }}>Dedicate this donation</Text>
@@ -208,12 +240,16 @@ const OnlyFiat = props => {
                 title={`Support ${project?.title}`}
                 amount={parseFloat(donation).toFixed(2)}
               />
-              {donateToGiveth && (
-                <SummaryRow title='Support Giveth' amount={GIVETH_DONATION_AMOUNT} />
-              )}
+              {/* {donateToGiveth && (
+                <SummaryRow
+                  title='Support Giveth'
+                  amount={GIVETH_DONATION_AMOUNT}
+                />
+              )} */}
               <SummaryRow
-                title='Coming Soon'
-                amount={parseFloat(donation * 0.029 + 0.3).toFixed(2)}
+                title='Fee'
+                // amount={parseFloat(donation * 0.029 + 0.3).toFixed(2)}
+                notice='To be calculated'
                 style={{
                   borderBottom: '1px solid #6B7087',
                   padding: '0 0 18px 0'
@@ -226,7 +262,7 @@ const OnlyFiat = props => {
                   color: 'background'
                 }}
               >
-                ${parseFloat(subtotal).toFixed(2)}
+                ${parseFloat(subtotal).toFixed(2)} + Fees
               </Text>
             </Summary>
           )}
@@ -324,7 +360,7 @@ const CheckboxLabel = styled(Label)`
 
 const Summary = styled(Flex)`
   flex-direction: column;
-  margin: 2rem 0;
+  margin: 1rem 0;
 `
 
 const SmRow = styled(Flex)`
