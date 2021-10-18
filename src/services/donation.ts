@@ -68,7 +68,6 @@ export async function saveDonationFromTransak(
         transakStatus
       }
     })
-    console.log({ data })
     const { saveDonation: saveDonationId } = data
     donationId = saveDonationId
   } catch (error) {
@@ -130,7 +129,6 @@ export async function startTransakDonation({ project, setSuccess }) {
   transak.init();
 
   transak.on(transak.ALL_EVENTS, async (data) => {
-    console.log(data)
     if (data?.eventName === "TRANSAK_ORDER_SUCCESSFUL") {
       transak.close()
       setSuccess(data.status.walletLink)
