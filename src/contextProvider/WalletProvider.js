@@ -17,7 +17,6 @@ import Toast from '../components/toast'
 import User from '../entities/user'
 
 import { getWallet } from '../wallets'
-// import { GivethBridge } from '@giveth/bridge-contract'
 
 const WalletContext = React.createContext()
 const network = process.env.NEXT_PUBLIC_NETWORK
@@ -128,6 +127,7 @@ function WalletProvider(props) {
   async function signMessage(message, publicAddress, loginFromXDAI) {
     try {
       await checkNetwork()
+      const networkId = await getNetworkId()
       console.log({ loginFromXDAI }, process.env.NEXT_PUBLIC_NETWORK_ID)
       let signedMessage = null
       const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
@@ -150,7 +150,7 @@ function WalletProvider(props) {
         },
         domain: {
           name: 'Giveth Login',
-          chainId: loginFromXDAI ? 100 : parseInt(process.env.NEXT_PUBLIC_NETWORK_ID),
+          chainId: networkId,
           version: '1'
         },
         message: {
@@ -228,7 +228,7 @@ function WalletProvider(props) {
     )
     if (!signedMessage) return
 
-    const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage, loginFromXDAI)
+    const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage, currentChainId)
     user.parseDbUser(dbUser)
 
     user.setUserId(userIDFromDB)
@@ -292,15 +292,13 @@ function WalletProvider(props) {
 
   async function checkNetwork() {
     if (!wallet) throw new Error('No Eth Provider')
-    const byPassXDAI = currentChainId === 100
-    const currentNetworkId = await wallet?.web3.eth.getChainId()
-    if (currentNetworkId?.toString() === networkId || byPassXDAI) {
-      return true
-    } else {
-      usePopup?.triggerPopup('WrongNetwork')
-      throw new Error(`Wrong network, please change to ${network} or xDAI`)
-    }
+    return true
   }
+
+  async function getNetworkId() {
+      return  wallet?.web3.eth.getChainId()
+  }
+
 
   // async function sendEthersTransaction(toAddress, amount) {
   //   const transaction = {
