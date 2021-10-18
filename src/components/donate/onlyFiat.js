@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Input, Flex, Label, Text } from 'theme-ui'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
@@ -13,7 +13,7 @@ const GIVETH_DONATION_AMOUNT = 5
 const COMING_SOON = false
 
 const OnlyFiat = props => {
-  const { project } = props
+  const { project, setTransakTx } = props
   const [amountSelect, setAmountSelect] = useState(null)
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
@@ -135,9 +135,14 @@ const OnlyFiat = props => {
     )
   }
 
-  if (COMING_SOON) {
+  useEffect(()=> {
+    startTransakDonation({project, setSuccess: setTransakTx })
+  }, [])
+
+  // if (COMING_SOON) {
+  if (true) {
     return (
-      <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+      <Flex sx={{ flexDirection: 'column' }}>
         <Text
           sx={{
             variant: 'headings.h5',
@@ -146,18 +151,22 @@ const OnlyFiat = props => {
             mt: 4
           }}
         >
-          Coming Soon
+          You are being redirected to Transak
         </Text>
-        <Flex>
+        <Text sx={{ variant: 'text.medium', cursor: "pointer", color: 'background', mb: 10 }} 
+          onClick={()=>startTransakDonation({project, setSuccess: setTransakTx })}>
+          Click here to try again
+        </Text>
+        {/* <Flex>
           <img
             src={'/images/coming-soon-gear.png'}
             style={{ marginLeft: -6 }}
           />
           <img
             src={'/images/coming-soon.png'}
-            style={{ position: 'absolute', marginTop: 5, marginLeft: 4 }}
+            style={{ float: "right"}}
           />
-        </Flex>
+        </Flex> */}
       </Flex>
     )
   }

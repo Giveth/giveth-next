@@ -40,7 +40,7 @@ const DonationsTable = ({ donations = [] }) => {
   )
 
   const traceDonations = fromTrace && traceDonationsFetch?.data
-
+  console.log({donations})
   React.useEffect(() => {
     if (!traceDonations) {
       return setLoading(true)
@@ -194,7 +194,7 @@ const DonationsTable = ({ donations = [] }) => {
                         ml: 2
                       }}
                     >
-                      {i?.user?.name
+                      {i?.user === null ? "Anonymous" : i?.user?.name
                         ? i.user.name
                         : i?.user?.firstName && i?.user?.lastName
                         ? `${i.user.firstName} ${i.user.lastName}`

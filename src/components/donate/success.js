@@ -9,7 +9,7 @@ import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
 const Success = props => {
   const { isLoggedIn, login } = useWallet()
-  const { project, hash, currentChainId } = props
+  const { project, transakTx, hash, currentChainId } = props
 
   const downloadPDF = () => {
     const filename = 'donation_invoice.pdf'
@@ -42,7 +42,7 @@ const Success = props => {
             textAlign: 'left'
           }}
         >
-          You`&apos;re a giver now!
+          You&apos;re a giver now!
         </Text>
         <Text sx={{ variant: 'headings.h5', color: 'background' }}>
           Thank you for supporting <strong> {project?.title} </strong>.
@@ -71,7 +71,21 @@ const Success = props => {
               </Link>
             </div>
           </Receipt>
-        ) : (
+        ) : transakTx ? (
+            <Receipt sx={{ my: 4 }}>
+              <Link
+                sx={{
+                  variant: 'text.paragraph',
+                  color: 'yellow',
+                  cursor: 'pointer'
+                }}
+                target='_blank'
+                href={transakTx}
+              >
+                View transaction details
+              </Link>
+            </Receipt>
+        ):(
           <Receipt sx={{ my: 4 }}>
             <DownloadReceipt onClick={downloadPDF}>
               <Text

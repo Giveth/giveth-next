@@ -31,6 +31,7 @@ const DonateIndex = props => {
   const [paymentType, setPaymentType] = React.useState(CRYPTO)
   const [isAfterPayment, setIsAfterPayment] = React.useState(null)
   const [paymentSessionId, setPaymentSessionId] = React.useState(null)
+  const [transakTx, setTransakTx] = React.useState(null)
   const [isCancelled, setIsCancelled] = React.useState(null)
   const { currentChainId } = useWallet()
   React.useEffect(() => {
@@ -58,7 +59,7 @@ const DonateIndex = props => {
       return paymentType === CRYPTO && !isSSR ? (
         <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
       ) : (
-        <OnlyFiat project={project} />
+        <OnlyFiat project={project} setTransakTx={tID => setTransakTx(tID)}/>
       )
     }
 
@@ -153,7 +154,7 @@ const DonateIndex = props => {
     )
   }
 
-  if (isAfterPayment || hashSent) {
+  if (isAfterPayment || hashSent || transakTx) {
     return (
       <Flex sx={{ flexDirection: ['column', 'column', 'row'] }}>
         <ProjectContainer>
@@ -171,7 +172,7 @@ const DonateIndex = props => {
           />
         </ProjectContainer>
         <Payment>
-          <Success sessionId={paymentSessionId} hash={hashSent} currentChainId={currentChainId} />
+          <Success transakTx={transakTx} sessionId={paymentSessionId} hash={hashSent} currentChainId={currentChainId} />
           <div style={{ margin: '3rem 0', zIndex: 2 }}>
             <ShareIcons message='Share this with your friends!' centered />
           </div>

@@ -806,16 +806,18 @@ const OnlyCrypto = props => {
                 </Button>
               )}
 
-              <Flex
-                sx={{
-                  cursor: 'pointer',
-                  width: isEnabled ? '25px' : '100%',
-                  justifyContent: 'center'
-                }}
-                onClick={() => setIsOpen(true)}
-              >
-                <SVGLogo />
-              </Flex>
+              {isEnabled && (
+                <Flex
+                  sx={{
+                    cursor: 'pointer',
+                    width: isEnabled ? '25px' : '100%',
+                    justifyContent: 'center'
+                  }}
+                  onClick={() => setIsOpen(true)}
+                >
+                  <SVGLogo />
+                </Flex>
+              )}
             </Flex>
             {/* {project?.listed === false && (
               <Text
