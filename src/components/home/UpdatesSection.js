@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Grid, Box, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
@@ -8,7 +8,22 @@ import MailchimpSignup from './MailchimpSignup'
 
 dayjs.extend(localizedFormat)
 
-const UpdatesSection = ({ mediumPosts }) => {
+const UpdatesSection = () => {
+  const [mediumPosts, setMediumPosts] = useState(null)
+
+  useEffect(() => {
+    const getPosts = async () => {
+      const medium = await fetch(
+        'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth'
+      )
+      const posts = await medium.json()
+      setMediumPosts(posts?.items?.slice(0, 2) || {})
+    }
+    getPosts()
+  }, [])
+
+  if (!mediumPosts) return null
+
   return (
     <React.Fragment>
       <div

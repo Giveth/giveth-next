@@ -17,7 +17,7 @@ import Toast from '../components/toast'
 import User from '../entities/user'
 
 import { getWallet } from '../wallets'
-import { GivethBridge } from '@giveth/bridge-contract'
+// import { GivethBridge } from '@giveth/bridge-contract'
 
 const WalletContext = React.createContext()
 const network = process.env.NEXT_PUBLIC_NETWORK
@@ -302,6 +302,19 @@ function WalletProvider(props) {
     }
   }
 
+  // async function sendEthersTransaction(toAddress, amount) {
+  //   const transaction = {
+  //     to: toAddress,
+  //     value: ethers.utils.parseEther(amount.toString())
+  //   }
+  //
+  //   // console.log(`JF wallet?.provider : ${JSON.stringify(wallet, null, 2)}`)
+  //
+  //   const signer = getSigner(wallet)
+  //   const signerTransaction = await signer.sendTransaction(transaction)
+  //   return signerTransaction
+  // }
+
   async function sendTransaction(
     params,
     txCallbacks,
@@ -334,14 +347,13 @@ function WalletProvider(props) {
         // DEV: 0x279277482F13aeF92914317a0417DD591145aDc9
         // RELEASE: 0xC59dCE5CCC065A4b51A2321F857466A25ca49B40
         // TRACE: 0x30f938fED5dE6e06a9A7Cd2Ac3517131C317B1E7
-
         // TODO !!!!!!!!!!!!
-        const givethBridgeCurrent = new GivethBridge(
-          wallet?.web3,
-          process.env.NEXT_PUBLIC_GIVETH_BRIDGE_ADDRESS
-        )
-        console.log({ givethBridgeCurrent })
-        return alert('This is a trace donation, do something NOW!')
+        // const givethBridgeCurrent = new GivethBridge(
+        //   wallet?.web3,
+        //   process.env.NEXT_PUBLIC_GIVETH_BRIDGE_ADDRESS
+        // )
+        // console.log({ givethBridgeCurrent })
+        // return alert('This is a trace donation, do something NOW!')
       }
 
       // ERC20 TRANSFER
