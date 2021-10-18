@@ -16,6 +16,9 @@ import projectBadge from './projectBadge'
 import { isNewProject } from '../lib/helpers'
 // import Donate from '../components/donateForm'
 
+const env = process.env.NEXT_PUBLIC_ENVIRONMENT
+const isDev = env === 'dev'
+
 const RichTextViewer = dynamic(() => import('./richTextViewer'), {
   ssr: false
 })
@@ -252,7 +255,7 @@ const ProjectCard = props => {
                 <Link
                   href={
                     project?.fromTrace
-                      ? `https://trace.giveth.io/campaign/${project?.slug}`
+                      ? `https://${isDev ? 'develop' : 'trace'}.giveth.io/campaign/${project?.slug}`
                       : !props.disabled && `/donate/${props?.slug || project?.slug}`
                   }
                   passHref
