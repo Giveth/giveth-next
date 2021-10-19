@@ -154,7 +154,7 @@ const Web3Provider = props => {
   const updateUser = () => {
     fetchUser().then(res => {
       if (res) {
-        const newUser = new User('other', user)
+        const newUser = new User(user)
         newUser.parseDbUser(res)
         Auth.setUser(newUser)
         setUser(newUser)
@@ -171,8 +171,8 @@ const Web3Provider = props => {
     )
     if (!signedMessage) return
 
-    const { token } = await getToken(user, signedMessage, isXdai)
-    const newUser = new User('other', user)
+    const token = await getToken(user, signedMessage, networkId)
+    const newUser = new User(user)
     newUser.setToken(token)
     Auth.setUser(newUser)
     client.resetStore().then()
@@ -214,7 +214,7 @@ const Web3Provider = props => {
   useEffect(() => {
     if (account) {
       const _user = Auth.getUser()
-      const newUser = new User('other')
+      const newUser = new User()
       newUser.addWalletAddress(account, true)
       if (account === _user?.walletAddress) {
         newUser.parseDbUser(_user)

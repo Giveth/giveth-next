@@ -19,10 +19,8 @@ export default class User {
   location?: string
   loginType: string
   confirmed: boolean
-  walletType: string
 
-  constructor(walletType, initUser) {
-    this.walletType = walletType
+  constructor(initUser) {
     this.walletAddresses = []
 
     if (initUser) {
@@ -31,16 +29,11 @@ export default class User {
   }
 
   parseInitUser(initUser) {
-    if (this.walletType === 'torus') {
-      this.parseTorusUser(initUser)
-    } else {
-      this.walletType = initUser.walletType
-      this.walletAddresses = initUser.walletAddresses
-      this.walletAddress = initUser.walletAddress
-      this.id = initUser.id
-      this.token = initUser.token
-      this.parseDbUser(initUser)
-    }
+    this.walletAddresses = initUser.walletAddresses
+    this.walletAddress = initUser.walletAddress
+    this.id = initUser.id
+    this.token = initUser.token
+    this.parseDbUser(initUser)
   }
 
   parseDbUser(dbUser) {
@@ -72,26 +65,9 @@ export default class User {
   }
 
   getName() {
-    return this.name ? this.name.toUpperCase() : shortenAddress(this.getWalletAddress())
+    return this.name ? this.name.toUpperCase() : shortenAddress(this.walletAddress)
     // return /(.+)@(.+){2,}\.(.+){2,}/.test(this.name)
     //         ? this.name?.toUpperCase()
     //         : this.name
-  }
-
-  getWalletAddress() {
-    return this.walletAddress
-  }
-  // organisations: Organisation[]
-
-  parseTorusUser(torusUser) {
-    if (this.walletType !== 'torus') throw Error('Only valid for Torus wallets')
-    this.avatar = torusUser.profileImage || torusUser.avatar
-    this.name = torusUser.name
-    this.email = torusUser.email
-    this.id = torusUser.id
-    // this.addWalletAddress(walletAddress, true)
-    torusUser.walletAddresses.forEach(address => {
-      this.addWalletAddress(address, true)
-    })
   }
 }
