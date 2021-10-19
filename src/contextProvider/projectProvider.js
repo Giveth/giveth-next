@@ -1,6 +1,6 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { client } from '../../src/apollo/client'
+import { client } from '../apollo/client'
 import useLocalStorage from './useLocalStorage'
 
 const projectContext = React.createContext({})

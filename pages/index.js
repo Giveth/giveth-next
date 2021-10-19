@@ -1,8 +1,7 @@
 import React from 'react'
-import * as matter from 'gray-matter'
 import dynamic from 'next/dynamic'
 import { client } from '../src/apollo/client'
-import GivethContent from '../src/content/giveth.md'
+import GivethContent from '../src/content/giveth.json'
 
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
 
@@ -46,7 +45,7 @@ const IndexContent = ({ hideInfo, content, topProjects, categories, allProject }
         categories={categories}
         totalCount={allProject?.totalCount}
       />
-      {!hideInfo === true ? <InfoSection content={content} /> : null}
+      {!hideInfo === true && <InfoSection content={content} />}
       <UpdatesSection />
     </>
   )
@@ -113,8 +112,6 @@ export async function getServerSideProps(props) {
     variables: { limit: 20 }
   })
 
-  const mdContent = matter(GivethContent)
-
   return {
     props: {
       topProjects: response?.projects
@@ -123,7 +120,7 @@ export async function getServerSideProps(props) {
           if (a?.qualityScore > b?.qualityScore) return -1
         })
         ?.slice(0, 3),
-      content: mdContent?.data,
+      content: GivethContent,
       query: props.query
     }
   }
