@@ -41,17 +41,21 @@ export async function getServerSideProps(props) {
     categories = null
   let errors = null
   try {
+    const enums = {
+      QUALITYSCORE: 'QualityScore',
+      DESC: "DESC"
+    }
+
     const { error, data: fetchProject } = await client.query({
       query: FETCH_ALL_PROJECTS,
+      variables: {
+        orderBy: { field: enums.QUALITYSCORE , direction:  enums.DESC }
+      },
       fetchPolicy: 'no-cache'
     })
-    projects = Array.from(fetchProject?.projects).filter(i => i?.status?.id === '5')
+    projects = fetchProject?.projects?.projects
+    categories = fetchProject?.projects?.categories
 
-    const { data: categoriesData } = await client.query({
-      query: GET_CATEGORIES,
-      fetchPolicy: 'network-only'
-    })
-    categories = categoriesData?.categories
 
     if (process.env.NEXT_PUBLIC_FEATHERS) {
       // only fetch if there's a route

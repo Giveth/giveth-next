@@ -3,40 +3,43 @@ import gql from 'graphql-tag'
 const FETCH_ALL_PROJECTS = gql`
   query FetchAllProjects($limit: Int, $skip: Int, $orderBy: OrderBy) {
     projects(take: $limit, skip: $skip, orderBy: $orderBy) {
-      id
-      title
-      balance
-      image
-      slug
-      creationDate
-      admin
-      description
-      walletAddress
-      impactLocation
-      qualityScore
-      verified
-      listed
-      status {
+      projects {
         id
-        symbol
-        name
+        title
+        balance
+        image
+        slug
+        creationDate
+        admin
         description
+        walletAddress
+        impactLocation
+        qualityScore
+        verified
+        listed
+        status {
+          id
+          symbol
+          name
+          description
+        }
+        categories {
+          name
+        }
+        reactions {
+          reaction
+          id
+          projectUpdateId
+          userId
+        }
+        qualityScore
+        totalDonations
+        totalHearts
       }
+      totalCount
       categories {
         name
       }
-      reactions {
-        reaction
-        id
-        projectUpdateId
-        userId
-      }
-      qualityScore
-      totalDonations
-      totalHearts
-    }
-    categories {
-      name
     }
   }
 `

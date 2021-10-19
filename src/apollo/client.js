@@ -65,6 +65,12 @@ function createApolloClient() {
       enum OrderField {
         CreationDate
         Balance
+        QualityScore
+        Verified
+        Hearts
+        Donations
+        RecentlyAdded
+        OldProjects
       }
 
       enum OrderDirection {

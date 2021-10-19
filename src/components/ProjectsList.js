@@ -112,9 +112,7 @@ const ProjectsList = props => {
 
   //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Old Projects']
   const sortFunctions = [
-    function qualityScore(a, b) {
-      return b.verified - a.verified || b.qualityScore - a.qualityScore
-    },
+    a => a,
     a => a,
     a => a,
     function amountRaised(a, b) {
