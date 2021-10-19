@@ -189,7 +189,6 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
           }
         `}
       </Script>
-      <Script src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed' crossOrigin='anonymous' />
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
         defer
