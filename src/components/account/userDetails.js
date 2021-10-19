@@ -211,7 +211,7 @@ const UserDetails = () => {
               variant: 'text.medium'
             }}
             className='shadow boxheight'
-            href='https://github.com/Giveth/giveth-2/issues/new/choose'
+            href='https://github.com/Giveth/giveth-next/issues/new/choose'
             target='_blank'
             rel='noopener noreferrer'
           >

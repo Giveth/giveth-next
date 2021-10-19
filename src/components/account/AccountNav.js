@@ -82,7 +82,7 @@ const AccountNav = props => {
         }}
       >
         <a
-          href={formatEtherscanLink('Account', [networkId, user?.getWalletAddress()])}
+          href={formatEtherscanLink('Account', [networkId, user?.walletAddress])}
           target='_blank'
           rel='noopener noreferrer'
           style={{ textDecoration: 'none' }}
@@ -101,7 +101,7 @@ const AccountNav = props => {
         </a>
 
         <a
-          href='https://github.com/Giveth/giveth-2/issues/new/choose'
+          href='https://github.com/Giveth/giveth-next/issues/new/choose'
           target='_blank'
           rel='noopener noreferrer'
           style={{ textDecoration: 'none' }}

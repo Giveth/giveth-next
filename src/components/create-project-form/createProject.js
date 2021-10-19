@@ -253,7 +253,7 @@ const CreateProject = props => {
             <Text
               onClick={() => (
                 typeof window !== 'undefined' &&
-                  window?.open('https://github.com/Giveth/giveth-2/issues/new/choose'),
+                  window?.open('https://github.com/Giveth/giveth-next/issues/new/choose'),
                 '_blank'
               )}
               sx={{
