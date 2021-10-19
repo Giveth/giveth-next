@@ -227,8 +227,8 @@ function WalletProvider(props) {
       loginFromXDAI
     )
     if (!signedMessage) return
-
-    const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage, currentChainId)
+    const networkId = await getNetworkId()
+    const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage, networkId)
     user.parseDbUser(dbUser)
 
     user.setUserId(userIDFromDB)
