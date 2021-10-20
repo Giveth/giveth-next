@@ -51,7 +51,7 @@ const InfoSection = ({ content }) => {
         }}
       >
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
-          {content?.infoHead}
+          {content.infoHead}
         </Text>
         <Text
           pb={5}
@@ -60,7 +60,7 @@ const InfoSection = ({ content }) => {
             color: 'background'
           }}
         >
-          {content?.infoSubtitle}
+          {content.infoSubtitle}
         </Text>
         <a href='https://docs.giveth.io/whatisgiveth/' target='_blank' rel='noopener noreferrer'>
           <Button
@@ -77,7 +77,7 @@ const InfoSection = ({ content }) => {
               borderColor: 'colors.bodyLight'
             }}
           >
-            {content?.infoButtonText}
+            {content.infoButtonText}
           </Button>
         </a>
       </Flex>
@@ -91,10 +91,10 @@ const InfoSection = ({ content }) => {
               py: '1.5rem'
             }}
           >
-            {content?.feature2}
+            {content.feature2}
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            {content?.feature2Text}
+            {content.feature2Text}
           </Text>
         </Flex>
         <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
@@ -106,7 +106,7 @@ const InfoSection = ({ content }) => {
               py: '1.5rem'
             }}
           >
-            {content?.feature1}
+            {content.feature1}
           </Text>
           <Text
             sx={{
@@ -114,7 +114,7 @@ const InfoSection = ({ content }) => {
               color: 'background'
             }}
           >
-            {content?.feature1Text}
+            {content.feature1Text}
           </Text>
         </Flex>
         <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
@@ -126,10 +126,10 @@ const InfoSection = ({ content }) => {
               py: '1.5rem'
             }}
           >
-            {content?.feature3}
+            {content.feature3}
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            {content?.feature3Text}
+            {content.feature3Text}
           </Text>
         </Flex>
       </Grid>
@@ -150,7 +150,7 @@ const InfoSection = ({ content }) => {
               letterSpacing: 'more'
             }}
           >
-            {content?.featureCta}
+            {content.featureCta}
           </Button>
         </a>
       </Flex>
@@ -162,10 +162,10 @@ const InfoSection = ({ content }) => {
         }}
       >
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
-          {content?.infoHead2}
+          {content.infoHead2}
         </Text>
         <Text pb={5} sx={{ variant: 'text.large', maxWidth: '580px', color: 'background' }}>
-          {content?.infoSubtitle2}
+          {content.infoSubtitle2}
         </Text>
       </Flex>
       <Grid gap={1} columns={[1, 3, 3]} sx={{ justifyItems: 'center' }}>
@@ -180,9 +180,7 @@ const InfoSection = ({ content }) => {
             maxHeight: '400px'
           }}
         >
-          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
-            {content?.userType1Title}
-          </Text>
+          <Text sx={{ variant: 'headings.h4', color: 'background' }}>{content.userType1Title}</Text>
           <Text pb={3} sx={{ variant: 'text.paragraph', color: 'background' }}>
             Create a project and get donations in crypto.{' '}
             <Link href='/create' className='intextlink'>
