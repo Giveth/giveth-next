@@ -1,11 +1,16 @@
-import React from 'react'
-import Avatar from '../avatar'
+import React, { useContext } from 'react'
 import { Text, Link, Flex } from 'theme-ui'
-import { getEtherscanPrefix } from '../../utils'
+import Avatar from '../avatar'
+import { ETHERSCAN_PREFIXES } from '../../lib/util'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
 export const ProfileHeader = props => {
-  const { user, donations, projects } = props
-  const etherscanPrefix = getEtherscanPrefix()
+  const {
+    state: { networkId, user }
+  } = useContext(Web3Context)
+
+  const { donations, projects } = props
+
   const TitleBox = ({ title, content }) => {
     return (
       <Flex
@@ -54,9 +59,11 @@ export const ProfileHeader = props => {
         <Avatar img={user?.profileImage || user?.avatar} size={100} address={user?.walletAddress} />
         <Flex sx={{ flexDirection: 'column', ml: [0, '27px', '27px'] }}>
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
-          <Link
-            sx={{ textDecoration: 'none' }}
-            href={`https://${etherscanPrefix}etherscan.io/address/${user?.walletAddress}`}
+          <a
+            style={{ textDecoration: 'none' }}
+            target='blank'
+            rel='noopener noreferrer'
+            href={`${ETHERSCAN_PREFIXES[networkId]}address/${user?.walletAddress}`}
           >
             <Text
               sx={{
@@ -68,7 +75,7 @@ export const ProfileHeader = props => {
             >
               {user?.walletAddress}
             </Text>
-          </Link>
+          </a>
           <Link
             sx={{ textDecoration: 'none' }}
             href={/^(?:f|ht)tps?:\/\//.test(user?.url) ? user?.url : `//${user?.url}`}

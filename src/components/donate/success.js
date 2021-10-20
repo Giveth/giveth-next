@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box, Link, Flex, Text } from 'theme-ui'
 import { useMediaQuery } from 'react-responsive'
-import { getEtherscanPrefix } from '../../utils'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../animations/confetti'
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
+import { ETHERSCAN_PREFIXES } from '../../lib/util'
 
 const Success = props => {
   const { project, hash, currentChainId } = props
@@ -17,7 +17,6 @@ const Success = props => {
     link.dispatchEvent(event)
   }
 
-  const etherscanPrefix = getEtherscanPrefix()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <>
@@ -52,21 +51,17 @@ const Success = props => {
         {hash?.transactionHash ? (
           <Receipt sx={{ my: 4 }}>
             <div style={{ flex: 1 }}>
-              <Link
-                sx={{
+              <a
+                style={{
                   variant: 'text.paragraph',
-                  color: 'yellow',
-                  cursor: 'pointer'
+                  color: 'yellow'
                 }}
                 target='_blank'
-                href={
-                  currentChainId === 100
-                    ? `https://blockscout.com/xdai/mainnet/tx/${hash?.transactionHash}`
-                    : `https://${etherscanPrefix}etherscan.io/tx/${hash?.transactionHash}`
-                }
+                href={`${ETHERSCAN_PREFIXES[currentChainId]}tx/${hash.transactionHash}`}
+                rel='noreferrer noopener'
               >
                 View transaction details
-              </Link>
+              </a>
             </div>
           </Receipt>
         ) : (
