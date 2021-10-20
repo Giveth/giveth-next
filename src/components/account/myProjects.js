@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 import ProjectCard from '../projectListing'
 import ProjectEdition from './projectEdition/index'
@@ -7,25 +6,18 @@ import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
 import { Flex, Grid, Text } from 'theme-ui'
 import DarkClouds from '../../images/svg/general/decorators/dark-clouds.svg'
-import { useWallet } from '../../contextProvider/WalletProvider'
 
 const MyProjects = props => {
-  const router = useRouter()
   const { projects, edit } = props
 
   const [editProject, setEditProject] = useState(edit)
-  const { isLoggedIn } = useWallet()
 
-  const setProject = val => {
-    setEditProject(val)
-  }
+  const setProject = val => setEditProject(val)
+
   if (editProject) {
     return <ProjectEdition project={editProject} />
   }
 
-  if (!isLoggedIn) {
-    router.push('/', { state: { welcome: true } })
-  }
   return (
     <>
       <Grid p={4} columns={[1, 2]} style={{ justifyItems: 'center' }}>

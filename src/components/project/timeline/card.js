@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Avatar, Heading, Badge, Box, Button, Card, IconButton, Input, Flex, Text } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
@@ -17,6 +17,7 @@ import {
 import Toast from '../../../components/toast'
 import theme from '../../../utils/theme-ui'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
+import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
 
 // import RichTextViewer from '../../richTextViewer'
 
@@ -97,6 +98,15 @@ const RaisedHandsImg = styled.img`
 `
 
 const TimelineCard = props => {
+  const {
+    state: { user: currentUser },
+    actions: { showSign }
+  } = useContext(Web3Context)
+
+  const client = useApolloClient()
+
+  const { content, reactions, number, isOwner } = props
+
   const [currentContent, setCurrentContent] = useState('')
   const [newTitle, setNewTitle] = useState(undefined)
   const [newInput, setNewInput] = useState('')
@@ -105,8 +115,7 @@ const TimelineCard = props => {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const [user, setUser] = useState(undefined)
-  const { content, reactions, number, isOwner } = props
-  const client = useApolloClient()
+
   const isSSR = typeof window === 'undefined'
 
   const react = async () => {
@@ -295,6 +304,8 @@ const TimelineCard = props => {
               }}
               onClick={async () => {
                 try {
+                  if (currentUser && !currentUser.token) return showSign()
+
                   const res = await props.newUpdateOption({
                     title: newTitle,
                     content: newInput
@@ -489,7 +500,7 @@ const TimelineCard = props => {
                     setEditInput(currentContent)
                     return setOpenEdit(false)
                   } else {
-                    setConfirmDelete(true)
+                    currentUser && !currentUser.token ? showSign() : setConfirmDelete(true)
                   }
                 }}
               >
@@ -507,7 +518,7 @@ const TimelineCard = props => {
                   if (!openEdit) {
                     return setOpenEdit(true)
                   } else {
-                    editUpdate()
+                    currentUser && !currentUser.token ? showSign() : editUpdate()
                   }
                 }}
               >

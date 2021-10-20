@@ -25,8 +25,6 @@ const CreateProjectForm = dynamic(() => import('./index'))
 const CreateProject = props => {
   const { categories } = props
   const [projectId, setProjectId] = useState(null)
-  // const [isLoggedIn] = useState(checkIfLoggedIn())
-  // const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
   const [addedProject, setAddedProject] = useState(null)
   const [inError, setInError] = useState(false)
@@ -39,7 +37,7 @@ const CreateProject = props => {
       const qs = queryString.parse(window.location.search)
       setProjectId(qs?.projectId)
     }
-  })
+  }, [])
   // const { projectId } = queryString.parse(location?.search)
   const onSubmit = async values => {
     try {
@@ -255,7 +253,7 @@ const CreateProject = props => {
             <Text
               onClick={() => (
                 typeof window !== 'undefined' &&
-                  window?.open('https://github.com/Giveth/giveth-2/issues/new/choose'),
+                  window?.open('https://github.com/Giveth/giveth-next/issues/new/choose'),
                 '_blank'
               )}
               sx={{
@@ -278,9 +276,9 @@ const CreateProject = props => {
     if (!projectAdded && !projectId) {
       return (
         <>
-          <img
+          <Image
             src={'/images/decorator-clouds.svg'}
-            alt=''
+            alt='decorator-clouds'
             css={{
               position: 'absolute',
               top: '57px',
@@ -288,9 +286,9 @@ const CreateProject = props => {
             }}
             className='hide'
           />
-          <img
+          <Image
             src={'/images/people-puzzle2.svg'}
-            alt=''
+            alt='people-puzzle2'
             css={{
               position: 'absolute',
               top: '417px',
@@ -308,13 +306,11 @@ const CreateProject = props => {
   return (
     <Layout noFooter noHeader>
       <div
-        sx={{
+        style={{
           // applies width 100% to all viewport widths,
           // width 50% above the first breakpoint,
           // and 25% above the next breakpoint
-          width: ['100%', '50%', '25%']
-        }}
-        style={{
+          width: ['100%', '50%', '25%'],
           maxWidth: '1440px'
         }}
       >

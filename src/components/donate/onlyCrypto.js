@@ -9,7 +9,7 @@ import { BsCaretDownFill } from 'react-icons/bs'
 import { ethers } from 'ethers'
 
 import Modal from '../modal'
-import { checkNetwork, ensRegex, getERC20List, pollEvery } from '../../utils'
+import { checkNetwork, getERC20List, pollEvery } from '../../utils'
 import useComponentVisible from '../../utils/useComponentVisible'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
@@ -26,7 +26,8 @@ import UnconfirmedModal from './unconfirmedModal'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
-import { useWallet } from '../../contextProvider/WalletProvider'
+import { sendTransaction } from '../../lib/helpers'
+import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
@@ -44,12 +45,10 @@ const POLL_DELAY_TOKENS = 5000
 const OnlyCrypto = props => {
   const {
     state: { validProvider, balance, web3, account, isEnabled, networkId, provider },
-    actions: { switchWallet, enableProvider, initOnBoard, switchToXdai }
+    actions: { switchWallet, enableProvider, switchToXdai, initOnBoard }
   } = useContext(Web3Context)
 
-  const { sendTransaction, isLoggedIn } = useWallet()
-
-  const usePopup = React.useContext(PopupContext)
+  const usePopup = useContext(PopupContext)
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
@@ -80,7 +79,6 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     fetchEthPrice().then(setMainTokenPrice)
-    initOnBoard()
   }, [])
 
   useEffect(() => {
@@ -326,18 +324,17 @@ const OnlyCrypto = props => {
         noAutoClose: true
       })
 
-      const toAddress = ensRegex(project.walletAddress)
-        ? await web3.eth.ens.getResolver(project.walletAddress)
+      const toAddress = isAddressENS(project.walletAddress)
+        ? await getAddressFromENS(project.walletAddress)
         : project.walletAddress
 
       const web3Provider = new ethers.providers.Web3Provider(provider)
 
       await transaction.send(
+        web3,
         toAddress,
         selectedToken.address,
         subtotal,
-        isLoggedIn,
-        isLoggedIn,
         sendTransaction,
         web3Provider,
         {
@@ -460,11 +457,7 @@ const OnlyCrypto = props => {
           setShowModal={val => setInProgress(val)}
           txHash={txHash}
         />
-        <UnconfirmedModal
-          showModal={unconfirmed}
-          setShowModal={val => setUnconfirmed(val)}
-          txHash={txHash}
-        />
+        <UnconfirmedModal showModal={unconfirmed} setShowModal={setUnconfirmed} txHash={txHash} />
         <Modal isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)} contentLabel='QR Modal'>
           <Flex
             sx={{

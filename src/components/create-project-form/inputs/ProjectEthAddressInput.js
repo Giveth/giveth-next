@@ -1,16 +1,9 @@
 import React from 'react'
 import { Label, Input, Button, Text, Flex } from 'theme-ui'
-import theme from '../../../../src/utils/theme-ui'
 import { BsQuestionCircle } from 'react-icons/bs'
-import { animated } from 'react-spring'
+import theme from '../../../../src/utils/theme-ui'
 
-export const ProjectEthAddressInput = ({
-  register,
-  currentValue,
-  walletUsed,
-  animationStyle,
-  goBack
-}) => {
+export const ProjectEthAddressInput = ({ register, currentValue, useUserAddress, goBack }) => {
   // const [characterLength, setCharacterLength] = useState(
   //   currentValue ? currentValue.length : 0
   // )
@@ -22,7 +15,7 @@ export const ProjectEthAddressInput = ({
   //   setAddress(true)
   // }
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
+    <div style={{ marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -110,7 +103,7 @@ export const ProjectEthAddressInput = ({
           {/* {characterLength}/42 */}
         </Text>
       </Flex>
-      {walletUsed && (
+      {useUserAddress && (
         <Text
           sx={{
             fontSize: '3',
@@ -204,6 +197,6 @@ export const ProjectEthAddressInput = ({
           visibility: visible;
         }
       `}</style>
-    </animated.section>
+    </div>
   )
 }
