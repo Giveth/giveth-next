@@ -202,32 +202,12 @@ const CreateProjectForm = props => {
           projectWalletAddress = user.addresses[0]
         }
 
-        const { data: addressValidation } = await client.query({
+        await client.query({
           query: WALLET_ADDRESS_IS_VALID,
           variables: {
             address: projectWalletAddress
           }
         })
-        if (!addressValidation?.walletAddressIsValid?.isValid) {
-          const reason = addressValidation?.walletAddressIsValid?.reasons[0]
-          setInputLoading(false)
-          if (reason === 'smart-contract') {
-            return Toast({
-              content: `Eth address ${projectWalletAddress} is a smart contract. We do not support smart contract wallets at this time because we use multiple blockchains, and there is a risk of your losing donations.`,
-              type: 'error'
-            })
-          } else if (reason === 'address-used') {
-            return Toast({
-              content: `Eth address ${projectWalletAddress} is already being used for a project`,
-              type: 'error'
-            })
-          } else {
-            return Toast({
-              content: 'Eth address not valid',
-              type: 'error'
-            })
-          }
-        }
         project.projectWalletAddress = projectWalletAddress
       }
       project.projectDescription = project?.projectDescription || ''
