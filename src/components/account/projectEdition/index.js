@@ -433,18 +433,12 @@ function ProjectEdition(props) {
       let ethAddress = data.editWalletAddress
 
       if (ethAddress) {
-        const { data: addressValidation } = await client.query({
+         await client.query({
           query: WALLET_ADDRESS_IS_VALID,
           variables: {
             address: ethAddress
           }
         })
-
-        if (!addressValidation?.walletAddressIsValid?.isValid) {
-          const reason = addressValidation?.walletAddressIsValid?.reasons[0]
-          setLoading(false)
-          return Toast({ content: reason, type: 'error' })
-        }
       }
       if (!isProjectTitleValid(data.editTitle)) {
         return invalidProjectTitleToast()
