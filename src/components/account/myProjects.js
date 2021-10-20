@@ -24,6 +24,7 @@ const MyProjects = props => {
         {projects?.map((item, index) => {
           return (
             <ProjectCard
+              project={item}
               withEditHover
               action={() => setProject(item)}
               name={item?.title}

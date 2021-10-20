@@ -166,7 +166,7 @@ const ProjectDonatorView = ({
   const projectPic = () => {
     const isSVG = setImage(project?.image)
     if (isSVG) return isSVG
-    else if (project.image) {
+    else if (project.image && project.image !== '/') {
       return (
         <Image
           src={project.image}

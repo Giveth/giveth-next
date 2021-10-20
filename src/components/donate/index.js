@@ -210,6 +210,7 @@ const LEFT_BOX_STYLE = {
   borderTopLeftRadius: '0.2rem',
   borderBottomLeftRadius: '0.2rem'
 }
+
 const RIGHT_BOX_STYLE = {
   borderTopRightRadius: '0.2rem',
   borderBottomRightRadius: '0.2rem'

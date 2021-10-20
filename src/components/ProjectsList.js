@@ -194,7 +194,7 @@ const ProjectsList = props => {
             >{`(${projectsFilteredNoSlice?.length})`}</Text>
           )}
         </Flex>
-        <Link href='/create'>
+        <Link href='/create' passHref>
           <CreateLink>Create a project</CreateLink>
         </Link>
       </Flex>
@@ -361,7 +361,7 @@ const ProjectsList = props => {
                 >
                   {projectsFilteredSorted
                     ? projectsFilteredSorted
-                        ?.slice(0, limit)
+                        .slice(0, limit)
                         .map((project, index) => (
                           <ProjectCard
                             shadowed

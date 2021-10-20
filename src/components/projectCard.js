@@ -11,9 +11,14 @@ import { FaShareAlt } from 'react-icons/fa'
 import theme from '../utils/theme-ui/index'
 import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
 import { PopupContext } from '../contextProvider/popupProvider'
-import LevitatingCard from './hoc/levitatingCard'
 import { Context as Web3Context } from '../contextProvider/Web3Provider'
+import LevitatingCard from './hoc/levitatingCard'
+import projectBadge from './projectBadge'
+import { isNewProject } from '../lib/helpers'
 // import Donate from '../components/donateForm'
+
+const env = process.env.NEXT_PUBLIC_ENVIRONMENT
+const isDev = env === 'dev'
 
 const RichTextViewer = dynamic(() => import('./richTextViewer'), {
   ssr: false
@@ -82,9 +87,6 @@ const ProjectCard = props => {
   }, [project, user])
 
   const image = props?.image || project?.image
-  const currentTime = new Date()
-  const twoWeeksAgo = currentTime.setDate(currentTime.getDate() - 14)
-  const isNewProject = new Date(project?.creationDate)?.valueOf() > twoWeeksAgo
 
   return (
     <Box
@@ -160,62 +162,16 @@ const ProjectCard = props => {
               )}
             </a>
           </Link>
+
           <div style={{ position: 'relative' }}>
-            {project?.fromTrace || project?.IOTraceable ? (
-              <Dot
-                style={{
-                  backgroundColor: theme.colors.secondary
-                }}
-                key={props.listingId + '_card'}
-              >
-                <DotInner>
-                  <Text
-                    sx={{
-                      variant: 'text.overlineSmall',
-                      color: 'background'
-                    }}
-                  >
-                    TRACE
-                  </Text>
-                </DotInner>
-              </Dot>
-            ) : isNewProject ? (
-              <Dot
-                style={{
-                  backgroundColor: theme.colors.primary
-                }}
-                key={props.listingId + '_card'}
-              >
-                <DotInner>
-                  <Text
-                    sx={{
-                      variant: 'text.overlineSmall',
-                      color: 'background'
-                    }}
-                  >
-                    NEW
-                  </Text>
-                </DotInner>
-              </Dot>
-            ) : project?.verified ? (
-              <Dot
-                style={{
-                  backgroundColor: theme.colors.blue
-                }}
-                key={props.listingId + '_card'}
-              >
-                <DotInner>
-                  <Text
-                    sx={{
-                      variant: 'text.overlineSmall',
-                      color: 'background'
-                    }}
-                  >
-                    VERIFIED
-                  </Text>
-                </DotInner>
-              </Dot>
-            ) : null}
+            {project?.fromTrace || project?.IOTraceable
+              ? projectBadge('TRACEABLE')
+              : project?.verified
+              ? projectBadge('VERIFIED')
+              : isNewProject(project?.creationDate)
+              ? projectBadge('NEW')
+              : null}
+
             {!project?.fromTrace ? (
               <Options>
                 <Flex sx={{ alignItems: 'center' }}>
@@ -302,7 +258,7 @@ const ProjectCard = props => {
                 <Link
                   href={
                     project?.fromTrace
-                      ? `https://trace.giveth.io/campaign/${project?.slug}`
+                      ? `https://${isDev ? 'develop' : 'trace'}.giveth.io/campaign/${project?.slug}`
                       : !props.disabled && `/donate/${props?.slug || project?.slug}`
                   }
                   passHref
@@ -410,27 +366,6 @@ const Badge = styled.span`
   border: 1px solid ${theme.colors.bodyLight};
   border-radius: 48px;
   color: ${theme.colors.bodyLight};
-`
-
-const Dot = styled.span`
-  height: 68px;
-  width: 68px;
-  display: grid;
-  color: ${theme.colors.background};
-  border: 6px solid ${theme.colors.background};
-  border-radius: 50%;
-  position: absolute;
-  bottom: -34px;
-  left: 24px;
-  font-family: 'Red Hat Text', sans-serif;
-  font-size: 10px;
-`
-
-const DotInner = styled.span`
-  display: block;
-  text-align: center;
-  align-self: center;
-  position: relative;
 `
 
 const Options = styled.span`
