@@ -127,14 +127,6 @@ export async function getEtherscanTxs(address, apolloClient = false, isDonor = f
   }
 }
 
-export function getEtherscanPrefix() {
-  return typeof process.env.ETHEREUM_NETWORK !== 'undefined'
-    ? process.env.ETHEREUM_NETWORK === 'mainnet'
-      ? ''
-      : process.env.ETHEREUM_NETWORK + '.'
-    : ''
-}
-
 export const getERC20List = ERC20List
 
 export async function checkIfURLisValid(checkUrl) {

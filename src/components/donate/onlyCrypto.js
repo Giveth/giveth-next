@@ -454,10 +454,16 @@ const OnlyCrypto = props => {
       <Content ref={ref}>
         <InProgressModal
           showModal={inProgress}
-          setShowModal={val => setInProgress(val)}
+          setShowModal={setInProgress}
           txHash={txHash}
+          networkId={networkId}
         />
-        <UnconfirmedModal showModal={unconfirmed} setShowModal={setUnconfirmed} txHash={txHash} />
+        <UnconfirmedModal
+          showModal={unconfirmed}
+          setShowModal={setUnconfirmed}
+          txHash={txHash}
+          networkId={networkId}
+        />
         <Modal isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)} contentLabel='QR Modal'>
           <Flex
             sx={{

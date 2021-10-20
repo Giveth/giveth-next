@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
-import { getEtherscanPrefix, titleCase } from '../../utils'
 import { useRouter } from 'next/router'
 import Pagination from 'react-js-pagination'
-import SearchIcon from '../../images/svg/general/search-icon.svg'
-import theme from '../../utils/theme-ui'
 import { Input, Flex, Spinner, Text } from 'theme-ui'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
+
+import SearchIcon from '../../images/svg/general/search-icon.svg'
+import theme from '../../utils/theme-ui'
+import { titleCase } from '../../utils'
+import { ETHERSCAN_PREFIXES } from '../../lib/util'
 // import DropdownInput from '../dropdownInput'
 // import { ProjectContext } from '../../contextProvider/projectProvider'
 // import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json
@@ -27,8 +29,6 @@ const MyDonations = props => {
   // const { currentProjectView, setCurrentProjectView } = React.useContext(
   //   ProjectContext
   // )
-
-  const etherscanPrefix = getEtherscanPrefix()
 
   useEffect(() => {
     const setup = async () => {
@@ -218,19 +218,17 @@ const MyDonations = props => {
                         </Text>
                         <FiCopy
                           size='18px'
-                          sx={{ cursor: 'pointer', mr: 2 }}
+                          style={{ cursor: 'pointer', mr: 2 }}
                           onClick={() => copy(i?.transactionId)}
                         />{' '}
                         <FiExternalLink
                           size='18px'
-                          sx={{ cursor: 'pointer' }}
-                          onClick={() => {
+                          style={{ cursor: 'pointer' }}
+                          onClick={() =>
                             window.open(
-                              i?.transactionNetworkId === 100
-                                ? `https://blockscout.com/xdai/mainnet/tx/${i?.transactionId}`
-                                : `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
+                              `${ETHERSCAN_PREFIXES[i.transactionNetworkId]}tx/${i?.transactionId}`
                             )
-                          }}
+                          }
                         />
                       </div>
                     </td>

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button, Image, Flex, Text } from 'theme-ui'
-import Modal from './modal'
 import Link from 'next/link'
 import {
   FacebookShareButton,
@@ -12,6 +11,9 @@ import {
 } from 'react-share'
 import { PopupContext } from '../contextProvider/popupProvider'
 import CopyToClipboard from '../components/copyToClipboard'
+import Modal from './modal'
+
+const isDev = process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
 
 function ChangeNetworkPopup({ close }) {
   return (
@@ -46,7 +48,8 @@ function ChangeNetworkPopup({ close }) {
           Please change the Network
         </Text>
         <Text color='secondary' variant='text.default' sx={{ mx: 4, width: '50%' }}>
-          Please select the Ethereum Mainnet or xDAI network in your wallet and try again
+          Please select the {isDev ? 'Ropsten' : 'Ethereum Mainnet'} or xDAI network in your wallet
+          and try again
         </Text>
       </Flex>
       <Button
@@ -68,7 +71,7 @@ function ChangeNetworkPopup({ close }) {
       </Button>
       <Image
         src={'/images/worried_woman.png'}
-        style={{ position: 'absolute', left: -4, bottom: 0 }}
+        style={{ position: 'absolute', left: -4, bottom: 0, zIndex: -1 }}
         alt='worried woman img'
       />
     </Flex>
