@@ -32,6 +32,7 @@ const MyProjects = props => {
         {projects?.map((item, index) => {
           return (
             <ProjectCard
+              project={item}
               withEditHover
               action={() => setProject(item)}
               name={item?.title}
@@ -45,7 +46,7 @@ const MyProjects = props => {
             />
           )
         })}
-        <Link href='/create'>
+        <Link href='/create' passHref>
           <SpecialCard sx={{ cursor: 'pointer', textDecoration: 'none' }}>
             {' '}
             <DarkClouds style={{ position: 'absolute', top: '41px', right: '34px' }} />
@@ -86,7 +87,7 @@ const MyProjects = props => {
   )
 }
 
-const SpecialCard = styled.div`
+const SpecialCard = styled.a`
   display: flex;
   width: 100%;
   height: 240px;
