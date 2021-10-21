@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
+import { gqlEnums } from '../src/utils/constants'
 import ErrorPage from '../src/components/errorPage'
 import { client } from '../src/apollo/client'
 import ProjectsList from '../src/components/ProjectsList'
@@ -42,15 +43,10 @@ export async function getServerSideProps(props) {
     categories = null
   let errors = null
   try {
-    const enums = {
-      QUALITYSCORE: 'QualityScore',
-      DESC: "DESC"
-    }
-
     const { error, data: fetchProject } = await client.query({
       query: FETCH_ALL_PROJECTS,
       variables: {
-        orderBy: { field: enums.QUALITYSCORE , direction:  enums.DESC }
+        orderBy: { field: gqlEnums.QUALITYSCORE , direction:  gqlEnums.DESC }
       },
       fetchPolicy: 'no-cache'
     })
