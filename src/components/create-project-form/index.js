@@ -233,7 +233,7 @@ const CreateProjectForm = props => {
       console.log({ error })
       setInputLoading(false)
       Toast({
-        content: error?.message,
+        content: error?.message || JSON.stringify(error),
         type: 'error'
       })
     }
