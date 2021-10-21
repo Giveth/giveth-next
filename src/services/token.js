@@ -23,9 +23,9 @@ export async function validateAuthToken(token) {
  * Ok the user has a token, but is it still valid?
  * @param {} user
  * @param {*} signedMessage
- * @param isXDAI
+ * @param networkId
  */
-export async function getToken(user, signedMessage, isXDAI) {
+export async function getToken(user, signedMessage, networkId) {
   if (signedMessage) {
     try {
       const { data } = await client.mutate({
@@ -37,10 +37,10 @@ export async function getToken(user, signedMessage, isXDAI) {
           avatar: user?.avatar,
           name: user?.name,
           hostname: window.location.hostname,
-          isXDAI: isXDAI
+          networkId
         }
       })
-
+      console.log("getToken data", data)
       const token = data?.loginWallet?.token
       const userIDFromDB = data?.loginWallet?.user?.id
       if (!userIDFromDB) throw new Error('No userId returned from the database')
