@@ -11,7 +11,8 @@ import {
   // GET_LINK_BANK_CREATION,
   // EDIT_PROJECT,
   FETCH_PROJECT_BY_SLUG,
-  WALLET_ADDRESS_IS_VALID
+  WALLET_ADDRESS_IS_VALID,
+  TITLE_IS_VALID
 } from '../../../apollo/gql/projects'
 import { toggleProjectActivation } from '../../../services/project'
 import LoadingModal from '../../loadingModal'
@@ -21,10 +22,7 @@ import { categoryList } from '../../../utils/constants'
 import ImageSection from './imageSection'
 import Toast from '../../toast'
 import { maxSelectedCategory } from '../../../utils/constants'
-import {
-  invalidProjectTitleToast,
-  isProjectTitleValid
-} from '../../../validation/projectValidation'
+
 
 // import dynamic from 'next/dynamic'
 // import { getWallet } from '../../../wallets'
@@ -440,9 +438,13 @@ function ProjectEdition(props) {
           }
         })
       }
-      if (!isProjectTitleValid(data.editTitle)) {
-        return invalidProjectTitleToast()
-      }
+      await client.query({
+        query: TITLE_IS_VALID,
+        variables: {
+          title: data.editTitle
+        }
+      })
+
       const projectCategories = []
       for (const category in categoryList) {
         const name = categoryList[category]?.name

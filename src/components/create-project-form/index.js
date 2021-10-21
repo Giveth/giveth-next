@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 
-import { GET_PROJECT_BY_ADDRESS, WALLET_ADDRESS_IS_VALID } from '../../apollo/gql/projects'
+import { GET_PROJECT_BY_ADDRESS, WALLET_ADDRESS_IS_VALID, TITLE_IS_VALID } from '../../apollo/gql/projects'
 import { getProjectWallet } from './utils'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
@@ -169,9 +169,12 @@ const CreateProjectForm = props => {
         }
       }
       // check title
-      if (!isProjectTitleValid(project?.projectName)) {
-        return invalidProjectTitleToast()
-      }
+      await client.query({
+        query: TITLE_IS_VALID,
+        variables: {
+          title: project?.projectName
+        }
+      })
       console.log({ project })
 
       if (isDescriptionStep(submitCurrentStep)) {
