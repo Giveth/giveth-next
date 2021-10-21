@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as matter from 'gray-matter'
 import dynamic from 'next/dynamic'
 import { client } from '../src/apollo/client'
 import GivethContent from '../src/content/giveth.md'
+import { PopupContext } from '../src/contextProvider/popupProvider'
+import { gqlEnums } from '../src/utils/constants'
 
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
 
@@ -36,7 +38,15 @@ const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSecti
 
 // ceramic.did = did
 
-const IndexContent = ({ hideInfo, content, topProjects, categories, allProject }) => {
+const IndexContent = ({ hideInfo, content, topProjects, categories, allProject, isWelcome }) => {
+  const popup = React.useContext(PopupContext)
+  // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
+  useEffect(() => {
+    if (isWelcome) {
+      popup.triggerPopup('WelcomeLoggedOut')
+    }
+  }, [])
+
   return (
     <>
       <Hero content={content} />
@@ -53,7 +63,7 @@ const IndexContent = ({ hideInfo, content, topProjects, categories, allProject }
 }
 
 const IndexPage = props => {
-  const { query, content, topProjects } = props
+  const { query, content, mediumPosts, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION ? process.env.HIDE_INFO_SECTION : false
 
@@ -96,6 +106,7 @@ const IndexPage = props => {
       <IndexContent
         hideInfo={hideInfo}
         content={content}
+        mediumPosts={mediumPosts}
         // html={null}
         // location={location}
         isWelcome={query?.welcome}
@@ -110,21 +121,25 @@ const IndexPage = props => {
 export async function getServerSideProps(props) {
   const { data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
-    variables: { limit: 20 }
+    variables: {
+      limit: 10,
+      orderBy: { field: gqlEnums.QUALITYSCORE , direction: gqlEnums.DESC }
+    }
   })
 
   const mdContent = matter(GivethContent)
 
+  const medium = await fetch(
+    'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth'
+  )
+  const mediumPosts = await medium.json()
+
   return {
     props: {
-      topProjects: response?.projects
-        ?.filter(i => !i?.verified)
-        ?.sort((a, b) => {
-          if (a?.qualityScore > b?.qualityScore) return -1
-        })
-        ?.slice(0, 3),
+      topProjects: response?.projects?.projects,
       content: mdContent?.data,
-      query: props.query
+      query: props.query,
+      mediumPosts
     }
   }
 }

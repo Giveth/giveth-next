@@ -29,3 +29,9 @@ export const categoryList = [
 ]
 
 export const maxSelectedCategory = 5
+
+export const gqlEnums = {
+  QUALITYSCORE: 'QualityScore',
+  DESC: "DESC",
+  ASC: "ASC"
+}

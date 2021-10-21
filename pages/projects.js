@@ -38,6 +38,7 @@ export async function getServerSideProps(props) {
   // Fetch Project
   let projects,
     traceProjects,
+    totalCount,
     categories = null
   let errors = null
   try {
@@ -55,8 +56,10 @@ export async function getServerSideProps(props) {
     })
     projects = fetchProject?.projects?.projects
     categories = fetchProject?.projects?.categories
+    totalCount = fetchProject?.projects?.totalCount
 
 
+    // This will be removed when trace projects are saved on impact graph
     if (process.env.NEXT_PUBLIC_FEATHERS) {
       // only fetch if there's a route
       // https://feathers.beta.giveth.io/campaigns?verified=true
@@ -90,7 +93,7 @@ export async function getServerSideProps(props) {
       projects: projects || [],
       traceProjects: traceProjects?.map(i => ({ ...i, fromTrace: true })) || [],
       categories: categories || null,
-      totalCount: projects?.length || null,
+      totalCount: totalCount || null,
       errors: JSON.stringify(errors) || null,
       query: props.query
     }
