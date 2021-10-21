@@ -4,7 +4,6 @@ import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 
 import { GET_PROJECT_BY_ADDRESS, WALLET_ADDRESS_IS_VALID } from '../../apollo/gql/projects'
-import { getProjectWallet } from './utils'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import {
   ProjectNameInput,
@@ -184,7 +183,7 @@ const CreateProjectForm = props => {
         }
         if (didEnterWalletAddress) {
           setInputLoading(true)
-          projectWalletAddress = await getProjectWallet(data?.projectWalletAddress)
+          projectWalletAddress = data?.projectWalletAddress
         } else {
           projectWalletAddress = account
         }
