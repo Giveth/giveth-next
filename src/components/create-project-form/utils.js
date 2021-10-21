@@ -1,6 +1,6 @@
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { client } from '../../apollo/client'
-import { getAddressFromENS, isWalletAddressValid, isAddressENS } from '../../services/wallet'
+import { getAddressFromENS, isWalletAddressValid, isAddressENS } from '../../lib/wallet'
 import { ethers } from 'ethers'
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID
@@ -10,7 +10,7 @@ const provider = new ethers.providers.InfuraProvider(network, infuraId)
 export async function getProjectWallet(projectWalletAddress) {
   if (projectWalletAddress) {
     try {
-      const isENS = await isAddressENS(projectWalletAddress)
+      const isENS = isAddressENS(projectWalletAddress)
       if (!isWalletAddressValid(projectWalletAddress) && !isENS) {
         throw new Error('Wallet address is invalid')
       }

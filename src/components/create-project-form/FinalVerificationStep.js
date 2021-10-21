@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, Button, Flex, Image, Box } from 'theme-ui'
 import dynamic from 'next/dynamic'
-import { animated } from 'react-spring'
+
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
@@ -11,7 +11,7 @@ const RichTextViewer = dynamic(() => import('../richTextViewer'), {
   ssr: false
 })
 
-const FinalVerificationStep = ({ formData, setStep, animationStyle, categoryList }) => {
+const FinalVerificationStep = ({ formData, setStep, categoryList }) => {
   const chosenCategories = []
   for (const category in formData.projectCategory) {
     if (!!formData.projectCategory[category] && formData.projectCategory[category]?.length !== 0) {
@@ -36,7 +36,7 @@ const FinalVerificationStep = ({ formData, setStep, animationStyle, categoryList
     mt: '18px'
   }
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '35px' }}>
+    <div style={{ marginTop: '35px' }}>
       <>
         <Flex>
           <Text sx={labelStyle}>Project Name</Text>
@@ -310,7 +310,7 @@ const FinalVerificationStep = ({ formData, setStep, animationStyle, categoryList
           </Text>
         </Button>
       </>
-    </animated.section>
+    </div>
   )
 }
 

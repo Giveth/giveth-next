@@ -1,5 +1,8 @@
+const env = process.env.NEXT_PUBLIC_ENVIRONMENT
+const isDevelopment = env === 'dev'
+
 export default {
-  donationSlug: 'giveth',
+  donationSlug: isDevelopment ? 'giveth' : 'the-giveth-community-of-makers',
   breakpoints: ['850px', '1024px', '1280px'],
   colors: {
     text: '#2C0B3F',

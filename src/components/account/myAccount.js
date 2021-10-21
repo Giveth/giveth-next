@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
-import { useWallet } from '../../contextProvider/WalletProvider'
+import React, { useContext, useState } from 'react'
 import { Flex, Text } from 'theme-ui'
 import Notification from '../notification'
 import Avatar from '../avatar'
 import EditProfileModal from './editProfileModal'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
 const MyAccount = ({ info }) => {
+  const {
+    state: { user, account }
+  } = useContext(Web3Context)
+
   const [openModal, setOpenModal] = useState(false)
   // const [ethPrice, setEthPrice] = useState(1)
-  const wallet = useWallet()
-  const user = wallet?.user
+
   // const balance = wallet?.balance
 
   // useEffect(() => {
@@ -24,7 +27,8 @@ const MyAccount = ({ info }) => {
 
   return (
     <>
-      <EditProfileModal isOpen={openModal} onRequestClose={() => setOpenModal(false)} user={user} />
+      <EditProfileModal isOpen={openModal} onRequestClose={() => setOpenModal(false)} />
+
       {!user?.name && (
         <Notification
           content='Please finish setting up your public profile.'
@@ -34,11 +38,7 @@ const MyAccount = ({ info }) => {
       )}
 
       <Flex>
-        <Avatar
-          img={user?.profileImage || user?.avatar}
-          size={100}
-          address={user.getWalletAddress()}
-        />
+        <Avatar img={user?.profileImage || user?.avatar} size={100} address={account} />
         <Flex sx={{ flexDirection: 'column', ml: '27px', textAlign: 'flex-end' }}>
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
           <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
@@ -69,9 +69,7 @@ const MyAccount = ({ info }) => {
           Change
         </Button> */}
       </Flex>
-      <Text sx={{ mt: '14px', variant: 'text.medium', color: 'secondary' }}>
-        {user.getWalletAddress()}
-      </Text>
+      <Text sx={{ mt: '14px', variant: 'text.medium', color: 'secondary' }}>{account}</Text>
       <Flex sx={{ mt: '40px' }}>
         <Flex
           sx={{
