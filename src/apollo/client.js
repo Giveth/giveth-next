@@ -14,7 +14,6 @@ export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 function createApolloClient() {
   // Declare variable to store authToken
   let token
-
   const appUser = getLocalStorageUserLabel()
 
   const httpLink = createUploadLink({

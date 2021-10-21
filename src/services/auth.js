@@ -13,12 +13,6 @@ export function handleLogout() {
   logout()
 }
 
-export const checkIfLoggedIn = () => {
-  const user = getUser()
-
-  return !!user.walletAddresses
-}
-
 export const logout = (callback = () => {}) => {
   if (isBrowser()) {
     window.localStorage.removeItem(getLocalStorageUserLabel())
@@ -32,20 +26,11 @@ export const logout = (callback = () => {}) => {
 }
 
 export function getLocalStorageUserLabel() {
-  const nextUser = process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
+  return process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
     ? process.env.NEXT_PUBLIC_LOCAL_USER_LABEL + '_' + process.env.ENVIRONMENT
     : 'nextUser' + '_' + process.env.ENVIRONMENT
-
-  return nextUser
 }
 
 export function getLocalStorageTokenLabel() {
-  const tokenLabel = getLocalStorageUserLabel() + '_token'
-
-  return tokenLabel
-}
-
-export function getUserToken() {
-  const userToken = window.localStorage.getItem(getLocalStorageTokenLabel())
-  return userToken || ''
+  return getLocalStorageUserLabel() + '_token'
 }

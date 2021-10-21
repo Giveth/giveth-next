@@ -38,6 +38,7 @@ export async function getServerSideProps(props) {
       fetchPolicy: 'network-only'
     })
     project = fetchProject?.projectBySlug
+
     if (error) errors = JSON.stringify(error)
   } catch (e) {
     console.log({ e })
@@ -46,7 +47,7 @@ export async function getServerSideProps(props) {
 
   // Try to fetch from TRACE
   const traceProject = await fetch(
-    `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?slug=${slug}`
+    `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?givethIoProjectId=${project?.id}`
   ).then(async function (response) {
     if (response.status >= 400) {
       errors = new Error('Bad response from server')

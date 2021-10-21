@@ -3,6 +3,7 @@ import { Grid, Button, Heading, Text, IconButton } from 'theme-ui'
 import styled from '@emotion/styled'
 
 import ProjectCard from '../src/components/projectCard'
+import Web3Provider from '../src/contextProvider/Web3Provider'
 
 // import placeholder image
 const noImage = '/images/no-image-available.jpg'
@@ -24,21 +25,6 @@ const imgDecoratorElements = '/images/decorator-elements.svg'
 const imgDecoratorFizzy = '/images/decorator-fizzy-square.svg'
 const imgDecoratorFizzyRot = '/images/decorator-fizzy-square-rotated.svg'
 const imgDecoratorLeaf = '/images/decorator-leaf.svg'
-// import UserDetails from '../components/torus/userDetails'
-import { WalletProvider } from '../src/contextProvider/WalletProvider'
-
-const StyleGuide = styled.div`
-  border: 1px solid lightgray;
-  border-radius: 4px;
-  margin: 1rem;
-`
-
-const Container = styled.div`
-  padding: 1rem;
-  button {
-    margin: 0.5rem;
-  }
-`
 
 const ViewStyles = () => {
   return (
@@ -49,14 +35,14 @@ const ViewStyles = () => {
       }}
     >
       <div
-        sx={{
+        style={{
           // applies width 100% to all viewport widths,
           // width 50% above the first breakpoint,
           // and 25% above the next breakpoint
           width: ['100%', '50%', '25%']
         }}
       >
-        <WalletProvider>
+        <Web3Provider>
           <Grid gap={1} columns={[2, '1fr 1fr']}>
             <StyleGuide>
               <Text sx={{ variant: 'text.styleGuide' }}>Headings</Text>
@@ -218,10 +204,23 @@ const ViewStyles = () => {
               </Container>
             </StyleGuide>
           </Grid>
-        </WalletProvider>
+        </Web3Provider>
       </div>
     </div>
   )
 }
+
+const StyleGuide = styled.div`
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  margin: 1rem;
+`
+
+const Container = styled.div`
+  padding: 1rem;
+  button {
+    margin: 0.5rem;
+  }
+`
 
 export default ViewStyles

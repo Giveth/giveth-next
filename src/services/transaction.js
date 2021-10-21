@@ -2,11 +2,10 @@ import Web3 from 'web3'
 import getSigner from './ethersSigner'
 
 export async function send(
+  web3,
   toAddress,
   contractAddress, // if none is set, it defaults to ETH
   subtotal,
-  fromOwnProvider,
-  isLoggedIn,
   sendTransaction,
   provider,
   txCallbacks,
@@ -21,27 +20,18 @@ export async function send(
     }
     let hash
 
-    if (fromOwnProvider && isLoggedIn) {
-      const regularTransaction = await sendTransaction(
-        transaction,
-        txCallbacks,
-        contractAddress,
-        null,
-        traceable
-      )
-      hash = regularTransaction?.transactionHash
-    } else {
-      const signer = getSigner(provider)
-      const signerTransaction = await sendTransaction(
-        transaction,
-        txCallbacks,
-        contractAddress,
-        signer,
-        traceable
-      )
-      console.log('look here', { signerTransaction })
-      hash = signerTransaction?.hash
-    }
+    const signer = getSigner(provider)
+    const signerTransaction = await sendTransaction(
+      web3,
+      transaction,
+      txCallbacks,
+      contractAddress,
+      signer,
+      traceable
+    )
+    console.log('look here', { signerTransaction })
+    hash = signerTransaction?.hash
+
     if (!hash) throw new Error('Transaction failed')
 
     return hash
