@@ -20,6 +20,8 @@ import Toast from '../toast'
 import { maxSelectedCategory } from '../../utils/constants'
 import { invalidProjectTitleToast, isProjectTitleValid } from '../../lib/projectValidation'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+import { compareAddresses } from '../../lib/helpers'
+import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 
 const Main = props => {
   const {
@@ -35,12 +37,17 @@ const Main = props => {
 }
 
 const CreateProjectForm = props => {
+  const {
+    state: { account, user, web3 }
+  } = useContext(Web3Context)
+
   const [loading, setLoading] = useState(true)
   const [inputIsLoading, setInputLoading] = useState(false)
   const [incompleteProfile, setIncompleteProfile] = useState(false)
   const [formData, setFormData] = useState({})
-  const [addressIsUsed, setAddressIsUsed] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
+  const [EthAddress, setEthAddress] = useState()
+  const [showCloseModal, setShowCloseModal] = useState(false)
 
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: useMemo(() => {
@@ -48,26 +55,11 @@ const CreateProjectForm = props => {
     }, [formData])
   })
 
-  const {
-    state: { account, user }
-  } = useContext(Web3Context)
-
   const usePopup = useContext(PopupContext)
   const client = useApolloClient()
 
   const nextStep = () => setCurrentStep(currentStep + 1)
   const goBack = () => setCurrentStep(currentStep - 1)
-
-  const EthAddress = formData?.projectWalletAddress
-    ? formData.projectWalletAddress
-    : !addressIsUsed
-    ? account
-    : null
-
-  const useUserAddress = !(
-    addressIsUsed ||
-    (!addressIsUsed && formData.projectWalletAddress && formData.projectWalletAddress !== account)
-  )
 
   const steps = [
     () => <ProjectNameInput currentValue={formData?.projectName} register={register} />,
@@ -104,14 +96,7 @@ const CreateProjectForm = props => {
         goBack={goBack}
       />
     ),
-    () => (
-      <ProjectEthAddressInput
-        currentValue={EthAddress}
-        useUserAddress={useUserAddress}
-        register={register}
-        goBack={goBack}
-      />
-    ),
+    () => <ProjectEthAddressInput value={EthAddress} onChange={setEthAddress} goBack={goBack} />,
     () => (
       <FinalVerificationStep
         formData={formData}
@@ -158,7 +143,6 @@ const CreateProjectForm = props => {
       if (!isProjectTitleValid(project?.projectName)) {
         return invalidProjectTitleToast()
       }
-      console.log({ project })
 
       if (isDescriptionStep(submitCurrentStep)) {
         // check if file is too large
@@ -173,28 +157,40 @@ const CreateProjectForm = props => {
       }
 
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
-        const didEnterWalletAddress = !!data?.projectWalletAddress
-        let projectWalletAddress
+        const didEnterWalletAddress = !!EthAddress
         if (!data?.projectName) {
           return Toast({
             content: 'Please set at least a title to your project',
             type: 'error'
           })
         }
+
         if (didEnterWalletAddress) {
           setInputLoading(true)
-          projectWalletAddress = data?.projectWalletAddress
         } else {
-          projectWalletAddress = account
+          return Toast({
+            content: 'Please enter a wallet address to receive donations',
+            type: 'error'
+          })
+        }
+
+        let address
+        // Handle ENS address
+        if (isAddressENS(EthAddress)) {
+          address = await getAddressFromENS(EthAddress, web3)
+          setEthAddress(address)
+        } else {
+          address = EthAddress
         }
 
         await client.query({
           query: WALLET_ADDRESS_IS_VALID,
           variables: {
-            address: projectWalletAddress
+            address
           }
         })
-        project.projectWalletAddress = projectWalletAddress
+
+        project.projectWalletAddress = address
       }
       project.projectDescription = project?.projectDescription || ''
 
@@ -218,7 +214,6 @@ const CreateProjectForm = props => {
     }
   }
 
-  const [showCloseModal, setShowCloseModal] = useState(false)
   useEffect(() => {
     const checkProjectWallet = async () => {
       if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
@@ -229,11 +224,26 @@ const CreateProjectForm = props => {
         }
       })
 
+      const localForm = JSON.parse(window?.localStorage.getItem('create-form'))
+      const localAddress = localForm?.projectWalletAddress
+
+      localForm && setFormData(localForm)
+
+      let addressIsUsed = false
       if (data?.projectByAddress) {
-        setAddressIsUsed(true)
-      } else {
-        addressIsUsed && setAddressIsUsed(false)
+        // Address is used in another project
+        addressIsUsed = true
       }
+
+      if (addressIsUsed) {
+        if (localAddress && !compareAddresses(localAddress, account)) {
+          setEthAddress(localAddress)
+        }
+      } else {
+        if (localAddress) setEthAddress(localAddress)
+        else setEthAddress(account)
+      }
+
       setLoading(false)
     }
 
@@ -245,13 +255,7 @@ const CreateProjectForm = props => {
         checkProjectWallet().then()
       }
     }
-  }, [user, client, formData])
-
-  useEffect(() => {
-    // Checks localstorage to reset form
-    const localCreateForm = window?.localStorage.getItem('create-form')
-    localCreateForm && setFormData(JSON.parse(localCreateForm))
-  }, [])
+  }, [user])
 
   if (incompleteProfile) {
     return null
