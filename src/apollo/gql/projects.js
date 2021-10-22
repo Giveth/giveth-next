@@ -449,10 +449,7 @@ const ACTIVATE_PROJECT = gql`
 
 const WALLET_ADDRESS_IS_VALID = gql`
   query WalletAddressIsValid($address: String!) {
-    walletAddressIsValid(address: $address) {
-      reasons
-      isValid
-    }
+    walletAddressIsValid(address: $address)
   }
 `
 

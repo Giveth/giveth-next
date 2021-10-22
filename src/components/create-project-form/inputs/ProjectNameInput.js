@@ -28,6 +28,7 @@ export const ProjectNameInput = ({ register, currentValue }) => {
           {...register('projectName', { required: true })}
           defaultValue={currentValue}
           placeholder='Project Name'
+          autoFocus
           maxLength={55}
           onChange={e => setCharacterLength(e.target.value.length)}
         />

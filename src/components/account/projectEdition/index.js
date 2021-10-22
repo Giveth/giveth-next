@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Web3 from 'web3'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
@@ -15,8 +15,14 @@ import { categoryList, maxSelectedCategory } from '../../../utils/constants'
 import Toast from '../../toast'
 import { invalidProjectTitleToast, isProjectTitleValid } from '../../../lib/projectValidation'
 import ProjectEditionForm from './projectEditionForm'
+import { getAddressFromENS, isAddressENS } from '../../../lib/wallet'
+import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
 
 function ProjectEdition(props) {
+  const {
+    state: { web3 }
+  } = useContext(Web3Context)
+
   const client = useApolloClient()
 
   const [loading, setLoading] = useState(false)
@@ -89,23 +95,29 @@ function ProjectEdition(props) {
       // Validate eth address if changed
       let ethAddress = data.editWalletAddress
 
-      if (ethAddress) {
-        const { data: addressValidation } = await client.query({
-          query: WALLET_ADDRESS_IS_VALID,
-          variables: {
-            address: ethAddress
-          }
+      if (!ethAddress) {
+        return Toast({
+          content: 'Please enter a wallet address to receive donations',
+          type: 'error'
         })
-
-        if (!addressValidation?.walletAddressIsValid?.isValid) {
-          const reason = addressValidation?.walletAddressIsValid?.reasons[0]
-          setLoading(false)
-          return Toast({ content: reason, type: 'error' })
-        }
       }
+
+      // Handle ENS address
+      if (isAddressENS(ethAddress)) {
+        ethAddress = await getAddressFromENS(data.editWalletAddress, web3)
+      }
+
+      await client.query({
+        query: WALLET_ADDRESS_IS_VALID,
+        variables: {
+          address: ethAddress
+        }
+      })
+
       if (!isProjectTitleValid(data.editTitle || project?.title)) {
         return invalidProjectTitleToast()
       }
+
       const projectCategories = []
       for (const category in categoryList) {
         const name = categoryList[category]?.name
