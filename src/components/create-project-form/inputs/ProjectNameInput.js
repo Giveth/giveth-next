@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Label, Input, Text, Button } from 'theme-ui'
-import { animated } from 'react-spring'
 
-export const ProjectNameInput = ({ register, currentValue, animationStyle }) => {
+export const ProjectNameInput = ({ register, currentValue }) => {
   const [characterLength, setCharacterLength] = useState(currentValue ? currentValue.length : 0)
+
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '50px' }}>
+    <div>
       <Label
         sx={{
           fontSize: 9,
@@ -28,6 +28,7 @@ export const ProjectNameInput = ({ register, currentValue, animationStyle }) => 
           {...register('projectName', { required: true })}
           defaultValue={currentValue}
           placeholder='Project Name'
+          autoFocus
           maxLength={55}
           onChange={e => setCharacterLength(e.target.value.length)}
         />
@@ -67,6 +68,6 @@ export const ProjectNameInput = ({ register, currentValue, animationStyle }) => 
           NEXT
         </Text>
       </Button>
-    </animated.section>
+    </div>
   )
 }

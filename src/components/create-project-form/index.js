@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react'
 import { Box, Heading, Flex, Button, Spinner, Progress, Text } from 'theme-ui'
-import { useRouter } from 'next/router'
 import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
-import { useTransition } from 'react-spring'
 
 import { GET_PROJECT_BY_ADDRESS, WALLET_ADDRESS_IS_VALID, TITLE_IS_VALID } from '../../apollo/gql/projects'
-import { getProjectWallet } from './utils'
-import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import {
   ProjectNameInput,
@@ -22,76 +18,69 @@ import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
 import { maxSelectedCategory } from '../../utils/constants'
-import { invalidProjectTitleToast, isProjectTitleValid } from '../../validation/projectValidation'
+import { invalidProjectTitleToast, isProjectTitleValid } from '../../lib/projectValidation'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+import { compareAddresses } from '../../lib/helpers'
+import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
+
+const Main = props => {
+  const {
+    state: { user },
+    actions: { signModalContent }
+  } = useContext(Web3Context)
+
+  return user && user.token ? (
+    <CreateProjectForm {...props} />
+  ) : (
+    <div style={{ margin: '150px 0', textAlign: 'center' }}>{signModalContent()}</div>
+  )
+}
 
 const CreateProjectForm = props => {
-  const router = useRouter()
+  const {
+    state: { account, user, web3 }
+  } = useContext(Web3Context)
+
   const [loading, setLoading] = useState(true)
   const [inputIsLoading, setInputLoading] = useState(false)
   const [incompleteProfile, setIncompleteProfile] = useState(false)
-  const { isLoggedIn, user, validateToken, logout } = useWallet()
-  const [flashMessage, setFlashMessage] = useState('')
   const [formData, setFormData] = useState({})
+  const [currentStep, setCurrentStep] = useState(0)
+  const [EthAddress, setEthAddress] = useState()
+  const [showCloseModal, setShowCloseModal] = useState(false)
+
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: useMemo(() => {
       return formData
     }, [formData])
   })
-  const [walletUsed, setWalletUsed] = useState(false)
+
   const usePopup = useContext(PopupContext)
   const client = useApolloClient()
 
-  const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
   const goBack = () => setCurrentStep(currentStep - 1)
 
-  useEffect(() => {
-    doValidateToken()
-    async function doValidateToken() {
-      const isValid = await validateToken()
-      // console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
-
-      setFlashMessage('Your session has expired')
-      if (!isValid) {
-        await logout()
-        // usePopup?.triggerPopup('WelcomeLoggedOut')
-        router.push({
-          pathname: '/',
-          query: { welcome: true }
-        })
-      }
-    }
-  }, [])
-
   const steps = [
-    ({ animationStyle }) => (
-      <ProjectNameInput
-        animationStyle={animationStyle}
-        currentValue={formData?.projectName}
-        register={register}
-      />
-    ),
-    ({ animationStyle }) => (
+    () => <ProjectNameInput currentValue={formData?.projectName} register={register} />,
+    () => (
       <ProjectDescriptionInput
-        animationStyle={animationStyle}
         currentValue={formData?.projectDescription}
         setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
       />
     ),
-    ({ animationStyle }) => (
+    () => (
       <ProjectCategoryInput
-        animationStyle={animationStyle}
         categoryList={props.categoryList}
         currentValue={formData?.projectCategory}
         register={register}
         goBack={goBack}
       />
     ),
-    ({ animationStyle }) => (
+    () => (
       <ProjectImpactLocationInput
-        animationStyle={animationStyle}
         currentValue={formData?.projectImpactLocation}
         setValue={(ref, val) => setValue(ref, val)}
         register={register}
@@ -99,35 +88,17 @@ const CreateProjectForm = props => {
       />
     ),
 
-    ({ animationStyle }) => (
+    () => (
       <ProjectImageInput
-        animationStyle={animationStyle}
         currentValue={formData?.projectImage}
         register={register}
         setValue={(ref, val) => setValue(ref, val)}
         goBack={goBack}
       />
     ),
-    ({ animationStyle }) => (
-      <ProjectEthAddressInput
-        animationStyle={animationStyle}
-        currentValue={
-          formData?.projectWalletAddress
-            ? formData?.projectWalletAddress
-            : typeof walletUsed !== 'boolean'
-            ? walletUsed
-            : null
-        }
-        walletUsed={
-          typeof walletUsed !== 'boolean' && formData?.projectWalletAddress === walletUsed
-        }
-        register={register}
-        goBack={goBack}
-      />
-    ),
-    ({ animationStyle }) => (
+    () => <ProjectEthAddressInput value={EthAddress} onChange={setEthAddress} goBack={goBack} />,
+    () => (
       <FinalVerificationStep
-        animationStyle={animationStyle}
         formData={formData}
         setStep={setCurrentStep}
         categoryList={props.categoryList}
@@ -190,28 +161,40 @@ const CreateProjectForm = props => {
       }
 
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
-        const didEnterWalletAddress = !!data?.projectWalletAddress
-        let projectWalletAddress
+        const didEnterWalletAddress = !!EthAddress
         if (!data?.projectName) {
           return Toast({
             content: 'Please set at least a title to your project',
             type: 'error'
           })
         }
+
         if (didEnterWalletAddress) {
           setInputLoading(true)
-          projectWalletAddress = await getProjectWallet(data?.projectWalletAddress)
         } else {
-          projectWalletAddress = user.addresses[0]
+          return Toast({
+            content: 'Please enter a wallet address to receive donations',
+            type: 'error'
+          })
+        }
+
+        let address
+        // Handle ENS address
+        if (isAddressENS(EthAddress)) {
+          address = await getAddressFromENS(EthAddress, web3)
+          setEthAddress(address)
+        } else {
+          address = EthAddress
         }
 
         await client.query({
           query: WALLET_ADDRESS_IS_VALID,
           variables: {
-            address: projectWalletAddress
+            address
           }
         })
-        project.projectWalletAddress = projectWalletAddress
+
+        project.projectWalletAddress = address
       }
       project.projectDescription = project?.projectDescription || ''
 
@@ -235,50 +218,48 @@ const CreateProjectForm = props => {
     }
   }
 
-  const stepTransitions = useTransition(currentStep, {
-    from: {
-      opacity: 0,
-      transform: 'translate3d(100%,0,0)',
-      position: 'absolute'
-    },
-    enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
-    leave: { opacity: 0, transform: 'translate3d(-50%,0,0)' }
-  })
-
-  const [showCloseModal, setShowCloseModal] = useState(false)
   useEffect(() => {
     const checkProjectWallet = async () => {
-      if (!user) return null
-
       if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
       const { data } = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
-          address: user.getWalletAddress()
+          address: account
         }
       })
+
+      const localForm = JSON.parse(window?.localStorage.getItem('create-form'))
+      const localAddress = localForm?.projectWalletAddress
+
+      localForm && setFormData(localForm)
+
+      let addressIsUsed = false
       if (data?.projectByAddress) {
-        setWalletUsed(true)
-      } else {
-        setWalletUsed(user.getWalletAddress())
+        // Address is used in another project
+        addressIsUsed = true
       }
+
+      if (addressIsUsed) {
+        if (localAddress && !compareAddresses(localAddress, account)) {
+          setEthAddress(localAddress)
+        }
+      } else {
+        if (localAddress) setEthAddress(localAddress)
+        else setEthAddress(account)
+      }
+
       setLoading(false)
     }
-    if (!isLoggedIn) {
-      router.push('/', { state: { welcome: true, flashMessage } })
-    } else if (!user?.name || !user?.email || user.email === '') {
-      usePopup?.triggerPopup('IncompleteProfile')
-      setIncompleteProfile(true)
-    } else {
-      checkProjectWallet()
-    }
-  }, [user, isLoggedIn, client, formData])
 
-  useEffect(() => {
-    // Checks localstorage to reset form
-    const localCreateForm = window?.localStorage.getItem('create-form')
-    localCreateForm && setFormData(JSON.parse(localCreateForm))
-  }, [])
+    if (user) {
+      if (!user.name || !user.email || user.email === '') {
+        usePopup?.triggerPopup('IncompleteProfile')
+        setIncompleteProfile(true)
+      } else {
+        checkProjectWallet().then()
+      }
+    }
+  }, [user])
 
   if (incompleteProfile) {
     return null
@@ -313,6 +294,7 @@ const CreateProjectForm = props => {
   //   )
   // }
   const progressPercentage = Object.keys(formData).filter(v => v.startsWith('proj'))?.length
+  const Step = steps[currentStep]
 
   return (
     <>
@@ -354,22 +336,19 @@ const CreateProjectForm = props => {
           ) : (
             <form onSubmit={handleSubmit(onSubmit(formData, currentStep, nextStep))}>
               <>
-                {currentStep !== steps.length - 1 ? (
+                {currentStep !== steps.length - 1 && (
                   <EditButtonSection
                     formData={formData}
                     setStep={setCurrentStep}
                     currentStep={currentStep}
                   />
-                ) : null}
+                )}
                 {inputIsLoading ? (
                   <Flex sx={{ justifyContent: 'center', pt: 5 }}>
                     <Spinner variant='spinner.medium' />
                   </Flex>
                 ) : (
-                  stepTransitions((props, item, key) => {
-                    const Step = steps[item]
-                    return <Step key={key} animationStyle={props} />
-                  })
+                  <Step />
                 )}
                 <ConfirmationModal
                   showModal={showCloseModal}
@@ -389,7 +368,7 @@ const CreateProjectForm = props => {
   )
 }
 
-export default CreateProjectForm
+export default Main
 
 function isDescriptionStep(currentStep) {
   return currentStep === 1

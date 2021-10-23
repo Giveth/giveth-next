@@ -1,11 +1,11 @@
 import React from 'react'
-import { Container, NavLink, Text } from 'theme-ui'
+import { Container } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../utils/theme-ui'
-
-import LeftArrow from '../images/svg/general/left-arrow.svg'
 import Confetti from '../images/svg/donation/confetti.svg'
+import Header from './header'
 
+// import LeftArrow from '../images/svg/general/left-arrow.svg'
 import decoratorClouds from '../images/decorator-clouds.svg'
 
 export default function Dialog({ children }) {
@@ -13,20 +13,21 @@ export default function Dialog({ children }) {
     <DialogContainer p={4} color='white' bg={theme.colors.secondary}>
       <LeftConfetti />
       <Clouds src={decoratorClouds} alt='' className='hide' />
-      <BackButton href='/'>
-        <LeftArrow />
-        <Text
-          sx={{ variant: 'text.default' }}
-          style={{
-            fontSize: '16px',
-            fontWeight: '500',
-            color: 'white',
-            paddingLeft: '17px'
-          }}
-        >
-          Giveth
-        </Text>
-      </BackButton>
+      {/*<BackButton href='/'>*/}
+      {/*  <LeftArrow />*/}
+      {/*  <Text*/}
+      {/*    sx={{ variant: 'text.default' }}*/}
+      {/*    style={{*/}
+      {/*      fontSize: '16px',*/}
+      {/*      fontWeight: '500',*/}
+      {/*      color: 'white',*/}
+      {/*      paddingLeft: '17px'*/}
+      {/*    }}*/}
+      {/*  >*/}
+      {/*    Giveth*/}
+      {/*  </Text>*/}
+      {/*</BackButton>*/}
+      <Header />
       <Main>
         <DialogContent>{children}</DialogContent>
       </Main>
@@ -48,6 +49,7 @@ const Clouds = styled.img`
   position: absolute;
   right: 0;
 `
+
 const LeftConfetti = styled(Confetti)`
   position: absolute;
   left: 3.875rem;
@@ -59,20 +61,21 @@ const LeftConfetti = styled(Confetti)`
   }
 `
 
-const BackButton = styled(NavLink)`
-  && {
-    display: flex;
-  }
-  width: 100%;
-  max-width: 7rem;
-  position: absolute;
-  left: 4.875rem;
-  top: 4.875rem;
-  @media (max-width: 600px) {
-    left: 2rem;
-  }
-`
-
 const DialogContent = styled.div`
   margin: 3.813rem 0 0 0;
 `
+
+//
+// const BackButton = styled(NavLink)`
+//   && {
+//     display: flex;
+//   }
+//   width: 100%;
+//   max-width: 7rem;
+//   position: absolute;
+//   left: 4.875rem;
+//   top: 4.875rem;
+//   @media (max-width: 600px) {
+//     left: 2rem;
+//   }
+// `

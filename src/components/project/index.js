@@ -1,1 +1,0 @@
-export { ProjectDonatorView } from './donatorView'

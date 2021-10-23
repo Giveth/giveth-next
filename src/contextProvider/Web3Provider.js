@@ -1,6 +1,16 @@
 import React, { createContext, useEffect, useState } from 'react'
 import Onboard from 'bnc-onboard'
 import Web3 from 'web3'
+import { Button, Flex, Text } from 'theme-ui'
+
+import { client } from '../apollo/client'
+import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
+import User from '../entities/user'
+import * as Auth from '../services/auth'
+import { getToken } from '../services/token'
+import { signMessage } from '../lib/helpers'
+import Modal from '../components/modal'
+import theme from '../utils/theme-ui'
 
 const Context = createContext({})
 const { Provider } = Context
@@ -59,6 +69,11 @@ const Web3Provider = props => {
   const [account, setAccount] = useState()
   const [balance, setBalance] = useState()
   const [onboard, setOnboard] = useState({})
+  const [networkName, setNetworkName] = useState()
+  const [user, setUser] = useState()
+  const [showSignModal, setShowSignModal] = useState(false)
+
+  const isXdai = networkId === 100
 
   const initOnBoard = () => {
     if (validProvider) return
@@ -70,12 +85,19 @@ const Web3Provider = props => {
         wallet: wallet => {
           window.localStorage.setItem('selectedWallet', wallet.name)
           const _web3 = new Web3(wallet.provider)
+          _web3[wallet.name] = true
           setValidProvider(!!wallet.provider)
           setWeb3(_web3)
           setProvider(wallet.provider)
         },
         network: _network => setNetworkId(_network),
-        address: _address => setAccount(_address),
+        address: _address => {
+          if (!_address || _address !== Auth.getUser()?.walletAddress) {
+            Auth.handleLogout()
+          }
+          if (user) setUser(undefined)
+          setAccount(_address)
+        },
         balance: _balance => setBalance(_balance / 10 ** nativeTokenDecimals)
       },
       walletSelect: {
@@ -117,11 +139,106 @@ const Web3Provider = props => {
     if (validProvider) onboard.walletCheck().then()
   }
 
+  const fetchUser = () => {
+    return client
+      .query({
+        query: GET_USER_BY_ADDRESS,
+        variables: {
+          address: account
+        },
+        fetchPolicy: 'network-only'
+      })
+      .then(res => res.data?.userByAddress)
+  }
+
+  const updateUser = () => {
+    fetchUser().then(res => {
+      if (res) {
+        const newUser = new User(user)
+        newUser.parseDbUser(res)
+        Auth.setUser(newUser)
+        setUser(newUser)
+      }
+    })
+  }
+
+  const setToken = async () => {
+    const signedMessage = await signMessage(
+      process.env.NEXT_PUBLIC_OUR_SECRET,
+      account,
+      networkId,
+      web3
+    )
+    if (!signedMessage) return
+
+    const token = await getToken(user, signedMessage, networkId)
+    const newUser = new User(user)
+    newUser.setToken(token)
+    Auth.setUser(newUser)
+    client.resetStore().then()
+    setUser(newUser)
+  }
+
+  const signModalContent = () => {
+    const handleClick = () => {
+      showSignModal && setShowSignModal(false)
+      setToken().then()
+    }
+    return (
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          p: 4,
+          alignItems: 'center'
+        }}
+      >
+        <Text sx={{ variant: 'text.large', color: 'secondary', marginBottom: '25px' }}>
+          Please Sign with your wallet to authenticate
+        </Text>
+        <Button
+          onClick={handleClick}
+          sx={{ cursor: 'pointer', width: '170px', background: theme.colors.primary }}
+        >
+          Sign
+        </Button>
+      </Flex>
+    )
+  }
+
+  const showSign = () => setShowSignModal(true)
+
   useEffect(() => {
-    if (networkId) onboard.config({ networkId })
+    initOnBoard()
+  }, [])
+
+  useEffect(() => {
+    if (account) {
+      const _user = Auth.getUser()
+      const newUser = new User()
+      newUser.addWalletAddress(account, true)
+      if (account === _user?.walletAddress) {
+        newUser.parseDbUser(_user)
+        newUser.setToken(_user.token)
+      } else
+        fetchUser().then(res => {
+          if (res) {
+            newUser.parseDbUser(res)
+            Auth.setUser(newUser)
+          }
+        })
+      setUser(newUser)
+    }
+  }, [account])
+
+  useEffect(() => {
+    if (networkId) {
+      onboard.config({ networkId })
+      if (isXdai) setNetworkName('xDai')
+      else web3?.eth.net.getNetworkType().then(name => setNetworkName(name))
+    }
   }, [networkId])
 
-  const isEnabled = !!web3 && !!account && balance !== undefined && !!networkId
+  const isEnabled = !!web3 && !!account && !!networkId && !!user
 
   return (
     <Provider
@@ -133,16 +250,26 @@ const Web3Provider = props => {
           isEnabled,
           web3,
           networkId,
-          provider
+          networkName,
+          provider,
+          user
         },
         actions: {
           switchWallet,
           switchToXdai,
           enableProvider,
-          initOnBoard
+          initOnBoard,
+          updateUser,
+          showSign,
+          signModalContent
         }
       }}
     >
+      {showSignModal && (
+        <Modal isOpen={showSignModal} onRequestClose={() => setShowSignModal(false)}>
+          {signModalContent()}
+        </Modal>
+      )}
       {props.children}
     </Provider>
   )

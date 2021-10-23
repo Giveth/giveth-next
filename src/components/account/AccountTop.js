@@ -1,4 +1,4 @@
-import { Text, Flex } from 'theme-ui'
+import { Text, Flex, Image } from 'theme-ui'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { BsArrowLeft } from 'react-icons/bs'
@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../../utils/theme-ui/index'
 
-const Login = dynamic(() => import('../torus/login'))
+const UserDetails = dynamic(() => import('../account/userDetails'))
 
 const AccountTop = props => {
   const isDonation = (props?.query?.view || '') === 'donations'
@@ -21,8 +21,7 @@ const AccountTop = props => {
       }}
     >
       <Link href='/'>
-        <span
-          href='/'
+        <a
           style={{
             cursor: 'pointer',
             textDecoration: 'none',
@@ -41,11 +40,11 @@ const AccountTop = props => {
           >
             Giveth
           </Text>
-        </span>
+        </a>
       </Link>
       <UserSpan>
         {isMobile ? null : (
-          <Link href={isDonation ? '/projects' : '/create'}>
+          <Link href={isDonation ? '/projects' : '/create'} passHref>
             <CreateLink>
               <Text
                 sx={{
@@ -61,8 +60,8 @@ const AccountTop = props => {
             </CreateLink>
           </Link>
         )}
-        <img src={'/images/icon-vertical-line.svg'} alt='' />
-        <Login />
+        <Image src='/images/icon-vertical-line.svg' alt='icon-vertical-line' />
+        <UserDetails />
       </UserSpan>
     </Flex>
   )
