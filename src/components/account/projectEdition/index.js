@@ -14,7 +14,6 @@ import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import { categoryList, maxSelectedCategory } from '../../../utils/constants'
 import Toast from '../../toast'
-import { invalidProjectTitleToast, isProjectTitleValid } from '../../../lib/projectValidation'
 import ProjectEditionForm from './projectEditionForm'
 import { getAddressFromENS, isAddressENS } from '../../../lib/wallet'
 import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
@@ -115,8 +114,13 @@ function ProjectEdition(props) {
         }
       })
 
-      if (!isProjectTitleValid(data.editTitle || project?.title)) {
-        return invalidProjectTitleToast()
+      if (data.editTitle && data.editTitle !== project?.title) {
+        await client.query({
+          query: TITLE_IS_VALID,
+          variables: {
+            title: data.editTitle
+          }
+        })
       }
 
       const projectCategories = []
