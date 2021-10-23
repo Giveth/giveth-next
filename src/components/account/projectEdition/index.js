@@ -95,24 +95,21 @@ function ProjectEdition(props) {
       // Validate eth address if changed
       let ethAddress = data.editWalletAddress
 
-      if (!ethAddress) {
-        return Toast({
-          content: 'Please enter a wallet address to receive donations',
-          type: 'error'
-        })
-      }
-
-      // Handle ENS address
-      if (isAddressENS(ethAddress)) {
-        ethAddress = await getAddressFromENS(data.editWalletAddress, web3)
-      }
-
-      await client.query({
-        query: WALLET_ADDRESS_IS_VALID,
-        variables: {
-          address: ethAddress
+      if (ethAddress) {
+        // Handle ENS address
+        if (isAddressENS(ethAddress)) {
+          ethAddress = await getAddressFromENS(data.editWalletAddress, web3)
         }
-      })
+        if (ethAddress !== project.walletAddress){
+          // we just check walletAddress when user has entered it and it's different with project.walletAddress
+          await client.query({
+            query: WALLET_ADDRESS_IS_VALID,
+            variables: {
+              address: ethAddress
+            }
+          })
+        }
+      }
 
       if (!isProjectTitleValid(data.editTitle || project?.title)) {
         return invalidProjectTitleToast()
