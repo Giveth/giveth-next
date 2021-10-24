@@ -59,7 +59,7 @@ export const ProjectCategoryInput = ({ value, setValue, categoryList = [], goBac
                 key={`${category.name}-checkbox`}
                 id={category.name}
                 name={category.name}
-                checked={!!value[category.name]}
+                checked={!!(value && value[category.name])}
                 onChange={e => handleChange(category.name, e.target.checked)}
               />
               <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
