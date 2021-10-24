@@ -8,7 +8,7 @@ import theme from '../../../utils/theme-ui'
 import { toggleProjectActivation } from '../../../services/project'
 import Toast from '../../toast'
 import ImageSection from './imageSection'
-import { categoryList } from '../../../utils/constants'
+import { categoryList, maxSelectedCategory } from '../../../utils/constants'
 
 const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
@@ -24,17 +24,38 @@ function ProjectEditionForm(props) {
     project,
     // client,
     mapLocation,
-    setMapLocation
+    setMapLocation,
+    setProject
   } = props
 
-  const [categories, setCategories] = useState(null)
   const [desc, setDesc] = useState('')
   const [isActive, setIsActive] = useState(null)
 
   const { register, handleSubmit, setValue } = useForm() // initialize the hook
 
+  const handleInput = (name, value) => {
+    const data = { ...project }
+    data[name] = value
+    setProject(data)
+  }
+
+  const handleCategories = (name, checked) => {
+    const newValue = { ...project.categories, [name]: checked }
+    const selectedCategories = Object.entries(newValue)?.filter(i => i[1] === true)
+    const isMaxCategories = selectedCategories.length > maxSelectedCategory
+
+    if (isMaxCategories) {
+      Toast({
+        content: `Please select no more than ${maxSelectedCategory} categories`,
+        type: 'error'
+      })
+      return handleInput('categories', project.categories)
+    }
+
+    handleInput('categories', newValue)
+  }
+
   useEffect(() => {
-    setCategories(project?.categories)
     setDesc(project?.description || '')
     setIsActive(project?.status?.id === '5')
   }, [project])
@@ -188,42 +209,22 @@ function ProjectEditionForm(props) {
             )}
             <CustomLabel title='Category' htmlFor='editCategory' />
             <Box sx={{ height: '320px', overflow: 'scroll' }}>
-              {categories &&
-                categoryList.map(category => {
-                  const categoryFound = categories?.find(i => i.name === category.name)
-                  return (
-                    <Label
-                      sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}
-                      key={`${category.name}-label`}
-                    >
-                      <Checkbox
-                        key={`${category.name}-checkbox`}
-                        id={category.name}
-                        name={category.name}
-                        // ref={register}
-                        {...register(category.name)}
-                        onClick={() => {
-                          categoryFound
-                            ? setCategories(
-                                // remove
-                                categories?.filter(i => i.name !== category.name)
-                              )
-                            : setCategories(
-                                categories?.length > 0
-                                  ? [
-                                      // add
-                                      ...categories,
-                                      { name: category.name }
-                                    ]
-                                  : [{ name: category.name }]
-                              )
-                        }}
-                        checked={categoryFound ? 1 : 0}
-                      />
-                      <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
-                    </Label>
-                  )
-                })}
+              {project.categories &&
+                categoryList.map(category => (
+                  <Label
+                    sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}
+                    key={`${category.name}-label`}
+                  >
+                    <Checkbox
+                      key={`${category.name}-checkbox`}
+                      id={category.name}
+                      name={category.name}
+                      checked={!!project.categories[category.name]}
+                      onChange={e => handleCategories(category.name, e.target.checked)}
+                    />
+                    <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
+                  </Label>
+                ))}
             </Box>
             <CustomLabel title='Impact Location' htmlFor='editImpactLocation' />
             {mapLocation && (

@@ -17,7 +17,6 @@ import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
-import { maxSelectedCategory } from '../../utils/constants'
 import { invalidProjectTitleToast, isProjectTitleValid } from '../../lib/projectValidation'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 import { compareAddresses } from '../../lib/helpers'
@@ -60,12 +59,17 @@ const CreateProjectForm = props => {
 
   const nextStep = () => setCurrentStep(currentStep + 1)
   const goBack = () => setCurrentStep(currentStep - 1)
+  const handleInput = (name, value) => {
+    const data = { ...formData }
+    data[name] = value
+    setFormData(data)
+  }
 
   const steps = [
-    () => <ProjectNameInput currentValue={formData?.projectName} register={register} />,
+    () => <ProjectNameInput currentValue={formData.projectName} register={register} />,
     () => (
       <ProjectDescriptionInput
-        currentValue={formData?.projectDescription}
+        currentValue={formData.projectDescription}
         setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
@@ -74,14 +78,14 @@ const CreateProjectForm = props => {
     () => (
       <ProjectCategoryInput
         categoryList={props.categoryList}
-        currentValue={formData?.projectCategory}
-        register={register}
+        value={formData.projectCategory}
+        setValue={e => handleInput('projectCategory', e)}
         goBack={goBack}
       />
     ),
     () => (
       <ProjectImpactLocationInput
-        currentValue={formData?.projectImpactLocation}
+        currentValue={formData.projectImpactLocation}
         setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
@@ -90,7 +94,7 @@ const CreateProjectForm = props => {
 
     () => (
       <ProjectImageInput
-        currentValue={formData?.projectImage}
+        currentValue={formData.projectImage}
         register={register}
         setValue={(ref, val) => setValue(ref, val)}
         goBack={goBack}
@@ -109,30 +113,10 @@ const CreateProjectForm = props => {
   const onSubmit = (formData, submitCurrentStep, doNextStep) => async data => {
     let project = {}
     try {
-      // console.log({ submitCurrentStep, data, formData })
-
       if (isCategoryStep(submitCurrentStep)) {
-        const maxFiveCategories = Object.entries(data)?.filter(i => {
-          return i[1] === true
-        })
-
-        if (maxFiveCategories.length > maxSelectedCategory) {
-          return Toast({
-            content: `Please select no more than ${maxSelectedCategory} categories`,
-            type: 'error'
-          })
-        }
-
         project = {
-          ...formData,
-          projectCategory: {
-            ...data,
-            projectDescription: null
-          }
+          ...formData
         }
-        // TODO: For some reason we are getting projectDescription inside the category
-        // we need to figure out why
-        delete project?.projectCategory['projectDescription']
       } else {
         project = {
           ...formData,
@@ -198,9 +182,11 @@ const CreateProjectForm = props => {
         'create-form',
         JSON.stringify({ ...project, projectImage: null })
       )
+
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
+
       setInputLoading(false)
       setFormData(project)
       doNextStep()
@@ -269,26 +255,6 @@ const CreateProjectForm = props => {
     )
   }
 
-  // // CHECKS USER
-  // if (JSON.stringify(user) === JSON.stringify({})) {
-  //   return (
-  //     <Flex sx={{ flexDirection: 'column' }}>
-  //       <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 6, mx: 6 }}>
-  //         You are not logged in yet...
-  //       </Text>
-  //       <Text
-  //         sx={{ variant: 'headings.h4', color: 'primary', mx: 6 }}
-  //         style={{
-  //           textDecoration: 'underline',
-  //           cursor: 'pointer'
-  //         }}
-  //         onClick={() => window.location.replace('/')}
-  //       >
-  //         go to our homepage
-  //       </Text>
-  //     </Flex>
-  //   )
-  // }
   const progressPercentage = Object.keys(formData).filter(v => v.startsWith('proj'))?.length
   const Step = steps[currentStep]
 
