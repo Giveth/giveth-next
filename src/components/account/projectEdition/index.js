@@ -17,6 +17,7 @@ import { invalidProjectTitleToast, isProjectTitleValid } from '../../../lib/proj
 import ProjectEditionForm from './projectEditionForm'
 import { getAddressFromENS, isAddressENS } from '../../../lib/wallet'
 import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
+import { compareAddresses } from '../../../lib/helpers'
 
 function ProjectEdition(props) {
   const {
@@ -100,7 +101,7 @@ function ProjectEdition(props) {
         if (isAddressENS(ethAddress)) {
           ethAddress = await getAddressFromENS(data.editWalletAddress, web3)
         }
-        if (ethAddress !== project.walletAddress){
+        if (!compareAddresses(ethAddress, project.walletAddress)) {
           // we just check walletAddress when user has entered it and it's different with project.walletAddress
           await client.query({
             query: WALLET_ADDRESS_IS_VALID,
