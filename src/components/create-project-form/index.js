@@ -3,7 +3,11 @@ import { Box, Heading, Flex, Button, Spinner, Progress, Text } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 
-import { GET_PROJECT_BY_ADDRESS, WALLET_ADDRESS_IS_VALID, TITLE_IS_VALID } from '../../apollo/gql/projects'
+import {
+  GET_PROJECT_BY_ADDRESS,
+  WALLET_ADDRESS_IS_VALID,
+  TITLE_IS_VALID
+} from '../../apollo/gql/projects'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import {
   ProjectNameInput,
@@ -18,7 +22,6 @@ import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
 import { maxSelectedCategory } from '../../utils/constants'
-import { invalidProjectTitleToast, isProjectTitleValid } from '../../lib/projectValidation'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 import { compareAddresses } from '../../lib/helpers'
 import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
@@ -146,7 +149,6 @@ const CreateProjectForm = props => {
           title: project?.projectName
         }
       })
-      console.log({ project })
 
       if (isDescriptionStep(submitCurrentStep)) {
         // check if file is too large
