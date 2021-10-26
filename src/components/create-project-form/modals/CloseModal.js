@@ -58,7 +58,7 @@ export const CloseModal = ({ showModal, setShowModal }) => (
         }}
       >
         <Link href='/' sx={{ textDecoration: 'none' }}>
-          Yes
+          <a>Yes</a>
         </Link>
       </Button>
       <Button

@@ -4,11 +4,13 @@ const SAVE_DONATION = gql`
     $chainId: Float!
     $fromAddress: String!
     $toAddress: String!
-    $transactionId: String!
+    $transactionId: String
     $transactionNetworkId: Float!
     $amount: Float!
     $token: String!
     $projectId: Float!
+    $transakId: String
+    $transakStatus: String
   ) {
     saveDonation(
       chainId: $chainId
@@ -19,6 +21,8 @@ const SAVE_DONATION = gql`
       amount: $amount
       token: $token
       projectId: $projectId
+      transakId: $transakId
+      transakStatus: $transakStatus
     )
   }
 `

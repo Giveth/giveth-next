@@ -454,8 +454,8 @@ const WALLET_ADDRESS_IS_VALID = gql`
 `
 
 const TITLE_IS_VALID = gql`
-  query IsValidTitleForProject($title: String!, $projectId : Float) {
-    isValidTitleForProject(title: $title, projectId : $projectId)
+  query IsValidTitleForProject($title: String!, $projectId: Float) {
+    isValidTitleForProject(title: $title, projectId: $projectId)
   }
 `
 
