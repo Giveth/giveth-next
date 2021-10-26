@@ -116,7 +116,8 @@ function ProjectEdition(props) {
         await client.query({
           query: TITLE_IS_VALID,
           variables: {
-            title: data.editTitle
+            title: data.editTitle,
+            projectId: Number(project.id)
           }
         })
       }
