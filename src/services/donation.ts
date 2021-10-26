@@ -109,7 +109,7 @@ export async function startTransakDonation({ project, setSuccess }) {
   const response = await request.json()
   const apiKey = response?.apiKey
   const transak = new transakSDK({
-    apiKey: apiKey,  // Your API Key
+    apiKey: apiKey, // Your API Key
     environment: process.env.NEXT_PUBLIC_ENVIRONMENT == 'production' ? 'PRODUCTION' : 'STAGING', // STAGING/PRODUCTION
     defaultCryptoCurrency: 'DAI',
     walletAddress: project.walletAddress, // Your customer's wallet address
@@ -124,16 +124,16 @@ export async function startTransakDonation({ project, setSuccess }) {
     widgetWidth: '450px',
     exchangeScreenTitle: `Donate to ${project.title}`,
     hideMenu: true
-  });
+  })
 
-  transak.init();
+  transak.init()
 
-  transak.on(transak.ALL_EVENTS, async (data) => {
-    if (data?.eventName === "TRANSAK_ORDER_SUCCESSFUL") {
+  transak.on(transak.ALL_EVENTS, async data => {
+    if (data?.eventName === 'TRANSAK_ORDER_SUCCESSFUL') {
       transak.close()
       setSuccess(data.status.walletLink)
     }
-    if (data?.eventName === "TRANSAK_ORDER_CREATED") {
+    if (data?.eventName === 'TRANSAK_ORDER_CREATED') {
       // data.status
       await saveDonationFromTransak(
         data.status.fromWalletAddress,
@@ -145,5 +145,5 @@ export async function startTransakDonation({ project, setSuccess }) {
         data.status.status
       )
     }
-  });
+  })
 }

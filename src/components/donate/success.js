@@ -70,20 +70,20 @@ const Success = props => {
             </div>
           </Receipt>
         ) : transakTx ? (
-            <Receipt sx={{ my: 4 }}>
-              <Link
-                sx={{
-                  variant: 'text.paragraph',
-                  color: 'yellow',
-                  cursor: 'pointer'
-                }}
-                target='_blank'
-                href={transakTx}
-              >
-                View transaction details
-              </Link>
-            </Receipt>
-        ):(
+          <Receipt sx={{ my: 4 }}>
+            <Link
+              sx={{
+                variant: 'text.paragraph',
+                color: 'yellow',
+                cursor: 'pointer'
+              }}
+              target='_blank'
+              href={transakTx}
+            >
+              View transaction details
+            </Link>
+          </Receipt>
+        ) : (
           <Receipt sx={{ my: 4 }}>
             <DownloadReceipt onClick={downloadPDF}>
               <Text

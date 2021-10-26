@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useMemo } from 'react'
 import { Box, Heading, Flex, Button, Spinner, Progress, Text } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 
 import {
   GET_PROJECT_BY_ADDRESS,
