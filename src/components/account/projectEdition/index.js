@@ -190,11 +190,11 @@ function ProjectEdition(props) {
         title='Success!'
         subtitle='Please allow a few minutes for your changes to be displayed.'
         confirmation={{
-          do: () => window.location.replace(`/project/${fetchedProject?.projectBySlug?.slug}`),
+          do: () => router.push(`/project/${fetchedProject?.projectBySlug?.slug}`),
           title: 'View Project'
         }}
         secondary={{
-          do: () => window.location.replace('/account'),
+          do: () => router.push('/account'),
           title: 'My Account'
         }}
       />
