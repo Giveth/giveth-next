@@ -1,14 +1,8 @@
-import React from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import redirect from 'nextjs-redirect'
 import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../../utils/theme-ui'
-import OnlyFiat from './onlyFiat'
-import Success from './success'
-import ProjectListing from '../projectListing'
-import { useWallet } from '../../contextProvider/WalletProvider'
-
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -18,6 +12,12 @@ import {
   TwitterIcon
 } from 'react-share'
 
+import theme from '../../utils/theme-ui'
+import OnlyFiat from './onlyFiat'
+import Success from './success'
+import ProjectListing from '../projectListing'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+
 const OnlyCrypto = dynamic(() => import('./onlyCrypto'), { ssr: false })
 
 // CONSTANTS
@@ -26,15 +26,19 @@ const CRYPTO = 'Cryptocurrency'
 const CREDIT = 'Credit Card'
 
 const DonateIndex = props => {
+  const {
+    state: { networkId }
+  } = useContext(Web3Context)
+
   const { project } = props
-  const [hashSent, setHashSent] = React.useState(false)
-  const [paymentType, setPaymentType] = React.useState(CRYPTO)
-  const [isAfterPayment, setIsAfterPayment] = React.useState(null)
-  const [paymentSessionId, setPaymentSessionId] = React.useState(null)
-  const [transakTx, setTransakTx] = React.useState(null)
-  const [isCancelled, setIsCancelled] = React.useState(null)
-  const { currentChainId } = useWallet()
-  React.useEffect(() => {
+  const [hashSent, setHashSent] = useState(false)
+  const [paymentType, setPaymentType] = useState(CRYPTO)
+  const [isAfterPayment, setIsAfterPayment] = useState(null)
+  const [paymentSessionId, setPaymentSessionId] = useState(null)
+  const [isCancelled, setIsCancelled] = useState(null)
+  const [transakTx, setTransakTx] = useState(null)
+
+  useEffect(() => {
     if (project?.status?.id !== '5') {
       setIsCancelled(true)
     }
@@ -172,7 +176,7 @@ const DonateIndex = props => {
           />
         </ProjectContainer>
         <Payment>
-          <Success transakTx={transakTx} sessionId={paymentSessionId} hash={hashSent} currentChainId={currentChainId} />
+          <Success transakTx={transakTx} sessionId={paymentSessionId} hash={hashSent} currentChainId={networkId} />
           <div style={{ margin: '3rem 0', zIndex: 2 }}>
             <ShareIcons message='Share this with your friends!' centered />
           </div>
@@ -207,6 +211,7 @@ const LEFT_BOX_STYLE = {
   borderTopLeftRadius: '0.2rem',
   borderBottomLeftRadius: '0.2rem'
 }
+
 const RIGHT_BOX_STYLE = {
   borderTopRightRadius: '0.2rem',
   borderBottomRightRadius: '0.2rem'

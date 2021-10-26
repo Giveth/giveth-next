@@ -4,11 +4,9 @@ import { useMediaQuery } from 'react-responsive'
 import { getEtherscanPrefix } from '../../utils'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../animations/confetti'
-import { useWallet } from '../../contextProvider/WalletProvider'
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
 const Success = props => {
-  const { isLoggedIn, login } = useWallet()
   const { project, transakTx, hash, currentChainId } = props
 
   const downloadPDF = () => {
@@ -102,31 +100,22 @@ const Success = props => {
           </Receipt>
         )}
 
-        {!isLoggedIn ? (
-          <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
-            Stay a Giver?{' '}
-            <span style={{ color: 'yellow', ml: 2, cursor: 'pointer' }} onClick={login}>
-              Register an account.
-            </span>
-          </Text>
-        ) : (
-          <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
-            Thank you for your support{' '}
-            <div>
-              <Link
-                sx={{
-                  variant: 'text.paragraph',
-                  color: 'yellow',
-                  cursor: 'pointer'
-                }}
-                target='_blank'
-                href='/account?view=donations'
-              >
-                View your donations
-              </Link>
-            </div>
-          </Text>
-        )}
+        <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
+          Thank you for your support{' '}
+          <div>
+            <Link
+              sx={{
+                variant: 'text.paragraph',
+                color: 'yellow',
+                cursor: 'pointer'
+              }}
+              target='_blank'
+              href='/account?view=donations'
+            >
+              View your donations
+            </Link>
+          </div>
+        </Text>
       </Content>
     </>
   )

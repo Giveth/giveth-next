@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Label, Grid, Box, Image, Text, Flex, Button } from 'theme-ui'
 import NextImage from 'next/image'
-import { animated } from 'react-spring'
 import { useDropzone } from 'react-dropzone'
-import theme from '../../../utils/theme-ui'
 import styled from '@emotion/styled'
 
 import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
@@ -11,6 +9,7 @@ import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery
 import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
 import { toBase64 } from '../../../utils'
+import theme from '../../../utils/theme-ui'
 
 const Selection = styled(Box)`
   cursor: pointer;
@@ -23,7 +22,7 @@ const Selection = styled(Box)`
   background-color: ${theme.colors.background};
 `
 
-export const ProjectImageInput = ({ register, currentValue, setValue, animationStyle, goBack }) => {
+export const ProjectImageInput = ({ register, currentValue, setValue, goBack }) => {
   const image = undefined
   const [displayImage, setDisplayImage] = useState(currentValue)
   const { getRootProps, getInputProps } = useDropzone({
@@ -58,7 +57,7 @@ export const ProjectImageInput = ({ register, currentValue, setValue, animationS
   }, [displayImage])
 
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '10px' }}>
+    <div style={{ marginTop: '10px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -214,6 +213,6 @@ export const ProjectImageInput = ({ register, currentValue, setValue, animationS
           </Text>
         </Button>
       </Flex>
-    </animated.section>
+    </div>
   )
 }

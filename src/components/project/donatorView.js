@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive'
@@ -6,27 +6,25 @@ import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import Link from 'next/link'
 import { useApolloClient } from '@apollo/client'
 import styled from '@emotion/styled'
-import { GoVerified } from 'react-icons/go'
-import { FaShareAlt } from 'react-icons/fa'
-import { ImLocation } from 'react-icons/im'
-import { BsHeartFill } from 'react-icons/bs'
 
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
-import CancelledModal from './cancelledModal'
+import DeactivatedModal from './deactivatedModal'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
 
+import { GoVerified } from 'react-icons/go'
+import { FaShareAlt } from 'react-icons/fa'
+import { ImLocation } from 'react-icons/im'
+import { BsHeartFill } from 'react-icons/bs'
+
 import { TOGGLE_PROJECT_REACTION } from '../../apollo/gql/projects'
 import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
-
-// import RichTextViewer from '../richTextViewer'
-
-import { useWallet } from '../../contextProvider/WalletProvider'
 
 const RichTextViewer = dynamic(() => import('../richTextViewer'), {
   ssr: false
@@ -43,22 +41,30 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
+  const {
+    state: { user },
+    actions: { showSign }
+  } = useContext(Web3Context)
+
+  const usePopup = useContext(PopupContext)
+
+  const { currentProjectView, setCurrentProjectView } = useContext(ProjectContext)
+
+  const client = useApolloClient()
+
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const router = useRouter()
-  const { user } = useWallet()
+
   const [ready, setReady] = useState(false)
   const [currentTab, setCurrentTab] = useState('description')
   const [totalGivers, setTotalGivers] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
-  const [isCancelled, setIsCancelled] = useState(false)
-  const usePopup = React.useContext(PopupContext)
-  const isSSR = typeof window === 'undefined'
-  const client = useApolloClient()
-  const { currentProjectView, setCurrentProjectView } = React.useContext(ProjectContext)
+  const [isDeactivated, setIsDeactivated] = useState(false)
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
   const donations = currentProjectView?.donations?.filter(el => el != null)
+  const isSSR = typeof window === 'undefined'
 
   const reactToProject = async () => {
     try {
@@ -77,8 +83,7 @@ const ProjectDonatorView = ({
       setHeartedCount(reactionCount)
       setHearted(hearted)
     } catch (error) {
-      usePopup?.triggerPopup('WelcomeLoggedOut')
-      console.log({ error })
+      showSign()
     }
   }
 
@@ -86,12 +91,16 @@ const ProjectDonatorView = ({
     const setup = async () => {
       try {
         if (project?.status?.id !== '5') {
-          setIsCancelled(true)
+          setIsDeactivated(true)
           return
         }
         const ethBalance = projectDonations?.reduce((prev, current) => prev + current?.amount, 0)
         setHeartedCount(projectReactions?.length || project?.totalHearts)
-        setHearted(projectReactions?.find(o => o.userId === user?.id))
+
+        if (user) {
+          setHearted(projectReactions?.find(o => o.userId === user.id))
+          !project?.fromTrace && setIsOwner(project?.admin === user.id)
+        }
 
         setCurrentProjectView({
           ...currentProjectView,
@@ -102,7 +111,6 @@ const ProjectDonatorView = ({
           updates: projectUpdates
         })
         setTotalGivers([...new Set(projectDonations?.map(data => data?.fromWalletAddress))].length)
-        setIsOwner(!project?.fromTrace && project?.admin === user.id)
 
         setReady(true)
       } catch (error) {
@@ -110,8 +118,9 @@ const ProjectDonatorView = ({
         setReady(true)
       }
     }
-    setup()
-  }, [project])
+
+    setup().then()
+  }, [project, user])
 
   const showMap = process.env.OPEN_FOREST_MAP ? process.env.OPEN_FOREST_MAP : false
 
@@ -157,7 +166,7 @@ const ProjectDonatorView = ({
   const projectPic = () => {
     const isSVG = setImage(project?.image)
     if (isSVG) return isSVG
-    else if (project.image) {
+    else if (project.image && project.image !== '/') {
       return (
         <Image
           src={project.image}
@@ -186,7 +195,7 @@ const ProjectDonatorView = ({
 
   return (
     <>
-      <CancelledModal isOpen={isCancelled} />
+      <DeactivatedModal isOpen={isDeactivated} />
       <Flex>{projectPic()}</Flex>
       <Flex
         sx={{

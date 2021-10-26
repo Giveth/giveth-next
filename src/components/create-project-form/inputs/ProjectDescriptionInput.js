@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Label, Button, Text, Flex } from 'theme-ui'
-import { animated } from 'react-spring'
 import { DescriptionInstructionModal } from '../modals'
 
 const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
-export const ProjectDescriptionInput = ({
-  register,
-  currentValue,
-  setValue,
-  animationStyle,
-  goBack
-}) => {
+export const ProjectDescriptionInput = ({ register, currentValue, setValue, goBack }) => {
   const [showInstructions, setShowInstructions] = useState(false)
 
   useEffect(() => {
@@ -22,7 +15,7 @@ export const ProjectDescriptionInput = ({
   const isSSR = typeof window === 'undefined'
 
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
+    <div style={{ marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -65,6 +58,7 @@ export const ProjectDescriptionInput = ({
               }}
               defaultValue={currentValue || ''}
               rows={12}
+              autoFocus
               onChange={newValue => {
                 // console.log({ setValue, newValue, delta, source })
                 setValue('projectDescription', newValue)
@@ -135,6 +129,6 @@ export const ProjectDescriptionInput = ({
           setShowModal={setShowInstructions}
         />
       )}
-    </animated.section>
+    </div>
   )
 }

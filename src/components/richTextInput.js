@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { client } from '../../src/apollo/client'
 import ReactQuill, { Quill } from 'react-quill'
-import Toast from '../components/toast'
-
+import MagicUrl from 'quill-magic-url'
 import * as Emoji from 'quill-emoji'
-
-import { UPLOAD_IMAGE } from '../../src/apollo/gql/projects'
-
+import QuillImageDropAndPaste from 'quill-image-drop-and-paste'
 import 'react-quill/dist/quill.snow.css'
 import 'quill-emoji/dist/quill-emoji.css'
-import QuillImageDropAndPaste from 'quill-image-drop-and-paste'
-import MagicUrl from 'quill-magic-url'
+
 import ImageUploader from './richImageUploader/imageUploader'
+import Toast from '../components/toast'
+import { UPLOAD_IMAGE } from '../apollo/gql/projects'
+import { client } from '../apollo/client'
 
 window.Quill = Quill
 
@@ -175,9 +173,9 @@ function TextRichWithQuill(props) {
       modules={mod}
       formats={formats}
       theme='snow'
-      ref={props?.ref}
-      id={props?.id}
-      name={props?.name}
+      ref={props.ref}
+      id={props.id}
+      name={props.name}
       value={value}
       onChange={handleChange}
       style={props.style}

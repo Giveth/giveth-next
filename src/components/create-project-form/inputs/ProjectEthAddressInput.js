@@ -1,16 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Label, Input, Button, Text, Flex } from 'theme-ui'
-import theme from '../../../../src/utils/theme-ui'
 import { BsQuestionCircle } from 'react-icons/bs'
-import { animated } from 'react-spring'
+import theme from '../../../../src/utils/theme-ui'
+import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
+import { compareAddresses } from '../../../lib/helpers'
 
-export const ProjectEthAddressInput = ({
-  register,
-  currentValue,
-  walletUsed,
-  animationStyle,
-  goBack
-}) => {
+export const ProjectEthAddressInput = ({ value, onChange, goBack }) => {
+  const {
+    state: { account }
+  } = useContext(Web3Context)
   // const [characterLength, setCharacterLength] = useState(
   //   currentValue ? currentValue.length : 0
   // )
@@ -21,8 +19,11 @@ export const ProjectEthAddressInput = ({
   //   setCharacterLength(e.target.value.length)
   //   setAddress(true)
   // }
+
+  const userAddressUsed = compareAddresses(account, value)
+
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
+    <div style={{ marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -84,7 +85,7 @@ export const ProjectEthAddressInput = ({
         </Flex>
       </Flex>
 
-      <Flex sx={{ width: '175%' }}>
+      <Flex>
         <Input
           sx={{
             width: '100%',
@@ -94,23 +95,14 @@ export const ProjectEthAddressInput = ({
           type='text'
           id='projectWalletAddress'
           name='projectWalletAddress'
-          {...register('projectWalletAddress')}
-          defaultValue={currentValue}
-          placeholder='0x00000...'
-          // onChange={e => onChangeAddress(e)}
+          value={value}
+          placeholder='0x...'
+          onChange={e => onChange(e.target.value)}
+          autoFocus
         />
-        <Text
-          sx={{
-            marginTop: '40px',
-            paddingLeft: '40px',
-            fontFamily: 'body',
-            color: 'muted'
-          }}
-        >
-          {/* {characterLength}/42 */}
-        </Text>
       </Flex>
-      {walletUsed && (
+
+      {userAddressUsed && (
         <Text
           sx={{
             fontSize: '3',
@@ -123,6 +115,7 @@ export const ProjectEthAddressInput = ({
           This is your default wallet address, you can choose another one if desired*
         </Text>
       )}
+
       <Flex
         sx={{
           alignItems: 'flex-end',
@@ -204,6 +197,6 @@ export const ProjectEthAddressInput = ({
           visibility: visible;
         }
       `}</style>
-    </animated.section>
+    </div>
   )
 }

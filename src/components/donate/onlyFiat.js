@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Input, Flex, Label, Text } from 'theme-ui'
-import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
+import Tooltip from '../../components/tooltip'
 import theme from '../../utils/theme-ui'
 import { startTransakDonation } from '../../services/donation'
 

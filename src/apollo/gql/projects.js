@@ -449,10 +449,13 @@ const ACTIVATE_PROJECT = gql`
 
 const WALLET_ADDRESS_IS_VALID = gql`
   query WalletAddressIsValid($address: String!) {
-    walletAddressIsValid(address: $address) {
-      reasons
-      isValid
-    }
+    walletAddressIsValid(address: $address)
+  }
+`
+
+const TITLE_IS_VALID = gql`
+  query IsValidTitleForProject($title: String!, $projectId : Float) {
+    isValidTitleForProject(title: $title, projectId : $projectId)
   }
 `
 
@@ -502,5 +505,6 @@ export {
   FETCH_MY_PROJECTS,
   WALLET_ADDRESS_IS_VALID,
   GET_CATEGORIES,
-  UPLOAD_IMAGE
+  UPLOAD_IMAGE,
+  TITLE_IS_VALID
 }

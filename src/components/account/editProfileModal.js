@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Box, Button, Input, Text, Flex } from 'theme-ui'
-import { useWallet } from '../../contextProvider/WalletProvider'
-import { checkIfURLisValid } from '../../utils'
+import Modal from 'react-modal'
 import { useMutation } from '@apollo/client'
 import { IoMdClose } from 'react-icons/io'
 import { useForm } from 'react-hook-form'
+
 import { UPDATE_USER } from '../../apollo/gql/auth'
 import theme from '../../utils/theme-ui/index'
-import Modal from 'react-modal'
 import Avatar from '../avatar'
 import Toast from '../../components/toast'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+import { checkIfURLisValid } from '../../utils'
 
 const InputBox = props => {
   const { title, placeholderText, name, register, errors, refExtras = null } = props
@@ -45,8 +46,10 @@ const InputBox = props => {
 }
 
 function EditProfileModal(props) {
-  const user = props?.user
-  const wallet = useWallet()
+  const {
+    state: { user, account },
+    actions: { updateUser }
+  } = useContext(Web3Context)
 
   const { register, handleSubmit, reset, errors } = useForm({
     // defaultValues: user
@@ -54,7 +57,7 @@ function EditProfileModal(props) {
       return user
     }, [user])
   })
-  const [updateUser] = useMutation(UPDATE_USER)
+  const [updateUserInDB] = useMutation(UPDATE_USER)
 
   const onSubmit = async data => {
     try {
@@ -81,12 +84,12 @@ function EditProfileModal(props) {
             type: 'error'
           })
       }
-      const { data: response, error } = await updateUser({
+      const { data: response, error } = await updateUserInDB({
         variables: newProfile
       })
       if (response?.updateUser === true) {
         props.onRequestClose()
-        wallet?.updateUser && wallet.updateUserInfoOnly()
+        updateUser()
         reset(data)
         return Toast({
           content: 'Profile updated successfully',
@@ -122,14 +125,10 @@ function EditProfileModal(props) {
           }}
         >
           <Flex sx={{ mb: 2 }}>
-            <Avatar
-              img={user?.profileImage || user?.avatar}
-              size={100}
-              address={user.getWalletAddress()}
-            />
+            <Avatar img={user?.profileImage || user?.avatar} size={100} address={account} />
             <Flex sx={{ flexDirection: 'column', ml: '27px' }}>
-              <Text sx={{ color: 'secondary', fontSize: 7 }}>{wallet?.user?.name}</Text>
-              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{wallet?.user?.email}</Text>
+              <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
+              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
             </Flex>
           </Flex>
           <InputBox
