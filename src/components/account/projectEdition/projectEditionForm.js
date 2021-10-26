@@ -89,12 +89,22 @@ function ProjectEditionForm(props) {
 
         <form
           onSubmit={handleSubmit(() => {
-            const res = toggleProjectActivation(project?.id, isActive, msg =>
-              Toast({ content: msg, type: 'success' })
-            )
-            if (res) {
-              setIsActive(!isActive)
-            }
+            toggleProjectActivation(project?.id, isActive)
+              .then(res => {
+                if (res) {
+                  setIsActive(!isActive)
+                  Toast({
+                    content: !isActive ? 'Project Activated' : 'Project Deactivated',
+                    type: 'success'
+                  })
+                }
+              })
+              .catch(err =>
+                Toast({
+                  content: err?.message || JSON.stringify(err),
+                  type: 'error'
+                })
+              )
           })}
         >
           <input

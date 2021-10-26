@@ -11,7 +11,7 @@ import { ProjectContext } from '../../contextProvider/projectProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
-import CancelledModal from './cancelledModal'
+import DeactivatedModal from './deactivatedModal'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
@@ -59,7 +59,7 @@ const ProjectDonatorView = ({
   const [currentTab, setCurrentTab] = useState('description')
   const [totalGivers, setTotalGivers] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
-  const [isCancelled, setIsCancelled] = useState(false)
+  const [isDeactivated, setIsDeactivated] = useState(false)
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
@@ -91,7 +91,7 @@ const ProjectDonatorView = ({
     const setup = async () => {
       try {
         if (project?.status?.id !== '5') {
-          setIsCancelled(true)
+          setIsDeactivated(true)
           return
         }
         const ethBalance = projectDonations?.reduce((prev, current) => prev + current?.amount, 0)
@@ -195,7 +195,7 @@ const ProjectDonatorView = ({
 
   return (
     <>
-      <CancelledModal isOpen={isCancelled} />
+      <DeactivatedModal isOpen={isDeactivated} />
       <Flex>{projectPic()}</Flex>
       <Flex
         sx={{
