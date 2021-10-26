@@ -25,19 +25,20 @@ import { maxSelectedCategory } from '../../utils/constants'
 import { invalidProjectTitleToast, isProjectTitleValid } from '../../validation/projectValidation'
 
 const CreateProjectForm = props => {
-  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [inputIsLoading, setInputLoading] = useState(false)
   const [incompleteProfile, setIncompleteProfile] = useState(false)
-  const { isLoggedIn, user, validateToken, logout } = useWallet()
   const [flashMessage, setFlashMessage] = useState('')
   const [formData, setFormData] = useState({})
+  const [walletUsed, setWalletUsed] = useState(false)
+
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: useMemo(() => {
       return formData
     }, [formData])
   })
-  const [walletUsed, setWalletUsed] = useState(false)
+  const { isLoggedIn, user, validateToken, logout } = useWallet()
+  const router = useRouter()
   const usePopup = useContext(PopupContext)
   const client = useApolloClient()
 
@@ -393,7 +394,7 @@ const CreateProjectForm = props => {
                   setShowModal={setShowCloseModal}
                   title='Are you sure?'
                   confirmation={{
-                    do: () => window.location.replace('/'),
+                    do: () => router.push('/'),
                     title: 'Yes'
                   }}
                 />

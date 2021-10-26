@@ -3,6 +3,14 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
+import Link from 'next/link'
+import { useApolloClient } from '@apollo/client'
+import styled from '@emotion/styled'
+import { GoVerified } from 'react-icons/go'
+import { FaShareAlt } from 'react-icons/fa'
+import { ImLocation } from 'react-icons/im'
+import { BsHeartFill } from 'react-icons/bs'
+
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 
@@ -12,15 +20,7 @@ import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.s
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
 
-import { GoVerified } from 'react-icons/go'
-import { FaShareAlt } from 'react-icons/fa'
-import { ImLocation } from 'react-icons/im'
-import { BsHeartFill } from 'react-icons/bs'
-
-import Link from 'next/link'
-import { useApolloClient } from '@apollo/client'
 import { TOGGLE_PROJECT_REACTION } from '../../apollo/gql/projects'
-import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
 
