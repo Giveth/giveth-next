@@ -6,16 +6,17 @@ import { useRouter } from 'next/router'
 import {
   EDIT_PROJECT,
   FETCH_PROJECT_BY_SLUG,
-  WALLET_ADDRESS_IS_VALID
+  WALLET_ADDRESS_IS_VALID,
+  TITLE_IS_VALID
 } from '../../../apollo/gql/projects'
 import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import Toast from '../../toast'
-import { invalidProjectTitleToast, isProjectTitleValid } from '../../../lib/projectValidation'
 import ProjectEditionForm from './projectEditionForm'
 import { getAddressFromENS, isAddressENS } from '../../../lib/wallet'
 import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
+import { compareAddresses } from '../../../lib/helpers'
 
 function ProjectEdition(props) {
   const {
@@ -99,27 +100,30 @@ function ProjectEdition(props) {
       // Validate eth address if changed
       let ethAddress = data.editWalletAddress
 
-      if (!ethAddress) {
-        return Toast({
-          content: 'Please enter a wallet address to receive donations',
-          type: 'error'
-        })
-      }
-
-      // Handle ENS address
-      if (isAddressENS(ethAddress)) {
-        ethAddress = await getAddressFromENS(data.editWalletAddress, web3)
-      }
-
-      await client.query({
-        query: WALLET_ADDRESS_IS_VALID,
-        variables: {
-          address: ethAddress
+      if (ethAddress) {
+        // Handle ENS address
+        if (isAddressENS(ethAddress)) {
+          ethAddress = await getAddressFromENS(data.editWalletAddress, web3)
         }
-      })
+        if (!compareAddresses(ethAddress, project.walletAddress)) {
+          // we just check walletAddress when user has entered it and it's different with project.walletAddress
+          await client.query({
+            query: WALLET_ADDRESS_IS_VALID,
+            variables: {
+              address: ethAddress
+            }
+          })
+        }
+      }
 
-      if (!isProjectTitleValid(data.editTitle || project.title)) {
-        return invalidProjectTitleToast()
+      if (data.editTitle && data.editTitle !== project?.title) {
+        await client.query({
+          query: TITLE_IS_VALID,
+          variables: {
+            title: data.editTitle,
+            projectId: Number(project.id)
+          }
+        })
       }
 
       const categories = []

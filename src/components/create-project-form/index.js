@@ -3,7 +3,11 @@ import { Box, Heading, Flex, Button, Spinner, Progress, Text } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 
-import { GET_PROJECT_BY_ADDRESS, WALLET_ADDRESS_IS_VALID } from '../../apollo/gql/projects'
+import {
+  GET_PROJECT_BY_ADDRESS,
+  WALLET_ADDRESS_IS_VALID,
+  TITLE_IS_VALID
+} from '../../apollo/gql/projects'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import {
   ProjectNameInput,
@@ -17,7 +21,6 @@ import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
-import { invalidProjectTitleToast, isProjectTitleValid } from '../../lib/projectValidation'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 import { compareAddresses } from '../../lib/helpers'
 import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
@@ -124,9 +127,12 @@ const CreateProjectForm = props => {
         }
       }
       // check title
-      if (!isProjectTitleValid(project?.projectName)) {
-        return invalidProjectTitleToast()
-      }
+      await client.query({
+        query: TITLE_IS_VALID,
+        variables: {
+          title: project?.projectName
+        }
+      })
 
       if (isDescriptionStep(submitCurrentStep)) {
         // check if file is too large
