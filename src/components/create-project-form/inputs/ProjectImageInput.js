@@ -103,8 +103,10 @@ export const ProjectImageInput = ({ register, currentValue, setValue, goBack }) 
           />
           {displayImage === undefined ? (
             <NextImage src={'/placeholder.png'} width='100%' height='100%' objectFit='cover' />
-          ) : displayImage?.startsWith('data:') ? (
-            <Image src={displayImage} sx={{ objectFit: 'cover', maxHeight: '150px' }} />
+          ) : displayImage?.startsWith('data:') ||
+            displayImage?.startsWith('http') ||
+            displayImage?.startsWith('/assets') ? (
+            <Image alt='image' src={displayImage} sx={{ objectFit: 'cover', maxHeight: '150px' }} />
           ) : (
             <Flex sx={{ justifyContent: 'center' }}>
               {displayImage === '1' && (
@@ -146,19 +148,15 @@ export const ProjectImageInput = ({ register, currentValue, setValue, goBack }) 
           mt: '16px'
         }}
       >
-        {[1, 2, 3, 4].map((i, index) => {
-          return (
-            <Selection
-              key={index}
-              type='button'
-              onClick={() => {
-                setDisplayImage(i?.toString())
-              }}
-            >
-              {ProjectImage(i)}
-            </Selection>
-          )
-        })}
+        {[1, 2, 3, 4].map(i => (
+          <Selection
+            key={i}
+            type='button'
+            onClick={() => setDisplayImage(`/assets/create/projectImageGallery${i}.svg`)}
+          >
+            {ProjectImage(i)}
+          </Selection>
+        ))}
       </Grid>
       <Flex
         sx={{
