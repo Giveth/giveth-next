@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex, Text, Button } from 'theme-ui'
-import { ProfileHeader, UserDonations, UserProjects } from './index'
 import { useQueryParams, StringParam } from 'use-query-params'
+import { ProfileHeader, UserDonations, UserProjects } from './index'
 
 const PublicProfileView = props => {
   const [query, setQuery] = useQueryParams({
