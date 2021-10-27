@@ -17,4 +17,4 @@ export async function fetchEntries({ contentType }) {
   }
 }
 
-export default { fetchEntries }
+export default fetchEntries
