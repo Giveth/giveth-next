@@ -28,7 +28,7 @@ const CreateProject = props => {
   const [projectAdded, setProjectAdded] = useState(false)
   const [addedProject, setAddedProject] = useState(null)
   const [inError, setInError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
@@ -107,20 +107,17 @@ const CreateProject = props => {
       } catch (error) {
         if (error.message === 'Access denied') {
           Logger.captureException(error)
-          logout(
-            setErrorMessage(
-              <>
-                <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
-                  {`We're so sorry but ${error.message}`}
-                </Text>
-                <Text sx={{ variant: 'text.default' }}>
-                  We have logged you out to resolve this.
-                </Text>
-                <Text sx={{ variant: 'text.default' }}>
-                  <Link href='/'>Please login and start again</Link>
-                </Text>
-              </>
-            )
+          logout()
+          setErrorMessage(
+            <>
+              <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
+                {`We're so sorry but ${error.message}`}
+              </Text>
+              <Text sx={{ variant: 'text.default' }}>We have logged you out to resolve this.</Text>
+              <Text sx={{ variant: 'text.default' }}>
+                <Link href='/'>Please login and start again</Link>
+              </Text>
+            </>
           )
         } else {
           console.log({ error })

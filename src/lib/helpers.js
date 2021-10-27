@@ -5,6 +5,10 @@ import { promisify } from 'util'
 import Toast from '../components/toast'
 // import { GivethBridge } from '@giveth/bridge-contract'
 
+export const isUserRegistered = user => {
+  return !!(user && user.name && user.email)
+}
+
 export const compareAddresses = (add1, add2) => {
   return add1?.toLowerCase() === add2?.toLowerCase()
 }

@@ -10,7 +10,7 @@ import theme from '../utils/theme-ui'
 import Logo from './content/Logo'
 import { ProjectContext } from '../contextProvider/projectProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
-import { shortenAddress } from '../lib/helpers'
+import { isUserRegistered, shortenAddress } from '../lib/helpers'
 import { Context as Web3Context } from '../contextProvider/Web3Provider'
 import UserDetails from './account/userDetails'
 
@@ -98,9 +98,7 @@ const Header = ({ isHomePage }) => {
   }, [])
 
   const goCreate = async () => {
-    if (!user?.name || !user?.email || user.email === '') {
-      return triggerPopup('IncompleteProfile')
-    }
+    if (!isUserRegistered(user)) return triggerPopup('IncompleteProfile')
     router.push('/create')
   }
 

@@ -9,11 +9,7 @@ export function setUser(user) {
   return window.localStorage.setItem(getLocalStorageUserLabel(), JSON.stringify(user))
 }
 
-export function handleLogout() {
-  logout()
-}
-
-export const logout = (callback = () => {}) => {
+export const logout = () => {
   if (isBrowser()) {
     window.localStorage.removeItem(getLocalStorageUserLabel())
     window.localStorage.removeItem(getLocalStorageTokenLabel())
@@ -22,7 +18,6 @@ export const logout = (callback = () => {}) => {
     // TODO: let's check if we should remove everything or just be careful
     // window.localStorage.clear()
   }
-  callback()
 }
 
 export function getLocalStorageUserLabel() {

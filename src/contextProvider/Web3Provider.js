@@ -93,7 +93,7 @@ const Web3Provider = props => {
         network: _network => setNetworkId(_network),
         address: _address => {
           if (!_address || _address !== Auth.getUser()?.walletAddress) {
-            Auth.handleLogout()
+            Auth.logout()
           }
           if (user) setUser(undefined)
           setAccount(_address)
@@ -170,7 +170,7 @@ const Web3Provider = props => {
       networkId,
       web3
     )
-    if (!signedMessage) return
+    if (!signedMessage) return false
 
     const token = await getToken(user, signedMessage, networkId)
     const newUser = new User(user)
@@ -178,6 +178,7 @@ const Web3Provider = props => {
     Auth.setUser(newUser)
     client.resetStore().then()
     setUser(newUser)
+    return true
   }
 
   const signModalContent = () => {
