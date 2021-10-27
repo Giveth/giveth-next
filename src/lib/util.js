@@ -1,12 +1,12 @@
 import { formatUnits } from '@ethersproject/units'
 
-const ETHERSCAN_PREFIXES = {
-  1: 'etherscan.io/',
-  3: 'ropsten.etherscan.io/',
-  4: 'rinkeby.etherscan.io/address/',
-  5: 'goerli.etherscan.io/address/',
-  42: 'kovan.etherscan.io/address/',
-  100: 'blockscout.com/poa/xdai/'
+export const ETHERSCAN_PREFIXES = {
+  1: 'https://etherscan.io/',
+  3: 'https://ropsten.etherscan.io/',
+  4: 'https://rinkeby.etherscan.io/',
+  5: 'https://goerli.etherscan.io/',
+  42: 'https://kovan.etherscan.io/',
+  100: 'https://blockscout.com/poa/xdai/'
 }
 
 /**
@@ -18,11 +18,11 @@ export function formatEtherscanLink(type, data) {
   switch (type) {
     case 'Account': {
       const [chainId, address] = data
-      return `https://${ETHERSCAN_PREFIXES[chainId]}address/${address}`
+      return `${ETHERSCAN_PREFIXES[chainId]}address/${address}`
     }
     case 'Transaction': {
       const [chainId, hash] = data
-      return `https://${ETHERSCAN_PREFIXES[chainId]}tx/${hash}`
+      return `${ETHERSCAN_PREFIXES[chainId]}tx/${hash}`
     }
   }
 }
