@@ -157,7 +157,7 @@ function ProjectEdition(props) {
     } catch (error) {
       setLoading(false)
       console.log({ error })
-      return Toast({
+      Toast({
         content: error?.message || JSON.stringify(error),
         type: 'error'
       })
