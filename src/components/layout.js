@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic'
 import Script from 'next/script'
 import PropTypes from 'prop-types'
 import { Link, Flex, Text, Image } from 'theme-ui'
+import { positions, Provider } from 'react-alert'
+import AlertTemplate from 'react-alert-template-mui'
 import styled from '@emotion/styled'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
@@ -196,10 +198,12 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
       <PopupProvider>
         <GlobalProvider>
           <QueryParamProvider>
-            <GithubIssue fixed={true} />
-            <XDAIPopup />
-            <Template />
-            <Popup />
+            <Provider template={AlertTemplate} {...AlertOptions}>
+              <GithubIssue fixed={true} />
+              <XDAIPopup />
+              <Template />
+              <Popup />
+            </Provider>
           </QueryParamProvider>
         </GlobalProvider>
         <StyledToastContainer />
@@ -235,6 +239,11 @@ const StyledToastContainer = styled(ToastContainer)`
     border-left: 6px solid ${theme.colors.warnYellow};
   }
 `
+
+const AlertOptions = {
+  timeout: 5000,
+  position: positions.BOTTOM_CENTER
+}
 
 const CookieBanner = styled(Flex)`
   position: fixed;
