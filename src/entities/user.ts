@@ -6,8 +6,6 @@ const tokenLabel = getLocalStorageTokenLabel()
 export default class User {
   id: number
   token: string
-  activeWalletIndex: number
-  walletAddresses: string[]
   walletAddress: string
   email?: string
   firstName?: string
@@ -21,15 +19,12 @@ export default class User {
   confirmed: boolean
 
   constructor(initUser) {
-    this.walletAddresses = []
-
     if (initUser) {
       this.parseInitUser(initUser)
     }
   }
 
   parseInitUser(initUser) {
-    this.walletAddresses = initUser.walletAddresses
     this.walletAddress = initUser.walletAddress
     this.id = initUser.id
     this.token = initUser.token
@@ -53,15 +48,11 @@ export default class User {
 
   setToken(token) {
     this.token = token
-
     localStorage.setItem(tokenLabel, token)
   }
 
-  addWalletAddress(address, activeWallet) {
+  addWalletAddress(address) {
     this.walletAddress = address
-    if (activeWallet) {
-      this.activeWalletIndex = this.walletAddresses.indexOf(address)
-    }
   }
 
   getName() {
