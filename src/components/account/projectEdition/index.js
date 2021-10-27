@@ -12,7 +12,6 @@ import {
 import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
-import { categoryList, maxSelectedCategory } from '../../../utils/constants'
 import Toast from '../../toast'
 import ProjectEditionForm from './projectEditionForm'
 import { getAddressFromENS, isAddressENS } from '../../../lib/wallet'
@@ -41,7 +40,11 @@ function ProjectEdition(props) {
 
   useEffect(() => {
     if (fetchedProject?.projectBySlug) {
-      setProject(fetchedProject.projectBySlug)
+      const _project = { ...fetchedProject.projectBySlug }
+      const newCategories = {}
+      _project.categories.forEach(i => (newCategories[i.name] = true))
+      _project.categories = newCategories
+      setProject(_project)
       setMapLocation(fetchedProject.projectBySlug.impactLocation)
     }
   }, [fetchedProject])
@@ -76,6 +79,7 @@ function ProjectEdition(props) {
           setLoading(false)
           setShowModal(true)
         } catch (error) {
+          setUpdateProjectOnServer(false)
           setLoading(false)
           Toast({
             content: error?.message || JSON.stringify(error),
@@ -122,36 +126,25 @@ function ProjectEdition(props) {
         })
       }
 
-      const projectCategories = []
-      for (const category in categoryList) {
-        const name = categoryList[category]?.name
-        if (data[name]) {
-          projectCategories.push(categoryList[category].name)
-        }
-      }
-
-      if (projectCategories.length > maxSelectedCategory)
-        return Toast({
-          content: `Please select no more than ${maxSelectedCategory} categories`,
-          type: 'error'
-        })
+      const categories = []
+      Object.entries(project.categories)
+        .filter(i => i[1] === true)
+        .forEach(i => categories.push(i[0]))
 
       const projectData = {
-        title: data.editTitle || project?.title,
+        title: data.editTitle || project.title,
         description: data.desc || data.editDescription,
         admin: project.admin,
         impactLocation: mapLocation,
-        categories: projectCategories,
-        walletAddress: ethAddress
-          ? Web3.utils.toChecksumAddress(ethAddress)
-          : project?.walletAddress
+        categories,
+        walletAddress: ethAddress ? Web3.utils.toChecksumAddress(ethAddress) : project.walletAddress
       }
 
       // Validate Image
-      if (data?.editImage && project?.image !== data.editImage) {
+      if (data?.editImage && project.image !== data.editImage) {
         if (data.editImage.length > 2) {
           // Download image to send
-          projectData.imageUpload = await getImageFile(data.editImage, project?.slug)
+          projectData.imageUpload = await getImageFile(data.editImage, project.slug)
         } else {
           if (data.editImage.length === 1) {
             projectData.imageStatic = data.editImage
@@ -183,6 +176,7 @@ function ProjectEdition(props) {
         client={client}
         mapLocation={mapLocation}
         setMapLocation={setMapLocation}
+        setProject={setProject}
       />
       <ConfirmationModal
         showModal={showModal}
