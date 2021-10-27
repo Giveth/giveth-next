@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Flex } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
@@ -14,8 +14,12 @@ import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 const Main = () => {
   const {
     state: { user },
-    actions: { signModalContent }
+    actions: { signModalContent, setToken }
   } = useContext(Web3Context)
+
+  useEffect(() => {
+    if (user && !user.token) setToken()
+  }, [user])
 
   return user && user.token ? (
     <AccountPage />

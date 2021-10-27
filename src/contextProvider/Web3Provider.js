@@ -149,6 +149,7 @@ const Web3Provider = props => {
         fetchPolicy: 'network-only'
       })
       .then(res => res.data?.userByAddress)
+      .catch(console.log)
   }
 
   const updateUser = () => {
@@ -215,18 +216,20 @@ const Web3Provider = props => {
     if (account) {
       const _user = Auth.getUser()
       const newUser = new User()
-      newUser.addWalletAddress(account, true)
+      newUser.addWalletAddress(account)
       if (account === _user?.walletAddress) {
         newUser.parseDbUser(_user)
         newUser.setToken(_user.token)
-      } else
+        setUser(newUser)
+      } else {
         fetchUser().then(res => {
           if (res) {
             newUser.parseDbUser(res)
             Auth.setUser(newUser)
+            setUser(newUser)
           }
         })
-      setUser(newUser)
+      }
     }
   }, [account])
 
@@ -261,7 +264,8 @@ const Web3Provider = props => {
           initOnBoard,
           updateUser,
           showSign,
-          signModalContent
+          signModalContent,
+          setToken
         }
       }}
     >

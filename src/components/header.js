@@ -21,7 +21,7 @@ const CategoriesList = () => {
   const { currentProjectView } = React.useContext(ProjectContext)
   const categories = currentProjectView?.globalCategories
 
-  if (!categories || categories?.length == 0) return null
+  if (!categories || categories?.length === 0) return null
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <CategoriesListView>
@@ -93,6 +93,10 @@ const Header = ({ isHomePage }) => {
     }
   }, [])
 
+  useEffect(() => {
+    router?.prefetch('/create')
+  }, [])
+
   const goCreate = async () => {
     if (!user?.name || !user?.email || user.email === '') {
       return triggerPopup('IncompleteProfile')
@@ -119,10 +123,6 @@ const Header = ({ isHomePage }) => {
       </Link>
     )
   }
-
-  useEffect(() => {
-    router?.prefetch('/create')
-  }, [])
 
   return (
     <Headroom style={{ zIndex: 5 }}>
