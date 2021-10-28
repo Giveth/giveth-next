@@ -10,7 +10,7 @@ const ConfirmationModal = ({
   secondary
 }) => (
   <div
-    css={{
+    style={{
       zIndex: 2,
       display: showModal ? 'flex' : 'none',
       position: 'fixed',

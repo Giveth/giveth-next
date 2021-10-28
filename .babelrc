@@ -4,10 +4,5 @@
       "next/babel"
     ]
   ],
-  "plugins": [
-    "@emotion", "inline-react-svg",
-    [
-      "styled-components"
-    ]
-  ]
+  "plugins": ["@emotion", "inline-react-svg"]
 }
