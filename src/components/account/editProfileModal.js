@@ -64,7 +64,7 @@ function EditProfileModal(props) {
       const { firstName, lastName, location, email, url } = data
       if (!firstName && !lastName) {
         return Toast({
-          content: 'Please fill at least one of firstName or lastName',
+          content: 'Please fill at least one of first name or last name',
           type: 'error'
         })
       }
