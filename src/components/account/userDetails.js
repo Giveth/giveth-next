@@ -72,7 +72,7 @@ const UserDetails = () => {
         sx={{ variant: 'buttons.nofill' }}
         onClick={() => setIsComponentVisible(!isComponentVisible)}
       >
-        {user?.avatar ? (
+        {user.avatar ? (
           <Image
             alt='user avatar'
             sx={{
@@ -98,7 +98,7 @@ const UserDetails = () => {
               textTransform: 'capitalize'
             }}
           >
-            {user?.getName()}
+            {user.getName()}
           </Text>
         )}
       </StyledButton>

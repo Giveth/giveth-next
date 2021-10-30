@@ -23,7 +23,7 @@ import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
-import { compareAddresses } from '../../lib/helpers'
+import { compareAddresses, isUserRegistered } from '../../lib/helpers'
 import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 
 const Main = props => {
@@ -242,7 +242,7 @@ const CreateProjectForm = props => {
     }
 
     if (user) {
-      if (!user.name || !user.email || user.email === '') {
+      if (!isUserRegistered(user)) {
         usePopup?.triggerPopup('IncompleteProfile')
         setIncompleteProfile(true)
       } else {
