@@ -6,7 +6,7 @@ import Toast from '../components/toast'
 // import { GivethBridge } from '@giveth/bridge-contract'
 
 export const isUserRegistered = user => {
-  return !!(user && user.name && user.email)
+  return Boolean(user && user.name && user.email)
 }
 
 export const compareAddresses = (add1, add2) => {
