@@ -60,7 +60,7 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash, networkId }) => {
           rel='noreferrer noopener'
           target='_blank'
         >
-          View on Etherscan
+          {' '}View on Etherscan
         </a>
       </Text>
       <Text sx={{ mt: 2, mx: 5, textAlign: 'center', variant: 'text.default' }}>

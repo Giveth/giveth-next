@@ -53,11 +53,12 @@ const ProjectCard = props => {
     state: { user },
     actions: { showSign }
   } = useContext(Web3Context)
+  const usePopup = useContext(PopupContext)
+  const client = useApolloClient()
 
   const { project, fromViewStyle, isATrace } = props
-  const client = useApolloClient()
+
   const [altStyle, setAltStyle] = useState(false)
-  const usePopup = useContext(PopupContext)
   const [heartedByUser, setHeartedByUser] = useState(null)
   const [heartedCount, setHeartedCount] = useState(null)
 

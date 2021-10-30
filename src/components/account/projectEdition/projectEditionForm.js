@@ -267,7 +267,7 @@ function ProjectEditionForm(props) {
               <Text sx={{ fontFamily: 'body', fontSize: 2 }}>This project has a global impact</Text>
             </Label>
             <div
-              css={{
+              style={{
                 display: 'flex',
                 flexDirection: 'column',
                 width: '600px',

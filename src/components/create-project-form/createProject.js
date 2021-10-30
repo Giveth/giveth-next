@@ -148,7 +148,7 @@ const CreateProject = props => {
     //       <img
     //         src={decoratorClouds}
     //         alt=''
-    //         css={{
+    //         style={{
     //           position: 'absolute',
     //           top: '57px',
     //           right: '434px',
@@ -159,7 +159,7 @@ const CreateProject = props => {
     //       <img
     //         src={peoplePuzzle2}
     //         alt=''
-    //         css={{
+    //         style={{
     //           position: 'absolute',
     //           top: '417px',
     //           right: '0px',
@@ -279,7 +279,7 @@ const CreateProject = props => {
           <Image
             src={'/images/decorator-clouds.svg'}
             alt='decorator-clouds'
-            css={{
+            style={{
               position: 'absolute',
               top: '57px',
               right: '434px'
@@ -289,7 +289,7 @@ const CreateProject = props => {
           <Image
             src={'/images/people-puzzle2.svg'}
             alt='people-puzzle2'
-            css={{
+            style={{
               position: 'absolute',
               top: '417px',
               right: '0px'

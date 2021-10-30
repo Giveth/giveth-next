@@ -72,7 +72,7 @@ export const ProjectImpactLocationInput = ({ register, currentValue, goBack, set
       )}
 
       <div
-        css={{
+        style={{
           display: 'flex',
           flexDirection: 'column',
           width: '600px',
