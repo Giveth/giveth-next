@@ -15,7 +15,7 @@ const MyProjects = props => {
   const setProject = val => setEditProject(val)
 
   if (editProject) {
-    return <ProjectEdition project={editProject} />
+    return <ProjectEdition project={editProject} goBack={() => setProject(false)} />
   }
 
   return (
