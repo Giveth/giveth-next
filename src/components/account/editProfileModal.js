@@ -62,17 +62,13 @@ function EditProfileModal(props) {
   const onSubmit = async data => {
     try {
       const { firstName, lastName, location, email, url } = data
-      if (!firstName && !lastName) {
+      if ((!firstName && !lastName) || !email) {
         return Toast({
-          content: 'Please fill at least one of first name or last name',
+          content: 'Please provide either your last name or first name and your email address.',
           type: 'error'
         })
       }
-      if (!email)
-        return Toast({
-          content: 'Please fill the email address',
-          type: 'error'
-        })
+
       const newProfile = {
         firstName: firstName || '',
         lastName: lastName || '',
