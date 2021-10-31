@@ -26,7 +26,7 @@ import UnconfirmedModal from './unconfirmedModal'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
-import { sendTransaction } from '../../lib/helpers'
+import { isUserRegistered, sendTransaction } from '../../lib/helpers'
 import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
@@ -44,8 +44,8 @@ const POLL_DELAY_TOKENS = 5000
 
 const OnlyCrypto = props => {
   const {
-    state: { validProvider, balance, web3, account, isEnabled, networkId, provider },
-    actions: { switchWallet, enableProvider, switchToXdai, initOnBoard }
+    state: { validProvider, balance, web3, account, isEnabled, networkId, provider, user },
+    actions: { switchWallet, enableProvider, switchToXdai, initOnBoard, setToken }
   } = useContext(Web3Context)
 
   const usePopup = useContext(PopupContext)
@@ -298,6 +298,12 @@ const OnlyCrypto = props => {
       //   : switchTraceable
       let traceable = false
 
+      // Sign message for registered users to get user info, no need to sign for anonymous
+      if (isUserRegistered(user) && !user.token) {
+        const isSigned = await setToken()
+        if (!isSigned) return
+      }
+
       if (!project?.walletAddress) {
         return Toast({
           content: 'There is no eth address assigned for this project',
@@ -454,10 +460,16 @@ const OnlyCrypto = props => {
       <Content ref={ref}>
         <InProgressModal
           showModal={inProgress}
-          setShowModal={val => setInProgress(val)}
+          setShowModal={setInProgress}
           txHash={txHash}
+          networkId={networkId}
         />
-        <UnconfirmedModal showModal={unconfirmed} setShowModal={setUnconfirmed} txHash={txHash} />
+        <UnconfirmedModal
+          showModal={unconfirmed}
+          setShowModal={setUnconfirmed}
+          txHash={txHash}
+          networkId={networkId}
+        />
         <Modal isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)} contentLabel='QR Modal'>
           <Flex
             sx={{

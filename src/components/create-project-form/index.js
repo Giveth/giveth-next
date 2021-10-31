@@ -2,9 +2,13 @@ import React, { useState, useEffect, useContext, useMemo } from 'react'
 import { Box, Heading, Flex, Button, Spinner, Progress, Text } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 
-import { GET_PROJECT_BY_ADDRESS, WALLET_ADDRESS_IS_VALID } from '../../apollo/gql/projects'
-import { getProjectWallet } from './utils'
+import {
+  GET_PROJECT_BY_ADDRESS,
+  WALLET_ADDRESS_IS_VALID,
+  TITLE_IS_VALID
+} from '../../apollo/gql/projects'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import {
   ProjectNameInput,
@@ -18,9 +22,9 @@ import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
-import { maxSelectedCategory } from '../../utils/constants'
-import { invalidProjectTitleToast, isProjectTitleValid } from '../../lib/projectValidation'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+import { compareAddresses, isUserRegistered } from '../../lib/helpers'
+import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 
 const Main = props => {
   const {
@@ -36,12 +40,17 @@ const Main = props => {
 }
 
 const CreateProjectForm = props => {
+  const {
+    state: { account, user, web3 }
+  } = useContext(Web3Context)
+
   const [loading, setLoading] = useState(true)
   const [inputIsLoading, setInputLoading] = useState(false)
   const [incompleteProfile, setIncompleteProfile] = useState(false)
   const [formData, setFormData] = useState({})
-  const [addressIsUsed, setAddressIsUsed] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
+  const [EthAddress, setEthAddress] = useState()
+  const [showCloseModal, setShowCloseModal] = useState(false)
 
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: useMemo(() => {
@@ -49,32 +58,23 @@ const CreateProjectForm = props => {
     }, [formData])
   })
 
-  const {
-    state: { account, user }
-  } = useContext(Web3Context)
-
+  const router = useRouter()
   const usePopup = useContext(PopupContext)
   const client = useApolloClient()
 
   const nextStep = () => setCurrentStep(currentStep + 1)
   const goBack = () => setCurrentStep(currentStep - 1)
-
-  const EthAddress = formData?.projectWalletAddress
-    ? formData.projectWalletAddress
-    : !addressIsUsed
-    ? account
-    : null
-
-  const useUserAddress = !(
-    addressIsUsed ||
-    (!addressIsUsed && formData.projectWalletAddress && formData.projectWalletAddress !== account)
-  )
+  const handleInput = (name, value) => {
+    const data = { ...formData }
+    data[name] = value
+    setFormData(data)
+  }
 
   const steps = [
-    () => <ProjectNameInput currentValue={formData?.projectName} register={register} />,
+    () => <ProjectNameInput currentValue={formData.projectName} register={register} />,
     () => (
       <ProjectDescriptionInput
-        currentValue={formData?.projectDescription}
+        currentValue={formData.projectDescription}
         setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
@@ -83,14 +83,14 @@ const CreateProjectForm = props => {
     () => (
       <ProjectCategoryInput
         categoryList={props.categoryList}
-        currentValue={formData?.projectCategory}
-        register={register}
+        value={formData.projectCategory}
+        setValue={e => handleInput('projectCategory', e)}
         goBack={goBack}
       />
     ),
     () => (
       <ProjectImpactLocationInput
-        currentValue={formData?.projectImpactLocation}
+        currentValue={formData.projectImpactLocation}
         setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
@@ -99,20 +99,13 @@ const CreateProjectForm = props => {
 
     () => (
       <ProjectImageInput
-        currentValue={formData?.projectImage}
+        currentValue={formData.projectImage}
         register={register}
         setValue={(ref, val) => setValue(ref, val)}
         goBack={goBack}
       />
     ),
-    () => (
-      <ProjectEthAddressInput
-        currentValue={EthAddress}
-        useUserAddress={useUserAddress}
-        register={register}
-        goBack={goBack}
-      />
-    ),
+    () => <ProjectEthAddressInput value={EthAddress} onChange={setEthAddress} goBack={goBack} />,
     () => (
       <FinalVerificationStep
         formData={formData}
@@ -125,30 +118,10 @@ const CreateProjectForm = props => {
   const onSubmit = (formData, submitCurrentStep, doNextStep) => async data => {
     let project = {}
     try {
-      // console.log({ submitCurrentStep, data, formData })
-
       if (isCategoryStep(submitCurrentStep)) {
-        const maxFiveCategories = Object.entries(data)?.filter(i => {
-          return i[1] === true
-        })
-
-        if (maxFiveCategories.length > maxSelectedCategory) {
-          return Toast({
-            content: `Please select no more than ${maxSelectedCategory} categories`,
-            type: 'error'
-          })
-        }
-
         project = {
-          ...formData,
-          projectCategory: {
-            ...data,
-            projectDescription: null
-          }
+          ...formData
         }
-        // TODO: For some reason we are getting projectDescription inside the category
-        // we need to figure out why
-        delete project?.projectCategory['projectDescription']
       } else {
         project = {
           ...formData,
@@ -156,10 +129,12 @@ const CreateProjectForm = props => {
         }
       }
       // check title
-      if (!isProjectTitleValid(project?.projectName)) {
-        return invalidProjectTitleToast()
-      }
-      console.log({ project })
+      await client.query({
+        query: TITLE_IS_VALID,
+        variables: {
+          title: project?.projectName
+        }
+      })
 
       if (isDescriptionStep(submitCurrentStep)) {
         // check if file is too large
@@ -174,48 +149,40 @@ const CreateProjectForm = props => {
       }
 
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
-        const didEnterWalletAddress = !!data?.projectWalletAddress
-        let projectWalletAddress
+        const didEnterWalletAddress = !!EthAddress
         if (!data?.projectName) {
           return Toast({
             content: 'Please set at least a title to your project',
             type: 'error'
           })
         }
+
         if (didEnterWalletAddress) {
           setInputLoading(true)
-          projectWalletAddress = await getProjectWallet(data?.projectWalletAddress)
         } else {
-          projectWalletAddress = account
+          return Toast({
+            content: 'Please enter a wallet address to receive donations',
+            type: 'error'
+          })
         }
 
-        const { data: addressValidation } = await client.query({
+        let address
+        // Handle ENS address
+        if (isAddressENS(EthAddress)) {
+          address = await getAddressFromENS(EthAddress, web3)
+          setEthAddress(address)
+        } else {
+          address = EthAddress
+        }
+
+        await client.query({
           query: WALLET_ADDRESS_IS_VALID,
           variables: {
-            address: projectWalletAddress
+            address
           }
         })
-        if (!addressValidation?.walletAddressIsValid?.isValid) {
-          const reason = addressValidation?.walletAddressIsValid?.reasons[0]
-          setInputLoading(false)
-          if (reason === 'smart-contract') {
-            return Toast({
-              content: `Eth address ${projectWalletAddress} is a smart contract. We do not support smart contract wallets at this time because we use multiple blockchains, and there is a risk of your losing donations.`,
-              type: 'error'
-            })
-          } else if (reason === 'address-used') {
-            return Toast({
-              content: `Eth address ${projectWalletAddress} is already being used for a project`,
-              type: 'error'
-            })
-          } else {
-            return Toast({
-              content: 'Eth address not valid',
-              type: 'error'
-            })
-          }
-        }
-        project.projectWalletAddress = projectWalletAddress
+
+        project.projectWalletAddress = address
       }
       project.projectDescription = project?.projectDescription || ''
 
@@ -223,9 +190,11 @@ const CreateProjectForm = props => {
         'create-form',
         JSON.stringify({ ...project, projectImage: null })
       )
+
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
+
       setInputLoading(false)
       setFormData(project)
       doNextStep()
@@ -233,13 +202,12 @@ const CreateProjectForm = props => {
       console.log({ error })
       setInputLoading(false)
       Toast({
-        content: error?.message,
+        content: error?.message || JSON.stringify(error),
         type: 'error'
       })
     }
   }
 
-  const [showCloseModal, setShowCloseModal] = useState(false)
   useEffect(() => {
     const checkProjectWallet = async () => {
       if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
@@ -250,29 +218,38 @@ const CreateProjectForm = props => {
         }
       })
 
+      const localForm = JSON.parse(window?.localStorage.getItem('create-form'))
+      const localAddress = localForm?.projectWalletAddress
+
+      localForm && setFormData(localForm)
+
+      let addressIsUsed = false
       if (data?.projectByAddress) {
-        setAddressIsUsed(true)
-      } else {
-        addressIsUsed && setAddressIsUsed(false)
+        // Address is used in another project
+        addressIsUsed = true
       }
+
+      if (addressIsUsed) {
+        if (localAddress && !compareAddresses(localAddress, account)) {
+          setEthAddress(localAddress)
+        }
+      } else {
+        if (localAddress) setEthAddress(localAddress)
+        else setEthAddress(account)
+      }
+
       setLoading(false)
     }
 
     if (user) {
-      if (!user.name || !user.email || user.email === '') {
+      if (!isUserRegistered(user)) {
         usePopup?.triggerPopup('IncompleteProfile')
         setIncompleteProfile(true)
       } else {
         checkProjectWallet().then()
       }
     }
-  }, [user, client, formData])
-
-  useEffect(() => {
-    // Checks localstorage to reset form
-    const localCreateForm = window?.localStorage.getItem('create-form')
-    localCreateForm && setFormData(JSON.parse(localCreateForm))
-  }, [])
+  }, [user])
 
   if (incompleteProfile) {
     return null
@@ -286,26 +263,6 @@ const CreateProjectForm = props => {
     )
   }
 
-  // // CHECKS USER
-  // if (JSON.stringify(user) === JSON.stringify({})) {
-  //   return (
-  //     <Flex sx={{ flexDirection: 'column' }}>
-  //       <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 6, mx: 6 }}>
-  //         You are not logged in yet...
-  //       </Text>
-  //       <Text
-  //         sx={{ variant: 'headings.h4', color: 'primary', mx: 6 }}
-  //         style={{
-  //           textDecoration: 'underline',
-  //           cursor: 'pointer'
-  //         }}
-  //         onClick={() => window.location.replace('/')}
-  //       >
-  //         go to our homepage
-  //       </Text>
-  //     </Flex>
-  //   )
-  // }
   const progressPercentage = Object.keys(formData).filter(v => v.startsWith('proj'))?.length
   const Step = steps[currentStep]
 
@@ -368,7 +325,7 @@ const CreateProjectForm = props => {
                   setShowModal={setShowCloseModal}
                   title='Are you sure?'
                   confirmation={{
-                    do: () => window.location.replace('/'),
+                    do: () => router.push('/'),
                     title: 'Yes'
                   }}
                 />

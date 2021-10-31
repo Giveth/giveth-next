@@ -16,5 +16,3 @@ export async function fetchEntries({ contentType }) {
     return null
   }
 }
-
-export default { fetchEntries }

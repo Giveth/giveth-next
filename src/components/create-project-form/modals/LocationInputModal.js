@@ -7,7 +7,7 @@ export const LocationInputModal = ({ showModal, setShowModal, setLocation }) => 
   })
   return (
     <div
-      css={{
+      style={{
         display: showModal ? 'flex' : 'none',
         position: 'absolute',
         left: '25%',

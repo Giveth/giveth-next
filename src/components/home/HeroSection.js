@@ -23,7 +23,7 @@ const Hero = ({ content }) => {
             color: 'secondaryDark'
           }}
         >
-          {content?.mainHead || 'Waiting for content'}
+          {content.mainHead}
         </Heading>
         <Heading
           sx={{
@@ -34,7 +34,7 @@ const Hero = ({ content }) => {
             color: 'secondaryDark'
           }}
         >
-          {content?.headBold || 'Waiting for content'}
+          {content.headBold}
         </Heading>
         <Text
           pt={4}
@@ -46,7 +46,7 @@ const Hero = ({ content }) => {
             lineHeight: 'taller'
           }}
         >
-          {content?.mainText || 'Waiting for content'}
+          {content.mainText}
         </Text>
         <Grid
           rows={2}
@@ -62,7 +62,7 @@ const Hero = ({ content }) => {
                 variant: 'buttons.big'
               }}
             >
-              {content?.mainButton || 'Waiting for content'}
+              {content.mainButton}
             </Button>
           </Link>
           <Link href='/create'>
@@ -72,7 +72,7 @@ const Hero = ({ content }) => {
                 justifySelf: ['center']
               }}
             >
-              {content?.mainButtonText || 'Waiting for content'}
+              {content.mainButtonText}
             </Text>
           </Link>
         </Grid>

@@ -1,11 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
 import { Button, Flex, Text, Spinner } from 'theme-ui'
-import { getEtherscanPrefix } from '../../utils'
 import theme from '../../utils/theme-ui/index'
+import { ETHERSCAN_PREFIXES } from '../../lib/util'
 
-const etherscanPrefix = getEtherscanPrefix()
-const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
+const UnconfirmedModal = ({ showModal, setShowModal, txHash, networkId }) => {
   if (!showModal) return null
   return (
     <Flex
@@ -26,9 +25,7 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
     >
       <Button
         type='button'
-        onClick={() => {
-          setShowModal(false)
-        }}
+        onClick={() => setShowModal(false)}
         aria-label='close'
         sx={{
           position: 'absolute',
@@ -57,9 +54,14 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
         }}
       >
         Transaction has been submitted but we can&apos;t get a confirmation at the moment.
-        <Link href={`https://${etherscanPrefix}etherscan.io/tx/${txHash}`}>
-          <a style={{ textDecoration: 'none', color: theme.colors.primary }}> View on Etherscan</a>
-        </Link>
+        <a
+          style={{ textDecoration: 'none', color: theme.colors.primary }}
+          href={`${ETHERSCAN_PREFIXES[networkId]}tx/${txHash}`}
+          rel='noreferrer noopener'
+          target='_blank'
+        >
+          {' '}View on Etherscan
+        </a>
       </Text>
       <Text sx={{ mt: 2, mx: 5, textAlign: 'center', variant: 'text.default' }}>
         You can safely close this window and return to Homepage. Your transaction will show in{' '}
@@ -78,9 +80,10 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
           height: '52px',
           border: '2px solid #AAAFCA'
         }}
-        onClick={() => (window.location.href = '/')}
       >
-        GO TO HOMEPAGE
+        <Link href={'/'}>
+          <a>GO TO HOMEPAGE</a>
+        </Link>
       </Button>
     </Flex>
   )

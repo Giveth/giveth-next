@@ -10,7 +10,7 @@ import theme from '../utils/theme-ui'
 import Logo from './content/Logo'
 import { ProjectContext } from '../contextProvider/projectProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
-import { shortenAddress } from '../lib/helpers'
+import { isUserRegistered, shortenAddress } from '../lib/helpers'
 import { Context as Web3Context } from '../contextProvider/Web3Provider'
 import UserDetails from './account/userDetails'
 
@@ -21,7 +21,7 @@ const CategoriesList = () => {
   const { currentProjectView } = React.useContext(ProjectContext)
   const categories = currentProjectView?.globalCategories
 
-  if (!categories || categories?.length == 0) return null
+  if (!categories || categories?.length === 0) return null
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <CategoriesListView>
@@ -93,10 +93,12 @@ const Header = ({ isHomePage }) => {
     }
   }, [])
 
+  useEffect(() => {
+    router?.prefetch('/create')
+  }, [])
+
   const goCreate = async () => {
-    if (!user?.name || !user?.email || user.email === '') {
-      return triggerPopup('IncompleteProfile')
-    }
+    if (!isUserRegistered(user)) return triggerPopup('IncompleteProfile')
     router.push('/create')
   }
 
@@ -119,10 +121,6 @@ const Header = ({ isHomePage }) => {
       </Link>
     )
   }
-
-  useEffect(() => {
-    router?.prefetch('/create')
-  }, [])
 
   return (
     <Headroom style={{ zIndex: 5 }}>

@@ -5,14 +5,20 @@ import { promisify } from 'util'
 import Toast from '../components/toast'
 // import { GivethBridge } from '@giveth/bridge-contract'
 
-const isNewProject = creationDate => {
+export const isUserRegistered = user => {
+  return Boolean(user && user.name && user.email)
+}
+
+export const compareAddresses = (add1, add2) => {
+  return add1?.toLowerCase() === add2?.toLowerCase()
+}
+
+export const isNewProject = creationDate => {
   if (!creationDate) return null
   const currentTime = new Date()
   const twoWeeksAgo = currentTime.setDate(currentTime.getDate() - 14)
   return new Date(creationDate)?.valueOf() > twoWeeksAgo
 }
-
-export { isNewProject }
 
 export const shortenAddress = (address, charsLength = 4) => {
   const prefixLength = 2 // "0x"

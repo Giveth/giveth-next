@@ -31,11 +31,13 @@ const DonateIndex = props => {
   } = useContext(Web3Context)
 
   const { project } = props
+
   const [hashSent, setHashSent] = useState(false)
   const [paymentType, setPaymentType] = useState(CRYPTO)
   const [isAfterPayment, setIsAfterPayment] = useState(null)
   const [paymentSessionId, setPaymentSessionId] = useState(null)
   const [isCancelled, setIsCancelled] = useState(null)
+  const [transakTx, setTransakTx] = useState(null)
 
   useEffect(() => {
     if (project?.status?.id !== '5') {
@@ -62,7 +64,7 @@ const DonateIndex = props => {
       return paymentType === CRYPTO && !isSSR ? (
         <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
       ) : (
-        <OnlyFiat project={project} setTransakTx={tID => setTransakTx(tID)}/>
+        <OnlyFiat project={project} setTransakTx={setTransakTx} />
       )
     }
 
@@ -175,7 +177,12 @@ const DonateIndex = props => {
           />
         </ProjectContainer>
         <Payment>
-          <Success transakTx={transakTx} sessionId={paymentSessionId} hash={hashSent} currentChainId={currentChainId} />
+          <Success
+            transakTx={transakTx}
+            sessionId={paymentSessionId}
+            hash={hashSent}
+            currentChainId={networkId}
+          />
           <div style={{ margin: '3rem 0', zIndex: 2 }}>
             <ShareIcons message='Share this with your friends!' centered />
           </div>

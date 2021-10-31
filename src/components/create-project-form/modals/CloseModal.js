@@ -4,7 +4,7 @@ import { Button, Flex, Text } from 'theme-ui'
 
 export const CloseModal = ({ showModal, setShowModal }) => (
   <div
-    css={{
+    style={{
       display: showModal ? 'flex' : 'none',
       position: 'absolute',
       right: '25%',
@@ -58,7 +58,7 @@ export const CloseModal = ({ showModal, setShowModal }) => (
         }}
       >
         <Link href='/' sx={{ textDecoration: 'none' }}>
-          Yes
+          <a>Yes</a>
         </Link>
       </Button>
       <Button

@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react'
-import * as matter from 'gray-matter'
+import React from 'react'
 import dynamic from 'next/dynamic'
 import { client } from '../src/apollo/client'
-import GivethContent from '../src/content/giveth.md'
-import { PopupContext } from '../src/contextProvider/popupProvider'
-import { gqlEnums } from '../src/utils/constants'
-
+import GivethContent from '../src/content/giveth.json'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
+import { gqlEnums } from '../src/utils/constants'
 
 const Hero = dynamic(() => import('../src/components/home/HeroSection'))
 const Seo = dynamic(() => import('../src/components/seo'))
@@ -38,15 +35,7 @@ const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSecti
 
 // ceramic.did = did
 
-const IndexContent = ({ hideInfo, content, topProjects, categories, allProject, isWelcome }) => {
-  const popup = React.useContext(PopupContext)
-  // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
-  useEffect(() => {
-    if (isWelcome) {
-      popup.triggerPopup('WelcomeLoggedOut')
-    }
-  }, [])
-
+const IndexContent = ({ hideInfo, content, topProjects, categories, allProject }) => {
   return (
     <>
       <Hero content={content} />
@@ -56,14 +45,14 @@ const IndexContent = ({ hideInfo, content, topProjects, categories, allProject, 
         categories={categories}
         totalCount={allProject?.totalCount}
       />
-      {!hideInfo === true ? <InfoSection content={content} /> : null}
+      {!hideInfo === true && <InfoSection content={content} />}
       <UpdatesSection />
     </>
   )
 }
 
 const IndexPage = props => {
-  const { query, content, mediumPosts, topProjects } = props
+  const { query, content, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION ? process.env.HIDE_INFO_SECTION : false
 
@@ -106,7 +95,6 @@ const IndexPage = props => {
       <IndexContent
         hideInfo={hideInfo}
         content={content}
-        mediumPosts={mediumPosts}
         // html={null}
         // location={location}
         isWelcome={query?.welcome}
@@ -127,19 +115,18 @@ export async function getServerSideProps(props) {
     }
   })
 
-  const mdContent = matter(GivethContent)
-
   const medium = await fetch(
     'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth'
   )
   const mediumPosts = await medium.json()
 
+  console.log(mediumPosts)
+
   return {
     props: {
       topProjects: response?.projects?.projects,
-      content: mdContent?.data,
-      query: props.query,
-      mediumPosts
+      content: GivethContent,
+      query: props.query
     }
   }
 }

@@ -40,7 +40,7 @@ const DonationsTable = ({ donations = [] }) => {
   )
 
   const traceDonations = fromTrace && traceDonationsFetch?.data
-  console.log({donations})
+
   React.useEffect(() => {
     if (!traceDonations) {
       return setLoading(true)
@@ -171,7 +171,7 @@ const DonationsTable = ({ donations = [] }) => {
                 <tr key={key}>
                   <td data-label='Account' style={{ variant: 'text.small', color: 'secondary' }}>
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
+                      {i.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
                     </Text>
                   </td>
                   <DonorBox
@@ -182,10 +182,10 @@ const DonationsTable = ({ donations = [] }) => {
                       svg: { borderRadius: '50%' }
                     }}
                   >
-                    {i?.user?.avatar ? (
-                      <Avatar src={i?.user?.avatar} />
+                    {i.user?.avatar ? (
+                      <Avatar src={i.user?.avatar} />
                     ) : (
-                      <Jdenticon size='32' value={i?.fromWalletAddress || i?.giverAddress} />
+                      <Jdenticon size='32' value={i.fromWalletAddress || i.giverAddress} />
                     )}
                     <Text
                       sx={{
@@ -194,15 +194,17 @@ const DonationsTable = ({ donations = [] }) => {
                         ml: 2
                       }}
                     >
-                      {i?.user === null ? "Anonymous" : i?.user?.name
+                      {i.user === null
+                        ? 'Anonymous'
+                        : i.user?.name
                         ? i.user.name
-                        : i?.user?.firstName && i?.user?.lastName
+                        : i.user?.firstName && i.user?.lastName
                         ? `${i.user.firstName} ${i.user.lastName}`
-                        : i?.user?.walletAddress || i?.fromWalletAddress || i?.giverAddress}
+                        : i.user?.walletAddress || i.fromWalletAddress || i.giverAddress}
                     </Text>
                   </DonorBox>
                   <td data-label='Currency' style={{ variant: 'text.small', color: 'secondary' }}>
-                    <Badge variant='green'>{i?.currency || i?.token?.symbol}</Badge>
+                    <Badge variant='green'>{i.currency || i.token?.symbol}</Badge>
                   </td>
                   <td data-label='Amount' style={{ variant: 'text.small', color: 'secondary' }}>
                     <Text
@@ -212,13 +214,11 @@ const DonationsTable = ({ donations = [] }) => {
                         color: 'secondary'
                       }}
                     >
-                      {!!i?.token?.symbol && i?.amount
-                        ? parseBalance(i?.amount, 18)
-                        : i?.currency === 'ETH' && i?.valueUsd
-                        ? `${i?.amount ? `${i?.amount} ETH` : ''} \n ~ USD $ ${i?.valueUsd?.toFixed(
-                            2
-                          )}`
-                        : i?.amount}
+                      {!!i.token?.symbol && i.amount
+                        ? parseBalance(i.amount, 18)
+                        : i.currency === 'ETH' && i.valueUsd
+                        ? `${i.amount ? `${i.amount} ETH` : ''} \n ~ ${i.valueUsd?.toFixed(2)} USD`
+                        : i.amount}
                     </Text>
                   </td>
                 </tr>

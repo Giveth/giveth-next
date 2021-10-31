@@ -3,7 +3,7 @@ import { Flex, Text } from 'theme-ui'
 import Modal from 'react-modal'
 import Link from 'next/link'
 
-function CancelledModal(props) {
+function DeactivatedModal(props) {
   return (
     <Modal
       isOpen={props.isOpen}
@@ -13,19 +13,21 @@ function CancelledModal(props) {
     >
       <Flex sx={{ p: 3, flexDirection: 'column' }}>
         <Text variant='headings.h6' color='secondary' sx={{ mb: 2 }}>
-          This project is currently cancelled...
+          This project is currently deactivated...
         </Text>
 
         <Text variant='headings.h5' color='secondary'>
           Check out these other{' '}
           <Link sx={{ textDecoration: 'none', textDecorationLine: 'none' }} href='/projects'>
-            <Text
-              variant='headings.h5'
-              color='primary'
-              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
-            >
-              projects!
-            </Text>
+            <a>
+              <Text
+                variant='headings.h5'
+                color='primary'
+                style={{ textDecoration: 'underline', cursor: 'pointer' }}
+              >
+                projects!
+              </Text>
+            </a>
           </Link>
         </Text>
       </Flex>
@@ -57,4 +59,4 @@ const customStyles = {
   }
 }
 
-export default CancelledModal
+export default DeactivatedModal

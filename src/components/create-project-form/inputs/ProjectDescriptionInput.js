@@ -58,6 +58,7 @@ export const ProjectDescriptionInput = ({ register, currentValue, setValue, goBa
               }}
               defaultValue={currentValue || ''}
               rows={12}
+              autoFocus
               onChange={newValue => {
                 // console.log({ setValue, newValue, delta, source })
                 setValue('projectDescription', newValue)

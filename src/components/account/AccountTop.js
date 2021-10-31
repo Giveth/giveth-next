@@ -23,7 +23,6 @@ const AccountTop = props => {
       <Link href='/'>
         <a
           style={{
-            cursor: 'pointer',
             textDecoration: 'none',
             display: 'flex',
             alignItems: 'center',

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Web3 from 'web3'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
@@ -6,17 +6,23 @@ import { useRouter } from 'next/router'
 import {
   EDIT_PROJECT,
   FETCH_PROJECT_BY_SLUG,
-  WALLET_ADDRESS_IS_VALID
+  WALLET_ADDRESS_IS_VALID,
+  TITLE_IS_VALID
 } from '../../../apollo/gql/projects'
 import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
-import { categoryList, maxSelectedCategory } from '../../../utils/constants'
 import Toast from '../../toast'
-import { invalidProjectTitleToast, isProjectTitleValid } from '../../../lib/projectValidation'
 import ProjectEditionForm from './projectEditionForm'
+import { getAddressFromENS, isAddressENS } from '../../../lib/wallet'
+import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
+import { compareAddresses } from '../../../lib/helpers'
 
 function ProjectEdition(props) {
+  const {
+    state: { web3 }
+  } = useContext(Web3Context)
+
   const client = useApolloClient()
 
   const [loading, setLoading] = useState(false)
@@ -34,7 +40,11 @@ function ProjectEdition(props) {
 
   useEffect(() => {
     if (fetchedProject?.projectBySlug) {
-      setProject(fetchedProject.projectBySlug)
+      const _project = { ...fetchedProject.projectBySlug }
+      const newCategories = {}
+      _project.categories.forEach(i => (newCategories[i.name] = true))
+      _project.categories = newCategories
+      setProject(_project)
       setMapLocation(fetchedProject.projectBySlug.impactLocation)
     }
   }, [fetchedProject])
@@ -69,6 +79,7 @@ function ProjectEdition(props) {
           setLoading(false)
           setShowModal(true)
         } catch (error) {
+          setUpdateProjectOnServer(false)
           setLoading(false)
           Toast({
             content: error?.message || JSON.stringify(error),
@@ -90,52 +101,50 @@ function ProjectEdition(props) {
       let ethAddress = data.editWalletAddress
 
       if (ethAddress) {
-        const { data: addressValidation } = await client.query({
-          query: WALLET_ADDRESS_IS_VALID,
+        // Handle ENS address
+        if (isAddressENS(ethAddress)) {
+          ethAddress = await getAddressFromENS(data.editWalletAddress, web3)
+        }
+        if (!compareAddresses(ethAddress, project.walletAddress)) {
+          // we just check walletAddress when user has entered it and it's different with project.walletAddress
+          await client.query({
+            query: WALLET_ADDRESS_IS_VALID,
+            variables: {
+              address: ethAddress
+            }
+          })
+        }
+      }
+
+      if (data.editTitle && data.editTitle !== project?.title) {
+        await client.query({
+          query: TITLE_IS_VALID,
           variables: {
-            address: ethAddress
+            title: data.editTitle,
+            projectId: Number(project.id)
           }
         })
-
-        if (!addressValidation?.walletAddressIsValid?.isValid) {
-          const reason = addressValidation?.walletAddressIsValid?.reasons[0]
-          setLoading(false)
-          return Toast({ content: reason, type: 'error' })
-        }
-      }
-      if (!isProjectTitleValid(data.editTitle || project?.title)) {
-        return invalidProjectTitleToast()
-      }
-      const projectCategories = []
-      for (const category in categoryList) {
-        const name = categoryList[category]?.name
-        if (data[name]) {
-          projectCategories.push(categoryList[category].name)
-        }
       }
 
-      if (projectCategories.length > maxSelectedCategory)
-        return Toast({
-          content: `Please select no more than ${maxSelectedCategory} categories`,
-          type: 'error'
-        })
+      const categories = []
+      Object.entries(project.categories)
+        .filter(i => i[1] === true)
+        .forEach(i => categories.push(i[0]))
 
       const projectData = {
-        title: data.editTitle || project?.title,
+        title: data.editTitle || project.title,
         description: data.desc || data.editDescription,
         admin: project.admin,
         impactLocation: mapLocation,
-        categories: projectCategories,
-        walletAddress: ethAddress
-          ? Web3.utils.toChecksumAddress(ethAddress)
-          : project?.walletAddress
+        categories,
+        walletAddress: ethAddress ? Web3.utils.toChecksumAddress(ethAddress) : project.walletAddress
       }
 
       // Validate Image
-      if (data?.editImage && project?.image !== data.editImage) {
+      if (data?.editImage && project.image !== data.editImage) {
         if (data.editImage.length > 2) {
           // Download image to send
-          projectData.imageUpload = await getImageFile(data.editImage, project?.slug)
+          projectData.imageUpload = await getImageFile(data.editImage, project.slug)
         } else {
           if (data.editImage.length === 1) {
             projectData.imageStatic = data.editImage
@@ -148,7 +157,7 @@ function ProjectEdition(props) {
     } catch (error) {
       setLoading(false)
       console.log({ error })
-      return Toast({
+      Toast({
         content: error?.message || JSON.stringify(error),
         type: 'error'
       })
@@ -167,6 +176,7 @@ function ProjectEdition(props) {
         client={client}
         mapLocation={mapLocation}
         setMapLocation={setMapLocation}
+        setProject={setProject}
       />
       <ConfirmationModal
         showModal={showModal}
@@ -174,11 +184,11 @@ function ProjectEdition(props) {
         title='Success!'
         subtitle='Please allow a few minutes for your changes to be displayed.'
         confirmation={{
-          do: () => window.location.replace(`/project/${fetchedProject?.projectBySlug?.slug}`),
+          do: () => router.push(`/project/${fetchedProject?.projectBySlug?.slug}`),
           title: 'View Project'
         }}
         secondary={{
-          do: () => window.location.replace('/account'),
+          do: () => router.push('/account'),
           title: 'My Account'
         }}
       />
