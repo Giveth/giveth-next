@@ -4,7 +4,7 @@ import { gqlEnums } from '../src/utils/constants'
 import ErrorPage from '../src/components/errorPage'
 import { client } from '../src/apollo/client'
 import ProjectsList from '../src/components/ProjectsList'
-import { FETCH_ALL_PROJECTS, GET_CATEGORIES } from '../src/apollo/gql/projects'
+import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
 
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
@@ -46,14 +46,13 @@ export async function getServerSideProps(props) {
     const { error, data: fetchProject } = await client.query({
       query: FETCH_ALL_PROJECTS,
       variables: {
-        orderBy: { field: gqlEnums.QUALITYSCORE , direction:  gqlEnums.DESC }
+        orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC }
       },
       fetchPolicy: 'no-cache'
     })
     projects = fetchProject?.projects?.projects
     categories = fetchProject?.projects?.categories
     totalCount = fetchProject?.projects?.totalCount
-
 
     // This will be removed when trace projects are saved on impact graph
     if (process.env.NEXT_PUBLIC_FEATHERS) {

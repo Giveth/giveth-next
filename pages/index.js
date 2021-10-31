@@ -111,7 +111,7 @@ export async function getServerSideProps(props) {
     query: FETCH_ALL_PROJECTS,
     variables: {
       limit: 10,
-      orderBy: { field: gqlEnums.QUALITYSCORE , direction: gqlEnums.DESC }
+      orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC }
     }
   })
 

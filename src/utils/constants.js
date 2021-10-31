@@ -39,6 +39,6 @@ export const gqlEnums = {
   DONATIONS: 'totalDonations',
   RECENTLYADDED: 'recentlyAdded',
   OLD: 'oldProjects',
-  DESC: "DESC",
-  ASC: "ASC"
+  DESC: 'DESC',
+  ASC: 'ASC'
 }
