@@ -2,12 +2,14 @@ import { useMemo } from 'react'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import gql from 'graphql-tag'
-import { getLocalStorageTokenLabel, getLocalStorageUserLabel } from '../services/auth'
 import { createUploadLink } from 'apollo-upload-client'
 import merge from 'deepmerge'
-import isEqual from 'lodash/isEqual'
+import isEqual from 'lodash.isequal'
+import { getLocalStorageTokenLabel, getLocalStorageUserLabel } from '../services/auth'
 
 let apolloClient
+
+const ssrMode = typeof window === 'undefined'
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 
@@ -22,21 +24,17 @@ function createApolloClient() {
 
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
-    if (typeof window !== 'undefined') {
-      token = localStorage.getItem(getLocalStorageTokenLabel())
-    }
+    if (!ssrMode) token = localStorage.getItem(getLocalStorageTokenLabel())
 
     // return the headers to the context so httpLink can read them
     const mutation = {
       Authorization: token ? `Bearer ${token}` : ''
     }
-    if (typeof window !== 'undefined') {
-      if (localStorage.getItem(appUser)) {
-        const user = JSON.parse(localStorage.getItem(appUser))
-        const userAddress = user?.addresses && user.addresses[0]
+    if (!ssrMode && localStorage.getItem(appUser)) {
+      const user = JSON.parse(localStorage.getItem(appUser))
+      const userAddress = user?.addresses && user.addresses[0]
 
-        if (userAddress) mutation['wallet-address'] = userAddress
-      }
+      if (userAddress) mutation['wallet-address'] = userAddress
     }
 
     return {
@@ -48,7 +46,7 @@ function createApolloClient() {
   })
 
   return new ApolloClient({
-    ssrMode: typeof window === 'undefined',
+    ssrMode,
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
     defaultOptions: {
@@ -108,7 +106,7 @@ export function initializeApollo(initialState = null) {
     _apolloClient.cache.restore(data)
   }
   // For SSG and SSR always create a new Apollo Client
-  if (typeof window === 'undefined') return _apolloClient
+  if (ssrMode) return _apolloClient
   // Create the Apollo Client once in the client
   if (!apolloClient) apolloClient = _apolloClient
 
@@ -125,8 +123,7 @@ export function addApolloState(client, pageProps) {
 
 export function useApollo(pageProps) {
   const state = pageProps[APOLLO_STATE_PROP_NAME]
-  const store = useMemo(() => initializeApollo(state), [state])
-  return store
+  return useMemo(() => initializeApollo(state), [state])
 }
 
 export const client = initializeApollo()

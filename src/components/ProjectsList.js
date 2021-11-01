@@ -129,6 +129,7 @@ const ProjectsList = props => {
       return new Date(a?.creationDate)?.valueOf() - new Date(b?.creationDate)?.valueOf()
     }
   ]
+
   const filterFunctions = [
     a => a,
     function verified(a) {
