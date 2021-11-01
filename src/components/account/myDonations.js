@@ -224,10 +224,12 @@ const MyDonations = props => {
                         <FiExternalLink
                           size='18px'
                           style={{ cursor: 'pointer' }}
-                          onClick={() =>
+                          onClick={() => {
+                            const transactionLink = i.transakTransactionLink || `${ETHERSCAN_PREFIXES[i.transactionNetworkId]}tx/${i?.transactionId}`
                             window.open(
-                              `${ETHERSCAN_PREFIXES[i.transactionNetworkId]}tx/${i?.transactionId}`
+                              transactionLink
                             )
+                          }
                           }
                         />
                       </div>
