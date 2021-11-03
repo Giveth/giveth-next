@@ -12,6 +12,8 @@ const InfoSection = dynamic(() => import('../src/components/home/InfoSection'))
 const HomeTopProjects = dynamic(() => import('../src/components/home/HomeTopProjects'))
 const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSection'))
 
+const projectsNumToShowInHomePage = 3
+
 // import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
 // import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 // import Ceramic from '@ceramicnetwork/http-client'
@@ -35,16 +37,11 @@ const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSecti
 
 // ceramic.did = did
 
-const IndexContent = ({ hideInfo, content, topProjects, categories, allProject }) => {
+const IndexContent = ({ hideInfo, content, topProjects }) => {
   return (
     <>
       <Hero content={content} />
-      <HomeTopProjects
-        fromHomePage
-        projects={topProjects}
-        categories={categories}
-        totalCount={allProject?.totalCount}
-      />
+      <HomeTopProjects projects={topProjects} />
       {!hideInfo === true && <InfoSection content={content} />}
       <UpdatesSection />
     </>
@@ -52,7 +49,7 @@ const IndexContent = ({ hideInfo, content, topProjects, categories, allProject }
 }
 
 const IndexPage = props => {
-  const { query, content, topProjects } = props
+  const { content, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION ? process.env.HIDE_INFO_SECTION : false
 
@@ -97,10 +94,8 @@ const IndexPage = props => {
         content={content}
         // html={null}
         // location={location}
-        isWelcome={query?.welcome}
+        // isWelcome={query?.welcome}
         topProjects={topProjects}
-        categories={topProjects?.categories}
-        allProject={null}
       />
     </Layout>
   )
@@ -110,7 +105,7 @@ export async function getServerSideProps(props) {
   const { data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
     variables: {
-      limit: 10,
+      limit: projectsNumToShowInHomePage,
       orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC }
     }
   })
