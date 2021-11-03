@@ -1,162 +1,112 @@
-import { Box, Button, Grid, Flex, Spinner, Text, Input } from 'theme-ui'
-import React, { useState } from 'react'
+import { Box, Grid, Flex, Spinner, Input } from 'theme-ui'
+import React, { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import styled from '@emotion/styled'
-import theme from '../utils/theme-ui'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import * as JsSearch from 'js-search'
+import Debounced from 'lodash.debounce'
+import Pagination from 'react-paginate'
+
 import SearchIcon from '../images/svg/general/search-icon.svg'
-// import DropIcon from '../images/svg/general/dropdown-arrow.svg'
+import theme from '../utils/theme-ui'
+import { client } from '../apollo/client'
+import { FETCH_ALL_PROJECTS } from '../apollo/gql/projects'
+import { gqlEnums } from '../utils/constants'
+import Toast from './toast'
 
 const ProjectCard = dynamic(() => import('./projectCard'))
 const DropdownInput = dynamic(() => import('../components/dropdownInput'))
 
-// export const OrderByField = {
-//   Balance: 'Balance',
-//   CreationDate: 'CreationDate'
-// }
+const allCategoryObj = { name: 'All' }
 
-// const orderBySelectOptions = {}
-// orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
-// orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
+const sortByObj = [
+  { name: 'Quality Score', value: gqlEnums.QUALITYSCORE },
+  { name: 'Amount Raised', value: gqlEnums.DONATIONS },
+  { name: 'Hearts', value: gqlEnums.HEARTS },
+  { name: 'Creation Date (Desc)', value: gqlEnums.CREATIONDATE },
+  { name: 'Creation Date (Asc)', value: gqlEnums.CREATIONDATE, direction: gqlEnums.ASC }
+]
+
+const filterByObj = [{ name: 'None' }, { name: 'Verified', value: gqlEnums.VERIFIED }]
 
 const ProjectsList = props => {
-  const {
-    projects,
-    categories,
-    totalCount,
-    maxLimit,
-    fromHomePage
-    // selectOrderByField
-  } = props
+  const { projects, categories, totalCount: _totalCount, itemsPerPage, query } = props
 
   const [search, setSearch] = useState()
-  const [limit, setLimit] = useState(maxLimit)
-  const [searchQuery, setSearchQuery] = useState()
-  const [searchResults, setSearchResults] = useState(projects)
-  const [category, setCategory] = useState(0)
-  const [sortBy, setSortBy] = useState(0)
-  const categoryList = Array.isArray(categories)
-    ? ['All'].concat(categories.map(o => o.name))
-    : ['All']
-  const sortBys = [
-    'Default',
-    'Verified',
-    'Traceable',
-    'Amount Raised',
-    'Hearts',
-    'Recently Added',
-    'Old Projects'
-  ]
+  const [category, setCategory] = useState(allCategoryObj)
+  const [sortBy, setSortBy] = useState(sortByObj[0])
+  const [filteredProjects, setFilteredProjects] = useState()
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [totalCount, setTotalCount] = useState()
+  const [filterBy, setFilterBy] = useState(filterByObj[0])
 
-  React.useEffect(() => {
-    rebuildIndex()
+  const isFirstRender = useRef(true)
+  const debouncedSearch = useRef()
+
+  const pageCount = Math.ceil((totalCount || _totalCount) / itemsPerPage)
+
+  useEffect(() => {
+    categories?.unshift(allCategoryObj)
+    debouncedSearch.current = Debounced(setSearch, 1000)
     checkCategory()
   }, [])
 
-  function checkCategory() {
-    const categoryFromQuery = props?.query?.category
-    if (categoryFromQuery) {
-      categoryList?.map((i, index) => {
-        if (i === categoryFromQuery) {
-          setCategory(index)
-        }
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      fetchProjects({
+        categoryQuery: category.name,
+        sortByQuery: sortBy,
+        searchQuery: search,
+        skip: itemsPerPage * currentPage,
+        filterQuery: filterBy.value
       })
+    } else isFirstRender.current = false
+  }, [category.name, sortBy.name, search, currentPage, filterBy.value])
+
+  const fetchProjects = queries => {
+    const { searchQuery, categoryQuery, sortByQuery, skip, filterQuery } = queries
+    const variables = {
+      orderBy: { field: sortByQuery.value, direction: gqlEnums.DESC },
+      limit: itemsPerPage,
+      skip
+    }
+
+    if (sortByQuery.direction) variables.orderBy.direction = sortByQuery.direction
+    if (categoryQuery && categoryQuery !== 'All') variables.category = categoryQuery
+    if (searchQuery) variables.searchTerm = searchQuery
+    if (filterQuery) variables.filterBy = { field: filterQuery, value: true }
+    else delete variables.filterBy
+
+    setIsLoading(true)
+
+    client
+      .query({
+        query: FETCH_ALL_PROJECTS,
+        variables,
+        fetchPolicy: 'no-cache'
+      })
+      .then(res => {
+        const data = res.data?.projects?.projects
+        const count = res.data?.projects?.totalCount
+        if (data) setFilteredProjects(data)
+        if (count) setTotalCount(count)
+        setIsLoading(false)
+      })
+      .catch(err => {
+        setIsLoading(false)
+        Toast({
+          content: err.message || JSON.stringify(err),
+          type: 'error'
+        })
+      })
+  }
+
+  function checkCategory() {
+    const categoryFromQuery = query?.category
+    if (categoryFromQuery) {
+      categories.some(i => i.name === categoryFromQuery && setCategory(i))
     }
   }
-
-  function searchProjects(e) {
-    const queryResult = search.search(e.target.value)
-    setSearchQuery(e.target.value)
-    setSearchResults(queryResult)
-  }
-  // handleSubmit = e => {
-  //   e.preventDefault()
-  // }
-  function rebuildIndex() {
-    const dataToSearch = new JsSearch.Search('id')
-    /**
-     *  defines a indexing strategy for the data
-     * more about it in here https://github.com/bvaughn/js-search#configuring-the-index-strategy
-     */
-    dataToSearch.indexStrategy = new JsSearch.PrefixIndexStrategy()
-    /**
-     * defines the sanitizer for the search
-     * to prevent some of the words from being excluded
-     *
-     */
-    dataToSearch.sanitizer = new JsSearch.LowerCaseSanitizer()
-    /**
-     * defines the search index
-     * read more in here https://github.com/bvaughn/js-search#configuring-the-search-index
-     */
-    //dataToSearch.searchIndex = new JsSearch.TfIdfSearchIndex('title')
-    dataToSearch.addIndex('title') // sets the index attribute for the data
-    dataToSearch.addIndex('description') // sets the index attribute for the data
-    dataToSearch.addIndex('impactLocation') // sets the index attribute for the data
-    dataToSearch.addDocuments(projects) // adds the data to be searched
-    setSearch(dataToSearch)
-  }
-
-  function filterCategory(searchedResults) {
-    const categoryName = categoryList[category].toLowerCase()
-
-    return searchedResults.filter(
-      o => o?.categories?.filter(c => c.name === categoryName).length > 0
-    )
-  }
-
-  const searchedResults = searchQuery === '' ? projects : searchResults
-  const projectsFiltered = category === 0 ? searchedResults : filterCategory(searchedResults)
-
-  //['Quality score', 'Amount raised', 'Hearts', 'New Projects', 'Old Projects']
-  const sortFunctions = [
-    a => a,
-    a => a,
-    a => a,
-    function amountRaised(a, b) {
-      console.log({ b, a })
-      return b.totalDonations - a.totalDonations
-    },
-    function hearts(a, b) {
-      return b.reactions?.length - a.reactions?.length
-    },
-    function recentlyAdded(a, b) {
-      return new Date(b?.creationDate)?.valueOf() - new Date(a?.creationDate)?.valueOf()
-    },
-    function earlyAdded(a, b) {
-      return new Date(a?.creationDate)?.valueOf() - new Date(b?.creationDate)?.valueOf()
-    }
-  ]
-
-  const filterFunctions = [
-    a => a,
-    function verified(a) {
-      return !!a?.verified
-    },
-    function traceable(a) {
-      // !!a?.fromTrace && console.log({ a })
-      return !!a?.fromTrace || a?.IOTraceable
-    },
-    a => a,
-    a => a,
-    a => a,
-    a => a
-  ]
-
-  const projectsFilteredNoSlice = projectsFiltered
-    ?.slice()
-    ?.sort(sortFunctions[sortBy])
-    ?.filter(filterFunctions[sortBy])
-
-  const projectsFilteredSorted = projectsFilteredNoSlice?.slice(0, limit)
-
-  const loadMore = () => {
-    setLimit(limit + 10)
-  }
-
-  const hasMore = projectsFilteredSorted?.length >= limit
 
   return (
     <>
@@ -184,19 +134,12 @@ const ProjectsList = props => {
           >
             Projects{' '}
           </Box>
-          {totalCount && (
-            <Text
-              sx={{
-                variant: 'headings.h4',
-                color: 'bodyLight'
-              }}
-            >{`(${projectsFilteredNoSlice?.length})`}</Text>
-          )}
         </Flex>
         <Link href='/create' passHref>
           <CreateLink>Create a project</CreateLink>
         </Link>
       </Flex>
+
       <Box p={0} sx={{ variant: 'grayBox' }}>
         <div
           style={{
@@ -206,88 +149,99 @@ const ProjectsList = props => {
             paddingTop: 40
           }}
         >
-          {!fromHomePage ? (
-            <Flex sx={{ flexDirection: ['column', null, 'row'] }}>
+          <Flex sx={{ flexDirection: ['column', null, 'row'] }}>
+            <Flex
+              sx={{
+                flex: [1, null, 0.6],
+                flexDirection: ['column', null, 'row'],
+                justifyContent: ['space-around', null, null]
+              }}
+            >
               <Flex
                 sx={{
-                  // width: '100%',
-                  flex: [1, null, 0.6],
-                  flexDirection: ['column', null, 'row'],
-                  justifyContent: ['space-around', null, null]
-                }}
-              >
-                <Flex
-                  sx={{
-                    // width: ['30%'],
-                    flex: 0.4,
-                    alignItems: 'center',
-                    mt: [4, 0, 0]
-                  }}
-                >
-                  <DropdownInput
-                    upperLabel='CATEGORY'
-                    options={categoryList}
-                    current={category}
-                    setCurrent={i => setCategory(i)}
-                  />
-                </Flex>
-                {/* <Flex
-            sx={{
-              width: ['30%'],
-              alignItems: 'center',
-              mt: [4, 0, 0]
-            }}
-          >
-            <DropdownInput
-              options={locations}
-              current={0}
-              // setCurrent={i => setFilter(i)}
-            />
-          </Flex> */}
-                <Flex
-                  sx={{
-                    // width: ['30%'],
-                    flex: 0.4,
-                    alignItems: 'center',
-                    mt: [4, 0, 0]
-                  }}
-                >
-                  <DropdownInput
-                    upperLabel='SORT BY'
-                    options={sortBys}
-                    current={sortBy}
-                    setCurrent={i => setSortBy(i)}
-                  />
-                </Flex>
-                {/* <SelectMenu
-            caption='sort by'
-            options={orderBySelectOptions}
-            onChange={selectOrderByField}
-          /> */}
-              </Flex>
-              <Flex
-                sx={{
+                  flex: 0.4,
                   alignItems: 'center',
-                  flex: [1, 0.4, 0.4],
-                  width: '100%',
-                  padding: '0 3% 0 0',
                   mt: [4, 0, 0],
-                  alignSelf: 'flex-end'
+                  mx: 10
                 }}
               >
-                <Input
-                  placeholder='Search Projects'
-                  variant='forms.search'
-                  style={{
-                    width: '100%',
-                    margin: '20px 0 0 0'
+                <DropdownInput
+                  upperLabel='CATEGORY'
+                  options={categories}
+                  current={category}
+                  setCurrent={e => {
+                    setCurrentPage(0)
+                    setCategory(e)
                   }}
-                  onChange={searchProjects}
                 />
-                <IconSearch />
+              </Flex>
+
+              <Flex
+                sx={{
+                  flex: 0.4,
+                  alignItems: 'center',
+                  mt: [4, 0, 0],
+                  mx: 10
+                }}
+              >
+                <DropdownInput
+                  upperLabel='SORT BY'
+                  options={sortByObj}
+                  current={sortBy}
+                  setCurrent={e => {
+                    setCurrentPage(0)
+                    setSortBy(e)
+                  }}
+                />
+              </Flex>
+
+              <Flex
+                sx={{
+                  // width: ['30%'],
+                  flex: 0.4,
+                  alignItems: 'center',
+                  mt: [4, 0, 0],
+                  mx: 10
+                }}
+              >
+                <DropdownInput
+                  upperLabel='FILTER BY'
+                  options={filterByObj}
+                  current={filterBy}
+                  setCurrent={e => {
+                    setCurrentPage(0)
+                    setFilterBy(e)
+                  }}
+                />
               </Flex>
             </Flex>
-          ) : null}
+
+            <Flex
+              sx={{
+                alignItems: 'center',
+                flex: [1, 0.4, 0.4],
+                width: '100%',
+                padding: '0 3% 0 0',
+                mt: [4, 0, 0],
+                alignSelf: 'flex-end'
+              }}
+            >
+              <Input
+                placeholder='Search Projects'
+                variant='forms.search'
+                style={{
+                  width: '100%',
+                  margin: '20px 0 0 0'
+                }}
+                onChange={e => {
+                  setCurrentPage(0)
+                  debouncedSearch.current(e.target.value)
+                }}
+              />
+              <IconSearch />
+            </Flex>
+          </Flex>
+
           <Flex
             sx={{
               width: '100%',
@@ -297,57 +251,14 @@ const ProjectsList = props => {
             <div
               style={{
                 width: '100%',
-                margin: 0
+                margin: '0 0 50px 0'
               }}
             >
-              <InfiniteScroll
-                dataLength={projectsFilteredSorted?.length || 0} //This is important field to render the next data
-                next={loadMore}
-                hasMore={hasMore}
-                loader={
-                  !fromHomePage && (
-                    <Flex sx={{ justifyContent: 'center', py: 2, mb: 2 }}>
-                      <Spinner variant='spinner.medium' />
-                    </Flex>
-                  )
-                }
-                endMessage={
-                  <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-                    {!fromHomePage ? (
-                      projectsFilteredSorted?.length <= limit ? (
-                        <>
-                          <Text
-                            variant='headings.h5'
-                            color='secondary'
-                            sx={{ textAlign: 'center' }}
-                          >
-                            Woah you reached the end!
-                          </Text>
-                          <Button
-                            type='button'
-                            onClick={() => window?.scrollTo(0, 0)}
-                            sx={{
-                              variant: 'buttons.default',
-                              backgroundColor: 'secondary',
-                              my: 4
-                            }}
-                          >
-                            Go to the top!
-                          </Button>
-                        </>
-                      ) : (
-                        <Text
-                          variant='headings.h5'
-                          color='secondary'
-                          sx={{ textAlign: 'center', mb: 4 }}
-                        >
-                          Nothing here
-                        </Text>
-                      )
-                    ) : null}
-                  </Flex>
-                }
-              >
+              {isLoading ? (
+                <Flex sx={{ justifyContent: 'center', py: 5 }}>
+                  <Spinner variant='spinner.medium' />
+                </Flex>
+              ) : (
                 <Grid
                   p={4}
                   columns={[1, 2, 3]}
@@ -358,47 +269,34 @@ const ProjectsList = props => {
                     marginBottom: 60
                   }}
                 >
-                  {projectsFilteredSorted
-                    ? projectsFilteredSorted
-                        .slice(0, limit)
-                        .map((project, index) => (
-                          <ProjectCard
-                            shadowed
-                            id={project.id}
-                            listingId={project.title + '-' + index}
-                            key={project.title + '-' + index}
-                            name={project.title}
-                            slug={project.slug}
-                            donateAddress={project.donateAddress}
-                            image={project.image || '/images/no-image-available.jpg'}
-                            raised={project.balance}
-                            project={project}
-                          />
-                        ))
-                    : null}
+                  {(filteredProjects || projects.slice(0, itemsPerPage)).map((project, index) => (
+                    <ProjectCard
+                      shadowed
+                      id={project.id}
+                      listingId={project.title + '-' + index}
+                      key={project.title + '-' + index}
+                      name={project.title}
+                      slug={project.slug}
+                      donateAddress={project.donateAddress}
+                      image={project.image || '/images/no-image-available.jpg'}
+                      raised={project.balance}
+                      project={project}
+                    />
+                  ))}
                 </Grid>
-              </InfiniteScroll>
-              {fromHomePage && (
-                <Flex
-                  style={{
-                    justifyContent: 'center',
-                    marginTop: 20,
-                    background: 'transparent'
-                  }}
-                >
-                  <Link href='/projects'>
-                    <Button
-                      sx={{
-                        variant: 'buttons.nofillGray',
-                        color: 'bodyLight',
-                        fontSize: 14,
-                        mb: '3rem'
-                      }}
-                    >
-                      Show more Projects
-                    </Button>
-                  </Link>
-                </Flex>
+              )}
+
+              {pageCount > 1 && (
+                <PaginationCard
+                  breakLabel='...'
+                  nextLabel='>'
+                  onPageChange={e => setCurrentPage(e.selected)}
+                  pageRangeDisplayed={5}
+                  pageCount={pageCount}
+                  previousLabel='<'
+                  forcePage={currentPage}
+                  renderOnZeroPageCount={null}
+                />
               )}
             </div>
           </Flex>
@@ -426,73 +324,33 @@ const IconSearch = styled(SearchIcon)`
   margin-left: -2.5rem;
 `
 
-// const IconDrop = styled(DropIcon)`
-//   position: absolute;
-//   right: 1rem;
-//   top: 0.563rem;
-// `
+const PaginationCard = styled(Pagination)`
+  justify-content: center;
+  list-style: none;
+  display: flex;
+  padding-left: 0;
+  border-radius: 0.25rem;
 
-// const SelectMenu = props => {
-//   const { caption, options = {}, onChange = () => {}, defaultValue } = props
-//   return (
-//     <div
-//       style={{
-//         flexGrow: 1,
-//         margin: '10px'
-//       }}
-//     >
-//       <Text
-//         pl={3}
-//         sx={{
-//           variant: 'text.default',
-//           color: 'secondary',
-//           fontSize: 3,
-//           fontWeight: 'medium',
-//           textDecoration: 'none',
-//           textTransform: 'uppercase'
-//         }}
-//       >
-//         {caption}
-//       </Text>
-//       <IconDrop />
-//       <Text
-//         sx={{
-//           variant: 'text.medium',
-//           fontWeight: 'bold',
-//           color: 'secondary'
-//         }}
-//       />
-//       <Select
-//         pl={3}
-//         sx={{
-//           variant: 'text.default',
-//           color: 'secondary',
-//           fontSize: 3,
-//           fontWeight: 'medium',
-//           textDecoration: 'none',
-//           width: '100%'
-//         }}
-//         defaultValue={defaultValue}
-//         onChange={e => onChange(e.target.value)}
-//         mb={3}
-//         name='sortBy'
-//         id='sortBy'
-//       >
-//         {Object.entries(options).map(([key, value]) => (
-//           <option
-//             style={{
-//               variant: 'text.medium',
-//               fontWeight: 'bold',
-//               color: 'secondary'
-//             }}
-//             key={key}
-//           >
-//             {value}
-//           </option>
-//         ))}
-//       </Select>
-//     </div>
-//   )
-// }
+  li a {
+    position: relative;
+    cursor: pointer;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: 0;
+    line-height: 1.25;
+    color: #007bff;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+  }
+
+  li.selected > a {
+    color: black;
+    cursor: default;
+  }
+
+  li.disabled > a {
+    cursor: not-allowed;
+  }
+`
 
 export default ProjectsList

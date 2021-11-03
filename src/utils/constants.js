@@ -32,13 +32,13 @@ export const maxSelectedCategory = 5
 
 export const gqlEnums = {
   QUALITYSCORE: 'QualityScore',
-  CREATIONDATE: 'creationDate',
-  BALANCE: 'balance',
-  VERIFIED: 'verified',
-  HEARTS: 'totalHearts',
-  DONATIONS: 'totalDonations',
-  RECENTLYADDED: 'recentlyAdded',
-  OLD: 'oldProjects',
+  CREATIONDATE: 'CreationDate',
+  BALANCE: 'Balance',
+  VERIFIED: 'Verified',
+  HEARTS: 'Reactions',
+  DONATIONS: 'Donations',
+  RECENTLYADDED: 'RecentlyAdded',
+  OLD: 'OldProjects',
   DESC: 'DESC',
   ASC: 'ASC'
 }
