@@ -92,6 +92,7 @@ const USERS_DONATIONS = gql`
     donationsByDonor {
       transactionId
       transactionNetworkId
+      transakTransactionLink
       toWalletAddress
       fromWalletAddress
       anonymous
