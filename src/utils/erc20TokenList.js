@@ -46,6 +46,13 @@ const mainnetTokens = {
     },
     {
       chainId: 1,
+      address: '0x056fd409e1d7a124bd7017459dfea2f387b6d5cd',
+      symbol: 'GUSD',
+      name: 'Gemini Dollar',
+      decimals: 2
+    },
+    {
+      chainId: 1,
       address: '0xde30da39c46104798bb5aa3fe8b9e0e1f348163f',
       symbol: 'GTC',
       name: 'Gitcoin',
