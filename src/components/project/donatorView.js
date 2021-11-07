@@ -95,7 +95,7 @@ const ProjectDonatorView = ({
           return
         }
         const ethBalance = projectDonations?.reduce((prev, current) => prev + current?.amount, 0)
-        setHeartedCount(projectReactions?.length || project?.totalHearts)
+        setHeartedCount(projectReactions?.length)
 
         if (user) {
           setHearted(projectReactions?.find(o => o.userId === user.id))

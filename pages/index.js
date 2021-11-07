@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import { client } from '../src/apollo/client'
 import GivethContent from '../src/content/giveth.json'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
+import { gqlEnums } from '../src/utils/constants'
 
 const Hero = dynamic(() => import('../src/components/home/HeroSection'))
 const Seo = dynamic(() => import('../src/components/seo'))
@@ -10,6 +11,8 @@ const Layout = dynamic(() => import('../src/components/layout'))
 const InfoSection = dynamic(() => import('../src/components/home/InfoSection'))
 const HomeTopProjects = dynamic(() => import('../src/components/home/HomeTopProjects'))
 const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSection'))
+
+const projectsNumToShowInHomePage = 3
 
 // import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
 // import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
@@ -34,16 +37,11 @@ const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSecti
 
 // ceramic.did = did
 
-const IndexContent = ({ hideInfo, content, topProjects, categories, allProject }) => {
+const IndexContent = ({ hideInfo, content, topProjects }) => {
   return (
     <>
       <Hero content={content} />
-      <HomeTopProjects
-        fromHomePage
-        projects={topProjects}
-        categories={categories}
-        totalCount={allProject?.totalCount}
-      />
+      <HomeTopProjects projects={topProjects} />
       {!hideInfo === true && <InfoSection content={content} />}
       <UpdatesSection />
     </>
@@ -51,7 +49,7 @@ const IndexContent = ({ hideInfo, content, topProjects, categories, allProject }
 }
 
 const IndexPage = props => {
-  const { query, content, topProjects } = props
+  const { content, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION ? process.env.HIDE_INFO_SECTION : false
 
@@ -96,10 +94,8 @@ const IndexPage = props => {
         content={content}
         // html={null}
         // location={location}
-        isWelcome={query?.welcome}
+        // isWelcome={query?.welcome}
         topProjects={topProjects}
-        categories={topProjects?.categories}
-        allProject={null}
       />
     </Layout>
   )
@@ -108,17 +104,20 @@ const IndexPage = props => {
 export async function getServerSideProps(props) {
   const { data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
-    variables: { limit: 20 }
+    variables: {
+      limit: projectsNumToShowInHomePage,
+      orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC }
+    }
   })
+
+  // const medium = await fetch(
+  //   'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth'
+  // )
+  // const mediumPosts = await medium.json()
 
   return {
     props: {
-      topProjects: response?.projects
-        ?.filter(i => !i?.verified)
-        ?.sort((a, b) => {
-          if (a?.qualityScore > b?.qualityScore) return -1
-        })
-        ?.slice(0, 3),
+      topProjects: response?.projects?.projects,
       content: GivethContent,
       query: props.query
     }
