@@ -8,10 +8,6 @@ const tosStyle = {
   a: {
     textDecoration: 'underline'
   },
-  table: {
-    padding: '10px',
-    border: '1px solid black'
-  },
   tableItem: {
     padding: '10px'
   }
@@ -1845,106 +1841,100 @@ const Tos = () => {
               twelve (12) months:
             </p>
 
-            <table>
+            <table className='tosTable'>
               <thead>
                 <tr>
-                  <td style={tosStyle.tableItem}>
+                  <td>
                     <strong>Category</strong>
                   </td>
-                  <td style={tosStyle.tableItem}>
+                  <td>
                     <strong>Examples</strong>
                   </td>
-                  <td style={tosStyle.tableItem}>
+                  <td>
                     <strong>Collected</strong>
                   </td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style={tosStyle.tableItem}>A. Identifiers</td>
-                  <td style={tosStyle.tableItem}>
+                  <td>A. Identifiers</td>
+                  <td>
                     Contact details, such as name, alias, postal address, telephone or mobile
                     contact number, unique personal identifier, online identifier, Internet Protocol
                     address, email address and account name
                   </td>
-                  <td style={tosStyle.tableItem}>YES</td>
+                  <td>YES</td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>B. Personal information categories</td>
-                  <td style={tosStyle.tableItem}>
+                  <td>B. Personal information categories</td>
+                  <td>
                     Name, contact information, education, employment, employment history, languages
                     spoken, and financial information
                   </td>
-                  <td style={tosStyle.tableItem}>NO</td>
+                  <td>NO</td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>C. Protected classification characteristics</td>
-                  <td style={tosStyle.tableItem}>Gender and date of birth</td>
-                  <td style={tosStyle.tableItem}>NO</td>
+                  <td>C. Protected classification characteristics</td>
+                  <td>Gender and date of birth</td>
+                  <td>NO</td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>D. Commercial information</td>
-                  <td style={tosStyle.tableItem}>
+                  <td>D. Commercial information</td>
+                  <td>
                     Transaction information, purchase history, financial details and payment
                     information
                   </td>
-                  <td style={tosStyle.tableItem}>YES</td>
+                  <td>YES</td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>E. Biometric information</td>
-                  <td style={tosStyle.tableItem}>Fingerprints and voiceprints</td>
-                  <td style={tosStyle.tableItem}>NO</td>
+                  <td>E. Biometric information</td>
+                  <td>Fingerprints and voiceprints</td>
+                  <td>NO</td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>F. Internet or other similar network activity</td>
-                  <td style={tosStyle.tableItem}>
+                  <td>F. Internet or other similar network activity</td>
+                  <td>
                     Browsing history, search history, online behavior, interest data, and
                     interactions with our and other websites, applications, systems and
                     advertisements
                   </td>
-                  <td style={tosStyle.tableItem}>NO</td>
+                  <td>NO</td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>G. Geolocation data</td>
-                  <td style={tosStyle.tableItem}>Device location</td>
-                  <td style={tosStyle.tableItem}>NO</td>
+                  <td>G. Geolocation data</td>
+                  <td>Device location</td>
+                  <td>NO</td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>
-                    H. Audio, electronic, visual, thermal, olfactory, or similar information
-                  </td>
-                  <td style={tosStyle.tableItem}>
+                  <td>H. Audio, electronic, visual, thermal, olfactory, or similar information</td>
+                  <td>
                     Images and audio, video or call recordings created in connection with our
                     business activities
                   </td>
-                  <td style={tosStyle.tableItem}>NO</td>
+                  <td>NO</td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>
-                    I.Professional or employment-related information
-                  </td>
-                  <td style={tosStyle.tableItem}>
+                  <td>I.Professional or employment-related information</td>
+                  <td>
                     Business contact details in order to provide you our services at a business
                     level, job title as well as work history and professional qualifications if you
                     apply for a job with us
                   </td>
-                  <td style={tosStyle.tableItem}>NO</td>
+                  <td>NO</td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>J. Education Information</td>
-                  <td style={tosStyle.tableItem}>Student records and directory information</td>
-                  <td style={tosStyle.tableItem}></td>
+                  <td>J. Education Information</td>
+                  <td>Student records and directory information</td>
+                  <td></td>
                 </tr>
                 <tr>
-                  <td style={tosStyle.tableItem}>
-                    K. Inferences drawn from other personal information
-                  </td>
-                  <td style={tosStyle.tableItem}>
+                  <td>K. Inferences drawn from other personal information</td>
+                  <td>
                     Inferences drawn from any of the collected personal information listed above to
                     create a profile or summary about, for example, an individual’s preferences and
                     characteristics
                   </td>
-                  <td style={tosStyle.tableItem}>YES</td>
+                  <td>YES</td>
                 </tr>
               </tbody>
             </table>

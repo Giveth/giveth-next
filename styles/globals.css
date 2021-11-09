@@ -45,6 +45,12 @@ a {
 }
 .ql-editor img{
   max-width: 100%;
+
+
+}
+.tosTable {
+  border: 1px solid black;
+  padding: 10px;
 }
 .ql-video-wrapper {
   position: relative;
