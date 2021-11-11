@@ -22,7 +22,6 @@ export async function validateAuthToken(token) {
 export async function getToken(user, signedMessage, networkId) {
   if (signedMessage && user) {
     try {
-      console.log({ user });
       const { data } = await client.mutate({
         mutation: DO_LOGIN,
         variables: {

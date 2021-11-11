@@ -119,9 +119,16 @@ const Web3Provider = (props) => {
     setOnboard(_onboard);
   };
 
-  const switchWallet = () => {
+  const logoutWallet = async () => {
+    await Auth.logout();
+  };
+
+  const switchWallet = async () => {
+    logoutWallet();
     onboard.walletSelect().then((selected) => {
-      selected && onboard.walletCheck().then();
+      if (selected) {
+        onboard.walletCheck().then();
+      }
     });
   };
 
@@ -142,7 +149,6 @@ const Web3Provider = (props) => {
 
   const enableProvider = () => {
     if (validProvider) {
-      setToken();
       onboard.walletCheck();
     }
   };
@@ -157,7 +163,7 @@ const Web3Provider = (props) => {
         fetchPolicy: "network-only",
       })
       .then((res) => {
-        res.data?.userByAddress;
+        return res.data?.userByAddress;
       })
       .catch(console.log);
   };
@@ -244,10 +250,14 @@ const Web3Provider = (props) => {
         setUser(newUser);
       } else {
         fetchUser().then((res) => {
+          console.log({ res });
           if (res) {
             newUser.parseDbUser(res);
             Auth.setUser(newUser);
             setUser(newUser);
+          } else {
+            const noUser = new User();
+            setUser(noUser);
           }
         });
       }

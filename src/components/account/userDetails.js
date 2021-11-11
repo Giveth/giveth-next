@@ -1,101 +1,102 @@
-import { useContext } from 'react'
-import styled from '@emotion/styled'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Text } from 'theme-ui'
-import { FiExternalLink } from 'react-icons/fi'
-import { useMediaQuery } from 'react-responsive'
-import Jdenticon from 'react-jdenticon'
+import { useContext } from "react";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import Link from "next/link";
+import { Text } from "theme-ui";
+import { FiExternalLink } from "react-icons/fi";
+import { useMediaQuery } from "react-responsive";
+import Jdenticon from "react-jdenticon";
 
-import theme from '../../utils/theme-ui'
-import useComponentVisible from '../../utils/useComponentVisible'
-import { formatEtherscanLink } from '../../lib/util'
-import { shortenAddress } from '../../lib/helpers'
-import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+import theme from "../../utils/theme-ui";
+import useComponentVisible from "../../utils/useComponentVisible";
+import { formatEtherscanLink } from "../../lib/util";
+import { shortenAddress } from "../../lib/helpers";
+import { Context as Web3Context } from "../../contextProvider/Web3Provider";
 
 const UserDetails = () => {
-  const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
+  const isXsWindow = useMediaQuery({ query: "(max-width: 576px)" });
   const {
-    state: { balance, account, networkId, networkName, user, web3 }
-  } = useContext(Web3Context)
+    state: { balance, account, networkId, networkName, user, web3 },
+  } = useContext(Web3Context);
 
-  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false);
 
-  let isXDai = false
-  let dotColor
+  let isXDai = false;
+  let dotColor;
   if (networkId === 100) {
-    dotColor = 'greenishBlue'
-    isXDai = true
+    dotColor = "greenishBlue";
+    isXDai = true;
   }
-
-  const truncAddress = shortenAddress(account)
+  console.log({ account, user });
+  const truncAddress = shortenAddress(account);
 
   const parseNetwork = () => {
     switch (networkName) {
-      case 'main':
-        dotColor = 'greenishBlue'
-        break
-      case 'ropsten':
-        dotColor = 'ropstenPink'
-        break
-      case 'kovan':
-        dotColor = 'kovanPurple'
-        break
-      case 'rinkeby':
-        dotColor = 'rinkebyYellow'
-        break
-      case 'goerli':
-        dotColor = 'goerliBlue'
-        break
+      case "main":
+        dotColor = "greenishBlue";
+        break;
+      case "ropsten":
+        dotColor = "ropstenPink";
+        break;
+      case "kovan":
+        dotColor = "kovanPurple";
+        break;
+      case "rinkeby":
+        dotColor = "rinkebyYellow";
+        break;
+      case "goerli":
+        dotColor = "goerliBlue";
+        break;
       default:
-        dotColor = 'softGray'
+        dotColor = "softGray";
     }
 
     return (
       <MenuTitle
         sx={{
-          variant: 'text.medium',
+          variant: "text.medium",
           pb: 2,
-          color: 'secondary',
-          textTransform: 'capitalize'
+          color: "secondary",
+          textTransform: "capitalize",
         }}
       >
         <Dot sx={{ backgroundColor: dotColor }} />
         {networkName}
       </MenuTitle>
-    )
-  }
+    );
+  };
 
   return (
     <div ref={ref}>
       <StyledButton
-        sx={{ variant: 'buttons.nofill' }}
+        sx={{ variant: "buttons.nofill" }}
         onClick={() => setIsComponentVisible(!isComponentVisible)}
       >
         {user.avatar ? (
           <Image
-            alt='user avatar'
+            alt="user avatar"
             sx={{
-              width: '30',
-              height: '30',
-              borderRadius: '15px'
+              width: "30",
+              height: "30",
+              borderRadius: "15px",
             }}
             src={user.avatar}
-            className='avatar image'
+            className="avatar image"
           />
         ) : (
-          <Jdenticon size='32' value={account || ''} />
+          <Jdenticon size="32" value={account || ""} />
         )}
 
         {!isXsWindow && (
           <Text
             p={1}
             sx={{
-              variant: 'text.default',
-              fontWeight: 'normal',
+              variant: "text.default",
+              fontWeight: "normal",
               ml: 2,
-              color: 'secondary',
-              textTransform: 'capitalize'
+              color: "secondary",
+              textTransform: "capitalize",
             }}
           >
             {user.getName()}
@@ -105,45 +106,55 @@ const UserDetails = () => {
 
       {isComponentVisible ? (
         <AccountDetails>
-          <MenuTitle sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}>
+          <MenuTitle
+            sx={{ variant: "text.overlineSmall", pt: 2, color: "bodyDark" }}
+          >
             Wallet Address
           </MenuTitle>
 
-          <MenuTitle sx={{ variant: 'text.medium', color: 'secondary' }}>{truncAddress}</MenuTitle>
+          <MenuTitle sx={{ variant: "text.medium", color: "secondary" }}>
+            {truncAddress}
+          </MenuTitle>
 
           {balance >= 0 && (
             <MenuTitle
               sx={{
-                variant: 'text.small',
+                variant: "text.small",
                 pb: 2,
-                '&:focus': { color: 'red' }
+                "&:focus": { color: "red" },
               }}
-              className='balance'
+              className="balance"
             >
-              Balance:{' '}
-              {parseFloat(balance)?.toLocaleString('en-US', {
+              Balance:{" "}
+              {parseFloat(balance)?.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
-                maximumFractionDigits: 6
-              })}{' '}
-              {isXDai ? 'xDAI' : 'ETH'}
+                maximumFractionDigits: 6,
+              })}{" "}
+              {isXDai ? "xDAI" : "ETH"}
             </MenuTitle>
           )}
 
-          <MenuTitle sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}>
-            {web3?.Torus ? 'Torus Network' : web3?.MetaMask ? 'Metamask Network' : 'Wallet network'}
+          <MenuTitle
+            sx={{ variant: "text.overlineSmall", pt: 2, color: "bodyDark" }}
+          >
+            {web3?.Torus
+              ? "Torus Network"
+              : web3?.MetaMask
+              ? "Metamask Network"
+              : "Wallet network"}
           </MenuTitle>
           {parseNetwork()}
 
           <Link
-            href='/account'
+            href="/account"
             passHref
-            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+            sx={{ textDecoration: "none", textDecorationLine: "none" }}
           >
             <MenuItem
               sx={{
-                variant: 'text.medium'
+                variant: "text.medium",
               }}
-              className='shadow boxheight'
+              className="shadow boxheight"
             >
               My Account
             </MenuItem>
@@ -151,56 +162,60 @@ const UserDetails = () => {
 
           <MenuItem
             sx={{
-              variant: 'text.medium'
+              variant: "text.medium",
             }}
-            className='shadow boxheight'
-            href={formatEtherscanLink('Account', [networkId, account])}
-            target='_blank'
-            rel='noopener noreferrer'
-            style={{ textDecoration: 'none' }}
+            className="shadow boxheight"
+            href={formatEtherscanLink("Account", [networkId, account])}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "none" }}
           >
             My Wallet
-            <div style={{ marginLeft: '10px' }}>
-              <FiExternalLink size='18px' />
+            <div style={{ marginLeft: "10px" }}>
+              <FiExternalLink size="18px" />
             </div>
           </MenuItem>
 
           <Link
-            href='/account?data=all&view=projects'
-            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+            href="/account?data=all&view=projects"
+            sx={{ textDecoration: "none", textDecorationLine: "none" }}
             passHref
           >
             <MenuItem
               sx={{
-                variant: 'text.medium'
+                variant: "text.medium",
               }}
-              className='shadow boxheight'
+              className="shadow boxheight"
             >
               My Projects
             </MenuItem>
           </Link>
 
-          <Link href='/create' sx={{ textDecoration: 'none', textDecorationLine: 'none' }} passHref>
+          <Link
+            href="/create"
+            sx={{ textDecoration: "none", textDecorationLine: "none" }}
+            passHref
+          >
             <MenuItem
               sx={{
-                variant: 'text.medium'
+                variant: "text.medium",
               }}
-              className='shadow boxheight'
+              className="shadow boxheight"
             >
               Create a Project
             </MenuItem>
           </Link>
 
           <Link
-            href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'
-            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
+            href="https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5"
+            sx={{ textDecoration: "none", textDecorationLine: "none" }}
             passHref
           >
             <MenuItem
               sx={{
-                variant: 'text.medium'
+                variant: "text.medium",
               }}
-              className='shadow boxheight'
+              className="shadow boxheight"
             >
               Project Verification
             </MenuItem>
@@ -208,32 +223,32 @@ const UserDetails = () => {
 
           <MenuItem
             sx={{
-              variant: 'text.medium'
+              variant: "text.medium",
             }}
-            className='shadow boxheight'
-            href='https://github.com/Giveth/giveth-next/issues/new/choose'
-            target='_blank'
-            rel='noopener noreferrer'
+            className="shadow boxheight"
+            href="https://github.com/Giveth/giveth-next/issues/new/choose"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Report a bug
           </MenuItem>
 
           <MenuItem
             sx={{
-              variant: 'text.medium'
+              variant: "text.medium",
             }}
-            className='shadow boxheight'
-            href='https://discord.gg/JYNBDuFUpG'
-            target='_blank'
-            rel='noopener noreferrer'
+            className="shadow boxheight"
+            href="https://discord.gg/JYNBDuFUpG"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Support
           </MenuItem>
         </AccountDetails>
       ) : null}
     </div>
-  )
-}
+  );
+};
 
 const AccountDetails = styled.div`
   width: 200px;
@@ -262,7 +277,7 @@ const AccountDetails = styled.div`
   & :hover .balance {
     opacity: 1;
   }
-`
+`;
 
 const MenuItem = styled.a`
   align-self: center;
@@ -273,14 +288,14 @@ const MenuItem = styled.a`
   :hover {
     color: ${theme.colors.primary};
   }
-`
+`;
 
 const MenuTitle = styled(Text)`
   align-self: center;
   padding-left: 16px;
   align-content: center;
   color: ${theme.colors.secondary};
-`
+`;
 
 const Dot = styled.div`
   height: 8px;
@@ -288,7 +303,7 @@ const Dot = styled.div`
   border-radius: 50%;
   display: inline-block;
   margin: 0 4px 0 0;
-`
+`;
 
 const StyledButton = styled.a`
   display: flex;
@@ -296,6 +311,6 @@ const StyledButton = styled.a`
   cursor: pointer;
   align-items: center;
   padding: 0.5rem;
-`
+`;
 
-export default UserDetails
+export default UserDetails;
