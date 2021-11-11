@@ -48,10 +48,16 @@ a {
 
 
 }
-.tosTable {
+.tosTable tr , .tosTable td {
   border: 1px solid black;
-  padding: 10px;
+  padding: 15px;
 }
+.tosTable thead {
+  background-color: #2c0b3f;
+  color: #ffffff
+}
+
+
 .ql-video-wrapper {
   position: relative;
   padding-bottom: 56.25%;

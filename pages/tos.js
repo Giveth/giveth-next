@@ -1840,7 +1840,7 @@ const Tos = () => {
               We expect to collect the following categories of personal information in the past
               twelve (12) months:
             </p>
-
+            <br />
             <table className='tosTable'>
               <thead>
                 <tr>
@@ -1914,7 +1914,7 @@ const Tos = () => {
                   <td>NO</td>
                 </tr>
                 <tr>
-                  <td>I.Professional or employment-related information</td>
+                  <td>I. Professional or employment-related information</td>
                   <td>
                     Business contact details in order to provide you our services at a business
                     level, job title as well as work history and professional qualifications if you
