@@ -28,7 +28,6 @@ const UserDetails = () => {
     dotColor = "greenishBlue";
     isXDai = true;
   }
-  console.log({ account, user });
   const truncAddress = shortenAddress(account);
 
   const parseNetwork = () => {

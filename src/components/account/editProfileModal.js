@@ -103,7 +103,6 @@ function EditProfileModal(props) {
         props.onRequestClose();
         updateUser();
         reset(data);
-        console.log({ data });
         return Toast({
           content: "Profile updated successfully",
           type: "success",

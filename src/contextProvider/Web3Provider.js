@@ -119,12 +119,8 @@ const Web3Provider = (props) => {
     setOnboard(_onboard);
   };
 
-  const logoutWallet = async () => {
-    await Auth.logout();
-  };
-
   const switchWallet = async () => {
-    logoutWallet();
+    setUser();
     onboard.walletSelect().then((selected) => {
       if (selected) {
         onboard.walletCheck().then();
@@ -158,7 +154,7 @@ const Web3Provider = (props) => {
       .query({
         query: GET_USER_BY_ADDRESS,
         variables: {
-          address: account,
+          address: account?.toLowerCase(),
         },
         fetchPolicy: "network-only",
       })
@@ -250,7 +246,6 @@ const Web3Provider = (props) => {
         setUser(newUser);
       } else {
         fetchUser().then((res) => {
-          console.log({ res });
           if (res) {
             newUser.parseDbUser(res);
             Auth.setUser(newUser);
