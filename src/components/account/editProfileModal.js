@@ -80,7 +80,8 @@ function EditProfileModal(props) {
       }
 
       const newProfile = {
-        name: firstName || "",
+        name: "",
+        firstName: firstName,
         lastName: lastName || "",
         location: location || "",
         email: email || "",
