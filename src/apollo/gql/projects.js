@@ -1,42 +1,57 @@
 import gql from 'graphql-tag'
 
 const FETCH_ALL_PROJECTS = gql`
-  query FetchAllProjects($limit: Int, $skip: Int, $orderBy: OrderBy) {
-    projects(take: $limit, skip: $skip, orderBy: $orderBy) {
-      id
-      title
-      balance
-      image
-      slug
-      creationDate
-      admin
-      description
-      walletAddress
-      impactLocation
-      qualityScore
-      verified
-      listed
-      status {
+  query FetchAllProjects(
+    $limit: Int
+    $skip: Int
+    $orderBy: OrderBy
+    $filterBy: FilterBy
+    $searchTerm: String
+    $category: String
+  ) {
+    projects(
+      take: $limit
+      skip: $skip
+      orderBy: $orderBy
+      filterBy: $filterBy
+      searchTerm: $searchTerm
+      category: $category
+    ) {
+      projects {
         id
-        symbol
-        name
+        title
+        balance
+        image
+        slug
+        creationDate
+        admin
         description
+        walletAddress
+        impactLocation
+        qualityScore
+        verified
+        listed
+        status {
+          id
+          symbol
+          name
+          description
+        }
+        categories {
+          name
+        }
+        reactions {
+          reaction
+          id
+          projectUpdateId
+          userId
+        }
+        qualityScore
       }
+      totalCount
       categories {
         name
       }
-      reactions {
-        reaction
-        id
-        projectUpdateId
-        userId
-      }
-      qualityScore
-      totalDonations
-      totalHearts
-    }
-    categories {
-      name
     }
   }
 `
@@ -66,8 +81,6 @@ const FETCH_PROJECTS = gql`
           userId
         }
         qualityScore
-        totalDonations
-        totalHearts
       }
       totalCount
     }
@@ -98,8 +111,6 @@ const FETCH_USER_PROJECTS = gql`
         userId
       }
       qualityScore
-      totalDonations
-      totalHearts
     }
   }
 `
@@ -118,8 +129,6 @@ const FETCH_MY_PROJECTS = gql`
       walletAddress
       impactLocation
       qualityScore
-      totalDonations
-      totalHearts
       listed
       categories {
         name
@@ -147,8 +156,6 @@ const FETCH_PROJECT = gql`
       walletAddress
       impactLocation
       qualityScore
-      totalDonations
-      totalHearts
       listed
       status {
         id
@@ -176,8 +183,6 @@ const FETCH_PROJECT_BY_SLUG = gql`
       walletAddress
       impactLocation
       qualityScore
-      totalDonations
-      totalHearts
       listed
       verified
       categories {

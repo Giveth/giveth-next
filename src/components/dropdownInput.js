@@ -51,7 +51,7 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
               color: 'secondary'
             }}
           >
-            {options[current]}
+            {current.name}
           </Text>
           <DropIcon style={{ marginRight: '16px' }} />
         </Flex>
@@ -59,12 +59,12 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
         {isComponentVisible && (
           <DropdownContent id='dropdownContent'>
             <DropList onMouseLeave={() => setIsComponentVisible(!isComponentVisible)}>
-              {options?.map((i, index) => {
+              {options?.map(i => {
                 return (
                   <DropItem
-                    key={index}
+                    key={i.name}
                     onClick={() => {
-                      setCurrent && setCurrent(index)
+                      setCurrent && setCurrent(i)
                       setIsComponentVisible(!isComponentVisible)
                     }}
                   >
@@ -75,7 +75,7 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
                         color: 'secondary'
                       }}
                     >
-                      {i}
+                      {i.name}
                     </Text>
                   </DropItem>
                 )

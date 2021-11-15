@@ -31,6 +31,7 @@ const DonateIndex = props => {
   } = useContext(Web3Context)
 
   const { project } = props
+
   const [hashSent, setHashSent] = useState(false)
   const [paymentType, setPaymentType] = useState(CRYPTO)
   const [isAfterPayment, setIsAfterPayment] = useState(null)
@@ -63,7 +64,7 @@ const DonateIndex = props => {
       return paymentType === CRYPTO && !isSSR ? (
         <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
       ) : (
-        <OnlyFiat project={project} setTransakTx={tID => setTransakTx(tID)} />
+        <OnlyFiat project={project} setTransakTx={setTransakTx} />
       )
     }
 

@@ -55,7 +55,7 @@ const InProgressModal = ({ showModal, setShowModal, txHash, networkId }) => {
           variant: 'text.default'
         }}
       >
-        Transaction has been submitted and is waiting for confirmation.
+        Transaction has been submitted and is waiting for confirmation.{' '}
         <a
           style={{ textDecoration: 'none', color: theme.colors.primary }}
           href={`${ETHERSCAN_PREFIXES[networkId]}tx/${txHash}`}
@@ -66,7 +66,7 @@ const InProgressModal = ({ showModal, setShowModal, txHash, networkId }) => {
         </a>
       </Text>
       <Text sx={{ mt: 2, mx: 5, textAlign: 'center', variant: 'text.default' }}>
-        You can safely close this window and return to Homepage. Your transaction will show in ${' '}
+        You can safely close this window and return to Homepage. Your transaction will show in{' '}
         <Link href='/account?view=donations'>
           <a style={{ textDecoration: 'none', color: theme.colors.primary }}>My Account.</a>
         </Link>
