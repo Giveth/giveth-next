@@ -72,7 +72,7 @@ const CookiesBanner = () => {
               fontWeight: 'bold',
               cursor: 'pointer'
             }}
-            href='https://giveth.io/tos'
+            href='https://giveth.io/tos/#cookiePolicy'
           >
             cookies policy
           </Link>
