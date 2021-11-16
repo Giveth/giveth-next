@@ -225,12 +225,11 @@ const MyDonations = props => {
                           size='18px'
                           style={{ cursor: 'pointer' }}
                           onClick={() => {
-                            const transactionLink = i.transakTransactionLink || `${ETHERSCAN_PREFIXES[i.transactionNetworkId]}tx/${i?.transactionId}`
-                            window.open(
-                              transactionLink
-                            )
-                          }
-                          }
+                            const transactionLink =
+                              i.transakTransactionLink ||
+                              `${ETHERSCAN_PREFIXES[i.transactionNetworkId]}tx/${i?.transactionId}`
+                            window.open(transactionLink)
+                          }}
                         />
                       </div>
                     </td>

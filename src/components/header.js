@@ -1,47 +1,47 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { IconButton, Text, Flex, Button } from "theme-ui";
-import styled from "@emotion/styled";
-import { useMediaQuery } from "react-responsive";
-import Headroom from "react-headroom";
+import React, { useState, useEffect, useContext } from 'react'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { IconButton, Text, Flex, Button } from 'theme-ui'
+import styled from '@emotion/styled'
+import { useMediaQuery } from 'react-responsive'
+import Headroom from 'react-headroom'
 
-import theme from "../utils/theme-ui";
-import Logo from "./content/Logo";
-import { ProjectContext } from "../contextProvider/projectProvider";
-import { PopupContext } from "../contextProvider/popupProvider";
-import { isUserRegistered, shortenAddress } from "../lib/helpers";
-import { Context as Web3Context } from "../contextProvider/Web3Provider";
-import UserDetails from "./account/userDetails";
+import theme from '../utils/theme-ui'
+import Logo from './content/Logo'
+import { ProjectContext } from '../contextProvider/projectProvider'
+import { PopupContext } from '../contextProvider/popupProvider'
+import { isUserRegistered, shortenAddress } from '../lib/helpers'
+import { Context as Web3Context } from '../contextProvider/Web3Provider'
+import UserDetails from './account/userDetails'
 
-const siteId = process.env.NEXT_PUBLIC_SITE_ID;
-const projectSearch = process.env.PROJECT_SEARCH;
+const siteId = process.env.NEXT_PUBLIC_SITE_ID
+const projectSearch = process.env.PROJECT_SEARCH
 
 const CategoriesList = () => {
-  const { currentProjectView } = React.useContext(ProjectContext);
-  const categories = currentProjectView?.globalCategories;
+  const { currentProjectView } = React.useContext(ProjectContext)
+  const categories = currentProjectView?.globalCategories
 
-  if (!categories || categories?.length === 0) return null;
+  if (!categories || categories?.length === 0) return null
   return (
-    <Flex sx={{ flexDirection: "column" }}>
+    <Flex sx={{ flexDirection: 'column' }}>
       <CategoriesListView>
-        <Link href={"/projects"} passHref>
+        <Link href={'/projects'} passHref>
           <li>
             <p>All</p>
           </li>
         </Link>
         {categories
           ?.sort(function (a, b) {
-            const textA = a.value.toUpperCase();
-            const textB = b.value.toUpperCase();
-            return textA < textB ? -1 : textA > textB ? 1 : 0;
+            const textA = a.value.toUpperCase()
+            const textB = b.value.toUpperCase()
+            return textA < textB ? -1 : textA > textB ? 1 : 0
           })
-          ?.map((c) => {
+          ?.map(c => {
             return (
               <Link
                 href={{
-                  pathname: "/projects",
-                  query: { category: c.name },
+                  pathname: '/projects',
+                  query: { category: c.name }
                 }}
                 key={c.name}
                 passHref
@@ -50,69 +50,67 @@ const CategoriesList = () => {
                   <p>{c.value}</p>
                 </li>
               </Link>
-            );
+            )
           })}
       </CategoriesListView>
     </Flex>
-  );
-};
+  )
+}
 
 const Header = ({ isHomePage }) => {
   const {
     state: { account, isEnabled, user, web3 },
-    actions: { switchWallet, enableProvider, initOnBoard },
-  } = useContext(Web3Context);
+    actions: { switchWallet, enableProvider, initOnBoard }
+  } = useContext(Web3Context)
 
-  const usePopup = useContext(PopupContext);
+  const usePopup = useContext(PopupContext)
 
-  const router = useRouter();
-  const { triggerPopup } = usePopup;
+  const router = useRouter()
+  const { triggerPopup } = usePopup
 
-  const isXsWindow = useMediaQuery({ query: "(max-width: 576px)" });
-  const isMobile = useMediaQuery({ query: "(max-width: 825px)" });
-  const isMobileForProjectBtn = useMediaQuery({ query: "(max-width: 1200px)" });
+  const isXsWindow = useMediaQuery({ query: '(max-width: 576px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+  const isMobileForProjectBtn = useMediaQuery({ query: '(max-width: 1200px)' })
 
-  const [hasScrolled, setScrollState] = useState(false);
+  const [hasScrolled, setScrollState] = useState(false)
 
-  const pathname = router.pathname?.split("/")[1];
+  const pathname = router.pathname?.split('/')[1]
   useEffect(() => {
     function handleScroll() {
-      const scrollTop = window.pageYOffset;
+      const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
-          setScrollState(true);
+          setScrollState(true)
         } else {
-          setScrollState(false);
+          setScrollState(false)
         }
       }
     }
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll)
     return function cleanup() {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   useEffect(() => {
-    router?.prefetch("/create");
-  }, []);
+    router?.prefetch('/create')
+  }, [])
 
   const goCreate = async () => {
-    if (!isUserRegistered(user)) return triggerPopup("IncompleteProfile");
-    router.push("/create");
-  };
+    if (!isUserRegistered(user)) return triggerPopup('IncompleteProfile')
+    router.push('/create')
+  }
 
   const MainLogo = () => {
     return (
-      <Link href="/" passHref>
-        <LogoSpan
-          className={hasScrolled || !isHomePage ? "HeaderLogoScrolled" : ""}
-        >
+      <Link href='/' passHref>
+        <LogoSpan className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}>
           <Logo />
-          {siteId === "giveth" && !isXsWindow && (
+          {siteId === 'giveth' && !isXsWindow && (
             <Text
               pl={3}
               sx={{
-                fontWeight: "medium",
+                fontWeight: 'medium'
               }}
             >
               GIVETH
@@ -120,41 +118,39 @@ const Header = ({ isHomePage }) => {
           )}
         </LogoSpan>
       </Link>
-    );
-  };
+    )
+  }
 
   return (
     <Headroom style={{ zIndex: 5 }}>
       <HeaderContainer
         style={{
-          marginBottom: "1.45rem",
+          marginBottom: '1.45rem'
         }}
       >
-        <HeaderSpan
-          className={hasScrolled || !isHomePage ? "HeaderScrolled" : ""}
-        >
+        <HeaderSpan className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}>
           <Decorator>
             <img
-              src={"/images/decorator-cloud1.svg"}
-              alt="decorator-cloud1"
-              width="100%"
-              height="100%"
+              src={'/images/decorator-cloud1.svg'}
+              alt='decorator-cloud1'
+              width='100%'
+              height='100%'
               style={{
-                position: "absolute",
-                top: "-70px",
-                left: "33vw",
+                position: 'absolute',
+                top: '-70px',
+                left: '33vw'
               }}
-              className="hide"
+              className='hide'
             />
             <img
-              src={"/images/decorator-cloud2.svg"}
-              alt="decorator-cloud2"
+              src={'/images/decorator-cloud2.svg'}
+              alt='decorator-cloud2'
               style={{
-                position: "absolute",
-                top: "-80px",
-                left: "66vw",
+                position: 'absolute',
+                top: '-80px',
+                left: '66vw'
               }}
-              className="hide"
+              className='hide'
             />
           </Decorator>
 
@@ -162,13 +158,11 @@ const Header = ({ isHomePage }) => {
 
           <MiddleSpan>
             {!isMobile && (
-              <Link href="/" passHref>
+              <Link href='/' passHref>
                 <NavLink
                   style={{
-                    display: ["none", "block", "block"],
-                    color: isHomePage
-                      ? theme.colors.primary
-                      : theme.colors.secondary,
+                    display: ['none', 'block', 'block'],
+                    color: isHomePage ? theme.colors.primary : theme.colors.secondary
                   }}
                 >
                   Home
@@ -176,34 +170,28 @@ const Header = ({ isHomePage }) => {
               </Link>
             )}
             <ProjectsCategories>
-              <Link href="/projects" passHref>
+              <Link href='/projects' passHref>
                 <NavLink
                   style={{
-                    color:
-                      pathname === "projects"
-                        ? theme.colors.primary
-                        : theme.colors.secondary,
+                    color: pathname === 'projects' ? theme.colors.primary : theme.colors.secondary
                   }}
                 >
                   Projects
                 </NavLink>
               </Link>
               {!isMobile && (
-                <Flex className="categoriesContent">
+                <Flex className='categoriesContent'>
                   <CategoriesList />
                 </Flex>
               )}
             </ProjectsCategories>
-            <Link href="/join" passHref>
+            <Link href='/join' passHref>
               <NavLink
                 style={{
-                  color:
-                    pathname === "join"
-                      ? theme.colors.primary
-                      : theme.colors.secondary,
+                  color: pathname === 'join' ? theme.colors.primary : theme.colors.secondary
                 }}
               >
-                Join{" "}
+                Join{' '}
               </NavLink>
             </Link>
             {/* <NavLink href='/causes'>Causes</NavLink> */}
@@ -212,38 +200,32 @@ const Header = ({ isHomePage }) => {
           <UserSpan>
             {isMobileForProjectBtn ? null : (
               <Flex>
-                {pathname !== "projects" && (
+                {pathname !== 'projects' && (
                   <CreateLink onClick={goCreate}>Create a project</CreateLink>
                 )}
-                {projectSearch === "true" && (
+                {projectSearch === 'true' && (
                   <IconButton>
-                    <img src={"/images/icon-search.svg"} alt="" />
+                    <img src={'/images/icon-search.svg'} alt='' />
                   </IconButton>
                 )}
               </Flex>
             )}
-            {pathname !== "projects" && (
+            {pathname !== 'projects' && (
               <img
-                style={{ margin: "0 10px" }}
-                src={"/images/icon-vertical-line.svg"}
-                alt="vertical line svg"
+                style={{ margin: '0 10px' }}
+                src={'/images/icon-vertical-line.svg'}
+                alt='vertical line svg'
               />
             )}
 
             {!!web3 && (
-              <Button
-                onClick={switchWallet}
-                style={{ marginRight: "10px", cursor: "pointer" }}
-              >
-                {account ? shortenAddress(account) : "Switch Wallet"}
+              <Button onClick={switchWallet} style={{ marginRight: '10px', cursor: 'pointer' }}>
+                {account ? shortenAddress(account) : 'Switch Wallet'}
               </Button>
             )}
 
             {!isEnabled && (
-              <Button
-                onClick={web3 ? enableProvider : initOnBoard}
-                style={{ cursor: "pointer" }}
-              >
+              <Button onClick={web3 ? enableProvider : initOnBoard} style={{ cursor: 'pointer' }}>
                 Connect Wallet
               </Button>
             )}
@@ -253,8 +235,8 @@ const Header = ({ isHomePage }) => {
         </HeaderSpan>
       </HeaderContainer>
     </Headroom>
-  );
-};
+  )
+}
 
 const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;
@@ -263,7 +245,7 @@ const HeaderContainer = styled.header`
   @media (max-width: 700px) {
     height: 160px;
   }
-`;
+`
 
 const HeaderSpan = styled.nav`
   position: absolute;
@@ -307,14 +289,14 @@ const HeaderSpan = styled.nav`
     padding: 25px;
     grid-template-columns: auto 1fr;
   }
-`;
+`
 
 const LogoSpan = styled.a`
   display: grid;
   grid-template-columns: repeat(2, auto);
   align-items: center;
   justify-content: start;
-`;
+`
 
 const MiddleSpan = styled.span`
   display: grid;
@@ -328,7 +310,7 @@ const MiddleSpan = styled.span`
     grid-column: 2;
     grid-row: 1;
   }
-`;
+`
 
 const UserSpan = styled.span`
   position: relative;
@@ -343,7 +325,7 @@ const UserSpan = styled.span`
     grid-row: 1;
     grid-column: 3;
   }
-`;
+`
 
 const NavLink = styled.a`
   cursor: pointer;
@@ -357,7 +339,7 @@ const NavLink = styled.a`
   :active {
     color: ${theme.colors.secondary};
   }
-`;
+`
 
 const CreateLink = styled.div`
   cursor: pointer;
@@ -375,11 +357,11 @@ const CreateLink = styled.div`
   :active {
     color: ${theme.colors.secondary};
   }
-`;
+`
 
 const Decorator = styled.div`
   position: absolute;
-`;
+`
 
 const ProjectsCategories = styled.div`
   .categoriesContent {
@@ -400,7 +382,7 @@ const ProjectsCategories = styled.div`
   &:hover .categoriesContent {
     visibility: visible;
   }
-`;
+`
 
 const CategoriesListView = styled.ul`
   display: flex;
@@ -422,6 +404,6 @@ const CategoriesListView = styled.ul`
   li:hover {
     font-weight: bold;
   }
-`;
+`
 
-export default Header;
+export default Header
