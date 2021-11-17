@@ -70,7 +70,8 @@ function EditProfileModal(props) {
       }
 
       const newProfile = {
-        firstName: firstName || '',
+        name: '',
+        firstName: firstName,
         lastName: lastName || '',
         location: location || '',
         email: email || '',

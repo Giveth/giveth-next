@@ -85,7 +85,7 @@ const DO_REGISTER = gql`
 const UPDATE_USER = gql`
   mutation UpdateUser(
     $url: String
-    $name: String
+    $name: String!
     $location: String
     $email: String
     $lastName: String

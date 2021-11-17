@@ -1,5 +1,5 @@
 import { getLocalStorageTokenLabel } from '../services/auth'
-import { shortenAddress } from '../lib/helpers'
+// import { shortenAddress } from '../lib/helpers'
 
 const tokenLabel = getLocalStorageTokenLabel()
 
@@ -56,7 +56,8 @@ export default class User {
   }
 
   getName() {
-    return this.name ? this.name.toUpperCase() : shortenAddress(this.walletAddress)
+    return this.name ? this.name.toUpperCase() : ''
+    // return this.name ? this.name.toUpperCase() : shortenAddress(this.walletAddress)
     // return /(.+)@(.+){2,}\.(.+){2,}/.test(this.name)
     //         ? this.name?.toUpperCase()
     //         : this.name

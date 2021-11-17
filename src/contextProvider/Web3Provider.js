@@ -116,8 +116,13 @@ const Web3Provider = props => {
     setOnboard(_onboard)
   }
 
-  const switchWallet = () => {
-    onboard.walletSelect().then(selected => selected && onboard.walletCheck().then())
+  const switchWallet = async () => {
+    setUser()
+    onboard.walletSelect().then(selected => {
+      if (selected) {
+        onboard.walletCheck().then()
+      }
+    })
   }
 
   const switchToXdai = () => {
@@ -136,7 +141,9 @@ const Web3Provider = props => {
   }
 
   const enableProvider = () => {
-    if (validProvider) onboard.walletCheck().then()
+    if (validProvider) {
+      onboard.walletCheck()
+    }
   }
 
   const fetchUser = () => {
@@ -144,11 +151,13 @@ const Web3Provider = props => {
       .query({
         query: GET_USER_BY_ADDRESS,
         variables: {
-          address: account
+          address: account?.toLowerCase()
         },
         fetchPolicy: 'network-only'
       })
-      .then(res => res.data?.userByAddress)
+      .then(res => {
+        return res.data?.userByAddress
+      })
       .catch(console.log)
   }
 
@@ -171,8 +180,8 @@ const Web3Provider = props => {
       web3
     )
     if (!signedMessage) return false
-
-    const token = await getToken(user, signedMessage, networkId)
+    const userWithAddress = { ...user, walletAddress: account }
+    const token = await getToken(userWithAddress, signedMessage, networkId)
     const newUser = new User(user)
     newUser.setToken(token)
     Auth.setUser(newUser)
@@ -194,12 +203,22 @@ const Web3Provider = props => {
           alignItems: 'center'
         }}
       >
-        <Text sx={{ variant: 'text.large', color: 'secondary', marginBottom: '25px' }}>
+        <Text
+          sx={{
+            variant: 'text.large',
+            color: 'secondary',
+            marginBottom: '25px'
+          }}
+        >
           Please Sign with your wallet to authenticate
         </Text>
         <Button
           onClick={handleClick}
-          sx={{ cursor: 'pointer', width: '170px', background: theme.colors.primary }}
+          sx={{
+            cursor: 'pointer',
+            width: '170px',
+            background: theme.colors.primary
+          }}
         >
           Sign
         </Button>
@@ -228,6 +247,9 @@ const Web3Provider = props => {
             newUser.parseDbUser(res)
             Auth.setUser(newUser)
             setUser(newUser)
+          } else {
+            const noUser = new User()
+            setUser(noUser)
           }
         })
       }

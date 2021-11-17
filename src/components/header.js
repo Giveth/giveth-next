@@ -75,7 +75,6 @@ const Header = ({ isHomePage }) => {
   const [hasScrolled, setScrollState] = useState(false)
 
   const pathname = router.pathname?.split('/')[1]
-
   useEffect(() => {
     function handleScroll() {
       const scrollTop = window.pageYOffset

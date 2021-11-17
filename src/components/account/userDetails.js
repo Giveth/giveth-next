@@ -27,7 +27,6 @@ const UserDetails = () => {
     dotColor = 'greenishBlue'
     isXDai = true
   }
-
   const truncAddress = shortenAddress(account)
 
   const parseNetwork = () => {

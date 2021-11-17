@@ -34,7 +34,6 @@ export async function getToken(user, signedMessage, networkId) {
           networkId
         }
       })
-
       return data?.loginWallet?.token
     } catch (error) {
       console.log('Error in token login', error)
