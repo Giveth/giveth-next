@@ -624,6 +624,13 @@ const mainnetTokens = {
       symbol: 'IDEX',
       name: 'IDEX',
       decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x4fE83213D56308330EC302a8BD641f1d0113A4Cc',
+      symbol: 'NU',
+      name: 'NuCypher',
+      decimals: 18
     }
   ],
   logoURI: 'ipfs://QmQAGtNJ2rSGpnP6dh6PPKNSmZL8RTZXmgFwgTdy5Nz5mx'
