@@ -54,67 +54,69 @@ const ContentFaq = ({ faqs, isopen }) => {
 
   return (
     <ContentContainer>
-      <Collapsible
-        trigger={
-          <QuestionSpan>
-            <Category>{categories[0].category}</Category>
-            <ArrowDown />
-          </QuestionSpan>
-        }
-        triggerWhenOpen={
-          <QuestionSpan>
-            <Category>{categories[0].category}</Category>
-            <ArrowUp />
-          </QuestionSpan>
-        }
-        open={isopen}
-      >
-        {faqs.map(edges => (
-          <ContentItem id={edges.linkId} key={edges.linkId}>
-            {hash === `#${edges.linkId}` ? (
-              <Collapsible
-                trigger={
-                  <QuestionSpan>
-                    <Question>{edges.question}</Question>
-                    <ArrowDown />
-                  </QuestionSpan>
-                }
-                triggerWhenOpen={
-                  <QuestionSpan>
-                    <Question>{edges.question}</Question>
-                    <ArrowUp />
-                  </QuestionSpan>
-                }
-                open={true}
-              >
-                <LongDescription sx={{ variant: 'text.default', color: 'colors.secondary' }}>
-                  {documentToReactComponents(edges?.answer.content[0])}
-                </LongDescription>
-              </Collapsible>
-            ) : (
-              <Collapsible
-                trigger={
-                  <QuestionSpan>
-                    <Question>{edges.question}</Question>
-                    <ArrowDown />
-                  </QuestionSpan>
-                }
-                triggerWhenOpen={
-                  <QuestionSpan>
-                    <Question>{edges.question}</Question>
-                    <ArrowUp />
-                  </QuestionSpan>
-                }
-                open={false}
-              >
-                <LongDescription sx={{ variant: 'text.default', color: 'colors.secondary' }}>
-                  {documentToReactComponents(edges?.answer.content[0], richTextOptions)}
-                </LongDescription>
-              </Collapsible>
-            )}
-          </ContentItem>
-        ))}
-      </Collapsible>
+      <div className='faqLinks'>
+        <Collapsible
+          trigger={
+            <QuestionSpan>
+              <Category>{categories[0].category}</Category>
+              <ArrowDown />
+            </QuestionSpan>
+          }
+          triggerWhenOpen={
+            <QuestionSpan>
+              <Category>{categories[0].category}</Category>
+              <ArrowUp />
+            </QuestionSpan>
+          }
+          open={isopen}
+        >
+          {faqs.map(edges => (
+            <ContentItem id={edges.linkId} key={edges.linkId}>
+              {hash === `#${edges.linkId}` ? (
+                <Collapsible
+                  trigger={
+                    <QuestionSpan>
+                      <Question>{edges.question}</Question>
+                      <ArrowDown />
+                    </QuestionSpan>
+                  }
+                  triggerWhenOpen={
+                    <QuestionSpan>
+                      <Question>{edges.question}</Question>
+                      <ArrowUp />
+                    </QuestionSpan>
+                  }
+                  open={true}
+                >
+                  <LongDescription sx={{ variant: 'text.default', color: 'colors.secondary' }}>
+                    {documentToReactComponents(edges?.answer.content[0])}
+                  </LongDescription>
+                </Collapsible>
+              ) : (
+                <Collapsible
+                  trigger={
+                    <QuestionSpan>
+                      <Question>{edges.question}</Question>
+                      <ArrowDown />
+                    </QuestionSpan>
+                  }
+                  triggerWhenOpen={
+                    <QuestionSpan>
+                      <Question>{edges.question}</Question>
+                      <ArrowUp />
+                    </QuestionSpan>
+                  }
+                  open={false}
+                >
+                  <LongDescription sx={{ variant: 'text.default', color: 'colors.secondary' }}>
+                    {documentToReactComponents(edges?.answer.content[0], richTextOptions)}
+                  </LongDescription>
+                </Collapsible>
+              )}
+            </ContentItem>
+          ))}
+        </Collapsible>
+      </div>
     </ContentContainer>
   )
 }
