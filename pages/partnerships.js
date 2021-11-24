@@ -56,7 +56,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
-      <Seo title='Our partnerships' />
+      <Seo title='Our Partnerships & Friends' />
       {!isMobile ? (
         <Decorator>
           <img
@@ -91,7 +91,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
             variant: 'text.large'
           }}
         >
-          Our partners and friends{' '}
+          Our Partners and Friends{' '}
         </Text>
         <Grid
           columns={[1, 2, 3]}
