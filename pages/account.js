@@ -1,8 +1,11 @@
 import React from 'react'
-import AccountIndex from '../src/components/account'
-import Seo from '../src/components/seo'
-import Layout from '../src/components/layout'
-const AccountPage = props => {
+import dynamic from 'next/dynamic'
+
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
+const AccountIndex = dynamic(() => import('../src/components/account'))
+
+const AccountPage = () => {
   return (
     <Layout noHeader>
       <Seo title='account' />

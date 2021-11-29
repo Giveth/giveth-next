@@ -1,35 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Label, Textarea, Button, Text, Flex } from 'theme-ui';
-import { animated } from 'react-spring';
-import { DescriptionInstructionModal } from '../modals';
+import React, { useEffect, useState } from 'react'
+import { Label, Button, Text, Flex } from 'theme-ui'
+import { DescriptionInstructionModal } from '../modals'
 
-const RichTextInput = React.lazy(() => import('../../richTextInput'));
+const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
-export const ProjectDescriptionInput = ({
-  register,
-  currentValue,
-  setValue,
-  animationStyle,
-  goBack
-}) => {
-  const [showInstructions, setShowInstructions] = useState(false);
-  const [characterLength, setCharacterLength] = useState(
-    currentValue ? currentValue.length : 0
-  );
+export const ProjectDescriptionInput = ({ register, currentValue, setValue, goBack }) => {
+  const [showInstructions, setShowInstructions] = useState(false)
 
   useEffect(() => {
-    register('projectDescription');
-    setValue('projectDescription', currentValue);
-  }, []);
+    register('projectDescription')
+    setValue('projectDescription', currentValue)
+  }, [])
 
-  const getLength = e => {
-    console.log({ e });
-  };
-
-  const isSSR = typeof window === 'undefined';
+  const isSSR = typeof window === 'undefined'
 
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
+    <div style={{ marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -63,21 +49,6 @@ export const ProjectDescriptionInput = ({
         </Text>
       </Button>
       <Flex sx={{ width: '90%' }}>
-        {/* <Textarea
-          sx={{
-            width: '800px',
-            mt: '40px',
-            resize: 'none',
-            fontFamily: 'body'
-          }}
-          id='projectDescription'
-          name='projectDescription'
-          ref={register}
-          defaultValue={currentValue}
-          rows={12}
-          maxLength={2000}
-          onChange={e => getLength(e)}
-        /> */}
         {!isSSR && (
           <React.Suspense fallback={<div />}>
             <RichTextInput
@@ -85,31 +56,16 @@ export const ProjectDescriptionInput = ({
                 marginTop: '40px',
                 fontFamily: 'body'
               }}
-              defaultValue={currentValue}
+              defaultValue={currentValue || ''}
               rows={12}
+              autoFocus
               onChange={newValue => {
-                try {
-                  // console.log({ setValue, newValue, delta, source })
-                  setValue('projectDescription', newValue);
-                } catch (error) {
-                  console.log({ error });
-                }
+                // console.log({ setValue, newValue, delta, source })
+                setValue('projectDescription', newValue)
               }}
-              // onChange={e => getLength(e)}
-              // maxLength={2000}
             />
           </React.Suspense>
         )}
-        {/* <Text
-          sx={{
-            marginTop: '40px',
-            paddingLeft: '40px',
-            fontFamily: 'body',
-            color: 'muted'
-          }}
-        >
-          {characterLength}/2000
-        </Text> */}
       </Flex>
       <Flex
         sx={{
@@ -118,7 +74,7 @@ export const ProjectDescriptionInput = ({
           justifyContent: 'flex-end',
           flexDirection: 'row-reverse',
           marginTop: '10px',
-          marginBottom: '50px',
+          marginBottom: '50px'
         }}
       >
         <Button
@@ -173,6 +129,6 @@ export const ProjectDescriptionInput = ({
           setShowModal={setShowInstructions}
         />
       )}
-    </animated.section>
-  );
-};
+    </div>
+  )
+}

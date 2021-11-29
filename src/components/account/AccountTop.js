@@ -1,4 +1,4 @@
-import { Text, Flex } from 'theme-ui'
+import { Text, Flex, Image } from 'theme-ui'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { BsArrowLeft } from 'react-icons/bs'
@@ -6,7 +6,65 @@ import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../../utils/theme-ui/index'
 
-const Login = dynamic(() => import('../torus/login'))
+const UserDetails = dynamic(() => import('../account/userDetails'))
+
+const AccountTop = props => {
+  const isDonation = (props?.query?.view || '') === 'donations'
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+  return (
+    <Flex
+      sx={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        mx: '5%',
+        height: '128px'
+      }}
+    >
+      <Link href='/'>
+        <a
+          style={{
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            width: '80px',
+            justifyContent: 'space-between',
+            variant: 'links.default'
+          }}
+        >
+          <BsArrowLeft size='24px' color={theme.colors.primary} />
+          <Text
+            sx={{
+              color: 'primary'
+            }}
+          >
+            Giveth
+          </Text>
+        </a>
+      </Link>
+      <UserSpan>
+        {isMobile ? null : (
+          <Link href={isDonation ? '/projects' : '/create'} passHref>
+            <CreateLink>
+              <Text
+                sx={{
+                  color: 'primary',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    color: 'accent'
+                  }
+                }}
+              >
+                {isDonation ? 'Donate' : 'Create a project'}
+              </Text>
+            </CreateLink>
+          </Link>
+        )}
+        <Image src='/images/icon-vertical-line.svg' alt='icon-vertical-line' />
+        <UserDetails />
+      </UserSpan>
+    </Flex>
+  )
+}
 
 const UserSpan = styled.span`
   position: relative;
@@ -34,63 +92,4 @@ const CreateLink = styled.div`
   }
 `
 
-const AccountTop = props => {
-  const isDonation = (props?.query?.view || '') === 'donations'
-  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
-  return (
-    <Flex
-      sx={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        mx: '5%',
-        height: '128px'
-      }}
-    >
-      <Link href='/'>
-        <span
-          href='/'
-          style={{
-            cursor: 'pointer',
-            textDecoration: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            width: '80px',
-            justifyContent: 'space-between',
-            variant: 'links.default'
-          }}
-        >
-          <BsArrowLeft size='24px' color={theme.colors.primary} />
-          <Text
-            sx={{
-              color: 'primary'
-            }}
-          >
-            Giveth
-          </Text>
-        </span>
-      </Link>
-      <UserSpan>
-        {isMobile ? null : (
-          <Link href={isDonation ? '/projects' : '/create'}>
-            <CreateLink>
-              <Text
-                sx={{
-                  color: 'primary',
-                  cursor: 'pointer',
-                  '&:hover': {
-                    color: 'accent'
-                  }
-                }}
-              >
-                {isDonation ? 'Donate' : 'Create a project'}
-              </Text>
-            </CreateLink>
-          </Link>
-        )}
-        <img src={'/images/icon-vertical-line.svg'} alt='' />
-        <Login />
-      </UserSpan>
-    </Flex>
-  )
-}
 export default AccountTop

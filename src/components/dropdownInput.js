@@ -5,43 +5,8 @@ import theme from '../utils/theme-ui'
 import { Flex, Text } from 'theme-ui'
 import useComponentVisible from '../utils/useComponentVisible'
 
-const Dropdown = styled(Flex)`
-  flex-direction: row;
-  position: relative;
-  display: inline-block;
-`
-
-const DropdownContent = styled.div`
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  max-height: 200px;
-  overflow: scroll;
-  background: ${theme.colors.background};
-  border: 1px solid #f5f5f5;
-  box-sizing: border-box;
-  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
-  border-radius: 6px;
-  margin: 15px 0 0 -11px;
-`
-
-const DropList = styled(Flex)`
-  flex-direction: column;
-`
-
-const DropItem = styled.div`
-  padding: 1rem 0 1rem 1rem;
-  :hover {
-    background-color: ${theme.colors.lightestBlue};
-  }
-`
-
 const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
-  const {
-    ref,
-    isComponentVisible,
-    setIsComponentVisible
-  } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
   return (
     <Flex sx={{ width: '100%', flexDirection: 'column' }}>
@@ -86,22 +51,20 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
               color: 'secondary'
             }}
           >
-            {options[current]}
+            {current.name}
           </Text>
           <DropIcon style={{ marginRight: '16px' }} />
         </Flex>
 
         {isComponentVisible && (
           <DropdownContent id='dropdownContent'>
-            <DropList
-              onMouseLeave={() => setIsComponentVisible(!isComponentVisible)}
-            >
-              {options?.map((i, index) => {
+            <DropList onMouseLeave={() => setIsComponentVisible(!isComponentVisible)}>
+              {options?.map(i => {
                 return (
                   <DropItem
-                    key={index}
+                    key={i.name}
                     onClick={() => {
-                      setCurrent && setCurrent(index)
+                      setCurrent && setCurrent(i)
                       setIsComponentVisible(!isComponentVisible)
                     }}
                   >
@@ -112,7 +75,7 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
                         color: 'secondary'
                       }}
                     >
-                      {i}
+                      {i.name}
                     </Text>
                   </DropItem>
                 )
@@ -124,5 +87,36 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
     </Flex>
   )
 }
+
+const Dropdown = styled(Flex)`
+  flex-direction: row;
+  position: relative;
+  display: inline-block;
+`
+
+const DropdownContent = styled.div`
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  max-height: 200px;
+  overflow: scroll;
+  background: ${theme.colors.background};
+  border: 1px solid #f5f5f5;
+  box-sizing: border-box;
+  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
+  border-radius: 6px;
+  margin: 15px 0 0 -11px;
+`
+
+const DropList = styled(Flex)`
+  flex-direction: column;
+`
+
+const DropItem = styled.div`
+  padding: 1rem 0 1rem 1rem;
+  :hover {
+    background-color: ${theme.colors.lightestBlue};
+  }
+`
 
 export default DropdownInput

@@ -14,7 +14,7 @@ const DO_LOGIN = gql`
     $avatar: String
     $name: String
     $hostname: String!
-    $isXDAI: Boolean
+    $networkId: Float!
   ) {
     loginWallet(
       walletAddress: $walletAddress
@@ -23,7 +23,7 @@ const DO_LOGIN = gql`
       avatar: $avatar
       name: $name
       hostname: $hostname
-      isXDAI: $isXDAI
+      networkId: $networkId
     ) {
       token
       user {
@@ -74,14 +74,7 @@ const GET_USER_BY_ADDRESS = gql`
 
 const DO_REGISTER = gql`
   mutation DoRegister($name: String!, $email: String!, $password: String!) {
-    register(
-      data: {
-        firstName: $name
-        lastName: ""
-        email: $email
-        password: $password
-      }
-    ) {
+    register(data: { firstName: $name, lastName: "", email: $email, password: $password }) {
       firstName
       email
       lastName
@@ -92,7 +85,7 @@ const DO_REGISTER = gql`
 const UPDATE_USER = gql`
   mutation UpdateUser(
     $url: String
-    $name: String
+    $name: String!
     $location: String
     $email: String
     $lastName: String
@@ -109,11 +102,4 @@ const UPDATE_USER = gql`
   }
 `
 
-export {
-  DO_LOGIN,
-  DO_REGISTER,
-  GET_USER,
-  UPDATE_USER,
-  GET_USER_BY_ADDRESS,
-  VALIDATE_TOKEN
-}
+export { DO_LOGIN, DO_REGISTER, GET_USER, UPDATE_USER, GET_USER_BY_ADDRESS, VALIDATE_TOKEN }

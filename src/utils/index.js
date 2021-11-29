@@ -8,41 +8,41 @@ const xDaiChainId = 100
 const appNetworkId = process.env.NEXT_PUBLIC_NETWORK_ID
 
 export function pollEvery(fn, delay) {
-  let timer = -1;
-  let stop = false;
+  let timer = -1
+  let stop = false
   const poll = async (request, onResult) => {
-    const result = await request();
+    const result = await request()
     if (!stop) {
-      onResult(result);
-      timer = setTimeout(poll.bind(null, request, onResult), delay);
+      onResult(result)
+      timer = setTimeout(poll.bind(null, request, onResult), delay)
     }
-  };
+  }
   return (...params) => {
-    const { request, onResult } = fn(...params);
-    poll(request, onResult).then();
+    const { request, onResult } = fn(...params)
+    poll(request, onResult).then()
     return () => {
-      stop = true;
-      clearTimeout(timer);
-    };
-  };
+      stop = true
+      clearTimeout(timer)
+    }
+  }
 }
 
 export function checkNetwork(networkId) {
   const isXdai = networkId === xDaiChainId
-  return networkId?.toString() === appNetworkId || isXdai;
+  return networkId?.toString() === appNetworkId || isXdai
 }
 
 export function titleCase(str) {
-  //hot fix
+  //TODO hot fix
   return str
-  if (!str) return null
-  return str
-    ?.toLowerCase()
-    .split(' ')
-    .map(function (word) {
-      return word.replace(word[0], word[0].toUpperCase())
-    })
-    .join(' ')
+  // if (!str) return null
+  // return str
+  //   ?.toLowerCase()
+  //   .split(' ')
+  //   .map(function (word) {
+  //     return word.replace(word[0], word[0].toUpperCase())
+  //   })
+  //   .join(' ')
 }
 
 export function base64ToBlob(base64) {
@@ -73,15 +73,10 @@ export const getImageFile = async (base64Data, projectName) => {
   return imageFile
 }
 
-export async function getEtherscanTxs(
-  address,
-  apolloClient = false,
-  isDonor = false
-) {
+export async function getEtherscanTxs(address, apolloClient = false, isDonor = false) {
   try {
     const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
-    const api =
-      process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
+    const api = process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
     const balance = await fetch(
       `https://${api}.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
     )
@@ -132,25 +127,11 @@ export async function getEtherscanTxs(
   }
 }
 
-export function ensRegex(ens) {
-  return /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/.test(
-    ens
-  )
-}
-
-export function getEtherscanPrefix() {
-  return typeof process.env.ETHEREUM_NETWORK !== 'undefined'
-    ? process.env.ETHEREUM_NETWORK === 'mainnet'
-      ? ''
-      : process.env.ETHEREUM_NETWORK + '.'
-    : ''
-}
-
 export const getERC20List = ERC20List
 
 export async function checkIfURLisValid(checkUrl) {
   let url = checkUrl
-  if (!/^(?:f|ht)tps?\:\/\//.test(checkUrl)) {
+  if (!/^(?:f|ht)tps?:\/\//.test(checkUrl)) {
     url = 'https://' + url
   }
   const pattern = new RegExp(

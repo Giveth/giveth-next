@@ -1,35 +1,33 @@
-import { jsx, Flex, Text, Box } from 'theme-ui'
-import Link from 'next/link'
-import { useWallet } from '../../contextProvider/WalletProvider'
-import { formatEtherscanLink } from '../../util'
-
+import { Flex, Text } from 'theme-ui'
 import { FiExternalLink } from 'react-icons/fi'
+import { useContext } from 'react'
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+import { formatEtherscanLink } from '../../lib/util'
 
 const formatTitle = (title, projectsList, userDonations) => {
   switch (title) {
     case 'My Projects':
-      return `My Projects ${
-        projectsList?.length ? `(${projectsList?.length})` : ''
-      }`
+      return `My Projects ${projectsList?.length ? `(${projectsList?.length})` : ''}`
     case 'My Donations':
-      return `My Donations ${
-        userDonations?.length ? `(${userDonations?.length})` : ''
-      }`
+      return `My Donations ${userDonations?.length ? `(${userDonations?.length})` : ''}`
     default:
       return title
   }
 }
+
 const options = [
   { route: 'account', name: 'My Account' },
   { route: 'projects', name: 'My Projects' },
   { route: 'donations', name: 'My Donations' }
 ]
+
 const AccountNav = props => {
+  const {
+    state: { networkId, user }
+  } = useContext(Web3Context)
+
   const { setQuery, query, projectsList, userDonations } = props
-  const { logout, user, currentChainId } = useWallet()
-  const handleLogout = () => {
-    logout()
-  }
+
   return (
     <Flex sx={{ flexDirection: 'column', pr: '8%' }}>
       <Text
@@ -43,6 +41,7 @@ const AccountNav = props => {
       >
         My Account
       </Text>
+
       <Flex sx={{ flexDirection: 'column', maxWidth: '80%' }}>
         {options.map((i, index) => {
           return (
@@ -64,8 +63,7 @@ const AccountNav = props => {
                 sx={{
                   mb: '8px',
                   color:
-                    query?.view === i.route ||
-                    (!query?.view && i.route === 'account')
+                    query?.view === i.route || (!query?.view && i.route === 'account')
                       ? 'primary'
                       : 'secondary'
                 }}
@@ -76,21 +74,18 @@ const AccountNav = props => {
           )
         })}
       </Flex>
+
       <Flex
         sx={{
           flexDirection: 'column',
-          mt: ['35px', '70px', '70px'],
-          maxWidth: '60%'
+          mt: ['35px', '70px', '70px']
         }}
       >
-        <Link
-          href={formatEtherscanLink('Account', [
-            currentChainId,
-            user.getWalletAddress()
-          ])}
+        <a
+          href={formatEtherscanLink('Account', [networkId, user?.walletAddress])}
           target='_blank'
           rel='noopener noreferrer'
-          sx={{ textDecoration: 'none' }}
+          style={{ textDecoration: 'none' }}
         >
           <Text
             sx={{
@@ -98,14 +93,18 @@ const AccountNav = props => {
               variant: 'links.grey'
             }}
           >
-            My Wallet <FiExternalLink size='18px' />
+            My Wallet
+            <span style={{ marginLeft: '10px' }}>
+              <FiExternalLink size='18px' />
+            </span>
           </Text>
-        </Link>
-        <Link
-          href='https://github.com/Giveth/giveth-2/issues/new/choose'
+        </a>
+
+        <a
+          href='https://github.com/Giveth/giveth-next/issues/new/choose'
           target='_blank'
           rel='noopener noreferrer'
-          sx={{ textDecoration: 'none' }}
+          style={{ textDecoration: 'none' }}
         >
           <Text
             sx={{
@@ -115,20 +114,19 @@ const AccountNav = props => {
           >
             Report A Bug
           </Text>
-        </Link>
-        <Link
+        </a>
+
+        <a
           href='https://discord.gg/JYNBDuFUpG'
           target='_blank'
           rel='noopener noreferrer'
-          sx={{ textDecoration: 'none' }}
+          style={{ textDecoration: 'none' }}
         >
           <Text sx={{ mb: '8px', variant: 'links.grey' }}>Support</Text>
-        </Link>
-        <Link href='/' sx={{ textDecoration: 'none' }} onClick={handleLogout}>
-          <Text sx={{ mb: '8px', variant: 'links.grey' }}>Sign Out</Text>
-        </Link>
+        </a>
       </Flex>
     </Flex>
   )
 }
+
 export default AccountNav

@@ -1,42 +1,57 @@
 import gql from 'graphql-tag'
 
 const FETCH_ALL_PROJECTS = gql`
-  query FetchAllProjects($limit: Int, $skip: Int, $orderBy: OrderBy) {
-    projects(take: $limit, skip: $skip, orderBy: $orderBy) {
-      id
-      title
-      balance
-      image
-      slug
-      creationDate
-      admin
-      description
-      walletAddress
-      impactLocation
-      qualityScore
-      verified
-      listed
-      status {
+  query FetchAllProjects(
+    $limit: Int
+    $skip: Int
+    $orderBy: OrderBy
+    $filterBy: FilterBy
+    $searchTerm: String
+    $category: String
+  ) {
+    projects(
+      take: $limit
+      skip: $skip
+      orderBy: $orderBy
+      filterBy: $filterBy
+      searchTerm: $searchTerm
+      category: $category
+    ) {
+      projects {
         id
-        symbol
-        name
+        title
+        balance
+        image
+        slug
+        creationDate
+        admin
         description
+        walletAddress
+        impactLocation
+        qualityScore
+        verified
+        listed
+        status {
+          id
+          symbol
+          name
+          description
+        }
+        categories {
+          name
+        }
+        reactions {
+          reaction
+          id
+          projectUpdateId
+          userId
+        }
+        qualityScore
       }
+      totalCount
       categories {
         name
       }
-      reactions {
-        reaction
-        id
-        projectUpdateId
-        userId
-      }
-      qualityScore
-      totalDonations
-      totalHearts
-    }
-    categories {
-      name
     }
   }
 `
@@ -66,8 +81,6 @@ const FETCH_PROJECTS = gql`
           userId
         }
         qualityScore
-        totalDonations
-        totalHearts
       }
       totalCount
     }
@@ -75,12 +88,7 @@ const FETCH_PROJECTS = gql`
 `
 
 const FETCH_USER_PROJECTS = gql`
-  query FetchProjects(
-    $limit: Int
-    $skip: Int
-    $orderBy: OrderBy
-    $admin: Float
-  ) {
+  query FetchProjects($limit: Int, $skip: Int, $orderBy: OrderBy, $admin: Float) {
     projects(take: $limit, skip: $skip, orderBy: $orderBy, admin: $admin) {
       id
       title
@@ -103,8 +111,6 @@ const FETCH_USER_PROJECTS = gql`
         userId
       }
       qualityScore
-      totalDonations
-      totalHearts
     }
   }
 `
@@ -123,8 +129,6 @@ const FETCH_MY_PROJECTS = gql`
       walletAddress
       impactLocation
       qualityScore
-      totalDonations
-      totalHearts
       listed
       categories {
         name
@@ -152,8 +156,6 @@ const FETCH_PROJECT = gql`
       walletAddress
       impactLocation
       qualityScore
-      totalDonations
-      totalHearts
       listed
       status {
         id
@@ -181,8 +183,6 @@ const FETCH_PROJECT_BY_SLUG = gql`
       walletAddress
       impactLocation
       qualityScore
-      totalDonations
-      totalHearts
       listed
       verified
       categories {
@@ -218,16 +218,8 @@ const ADD_BANK_ACCOUNT = gql`
 `
 
 const GET_LINK_BANK_CREATION = gql`
-  query SetProjectBankAccount(
-    $projectId: Float!
-    $returnUrl: String!
-    $refreshUrl: String!
-  ) {
-    setProjectBankAccount(
-      projectId: $projectId
-      returnUrl: $returnUrl
-      refreshUrl: $refreshUrl
-    )
+  query SetProjectBankAccount($projectId: Float!, $returnUrl: String!, $refreshUrl: String!) {
+    setProjectBankAccount(projectId: $projectId, returnUrl: $returnUrl, refreshUrl: $refreshUrl)
   }
 `
 const GET_DONATION_SESSION = gql`
@@ -309,7 +301,7 @@ const GET_STRIPE_PROJECT_DONATIONS = gql`
   }
 `
 const ADD_PROJECT = gql`
-  mutation($project: ProjectInput!) {
+  mutation ($project: ProjectInput!) {
     addProject(project: $project) {
       id
       title
@@ -329,7 +321,7 @@ const ADD_PROJECT = gql`
  ** PROJECT UPDATES
  */
 const ADD_PROJECT_UPDATE = gql`
-  mutation($projectId: Float!, $title: String!, $content: String!) {
+  mutation ($projectId: Float!, $title: String!, $content: String!) {
     addProjectUpdate(projectId: $projectId, title: $title, content: $content) {
       id
       projectId
@@ -359,11 +351,7 @@ const GET_PROJECT_UPDATES = gql`
 `
 
 const EDIT_PROJECT_UPDATE = gql`
-  mutation EditProjectUpdate(
-    $content: String!
-    $title: String!
-    $updateId: Float!
-  ) {
+  mutation EditProjectUpdate($content: String!, $title: String!, $updateId: Float!) {
     editProjectUpdate(content: $content, title: $title, updateId: $updateId) {
       id
       title
@@ -428,7 +416,7 @@ const GET_PROJECT_BY_ADDRESS = gql`
 `
 
 const REGISTER_PROJECT_DONATION = gql`
-  mutation($txId: String!, $anonymous: Boolean!) {
+  mutation ($txId: String!, $anonymous: Boolean!) {
     registerProjectDonation(txId: $txId, anonymous: $anonymous)
   }
 `
@@ -466,10 +454,13 @@ const ACTIVATE_PROJECT = gql`
 
 const WALLET_ADDRESS_IS_VALID = gql`
   query WalletAddressIsValid($address: String!) {
-    walletAddressIsValid(address: $address) {
-      reasons
-      isValid
-    }
+    walletAddressIsValid(address: $address)
+  }
+`
+
+const TITLE_IS_VALID = gql`
+  query IsValidTitleForProject($title: String!, $projectId: Float) {
+    isValidTitleForProject(title: $title, projectId: $projectId)
   }
 `
 
@@ -483,7 +474,7 @@ const GET_CATEGORIES = gql`
 `
 
 const UPLOAD_IMAGE = gql`
-  mutation($imageUpload: ImageUpload!) {
+  mutation ($imageUpload: ImageUpload!) {
     uploadImage(imageUpload: $imageUpload) {
       url
       projectId
@@ -519,5 +510,6 @@ export {
   FETCH_MY_PROJECTS,
   WALLET_ADDRESS_IS_VALID,
   GET_CATEGORIES,
-  UPLOAD_IMAGE
+  UPLOAD_IMAGE,
+  TITLE_IS_VALID
 }

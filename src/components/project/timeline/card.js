@@ -1,16 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import {
-  Avatar,
-  Heading,
-  Badge,
-  Box,
-  Button,
-  Card,
-  IconButton,
-  Input,
-  Flex,
-  Text
-} from 'theme-ui'
+import React, { useState, useEffect, useContext } from 'react'
+import { Avatar, Heading, Badge, Box, Button, Card, IconButton, Input, Flex, Text } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -28,6 +17,7 @@ import {
 import Toast from '../../../components/toast'
 import theme from '../../../utils/theme-ui'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
+import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
 
 // import RichTextViewer from '../../richTextViewer'
 
@@ -108,6 +98,15 @@ const RaisedHandsImg = styled.img`
 `
 
 const TimelineCard = props => {
+  const {
+    state: { user: currentUser },
+    actions: { showSign }
+  } = useContext(Web3Context)
+
+  const client = useApolloClient()
+
+  const { content, reactions, number, isOwner } = props
+
   const [currentContent, setCurrentContent] = useState('')
   const [newTitle, setNewTitle] = useState(undefined)
   const [newInput, setNewInput] = useState('')
@@ -116,8 +115,7 @@ const TimelineCard = props => {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const [user, setUser] = useState(undefined)
-  const { content, reactions, number, isOwner } = props
-  const client = useApolloClient()
+
   const isSSR = typeof window === 'undefined'
 
   const react = async () => {
@@ -150,7 +148,8 @@ const TimelineCard = props => {
 
   const editUpdate = async () => {
     try {
-      if (editInput === props?.content?.content && editTitle === props?.content?.title) return setOpenEdit(false)
+      if (editInput === props?.content?.content && editTitle === props?.content?.title)
+        return setOpenEdit(false)
       await client?.mutate({
         mutation: EDIT_PROJECT_UPDATE,
         variables: {
@@ -305,6 +304,8 @@ const TimelineCard = props => {
               }}
               onClick={async () => {
                 try {
+                  if (currentUser && !currentUser.token) return showSign()
+
                   const res = await props.newUpdateOption({
                     title: newTitle,
                     content: newInput
@@ -336,9 +337,7 @@ const TimelineCard = props => {
     return (
       <Box style={{ width: '100%' }}>
         <SpecialCardContainer>
-          <DarkClouds
-            style={{ position: 'absolute', top: '41px', left: '42px' }}
-          />
+          <DarkClouds style={{ position: 'absolute', top: '41px', left: '42px' }} />
           <Box
             sx={{
               width: '60%',
@@ -396,9 +395,7 @@ const TimelineCard = props => {
           key={props.listingId + '_heading'}
         >
           <Top>
-            <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
-              Update # {number}
-            </Text>
+            <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>Update # {number}</Text>
           </Top>
           {!openEdit && content?.title}
         </Heading>
@@ -503,13 +500,11 @@ const TimelineCard = props => {
                     setEditInput(currentContent)
                     return setOpenEdit(false)
                   } else {
-                    setConfirmDelete(true)
+                    currentUser && !currentUser.token ? showSign() : setConfirmDelete(true)
                   }
                 }}
               >
-                <Text variant='text.bold'>
-                  {openEdit ? 'CANCEL' : 'DELETE'}
-                </Text>
+                <Text variant='text.bold'>{openEdit ? 'CANCEL' : 'DELETE'}</Text>
               </Button>
               <Button
                 sx={{
@@ -523,7 +518,7 @@ const TimelineCard = props => {
                   if (!openEdit) {
                     return setOpenEdit(true)
                   } else {
-                    editUpdate()
+                    currentUser && !currentUser.token ? showSign() : editUpdate()
                   }
                 }}
               >

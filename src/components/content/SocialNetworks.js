@@ -8,43 +8,10 @@ import {
   FaReddit,
   FaFacebook,
   FaYoutube,
-  FaWikipediaW,
   FaLinkedin
 } from 'react-icons/fa'
 
 import theme from '../../utils/theme-ui'
-
-const SocialContainer = styled.div`
-  @media (max-width: 850px) {
-    max-width: 100vw;
-  }
-`
-
-const LinkContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(24px, 1fr));
-  justify-content: space-evenly;
-  width: 344px;
-  @media (max-width: 850px) {
-    max-width: 100vw;
-  }
-`
-
-const SocialLink = styled.a`
-  width: 24px;
-  justify-self: start;
-  transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  color: ${theme.colors.bodyDark};
-
-  :hover {
-    transform: scale(1.2) translateY(-3px);
-    color: ${theme.colors.accent};
-  }
-
-  @media (max-width: 850px) {
-    justify-self: center;
-  }
-`
 
 const SocialNetworks = ({ compressed }) => {
   if (compressed) {
@@ -127,5 +94,37 @@ const SocialNetworks = ({ compressed }) => {
     </SocialContainer>
   )
 }
+
+const SocialContainer = styled.div`
+  @media (max-width: 850px) {
+    max-width: 100vw;
+  }
+`
+
+const LinkContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(24px, 1fr));
+  justify-content: space-evenly;
+  width: 344px;
+  @media (max-width: 850px) {
+    max-width: 100vw;
+  }
+`
+
+const SocialLink = styled.a`
+  width: 24px;
+  justify-self: start;
+  transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  color: ${theme.colors.bodyDark};
+
+  :hover {
+    transform: scale(1.2) translateY(-3px);
+    color: ${theme.colors.accent};
+  }
+
+  @media (max-width: 850px) {
+    justify-self: center;
+  }
+`
 
 export default SocialNetworks

@@ -3,24 +3,9 @@ import Link from 'next/link'
 import { Text, Flex, Box } from 'theme-ui'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
-import {
-  FacebookShareButton,
-  FacebookIcon,
-  LinkedinShareButton,
-  LinkedinIcon,
-  TwitterShareButton,
-  TwitterIcon
-} from 'react-share'
+import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from 'react-share'
 
-const HighFive = ({
-  project,
-  addedProject,
-  projectId,
-  projectImage,
-  projectTitle,
-  projectDescription,
-  newProject
-}) => {
+const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDescription }) => {
   const shareTitle = `Check out on @Givethio`
   const url = `${window.location.origin}/project/${addedProject?.slug}`
 
@@ -65,9 +50,7 @@ const HighFive = ({
           flexDirection: ['column', 'row', 'row']
         }}
       >
-        <Box
-          sx={{ minWidth: '20vw', mt: '100px', width: ['80%', '40%', '30%'] }}
-        >
+        <Box sx={{ minWidth: '20vw', mt: '100px', width: ['80%', '40%', '30%'] }}>
           <ProjectListing
             disabled
             shadowed
@@ -100,21 +83,13 @@ const HighFive = ({
             Tell everyone about it.
           </Text>
           <Flex sx={{ my: '30px', justifyContent: 'space-evenly' }}>
-            <TwitterShareButton
-              title={shareTitle}
-              url={url}
-              hashtags={['giveth']}
-            >
+            <TwitterShareButton title={shareTitle} url={url} hashtags={['giveth']}>
               <FaTwitter size='24px' />
             </TwitterShareButton>
             <FacebookShareButton quote={shareTitle} url={url} hashtag='#giveth'>
               <FaFacebook size='24px' />
             </FacebookShareButton>
-            <LinkedinShareButton
-              title={shareTitle}
-              summary={project?.description}
-              url={url}
-            >
+            <LinkedinShareButton title={shareTitle} summary={project?.description} url={url}>
               <FaLinkedin size='24px' />
             </LinkedinShareButton>
           </Flex>

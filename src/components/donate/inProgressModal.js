@@ -1,13 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
 import { Button, Flex, Text, Spinner } from 'theme-ui'
-import { getEtherscanPrefix } from '../../utils'
-import { useWallet } from '../../contextProvider/WalletProvider'
 import theme from '../../utils/theme-ui/index'
+import { ETHERSCAN_PREFIXES } from '../../lib/util'
 
-const etherscanPrefix = getEtherscanPrefix()
-const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
-  const { isLoggedIn } = useWallet()
+const InProgressModal = ({ showModal, setShowModal, txHash, networkId }) => {
   if (!showModal) return null
   return (
     <Flex
@@ -58,25 +55,21 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
           variant: 'text.default'
         }}
       >
-        Transaction has been submitted and is waiting for confirmation.
-        <Link href={`https://${etherscanPrefix}etherscan.io/tx/${txHash}`}>
-          <a style={{ textDecoration: 'none', color: theme.colors.primary }}>
-            View on Etherscan
-          </a>
-        </Link>
+        Transaction has been submitted and is waiting for confirmation.{' '}
+        <a
+          style={{ textDecoration: 'none', color: theme.colors.primary }}
+          href={`${ETHERSCAN_PREFIXES[networkId]}tx/${txHash}`}
+          rel='noreferrer noopener'
+          target='_blank'
+        >
+          View on Etherscan
+        </a>
       </Text>
       <Text sx={{ mt: 2, mx: 5, textAlign: 'center', variant: 'text.default' }}>
-        You can safely close this window and return to Homepage.{' '}
-        {isLoggedIn &&
-          `Your
-          transaction will show in ${' '}`}
-        {isLoggedIn && (
-          <Link href='/account?view=donations'>
-            <a style={{ textDecoration: 'none', color: theme.colors.primary }}>
-              My Account.
-            </a>
-          </Link>
-        )}
+        You can safely close this window and return to Homepage. Your transaction will show in{' '}
+        <Link href='/account?view=donations'>
+          <a style={{ textDecoration: 'none', color: theme.colors.primary }}>My Account.</a>
+        </Link>
       </Text>
 
       <Button
@@ -89,12 +82,13 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
           height: '52px',
           border: '2px solid #AAAFCA'
         }}
-        onClick={() => (window.location.href = '/')}
       >
-        GO TO HOMEPAGE
+        <Link href={'/'}>
+          <a>GO TO HOMEPAGE</a>
+        </Link>
       </Button>
     </Flex>
   )
 }
 
-export default UnconfirmedModal
+export default InProgressModal

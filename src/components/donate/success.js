@@ -1,56 +1,23 @@
-import React, { useState } from 'react';
-import { Box, Link, Flex, Text } from 'theme-ui';
-import { useMediaQuery } from 'react-responsive';
-import { base64ToBlob, getEtherscanPrefix } from '../../utils';
-import styled from '@emotion/styled';
-import ConfettiAnimation from '../animations/confetti';
-import { useWallet } from '../../contextProvider/WalletProvider';
-import BillIcon from '../../images/svg/donation/bill-icon.svg';
-
-const Content = styled(Flex)`
-  flex-direction: column;
-  z-index: 10;
-  min-width: 32vw;
-  word-wrap: break-word;
-`;
-
-const Receipt = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const DownloadReceipt = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex: 0.5;
-  border: 2px solid #aaafca;
-  border-radius: 6px;
-  padding: 20px 14px;
-  align-items: center;
-  cursor: pointer;
-`;
+import React from 'react'
+import { Box, Link, Flex, Text } from 'theme-ui'
+import { useMediaQuery } from 'react-responsive'
+import styled from '@emotion/styled'
+import ConfettiAnimation from '../animations/confetti'
+import BillIcon from '../../images/svg/donation/bill-icon.svg'
+import { ETHERSCAN_PREFIXES } from '../../lib/util'
 
 const Success = props => {
-  const { isLoggedIn, login } = useWallet();
-  const { project, hash, currentChainId } = props;
-  const [pdfBase64, setPdfBase64] = useState(null);
+  const { project, transakTx, hash, currentChainId } = props
 
   const downloadPDF = () => {
-    const blob = base64ToBlob(pdfBase64);
-    const filename = 'donation_invoice.pdf';
-    const uriContent = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', uriContent);
-    link.setAttribute('download', filename);
-    const event = new MouseEvent('click');
-    link.dispatchEvent(event);
-  };
+    const filename = 'donation_invoice.pdf'
+    const link = document.createElement('a')
+    link.setAttribute('download', filename)
+    const event = new MouseEvent('click')
+    link.dispatchEvent(event)
+  }
 
-  const etherscanPrefix = getEtherscanPrefix();
-  const isMobile = useMediaQuery({ query: '(max-width: 825px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <>
       <Flex
@@ -72,39 +39,48 @@ const Success = props => {
             textAlign: 'left'
           }}
         >
-          You're a giver now!
+          You&apos;re a giver now!
         </Text>
         <Text sx={{ variant: 'headings.h5', color: 'background' }}>
           Thank you for supporting <strong> {project?.title} </strong>.
         </Text>
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: -1 }}>
-          Your{' '}
-          <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong>{' '}
-          contribution goes a long way!
+          Your <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong> contribution goes
+          a long way!
         </Text>
         {hash?.transactionHash ? (
           <Receipt sx={{ my: 4 }}>
             <div style={{ flex: 1 }}>
-              <Link
-                sx={{
+              <a
+                style={{
                   variant: 'text.paragraph',
-                  color: 'yellow',
-                  cursor: 'pointer'
+                  color: 'yellow'
                 }}
                 target='_blank'
-                href={
-                  currentChainId === 100
-                    ? `https://blockscout.com/xdai/mainnet/tx/${hash?.transactionHash}`
-                    : `https://${etherscanPrefix}etherscan.io/tx/${hash?.transactionHash}`
-                }
+                href={`${ETHERSCAN_PREFIXES[currentChainId]}tx/${hash.transactionHash}`}
+                rel='noreferrer noopener'
               >
                 View transaction details
-              </Link>
+              </a>
             </div>
+          </Receipt>
+        ) : transakTx ? (
+          <Receipt sx={{ my: 4 }}>
+            <Link
+              sx={{
+                variant: 'text.paragraph',
+                color: 'yellow',
+                cursor: 'pointer'
+              }}
+              target='_blank'
+              href={transakTx}
+            >
+              View transaction details
+            </Link>
           </Receipt>
         ) : (
           <Receipt sx={{ my: 4 }}>
-            <DownloadReceipt onClick={() => downloadPDF()}>
+            <DownloadReceipt onClick={downloadPDF}>
               <Text
                 sx={{
                   variant: 'text.paragraph',
@@ -119,37 +95,51 @@ const Success = props => {
           </Receipt>
         )}
 
-        {!isLoggedIn ? (
-          <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
-            Stay a Giver?{' '}
-            <span
-              sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
-              onClick={login}
+        <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
+          Thank you for your support{' '}
+          <div>
+            <Link
+              sx={{
+                variant: 'text.paragraph',
+                color: 'yellow',
+                cursor: 'pointer'
+              }}
+              target='_blank'
+              href='/account?view=donations'
             >
-              Register an account.
-            </span>
-          </Text>
-        ) : (
-          <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
-            Thank you for your support{' '}
-            <div>
-              <Link
-                sx={{
-                  variant: 'text.paragraph',
-                  color: 'yellow',
-                  cursor: 'pointer'
-                }}
-                target='_blank'
-                href='/account?view=donations'
-              >
-                View your donations
-              </Link>
-            </div>
-          </Text>
-        )}
+              View your donations
+            </Link>
+          </div>
+        </Text>
       </Content>
     </>
-  );
-};
+  )
+}
 
-export default Success;
+const Content = styled(Flex)`
+  flex-direction: column;
+  z-index: 10;
+  min-width: 32vw;
+  word-wrap: break-word;
+`
+
+const Receipt = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const DownloadReceipt = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: 0.5;
+  border: 2px solid #aaafca;
+  border-radius: 6px;
+  padding: 20px 14px;
+  align-items: center;
+  cursor: pointer;
+`
+
+export default Success

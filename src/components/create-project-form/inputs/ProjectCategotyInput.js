@@ -1,16 +1,27 @@
 import React from 'react'
 import { Checkbox, Label, Flex, Box, Text, Button } from 'theme-ui'
-import { animated } from 'react-spring'
+import { maxSelectedCategory } from '../../../utils/constants'
+import Toast from '../../toast'
 
-export const ProjectCategoryInput = ({
-  register,
-  currentValue,
-  categoryList = [],
-  animationStyle,
-  goBack
-}) => {
+export const ProjectCategoryInput = ({ value, setValue, categoryList = [], goBack }) => {
+  const handleChange = (name, e) => {
+    const newValue = { ...value, [name]: e }
+    const selectedCategories = Object.entries(newValue)?.filter(i => i[1] === true)
+    const isMaxCategories = selectedCategories.length > maxSelectedCategory
+
+    if (isMaxCategories) {
+      Toast({
+        content: `Please select no more than ${maxSelectedCategory} categories`,
+        type: 'error'
+      })
+      return setValue(value)
+    }
+
+    setValue(newValue)
+  }
+
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
+    <div style={{ marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -29,7 +40,7 @@ export const ProjectCategoryInput = ({
           lineHeight: '19px'
         }}
       >
-        You can select multiple categories
+        You can select multiple categories (maximum {maxSelectedCategory})
       </Text>
       <Box
         sx={{
@@ -48,10 +59,8 @@ export const ProjectCategoryInput = ({
                 key={`${category.name}-checkbox`}
                 id={category.name}
                 name={category.name}
-                {...register(category.name)}
-                defaultChecked={
-                  currentValue ? (!!currentValue[category.name] ? 1 : 0) : 0
-                }
+                checked={!!(value && value[category.name])}
+                onChange={e => handleChange(category.name, e.target.checked)}
               />
               <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
             </Label>
@@ -111,6 +120,6 @@ export const ProjectCategoryInput = ({
           </Text>
         </Button>
       </Flex>
-    </animated.section>
+    </div>
   )
 }

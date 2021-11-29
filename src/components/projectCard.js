@@ -1,122 +1,28 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
+import { Heading, Box, Button, Card, Flex, Text } from 'theme-ui'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import styled from '@emotion/styled'
-import { useApolloClient, useQuery } from '@apollo/client'
-import theme from '../utils/theme-ui/index'
-// import Donate from '../components/donateForm'
-import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
+import { useApolloClient } from '@apollo/client'
 import { BsHeartFill } from 'react-icons/bs'
 import { FaShareAlt } from 'react-icons/fa'
+
+import theme from '../utils/theme-ui/index'
+import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
 import { PopupContext } from '../contextProvider/popupProvider'
-import { useWallet } from '../contextProvider/WalletProvider'
+import { Context as Web3Context } from '../contextProvider/Web3Provider'
 import LevitatingCard from './hoc/levitatingCard'
+import projectBadge from './projectBadge'
+import { isNewProject } from '../lib/helpers'
+// import Donate from '../components/donateForm'
+
+const env = process.env.NEXT_PUBLIC_ENVIRONMENT
+const isDev = env === 'dev'
 
 const RichTextViewer = dynamic(() => import('./richTextViewer'), {
   ssr: false
 })
-
-const CardContainer = styled(Card)`
-  position: relative;
-  z-index: 0;
-  background-color: ${theme.colors.background};
-  margin-bottom: 30px;
-  border-radius: 12px;
-  width: 100%;
-`
-
-const CardContent = styled(Flex)`
-  flex-direction: column;
-  word-wrap: break-word;
-  padding: 1rem;
-`
-
-const AltCardContent = styled.span`
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  flex: 1;
-  width: 100%;
-  z-index: 2;
-  flex-direction: column;
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: 12px;
-  padding: 0.5rem 1.5rem 1rem 1.5rem;
-  text-align: center;
-`
-
-const Badge = styled.span`
-  padding: 3px 11.76px;
-  margin: 0.4rem;
-  align-items: center;
-  text-align: center;
-  border: 1px solid ${theme.colors.bodyLight};
-  border-radius: 48px;
-  color: ${theme.colors.bodyLight};
-`
-
-const Dot = styled.span`
-  height: 68px;
-  width: 68px;
-  display: grid;
-  color: ${theme.colors.background};
-  border: 6px solid ${theme.colors.background};
-  border-radius: 50%;
-  position: absolute;
-  bottom: -34px;
-  left: 24px;
-  font-family: 'Red Hat Text', sans-serif;
-  font-size: 10px;
-`
-
-const DotInner = styled.span`
-  display: block;
-  text-align: center;
-  align-self: center;
-  position: relative;
-`
-
-const Options = styled.span`
-  font-family: 'Red Hat Text', sans-serif;
-  color: ${theme.colors.background};
-  display: flex;
-  position: absolute;
-  align-items: center;
-  bottom: -42px;
-  right: 24px;
-`
-
-const CardFooter = styled.span`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin: 1rem 0;
-`
-
-const Givers = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-self: center;
-  margin: 1.2rem 0 0.5rem 0;
-  div:first-child {
-    border-right: 2px solid #edf0fa;
-  }
-  div {
-    padding: 0 1rem;
-  }
-`
-const IconBtn = styled(IconButton)`
-  cursor: pointer;
-`
-
-const StyledImage = styled(Image)`
-  cursor: pointer;
-  border-radius: 12px 12px 0px 0px;
-  object-fit: cover;
-`
 
 const Categories = ({ categories }) => {
   const BadgeContent = ({ index, name }) => {
@@ -137,20 +43,22 @@ const Categories = ({ categories }) => {
   return categories?.length
     ? categories.map((category, index) => {
         if (!category) return null
-        return <BadgeContent index={index} name={category?.name} />
+        return <BadgeContent key={category.name} index={index} name={category.name} />
       })
     : null
 }
 
 const ProjectCard = props => {
-  const { user } = useWallet()
-  const { project, fromViewStyle, isATrace } = props
-  const client = useApolloClient()
-  const [altStyle, setAltStyle] = useState(false)
+  const {
+    state: { user },
+    actions: { showSign }
+  } = useContext(Web3Context)
   const usePopup = useContext(PopupContext)
-  const strUserId = user?.id?.toString()
-  const initUserHearted =project?.reactions?.find(r => r?.userId === user?.id)
-  const [hearted, setHearted] = useState(initUserHearted)
+  const client = useApolloClient()
+
+  const { project, fromViewStyle, isATrace } = props
+
+  const [altStyle, setAltStyle] = useState(false)
   const [heartedByUser, setHeartedByUser] = useState(null)
   const [heartedCount, setHeartedCount] = useState(null)
 
@@ -167,25 +75,19 @@ const ProjectCard = props => {
       const { data } = reaction
       const { toggleProjectReaction } = data
       const { reaction: hearted, reactionCount } = toggleProjectReaction
-      console.log({ hearted, reactionCount })
       setHeartedCount(reactionCount)
       setHeartedByUser(hearted)
-      setHearted(hearted)
-    } catch (error) {
-      usePopup?.triggerPopup('WelcomeLoggedOut')
-      console.log({ error })
+    } catch (err) {
+      showSign()
     }
   }
 
   useEffect(() => {
-    setHeartedCount(project?.reactions?.length)
-    setHeartedByUser(project?.reactions?.find(r => r.userId === user?.id))
-  }, [project])
+    if (project) setHeartedCount(project.reactions?.length)
+    if (user) setHeartedByUser(project?.reactions?.find(r => r.userId === user.id))
+  }, [project, user])
 
   const image = props?.image || project?.image
-  const currentTime = new Date()
-  const twoWeeksAgo = currentTime.setDate(currentTime.getDate() - 14)
-  const isNewProject = new Date(project?.creationDate)?.valueOf() > twoWeeksAgo
 
   return (
     <Box
@@ -208,11 +110,7 @@ const ProjectCard = props => {
             //     ? `https://trace.giveth.io/campaign/${project?.slug}`
             //     : `/project/${props?.slug || project?.slug || ''}`
             // }
-            href={
-              isATrace
-                ? isATrace
-                : `/project/${props?.slug || project?.slug || ''}`
-            }
+            href={isATrace ? isATrace : `/project/${props?.slug || project?.slug || ''}`}
             passHref
           >
             <a
@@ -238,7 +136,6 @@ const ProjectCard = props => {
                     backgroundRepeat: 'no-repeat',
                     position: 'relative'
                   }}
-                  alt={props.name || project?.title}
                 />
               ) : (
                 <div
@@ -266,77 +163,27 @@ const ProjectCard = props => {
               )}
             </a>
           </Link>
+
           <div style={{ position: 'relative' }}>
-            {project?.fromTrace || project?.IOTraceable ? (
-              <Dot
-                style={{
-                  backgroundColor: theme.colors.secondary
-                }}
-                key={props.listingId + '_card'}
-              >
-                <DotInner>
-                  <Text
-                    sx={{
-                      variant: 'text.overlineSmall',
-                      color: 'background'
-                    }}
-                  >
-                    TRACE
-                  </Text>
-                </DotInner>
-              </Dot>
-            ) : isNewProject ? (
-              <Dot
-                style={{
-                  backgroundColor: theme.colors.primary
-                }}
-                key={props.listingId + '_card'}
-              >
-                <DotInner>
-                  <Text
-                    sx={{
-                      variant: 'text.overlineSmall',
-                      color: 'background'
-                    }}
-                  >
-                    NEW
-                  </Text>
-                </DotInner>
-              </Dot>
-            ) : project?.verified ? (
-              <Dot
-                style={{
-                  backgroundColor: theme.colors.blue
-                }}
-                key={props.listingId + '_card'}
-              >
-                <DotInner>
-                  <Text
-                    sx={{
-                      variant: 'text.overlineSmall',
-                      color: 'background'
-                    }}
-                  >
-                    VERIFIED
-                  </Text>
-                </DotInner>
-              </Dot>
-            ) : null}
+            {project?.fromTrace || project?.IOTraceable
+              ? projectBadge('TRACEABLE')
+              : project?.verified
+              ? projectBadge('VERIFIED')
+              : isNewProject(project?.creationDate)
+              ? projectBadge('NEW')
+              : null}
+
             {!project?.fromTrace ? (
               <Options>
                 <Flex sx={{ alignItems: 'center' }}>
                   <BsHeartFill
                     style={{ cursor: 'pointer' }}
                     size='18px'
-                    color={
-                      heartedByUser ? theme.colors.red : theme.colors.muted
-                    }
+                    color={heartedByUser ? theme.colors.red : theme.colors.muted}
                     onClick={reactToProject}
                   />
                   {heartedCount && (
-                    <Text sx={{ variant: 'text.default', ml: 2 }}>
-                      {heartedCount}
-                    </Text>
+                    <Text sx={{ variant: 'text.default', ml: 2 }}>{heartedCount}</Text>
                   )}
                 </Flex>
 
@@ -396,20 +243,14 @@ const ProjectCard = props => {
                 //     ? `https://trace.giveth.io/campaign/${project?.slug}`
                 //     : `/project/${props?.slug || project?.slug || ''}`
                 // }
-                href={
-                  isATrace
-                    ? isATrace
-                    : `/project/${props?.slug || project?.slug || ''}`
-                }
+                href={isATrace ? isATrace : `/project/${props?.slug || project?.slug || ''}`}
                 passHref
               >
                 <a
                   target={project?.fromTrace ? '_blank' : null}
                   rel={project?.fromTrace ? 'noopener noreferrer' : null}
                 >
-                  <Button
-                    sx={{ width: '100%', variant: 'buttons.default', mt: 2 }}
-                  >
+                  <Button sx={{ width: '100%', variant: 'buttons.default', mt: 2 }}>
                     Learn More
                   </Button>
                 </a>
@@ -418,9 +259,8 @@ const ProjectCard = props => {
                 <Link
                   href={
                     project?.fromTrace
-                      ? `https://trace.giveth.io/campaign/${project?.slug}`
-                      : !props.disabled &&
-                        `/donate/${props?.slug || project?.slug}`
+                      ? `https://${isDev ? 'develop' : 'trace'}.giveth.io/campaign/${project?.slug}`
+                      : !props.disabled && `/donate/${props?.slug || project?.slug}`
                   }
                   passHref
                 >
@@ -489,5 +329,80 @@ const ProjectCard = props => {
     </Box>
   )
 }
+
+const CardContainer = styled(Card)`
+  position: relative;
+  z-index: 0;
+  background-color: ${theme.colors.background};
+  margin-bottom: 30px;
+  border-radius: 12px;
+  width: 100%;
+`
+
+const CardContent = styled(Flex)`
+  flex-direction: column;
+  word-wrap: break-word;
+  padding: 1rem;
+`
+
+const AltCardContent = styled.span`
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  z-index: 2;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  padding: 0.5rem 1.5rem 1rem 1.5rem;
+  text-align: center;
+`
+
+const Badge = styled.span`
+  padding: 3px 11.76px;
+  margin: 0.4rem;
+  align-items: center;
+  text-align: center;
+  border: 1px solid ${theme.colors.bodyLight};
+  border-radius: 48px;
+  color: ${theme.colors.bodyLight};
+`
+
+const Options = styled.span`
+  font-family: 'Red Hat Text', sans-serif;
+  color: ${theme.colors.background};
+  display: flex;
+  position: absolute;
+  align-items: center;
+  bottom: -42px;
+  right: 24px;
+`
+
+const CardFooter = styled.span`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 1rem 0;
+`
+
+const Givers = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  margin: 1.2rem 0 0.5rem 0;
+  div:first-child {
+    border-right: 2px solid #edf0fa;
+  }
+  div {
+    padding: 0 1rem;
+  }
+`
+
+const StyledImage = styled(Image)`
+  cursor: pointer;
+  border-radius: 12px 12px 0px 0px;
+  object-fit: cover;
+`
 
 export default ProjectCard

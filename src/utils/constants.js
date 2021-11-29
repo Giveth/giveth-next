@@ -26,6 +26,19 @@ export const categoryList = [
   { name: 'waste', value: 'Waste', source: 'IRIS' },
   { name: 'water', value: 'Water', source: 'IRIS' },
   { name: 'other', value: 'Other', source: 'adhoc' }
-];
+]
 
-export const maxSelectedCategory = 5;
+export const maxSelectedCategory = 5
+
+export const gqlEnums = {
+  QUALITYSCORE: 'QualityScore',
+  CREATIONDATE: 'CreationDate',
+  BALANCE: 'Balance',
+  VERIFIED: 'Verified',
+  HEARTS: 'Reactions',
+  DONATIONS: 'Donations',
+  RECENTLYADDED: 'RecentlyAdded',
+  OLD: 'OldProjects',
+  DESC: 'DESC',
+  ASC: 'ASC'
+}

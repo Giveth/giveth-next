@@ -1,51 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Box, Button, Input, Text, Flex } from 'theme-ui'
-import { useWallet } from '../../contextProvider/WalletProvider'
-import * as Auth from '../../services/auth'
-import { checkIfURLisValid } from '../../utils'
+import Modal from 'react-modal'
 import { useMutation } from '@apollo/client'
 import { IoMdClose } from 'react-icons/io'
 import { useForm } from 'react-hook-form'
+
 import { UPDATE_USER } from '../../apollo/gql/auth'
 import theme from '../../utils/theme-ui/index'
-import Modal from 'react-modal'
 import Avatar from '../avatar'
 import Toast from '../../components/toast'
-
-const customStyles = {
-  overlay: {
-    position: 'fixed',
-    zIndex: 4,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    backdropFilter: 'blur(2px)',
-    '-webkit-backdrop-filter': 'blur(2px)'
-  },
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    borderRadius: '12px',
-    borderColor: 'transparent',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)'
-  }
-}
+import { Context as Web3Context } from '../../contextProvider/Web3Provider'
+import { checkIfURLisValid } from '../../utils'
 
 const InputBox = props => {
-  const {
-    title,
-    placeholderText,
-    name,
-    register,
-    errors,
-    refExtras = null
-  } = props
+  const { title, placeholderText, name, register, errors, refExtras = null } = props
   return (
     <Box sx={{ mt: 3, mb: 2, width: '100%' }}>
       <Text
@@ -72,16 +40,16 @@ const InputBox = props => {
         // defaultValue={defaultValue}
         // onChange={e => setCharacterLength(e.target.value.length)}
       />
-      {errors && errors[name] && (
-        <Text sx={{ mt: 1, color: 'red' }}>{errors[name].message}</Text>
-      )}
+      {errors && errors[name] && <Text sx={{ mt: 1, color: 'red' }}>{errors[name].message}</Text>}
     </Box>
   )
 }
 
 function EditProfileModal(props) {
-  const [user, setUser] = React.useState(props?.user)
-  const wallet = useWallet()
+  const {
+    state: { user, account },
+    actions: { updateUser }
+  } = useContext(Web3Context)
 
   const { register, handleSubmit, reset, errors } = useForm({
     // defaultValues: user
@@ -89,18 +57,21 @@ function EditProfileModal(props) {
       return user
     }, [user])
   })
-  const [updateUser] = useMutation(UPDATE_USER)
+  const [updateUserInDB] = useMutation(UPDATE_USER)
 
   const onSubmit = async data => {
     try {
       const { firstName, lastName, location, email, url } = data
-      if (!firstName && !lastName && !location && !url)
+      if ((!firstName && !lastName) || !email) {
         return Toast({
-          content: 'Please fill at least one field',
+          content: 'Please provide either your last name or first name and your email address.',
           type: 'error'
         })
+      }
+
       const newProfile = {
-        firstName: firstName || '',
+        name: '',
+        firstName: firstName,
         lastName: lastName || '',
         location: location || '',
         email: email || '',
@@ -116,12 +87,12 @@ function EditProfileModal(props) {
             type: 'error'
           })
       }
-      const { data: response, error } = await updateUser({
+      const { data: response, error } = await updateUserInDB({
         variables: newProfile
       })
       if (response?.updateUser === true) {
         props.onRequestClose()
-        wallet?.updateUser && wallet.updateUserInfoOnly()
+        updateUser()
         reset(data)
         return Toast({
           content: 'Profile updated successfully',
@@ -157,18 +128,10 @@ function EditProfileModal(props) {
           }}
         >
           <Flex sx={{ mb: 2 }}>
-            <Avatar
-              img={user?.profileImage || user?.avatar}
-              size={100}
-              address={user.getWalletAddress()}
-            />
+            <Avatar img={user?.profileImage || user?.avatar} size={100} address={account} />
             <Flex sx={{ flexDirection: 'column', ml: '27px' }}>
-              <Text sx={{ color: 'secondary', fontSize: 7 }}>
-                {wallet?.user?.name}
-              </Text>
-              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>
-                {wallet?.user?.email}
-              </Text>
+              <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
+              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
             </Flex>
           </Flex>
           <InputBox
@@ -213,11 +176,8 @@ function EditProfileModal(props) {
             errors={errors}
             register={register}
           />
-          <Flex
-            sx={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
-          >
+          <Flex sx={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
             <Button
-              type='button'
               aria-label='edit profile'
               variant='small'
               sx={{
@@ -229,7 +189,6 @@ function EditProfileModal(props) {
                 fontWeight: 'bold'
               }}
               type='submit'
-              // onClick={() => alert('This is still a mockup, hold on!')}
             >
               SAVE
             </Button>
@@ -265,6 +224,31 @@ function EditProfileModal(props) {
       </form>
     </Modal>
   )
+}
+
+const customStyles = {
+  overlay: {
+    position: 'fixed',
+    zIndex: 4,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    backdropFilter: 'blur(2px)',
+    '-webkit-backdrop-filter': 'blur(2px)'
+  },
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    borderRadius: '12px',
+    borderColor: 'transparent',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)'
+  }
 }
 
 export default EditProfileModal

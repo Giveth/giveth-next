@@ -1,31 +1,17 @@
 import React from 'react'
-import { Text, Button, Flex, Image, Grid, Box } from 'theme-ui'
+import { Text, Button, Flex, Image } from 'theme-ui'
 import dynamic from 'next/dynamic'
-import { animated } from 'react-spring'
-import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
-import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
-import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
-import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
 
 const RichTextViewer = dynamic(() => import('../richTextViewer'), {
   ssr: false
 })
 
-const FinalVerificationStep = ({
-  formData,
-  setStep,
-  animationStyle,
-  categoryList
-}) => {
+const FinalVerificationStep = ({ formData, setStep, categoryList }) => {
   const chosenCategories = []
   for (const category in formData.projectCategory) {
-    if (
-      !!formData.projectCategory[category] &&
-      formData.projectCategory[category]?.length !== 0
-    ) {
+    if (!!formData.projectCategory[category] && formData.projectCategory[category]?.length !== 0) {
       chosenCategories.push(
-        categoryList?.filter(categoryItem => categoryItem.name === category)[0]
-          ?.value
+        categoryList?.filter(categoryItem => categoryItem.name === category)[0]?.value
       )
     }
   }
@@ -45,7 +31,7 @@ const FinalVerificationStep = ({
     mt: '18px'
   }
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '35px' }}>
+    <div style={{ marginTop: '35px' }}>
       <>
         <Flex>
           <Text sx={labelStyle}>Project Name</Text>
@@ -259,7 +245,7 @@ const FinalVerificationStep = ({
             </Button>
           </Flex>
 
-          {formData.projectImage?.startsWith('data:') ? (
+          {formData.projectImage && (
             <Image
               src={formData.projectImage}
               sx={{
@@ -268,27 +254,8 @@ const FinalVerificationStep = ({
                 maxWidth: '600px',
                 mt: '20px'
               }}
+              alt='project image'
             />
-          ) : (
-            <Box
-              sx={{
-                mt: '20px',
-                '*': { borderRadius: 10, p: 1 }
-              }}
-            >
-              {formData.projectImage === '1' && (
-                <ProjectImageGallery1 style={{ width: '40%', height: '40%' }} />
-              )}
-              {formData.projectImage === '2' && (
-                <ProjectImageGallery2 style={{ width: '40%', height: '40%' }} />
-              )}
-              {formData.projectImage === '3' && (
-                <ProjectImageGallery3 style={{ width: '40%', height: '40%' }} />
-              )}
-              {formData.projectImage === '4' && (
-                <ProjectImageGallery4 style={{ width: '40%', height: '40%' }} />
-              )}
-            </Box>
           )}
         </Flex>
         <br />
@@ -319,7 +286,7 @@ const FinalVerificationStep = ({
           </Text>
         </Button>
       </>
-    </animated.section>
+    </div>
   )
 }
 
