@@ -1,296 +1,21 @@
 import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
+import { getEtherscanPrefix, titleCase } from '../../utils'
 import { useRouter } from 'next/router'
 import Pagination from 'react-js-pagination'
+import SearchIcon from '../../images/svg/general/search-icon.svg'
+import theme from '../../utils/theme-ui'
 import { Input, Flex, Spinner, Text } from 'theme-ui'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
-
-import SearchIcon from '../../images/svg/general/search-icon.svg'
-import theme from '../../utils/theme-ui'
-import { titleCase } from '../../utils'
-import { ETHERSCAN_PREFIXES } from '../../lib/util'
 // import DropdownInput from '../dropdownInput'
 // import { ProjectContext } from '../../contextProvider/projectProvider'
-// import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json
 
+import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 dayjs.extend(localizedFormat)
-
-const MyDonations = props => {
-  const router = useRouter()
-  const options = ['All Donations', 'Crypto']
-  const [currentDonations, setCurrentDonations] = React.useState([])
-  const filter = 0
-  const [loading, setLoading] = React.useState(true)
-  // TODO: Set this context for the user
-  // const { currentProjectView, setCurrentProjectView } = React.useContext(
-  //   ProjectContext
-  // )
-
-  useEffect(() => {
-    const setup = async () => {
-      window.scrollTo(0, 0)
-      if (props?.donations) {
-        setCurrentDonations(props?.donations)
-        setLoading(false)
-      }
-    }
-
-    setup()
-  }, [])
-
-  const searching = search => {
-    const donations = props.donations
-    if (!search || search === '') {
-      return setCurrentDonations(donations)
-    }
-    const some = donations?.filter(donation => {
-      const val = donation?.project?.title
-      return val?.toString().toLowerCase().indexOf(search.toString().toLowerCase()) === 0
-    })
-    setCurrentDonations(some)
-  }
-
-  const filterDonations = items => {
-    switch (options[filter]) {
-      case 'All Donations':
-        return items
-      case 'Fiat':
-        return items?.filter(item => !item.transactionId)
-      case 'Crypto':
-        return items?.filter(item => !!item.transactionId)
-      default:
-        return items
-    }
-  }
-
-  const filteredDonations = [...filterDonations(currentDonations)].sort((a, b) => {
-    return new Date(b?.createdAt) - new Date(a?.createdAt)
-  })
-
-  const populateIcons = item => {
-    // const found = iconManifest?.find(
-    //   i => i?.symbol === item?.currency?.toUpperCase()
-    // )
-
-    let icon = `/assets/cryptocurrency-icons/32/color/${item?.currency?.toLowerCase() || 'eth'}.png`
-    // let icon = found
-    //   ? `/assets/cryptocurrency-icons/32/color/${
-    //       item?.currency?.toLowerCase() || 'eth'
-    //     }.png`
-    //   : `/assets/tokens/${item?.symbol?.toUpperCase()}.png`
-    return { ...item, icon }
-  }
-
-  const TableToShow = () => {
-    const paginationItems = filteredDonations
-    const [activeItem, setCurrentItem] = React.useState(1)
-    const [currentItems, setCurrentItems] = React.useState([])
-
-    useEffect(() => {
-      // Data to be rendered using pagination.
-      const itemsPerPage = 6
-
-      // Logic for displaying current items
-      const indexOfLastItem = activeItem * itemsPerPage
-      const indexOfFirstItem = indexOfLastItem - itemsPerPage
-      const tmpItems = paginationItems?.slice(indexOfFirstItem, indexOfLastItem)
-
-      const items = tmpItems.map(item => populateIcons(item))
-
-      setCurrentItems(items)
-    }, [activeItem, paginationItems])
-
-    const handlePageChange = pageNumber => {
-      setCurrentItem(pageNumber)
-    }
-
-    const copy = hash => {
-      navigator.clipboard.writeText(hash)
-    }
-
-    return (
-      <>
-        <Table>
-          <thead>
-            <tr>
-              {['Date', 'Project', 'Currency', 'Amount', 'Transaction'].map((i, index) => {
-                return (
-                  <th scope='col' key={index}>
-                    <Text
-                      sx={{
-                        variant: 'text.small',
-                        fontWeight: 'bold',
-                        color: 'secondary'
-                      }}
-                    >
-                      {i}
-                    </Text>
-                  </th>
-                )
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems
-              ?.slice()
-              .sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
-              .map((i, key) => {
-                return (
-                  <tr key={key}>
-                    <td data-label='Account' style={{ variant: 'text.small', color: 'secondary' }}>
-                      <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                        {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
-                      </Text>
-                    </td>
-                    <td data-label='Project' style={{ variant: 'text.small', color: 'secondary' }}>
-                      <Text
-                        sx={{
-                          variant: 'text.medium',
-                          color: 'primary',
-                          cursor: 'pointer'
-                        }}
-                        onClick={() => router.push(`/project/${i?.project?.slug}`)}
-                      >
-                        {titleCase(i?.project?.title) || i?.donor}
-                      </Text>
-                    </td>
-                    <td
-                      data-label='Currency'
-                      style={{
-                        variant: 'text.small',
-                        color: 'secondary'
-                      }}
-                    >
-                      <img
-                        src={i?.icon || `/assets/tokens/${i?.currency?.toUpperCase()}.png`}
-                        alt={i.currency}
-                        onError={ev => {
-                          ev.target.src = ETHIcon
-                          ev.target.onerror = null
-                        }}
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          marginLeft: '1rem'
-                        }}
-                      />
-                    </td>
-                    <td data-label='Amount' style={{ variant: 'text.small', color: 'secondary' }}>
-                      <Text
-                        sx={{
-                          variant: 'text.small',
-                          color: 'secondary'
-                        }}
-                      >
-                        {i?.currency === 'ETH' && i?.valueUsd
-                          ? `${
-                              i?.amount ? `${i?.amount} ETH` : ''
-                            } \n ~ USD $${i?.valueUsd?.toFixed(2)}`
-                          : `${i?.amount} ${i?.currency}`}
-                      </Text>
-                    </td>
-                    <td
-                      data-label='Transaction'
-                      style={{ variant: 'text.small', color: 'secondary' }}
-                    >
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          alignItems: 'baseline'
-                        }}
-                      >
-                        <Text
-                          sx={{
-                            variant: 'text.small',
-                            color: 'secondary',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            width: '120px'
-                          }}
-                        >
-                          {i?.transactionId}
-                        </Text>
-                        <FiCopy
-                          size='18px'
-                          style={{ cursor: 'pointer', mr: 2 }}
-                          onClick={() => copy(i?.transactionId)}
-                        />{' '}
-                        <FiExternalLink
-                          size='18px'
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => {
-                            const transactionLink =
-                              i.transakTransactionLink ||
-                              `${ETHERSCAN_PREFIXES[i.transactionNetworkId]}tx/${i?.transactionId}`
-                            window.open(transactionLink)
-                          }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                )
-              })}
-          </tbody>
-        </Table>
-        <PagesStyle>
-          <Pagination
-            hideNavigation
-            hideFirstLastPages
-            activePage={activeItem}
-            itemsCountPerPage={6}
-            totalItemsCount={paginationItems.length}
-            pageRangeDisplayed={3}
-            onChange={handlePageChange}
-            innerClass='inner-pagination'
-            itemClass='item-page'
-            activeClass='active-page'
-          />
-        </PagesStyle>
-      </>
-    )
-  }
-
-  return (
-    <>
-      <FilterBox sx={{ pt: 4, flexDirection: ['column-reverse', null, 'row'] }}>
-        {/* Removing this as we don't have fiat donations yet */}
-        {/* <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
-          <DropdownInput
-            options={options}
-            current={filter}
-            setCurrent={i => setFilter(i)}
-          />
-        </FilterInput> */}
-        <SearchInput sx={{ width: ['100%', null, '100%'] }}>
-          <Input
-            defaultValue=''
-            placeholder='Search for projects'
-            variant='forms.search'
-            onChange={e => searching(e.target.value)}
-          />
-          <IconSearch />
-        </SearchInput>
-      </FilterBox>
-      {loading ? (
-        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
-          <Spinner variant='spinner.medium' />
-        </Flex>
-      ) : !filteredDonations || filteredDonations?.length === 0 ? (
-        <Table>
-          <Text sx={{ variant: 'text.large', color: 'secondary' }}>No donations :(</Text>
-        </Table>
-      ) : (
-        <TableToShow />
-      )}
-    </>
-  )
-}
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -368,6 +93,7 @@ const Table = styled.table`
     }
 
     td::before {
+      content: attr(aria-label);
       content: attr(data-label);
       float: left;
       font-size: 0.8rem;
@@ -380,7 +106,6 @@ const Table = styled.table`
     }
   }
 `
-
 const PagesStyle = styled.div`
   .inner-pagination {
     display: flex;
@@ -418,13 +143,326 @@ const IconSearch = styled(SearchIcon)`
 const SearchInput = styled(Flex)`
   align-items: center;
 `
+// const FilterInput = styled(Flex)`
+//   align-items: center;
+// `
 
 const FilterBox = styled(Flex)`
   width: 100%;
   justify-content: space-between;
 `
-// const FilterInput = styled(Flex)`
-//   align-items: center;
-// `
+
+const MyDonations = props => {
+  const router = useRouter()
+  const options = ['All Donations', 'Crypto']
+  const [currentDonations, setCurrentDonations] = React.useState([])
+  const [filter, setFilter] = React.useState(0)
+  const [loading, setLoading] = React.useState(true)
+  // TODO: Set this context for the user
+  // const { currentProjectView, setCurrentProjectView } = React.useContext(
+  //   ProjectContext
+  // )
+
+  const etherscanPrefix = getEtherscanPrefix()
+
+  useEffect(() => {
+    const setup = async () => {
+      window.scrollTo(0, 0)
+      if (props?.donations) {
+        setCurrentDonations(props?.donations)
+        setLoading(false)
+      }
+    }
+
+    setup()
+  }, [])
+
+  const searching = search => {
+    const donations = props.donations
+    if (!search || search === '') {
+      return setCurrentDonations(donations)
+    }
+    const some = donations?.filter(donation => {
+      const val = donation?.project?.title
+      return (
+        val
+          ?.toString()
+          .toLowerCase()
+          .indexOf(search.toString().toLowerCase()) === 0
+      )
+    })
+    setCurrentDonations(some)
+  }
+
+  const filterDonations = items => {
+    switch (options[filter]) {
+      case 'All Donations':
+        return items
+      case 'Fiat':
+        return items?.filter(item => !item.transactionId)
+      case 'Crypto':
+        return items?.filter(item => !!item.transactionId)
+      default:
+        return items
+    }
+  }
+
+  const filteredDonations = [...filterDonations(currentDonations)].sort(
+    (a, b) => {
+      return new Date(b?.createdAt) - new Date(a?.createdAt)
+    }
+  )
+
+  const populateIcons = async item => {
+    const found = iconManifest?.find(
+      i => i?.symbol === item?.currency?.toUpperCase()
+    )
+
+    let icon = `/assets/cryptocurrency-icons/32/color/${
+      item?.currency?.toLowerCase() || 'eth'
+    }.png`
+    // let icon = found
+    //   ? `/assets/cryptocurrency-icons/32/color/${
+    //       item?.currency?.toLowerCase() || 'eth'
+    //     }.png`
+    //   : `/assets/tokens/${item?.symbol?.toUpperCase()}.png`
+    return { ...item, icon }
+  }
+
+  const TableToShow = () => {
+    const paginationItems = filteredDonations
+    const [activeItem, setCurrentItem] = React.useState(1)
+    const [currentItems, setCurrentItems] = React.useState([])
+
+    useEffect(() => {
+      const getItems = async () => {
+        // Data to be rendered using pagination.
+        const itemsPerPage = 6
+
+        // Logic for displaying current items
+        const indexOfLastItem = activeItem * itemsPerPage
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage
+        const tmpItems = paginationItems?.slice(
+          indexOfFirstItem,
+          indexOfLastItem
+        )
+
+        const items = await Promise.all(
+          tmpItems.map(item => populateIcons(item))
+        )
+
+        setCurrentItems(items)
+      }
+      getItems()
+    }, [activeItem, paginationItems])
+
+    const handlePageChange = pageNumber => {
+      setCurrentItem(pageNumber)
+    }
+
+    const copy = hash => {
+      navigator.clipboard.writeText(hash)
+    }
+
+    return (
+      <>
+        <Table>
+          <thead>
+            <tr>
+              {['Date', 'Project', 'Currency', 'Amount', 'Transaction'].map(
+                (i, index) => {
+                  return (
+                    <th scope='col' key={index}>
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          fontWeight: 'bold',
+                          color: 'secondary'
+                        }}
+                      >
+                        {i}
+                      </Text>
+                    </th>
+                  )
+                }
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {currentItems
+              ?.slice()
+              .sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
+              .map((i, key) => {
+                return (
+                  <tr key={key}>
+                    <td
+                      data-label='Account'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                        {i?.createdAt
+                          ? dayjs(i.createdAt).format('ll')
+                          : 'null'}
+                      </Text>
+                    </td>
+                    <td
+                      data-label='Project'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Text
+                        sx={{
+                          variant: 'text.medium',
+                          color: 'primary',
+                          cursor: 'pointer'
+                        }}
+                        onClick={() =>
+                          router.push(`/project/${i?.project?.slug}`)
+                        }
+                      >
+                        {titleCase(i?.project?.title) || i?.donor}
+                      </Text>
+                    </td>
+                    <td
+                      data-label='Currency'
+                      sx={{
+                        variant: 'text.small',
+                        color: 'secondary'
+                      }}
+                    >
+                      <img
+                        src={
+                          i?.icon ||
+                          `/assets/tokens/${i?.currency?.toUpperCase()}.png`
+                        }
+                        alt={i.currency}
+                        onError={ev => {
+                          ev.target.src = ETHIcon
+                          ev.target.onerror = null
+                        }}
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          marginLeft: '1rem'
+                        }}
+                      />
+                    </td>
+                    <td
+                      data-label='Amount'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          color: 'secondary'
+                        }}
+                      >
+                        {i?.currency === 'ETH' && i?.valueUsd
+                          ? `${
+                              i?.amount ? `${i?.amount} ETH` : ''
+                            } \n ~ USD $${i?.valueUsd?.toFixed(2)}`
+                          : `${i?.amount} ${i?.currency}`}
+                      </Text>
+                    </td>
+                    <td
+                      data-label='Transaction'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'baseline'
+                        }}
+                      >
+                        <Text
+                          sx={{
+                            variant: 'text.small',
+                            color: 'secondary',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            width: '120px'
+                          }}
+                        >
+                          {i?.transactionId}
+                        </Text>
+                        <FiCopy
+                          size='18px'
+                          sx={{ cursor: 'pointer', mr: 2 }}
+                          onClick={() => copy(i?.transactionId)}
+                        />{' '}
+                        <FiExternalLink
+                          size='18px'
+                          sx={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            window.open(
+                              i?.transactionNetworkId === 100
+                                ? `https://blockscout.com/xdai/mainnet/tx/${i?.transactionId}`
+                                : `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
+                            )
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+          </tbody>
+        </Table>
+        <PagesStyle>
+          <Pagination
+            hideNavigation
+            hideFirstLastPages
+            activePage={activeItem}
+            itemsCountPerPage={6}
+            totalItemsCount={paginationItems.length}
+            pageRangeDisplayed={3}
+            onChange={handlePageChange}
+            innerClass='inner-pagination'
+            itemClass='item-page'
+            activeClass='active-page'
+          />
+        </PagesStyle>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <FilterBox sx={{ pt: 4, flexDirection: ['column-reverse', null, 'row'] }}>
+        {/* Removing this as we don't have fiat donations yet */}
+        {/* <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
+          <DropdownInput
+            options={options}
+            current={filter}
+            setCurrent={i => setFilter(i)}
+          />
+        </FilterInput> */}
+        <SearchInput sx={{ width: ['100%', null, '100%'] }}>
+          <Input
+            defaultValue=''
+            placeholder='Search for projects'
+            variant='forms.search'
+            onChange={e => searching(e.target.value)}
+          />
+          <IconSearch />
+        </SearchInput>
+      </FilterBox>
+      {loading ? (
+        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+          <Spinner variant='spinner.medium' />
+        </Flex>
+      ) : !filteredDonations || filteredDonations?.length === 0 ? (
+        <Table>
+          <Text sx={{ variant: 'text.large', color: 'secondary' }}>
+            No donations :(
+          </Text>
+        </Table>
+      ) : (
+        <TableToShow />
+      )}
+    </>
+  )
+}
 
 export default MyDonations

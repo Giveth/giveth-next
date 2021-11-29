@@ -1,5 +1,6 @@
 import React from 'react'
 import { Flex, Text } from 'theme-ui'
+import { Slide, toast } from 'react-toastify'
 import {
   IoMdWarning,
   IoIosCheckmarkCircle,
@@ -8,6 +9,7 @@ import {
 } from 'react-icons/io'
 import 'react-toastify/dist/ReactToastify.css'
 import theme from '../utils/theme-ui/index'
+import styled from '@emotion/styled'
 
 export default function Toast({ content = 'default msg', type, action }) {
   const Content = () => {
@@ -49,7 +51,9 @@ export default function Toast({ content = 'default msg', type, action }) {
       >
         <Flex sx={{ flex: action ? 0.8 : 1, alignItems: 'center' }}>
           <div style={{ marginRight: '10px' }}>{icon}</div>
-          <Text sx={{ wordBreak: 'break-word', color: borderColor }}>{content}</Text>
+          <Text sx={{ wordBreak: 'break-word', color: borderColor }}>
+            {content}
+          </Text>
         </Flex>
         {action && (
           <Flex sx={{ alignItems: 'center' }}>

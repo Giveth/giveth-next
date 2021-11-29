@@ -7,8 +7,6 @@ import styled from '@emotion/styled'
 import Image from 'next/image'
 
 import theme from '../utils/theme-ui/index'
-import projectBadge from './projectBadge'
-import { isNewProject } from '../lib/helpers'
 // import Donate from '../components/donateForm'
 
 // import iconShare from '../images/icon-share.svg'
@@ -58,6 +56,24 @@ const Badge = styled.span`
   border: 1px solid ${theme.colors.bodyLight};
   border-radius: 48px;
   color: ${theme.colors.bodyLight};
+`
+
+const Dot = styled.span`
+  display: grid;
+  height: 68px;
+  width: 68px;
+  color: ${theme.colors.background};
+  border: 6px solid ${theme.colors.background};
+  border-radius: 50%;
+  margin: -10% 0 0 24px;
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 10px;
+  position: relative;
+`
+
+const DotInner = styled.span`
+  text-align: center;
+  align-self: center;
 `
 
 const AltCardContent = styled.span`
@@ -113,9 +129,9 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectListing = props => {
-  const { project } = props
   const router = useRouter()
   const [hoverStyle, setHoverStyle] = React.useState(false)
+
   const image = props.image || '/images/no-image-available.jpg'
 
   return (
@@ -135,10 +151,14 @@ const ProjectListing = props => {
           onClick={() => {
             if (props.withEditHover) return
             if (props.wholeClickable)
-              return router.push(`/project/${props?.project?.slug || props?.slug}`)
+              return router.push(
+                `/project/${props?.project?.slug || props?.slug}`
+              )
             if (hoverStyle) return
             !props.disabled &&
-              (props?.action ? props.action() : router.push(`/donate/${props?.id}`))
+              (props?.action
+                ? props.action()
+                : router.push(`/donate/${props?.id}`))
           }}
           style={{
             cursor: props.wholeClickable
@@ -147,12 +167,17 @@ const ProjectListing = props => {
               ? 'default'
               : 'pointer',
             border:
-              props.disabled || props.transparentBorders ? null : `1px solid ${theme.colors.muted}`,
-            boxShadow: props.shadowed || hoverStyle ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
+              props.disabled || props.transparentBorders
+                ? null
+                : `1px solid ${theme.colors.muted}`,
+            boxShadow:
+              props.shadowed || hoverStyle
+                ? '0px 28px 52px rgba(44, 13, 83, 0.2)'
+                : null
           }}
         >
           {/* need to add options from the gallery. */}
-          <div key={props.listingId + '_div'} style={{ position: 'relative' }}>
+          <div key={props.listingId + '_div'}>
             {/^\d+$/.test(image) ? (
               <div
                 style={{
@@ -168,7 +193,7 @@ const ProjectListing = props => {
                   position: 'relative'
                 }}
               />
-            ) : props.image ? (
+            ) : !!props.image ? (
               <div
                 style={{
                   width: '100%',
@@ -182,7 +207,12 @@ const ProjectListing = props => {
                   position: 'relative'
                 }}
               >
-                <StyledImage src={image} layout='fill' priority={true} quality={40} />
+                <StyledImage
+                  src={image}
+                  layout='fill'
+                  priority={true}
+                  quality={40}
+                />
               </div>
             ) : (
               <div
@@ -200,18 +230,58 @@ const ProjectListing = props => {
               />
             )}
 
-            {project?.fromTrace || project?.IOTraceable
-              ? projectBadge('TRACEABLE')
-              : project?.verified
-              ? projectBadge('VERIFIED')
-              : isNewProject(project?.creationDate)
-              ? projectBadge('NEW')
-              : null}
+            <Dot
+              key={props.listingId + '_card'}
+              style={{
+                backgroundColor:
+                  props.raised === 0
+                    ? theme.colors.attention
+                    : theme.colors.secondary
+              }}
+            >
+              {props.raised === 0 ? (
+                <DotInner>
+                  <Text
+                    sx={{
+                      variant: 'text.overlineSmall',
+                      color: 'background'
+                    }}
+                  >
+                    NEW
+                  </Text>
+                </DotInner>
+              ) : (
+                <DotInner>
+                  {/* <Text sx={{ variant: 'text.overlineSmall', color: 'background' }}>
+                    RAISED
+                  </Text>
+                  <Text sx={{ variant: 'text.microbold', color: 'white' }}>
+                    ${props?.raised}
+                  </Text> */}
+                  <Text
+                    sx={{
+                      variant: 'text.overlineSmall',
+                      color: 'background'
+                    }}
+                  >
+                    ACTIVE
+                  </Text>
+                </DotInner>
+              )}
+            </Dot>
+            {/* <Options>
+            <IconButton>
+              <img src={iconHeart} alt='' />
+            </IconButton>
+            <IconButton>
+              <img src={iconShare} alt='' />
+            </IconButton>
+          </Options> */}
           </div>
           <Heading
-            sx={{
-              variant: 'headings.h6',
-              padding: '2.5rem 1rem 0 1rem',
+            sx={{ variant: 'headings.h6' }}
+            style={{
+              padding: '1rem 1rem 0 1rem',
               width: '260',
               height: '100%',
               overflow: 'hidden',
@@ -250,7 +320,10 @@ const ProjectListing = props => {
               >
                 EDIT
               </Button>
-              <Link href={!props.disabled && `/project/${props?.slug}`} passHref>
+              <Link
+                href={!props.disabled && `/project/${props?.slug}`}
+                passHref
+              >
                 <a style={{ margin: 'auto', zIndex: 10 }}>
                   <Text
                     sx={{
@@ -286,7 +359,9 @@ const ProjectListing = props => {
               }}
             >
               <RichTextViewer
-                content={props?.description?.replace(/<img .*?>/g, '').replace(/<iframe .*?>/g, '')}
+                content={props?.description
+                  ?.replace(/<img .*?>/g, '')
+                  .replace(/<iframe .*?>/g, '')}
               />
               {
                 /* Description String */

@@ -7,10 +7,11 @@ const ConfirmationModal = ({
   title,
   subtitle,
   confirmation,
-  secondary
+  secondary,
+  noMsg
 }) => (
   <div
-    style={{
+    css={{
       zIndex: 2,
       display: showModal ? 'flex' : 'none',
       position: 'fixed',
@@ -42,7 +43,11 @@ const ConfirmationModal = ({
     >
       Close
     </Button>
-    <Text sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}>{title}</Text>
+    <Text
+      sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}
+    >
+      {title}
+    </Text>
     {subtitle && (
       <Text
         sx={{

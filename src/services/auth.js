@@ -6,10 +6,23 @@ export const getUser = () =>
     : {}
 
 export function setUser(user) {
-  return window.localStorage.setItem(getLocalStorageUserLabel(), JSON.stringify(user))
+  return window.localStorage.setItem(
+    getLocalStorageUserLabel(),
+    JSON.stringify(user)
+  )
 }
 
-export const logout = () => {
+export function handleLogout() {
+  logout()
+}
+
+export const checkIfLoggedIn = () => {
+  const user = getUser()
+
+  return !!user.walletAddresses
+}
+
+export const logout = (callback = () => {}) => {
   if (isBrowser()) {
     window.localStorage.removeItem(getLocalStorageUserLabel())
     window.localStorage.removeItem(getLocalStorageTokenLabel())
@@ -18,14 +31,24 @@ export const logout = () => {
     // TODO: let's check if we should remove everything or just be careful
     // window.localStorage.clear()
   }
+  callback()
 }
 
 export function getLocalStorageUserLabel() {
-  return process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
+  const nextUser = process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
     ? process.env.NEXT_PUBLIC_LOCAL_USER_LABEL + '_' + process.env.ENVIRONMENT
     : 'nextUser' + '_' + process.env.ENVIRONMENT
+
+  return nextUser
 }
 
 export function getLocalStorageTokenLabel() {
-  return getLocalStorageUserLabel() + '_token'
+  const tokenLabel = getLocalStorageUserLabel() + '_token'
+
+  return tokenLabel
+}
+
+export function getUserToken() {
+  const userToken = window.localStorage.getItem(getLocalStorageTokenLabel())
+  return userToken || ''
 }

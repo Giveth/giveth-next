@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import * as queryString from 'query-string'
 import Web3 from 'web3'
 import fetch from 'isomorphic-fetch'
 import { useMutation } from '@apollo/client'
-import { Flex, Image, Spinner, Text } from 'theme-ui'
+import { Flex, Text, Spinner, Image } from 'theme-ui'
 
 import Seo from '../../components/seo'
-import { ADD_PROJECT, FETCH_PROJECTS } from '../../apollo/gql/projects'
+import { FETCH_PROJECTS, ADD_PROJECT } from '../../apollo/gql/projects'
 import Layout from '../../components/layout'
 import HighFive from '../../components/create-project-form/highFive'
 import GithubIssue from '../../components/GithubIssue'
@@ -25,10 +25,12 @@ const CreateProjectForm = dynamic(() => import('./index'))
 const CreateProject = props => {
   const { categories } = props
   const [projectId, setProjectId] = useState(null)
+  // const [isLoggedIn] = useState(checkIfLoggedIn())
+  // const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
   const [addedProject, setAddedProject] = useState(null)
   const [inError, setInError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState('')
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
@@ -37,9 +39,9 @@ const CreateProject = props => {
       const qs = queryString.parse(window.location.search)
       setProjectId(qs?.projectId)
     }
-  }, [])
+  })
   // const { projectId } = queryString.parse(location?.search)
-  const onSubmit = async values => {
+  const onSubmit = async (values, walletAddress) => {
     try {
       setProjectAdded(true)
 
@@ -75,6 +77,12 @@ const CreateProject = props => {
         )
       }
 
+      const projectDescImgs = window?.localStorage
+        .getItem('cached-uploaded-imgs')
+        ?.replace(/\[/g, '')
+        .replace(/\]/g, '')
+        .replace(/\s/g, '')
+
       const projectData = {
         title: values.projectName,
         description: values.projectDescription,
@@ -82,13 +90,19 @@ const CreateProject = props => {
         impactLocation: values.projectImpactLocation,
         categories: projectCategories,
         organisationId,
-        walletAddress: Web3.utils.toChecksumAddress(values.projectWalletAddress),
+        walletAddress: Web3.utils.toChecksumAddress(
+          values.projectWalletAddress
+        ),
         projectImage: values.pro
       }
       if (values?.projectImage?.length === 1) {
         projectData.imageStatic = values.projectImage
       } else if (values.projectImage) {
-        projectData.imageUpload = await getImageFile(values.projectImage, values.projectName)
+        const imageFile = await getImageFile(
+          values.projectImage,
+          values.projectName
+        )
+        projectData.imageUpload = imageFile
       }
       try {
         const project = await addProjectQuery({
@@ -107,17 +121,22 @@ const CreateProject = props => {
       } catch (error) {
         if (error.message === 'Access denied') {
           Logger.captureException(error)
-          logout()
-          setErrorMessage(
-            <>
-              <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
-                {`We're so sorry but ${error.message}`}
-              </Text>
-              <Text sx={{ variant: 'text.default' }}>We have logged you out to resolve this.</Text>
-              <Text sx={{ variant: 'text.default' }}>
-                <Link href='/'>Please login and start again</Link>
-              </Text>
-            </>
+          logout(
+            setErrorMessage(
+              <>
+                <Text
+                  sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}
+                >
+                  {`We're so sorry but ${error.message}`}
+                </Text>
+                <Text sx={{ variant: 'text.default' }}>
+                  We have logged you out to resolve this.
+                </Text>
+                <Text sx={{ variant: 'text.default' }}>
+                  <Link href='/'>Please login and start again</Link>
+                </Text>
+              </>
+            )
           )
         } else {
           console.log({ error })
@@ -145,7 +164,7 @@ const CreateProject = props => {
     //       <img
     //         src={decoratorClouds}
     //         alt=''
-    //         style={{
+    //         css={{
     //           position: 'absolute',
     //           top: '57px',
     //           right: '434px',
@@ -156,7 +175,7 @@ const CreateProject = props => {
     //       <img
     //         src={peoplePuzzle2}
     //         alt=''
-    //         style={{
+    //         css={{
     //           position: 'absolute',
     //           top: '417px',
     //           right: '0px',
@@ -250,7 +269,9 @@ const CreateProject = props => {
             <Text
               onClick={() => (
                 typeof window !== 'undefined' &&
-                  window?.open('https://github.com/Giveth/giveth-next/issues/new/choose'),
+                  window?.open(
+                    'https://github.com/Giveth/giveth-2/issues/new/choose'
+                  ),
                 '_blank'
               )}
               sx={{
@@ -273,20 +294,20 @@ const CreateProject = props => {
     if (!projectAdded && !projectId) {
       return (
         <>
-          <Image
+          <img
             src={'/images/decorator-clouds.svg'}
-            alt='decorator-clouds'
-            style={{
+            alt=''
+            css={{
               position: 'absolute',
               top: '57px',
               right: '434px'
             }}
             className='hide'
           />
-          <Image
+          <img
             src={'/images/people-puzzle2.svg'}
-            alt='people-puzzle2'
-            style={{
+            alt=''
+            css={{
               position: 'absolute',
               top: '417px',
               right: '0px'
@@ -303,11 +324,13 @@ const CreateProject = props => {
   return (
     <Layout noFooter noHeader>
       <div
-        style={{
+        sx={{
           // applies width 100% to all viewport widths,
           // width 50% above the first breakpoint,
           // and 25% above the next breakpoint
-          width: ['100%', '50%', '25%'],
+          width: ['100%', '50%', '25%']
+        }}
+        style={{
           maxWidth: '1440px'
         }}
       >

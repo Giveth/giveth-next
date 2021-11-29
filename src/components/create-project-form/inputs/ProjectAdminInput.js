@@ -2,8 +2,15 @@ import React, { useState } from 'react'
 import { Label, Input, Flex, Text, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
-export const ProjectAdminInput = ({ register, currentValue, animationStyle, goBack }) => {
-  const [characterLength, setCharacterLength] = useState(currentValue ? currentValue.length : 0)
+export const ProjectAdminInput = ({
+  register,
+  currentValue,
+  animationStyle,
+  goBack
+}) => {
+  const [characterLength, setCharacterLength] = useState(
+    currentValue ? currentValue.length : 0
+  )
   return (
     <animated.section style={{ ...animationStyle, marginTop: '50px' }}>
       <Label
@@ -13,7 +20,7 @@ export const ProjectAdminInput = ({ register, currentValue, animationStyle, goBa
         }}
         htmlFor='projectAdmin'
       >
-        What&apos;s the name of the organization or administrator of the project?
+        What's the name of the organization or administrator of the project?
       </Label>
       <div style={{ position: 'relative' }}>
         <Input

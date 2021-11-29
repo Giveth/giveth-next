@@ -1,13 +1,18 @@
 import React, { useEffect } from 'react'
-import { Button, Input } from 'theme-ui'
+import Link from 'next/link'
+import { Button, Flex, Text, Input } from 'theme-ui'
 
-export const LocationInputModal = ({ showModal, setShowModal, setLocation }) => {
+export const LocationInputModal = ({
+  showModal,
+  setShowModal,
+  setLocation
+}) => {
   useEffect(() => {
     console.log('change')
   })
   return (
     <div
-      style={{
+      css={{
         display: showModal ? 'flex' : 'none',
         position: 'absolute',
         left: '25%',

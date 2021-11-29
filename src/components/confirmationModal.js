@@ -1,7 +1,13 @@
 import React from 'react'
 import { Button, Flex, Text } from 'theme-ui'
 
-const ConfirmationModal = ({ showModal, setShowModal, title, confirmation }) => (
+const ConfirmationModal = ({
+  showModal,
+  setShowModal,
+  title,
+  confirmation,
+  noMsg
+}) => (
   <div
     style={{
       display: showModal ? 'flex' : 'none',
@@ -36,7 +42,11 @@ const ConfirmationModal = ({ showModal, setShowModal, title, confirmation }) => 
     >
       Close
     </Button>
-    <Text sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}>{title}</Text>
+    <Text
+      sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}
+    >
+      {title}
+    </Text>
     <Flex
       sx={{
         width: '304px',

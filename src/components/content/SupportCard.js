@@ -5,6 +5,53 @@ import Modal from 'react-modal'
 
 import theme from '../../utils/theme-ui/index'
 
+const CardContainer = styled(Card)`
+  background-color: ${theme.colors.backgroundGray};
+  margin-bottom: 30px;
+  border-radius: 12px;
+  max-width: 550px;
+  overflow: hidden;
+  position: relative;
+`
+
+const CardContent = styled.span`
+  display: flex;
+  flex: 1;
+  word-wrap: break-word;
+  padding: 2rem 1rem;
+  position: relative;
+`
+const Logo = styled.img`
+  align-self: center;
+  justify-self: center;
+  margin: 2rem;
+`
+const customStyles = {
+  overlay: {
+    position: 'fixed',
+    zIndex: 4,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    backdropFilter: 'blur(2px)',
+    '-webkit-backdrop-filter': 'blur(2px)'
+  },
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    borderRadius: '12px',
+    borderColor: 'transparent',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    height: '80%'
+  }
+}
+
 function SupportCard({ data }) {
   const [showModal, toggleModal] = useState(false)
   return (
@@ -107,53 +154,6 @@ function SupportCard({ data }) {
       })}
     </>
   )
-}
-
-const CardContainer = styled(Card)`
-  background-color: ${theme.colors.backgroundGray};
-  margin-bottom: 30px;
-  border-radius: 12px;
-  max-width: 550px;
-  overflow: hidden;
-  position: relative;
-`
-
-const CardContent = styled.span`
-  display: flex;
-  flex: 1;
-  word-wrap: break-word;
-  padding: 2rem 1rem;
-  position: relative;
-`
-const Logo = styled.img`
-  align-self: center;
-  justify-self: center;
-  margin: 2rem;
-`
-const customStyles = {
-  overlay: {
-    position: 'fixed',
-    zIndex: 4,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    backdropFilter: 'blur(2px)',
-    '-webkit-backdrop-filter': 'blur(2px)'
-  },
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    borderRadius: '12px',
-    borderColor: 'transparent',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    width: '80%',
-    height: '80%'
-  }
 }
 
 export default SupportCard

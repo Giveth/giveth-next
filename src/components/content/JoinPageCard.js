@@ -5,6 +5,37 @@ import styled from '@emotion/styled'
 
 import theme from '../../utils/theme-ui/index'
 
+const CardContainer = styled(Card)`
+  background-color: ${theme.colors.background};
+  margin-bottom: 30px;
+  border-radius: 12px;
+  max-width: 550px;
+  overflow: hidden;
+  position: relative;
+`
+
+const CardContent = styled.span`
+  display: flex;
+  flex: 1;
+  word-wrap: break-word;
+  padding: 2rem 1rem;
+  position: relative;
+`
+
+const Background = styled.img`
+  opacity: 0.1;
+  background: none;
+  position: absolute;
+  right: -3rem;
+  top: 3rem;
+`
+
+const Logo = styled.img`
+  align-self: center;
+  justify-self: center;
+  margin: 2rem;
+`
+
 const JoinChatCard = ({ data }) => (
   <>
     {data?.map(join => {
@@ -84,36 +115,5 @@ const JoinChatCard = ({ data }) => (
     })}
   </>
 )
-
-const CardContainer = styled(Card)`
-  background-color: ${theme.colors.background};
-  margin-bottom: 30px;
-  border-radius: 12px;
-  max-width: 550px;
-  overflow: hidden;
-  position: relative;
-`
-
-const CardContent = styled.span`
-  display: flex;
-  flex: 1;
-  word-wrap: break-word;
-  padding: 2rem 1rem;
-  position: relative;
-`
-
-const Background = styled.img`
-  opacity: 0.1;
-  background: none;
-  position: absolute;
-  right: -3rem;
-  top: 3rem;
-`
-
-const Logo = styled.img`
-  align-self: center;
-  justify-self: center;
-  margin: 2rem;
-`
 
 export default JoinChatCard

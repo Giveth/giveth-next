@@ -1,29 +1,28 @@
-import React, { useContext } from 'react'
+import React, { useState } from 'react'
 import { Label, Input, Button, Text, Flex } from 'theme-ui'
-import { BsQuestionCircle } from 'react-icons/bs'
 import theme from '../../../../src/utils/theme-ui'
-import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
-import { compareAddresses } from '../../../lib/helpers'
+import { BsQuestionCircle } from 'react-icons/bs'
+import { animated } from 'react-spring'
 
-export const ProjectEthAddressInput = ({ value, onChange, goBack }) => {
-  const {
-    state: { account }
-  } = useContext(Web3Context)
-  // const [characterLength, setCharacterLength] = useState(
-  //   currentValue ? currentValue.length : 0
-  // )
-  // const [address, setAddress] = useState(null)
+export const ProjectEthAddressInput = ({
+  register,
+  currentValue,
+  walletUsed,
+  animationStyle,
+  goBack
+}) => {
+  const [characterLength, setCharacterLength] = useState(
+    currentValue ? currentValue.length : 0
+  )
+  const [address, setAddress] = useState(null)
 
-  // const onChangeAddress = e => {
-  //   e.preventDefault()
-  //   setCharacterLength(e.target.value.length)
-  //   setAddress(true)
-  // }
-
-  const userAddressUsed = compareAddresses(account, value)
-
+  const onChangeAddress = e => {
+    e.preventDefault()
+    setCharacterLength(e.target.value.length)
+    setAddress(true)
+  }
   return (
-    <div style={{ marginTop: '30px' }}>
+    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -65,18 +64,27 @@ export const ProjectEthAddressInput = ({ value, onChange, goBack }) => {
           >
             What is an ETH address <BsQuestionCircle size={15} />
             <span className='tooltiptext'>
-              Your ETH address, also known as an ERC20 address, is the receiving address for your
-              Ethereum wallet. This is where funds raised by your project will be sent.
+              Your ETH address, also known as an ERC20 address, is the receiving
+              address for your Ethereum wallet. This is where funds raised by
+              your project will be sent.
               <br />
-              <br /> If you logged using Torus via your email or social media. You can access your
-              wallet{' '}
-              <a href='https://app.tor.us/' target='_blank' rel='noopener noreferrer'>
+              <br /> If you logged using Torus via your email or social media.
+              You can access your wallet{' '}
+              <a
+                href='https://app.tor.us/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
                 here
               </a>
               .
               <br />
               <br /> Learn more about Ethereum wallets{' '}
-              <a href='https://ethereum.org/en/wallets/' target='_blank' rel='noopener noreferrer'>
+              <a
+                href='https://ethereum.org/en/wallets/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
                 here
               </a>
               .
@@ -85,7 +93,7 @@ export const ProjectEthAddressInput = ({ value, onChange, goBack }) => {
         </Flex>
       </Flex>
 
-      <Flex>
+      <Flex sx={{ width: '175%' }}>
         <Input
           sx={{
             width: '100%',
@@ -95,14 +103,23 @@ export const ProjectEthAddressInput = ({ value, onChange, goBack }) => {
           type='text'
           id='projectWalletAddress'
           name='projectWalletAddress'
-          value={value}
-          placeholder='0x...'
-          onChange={e => onChange(e.target.value)}
-          autoFocus
+          {...register('projectWalletAddress')}
+          defaultValue={currentValue}
+          placeholder='0x00000...'
+          onChange={e => onChangeAddress(e)}
         />
+        <Text
+          sx={{
+            marginTop: '40px',
+            paddingLeft: '40px',
+            fontFamily: 'body',
+            color: 'muted'
+          }}
+        >
+          {/* {characterLength}/42 */}
+        </Text>
       </Flex>
-
-      {userAddressUsed && (
+      {walletUsed && (
         <Text
           sx={{
             fontSize: '3',
@@ -112,10 +129,10 @@ export const ProjectEthAddressInput = ({ value, onChange, goBack }) => {
             lineHeight: '19px'
           }}
         >
-          This is your default wallet address, you can choose another one if desired*
+          This is your default wallet address, you can choose another one if
+          desired*
         </Text>
       )}
-
       <Flex
         sx={{
           alignItems: 'flex-end',
@@ -140,7 +157,7 @@ export const ProjectEthAddressInput = ({ value, onChange, goBack }) => {
               fontFamily: 'body',
               fontWeight: 'bold',
               fontSize: 2,
-              letterSpacing: '4%'
+              letterSpacing: '4%',
             }}
           >
             NEXT
@@ -184,7 +201,7 @@ export const ProjectEthAddressInput = ({ value, onChange, goBack }) => {
           padding: 15px 10px;
           margin: 0 5px;
           border-radius: 6px;
-
+         
           position: absolute;
           z-index: 1;
         }
@@ -192,11 +209,11 @@ export const ProjectEthAddressInput = ({ value, onChange, goBack }) => {
         .tooltiptext a {
           text-decoration: underline
         }
-
+        
         .tooltip:hover .tooltiptext {
           visibility: visible;
         }
       `}</style>
-    </div>
+    </animated.section>
   )
 }

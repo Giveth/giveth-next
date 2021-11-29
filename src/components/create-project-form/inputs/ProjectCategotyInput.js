@@ -1,27 +1,16 @@
 import React from 'react'
 import { Checkbox, Label, Flex, Box, Text, Button } from 'theme-ui'
-import { maxSelectedCategory } from '../../../utils/constants'
-import Toast from '../../toast'
+import { animated } from 'react-spring'
 
-export const ProjectCategoryInput = ({ value, setValue, categoryList = [], goBack }) => {
-  const handleChange = (name, e) => {
-    const newValue = { ...value, [name]: e }
-    const selectedCategories = Object.entries(newValue)?.filter(i => i[1] === true)
-    const isMaxCategories = selectedCategories.length > maxSelectedCategory
-
-    if (isMaxCategories) {
-      Toast({
-        content: `Please select no more than ${maxSelectedCategory} categories`,
-        type: 'error'
-      })
-      return setValue(value)
-    }
-
-    setValue(newValue)
-  }
-
+export const ProjectCategoryInput = ({
+  register,
+  currentValue,
+  categoryList = [],
+  animationStyle,
+  goBack
+}) => {
   return (
-    <div style={{ marginTop: '30px' }}>
+    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -40,7 +29,7 @@ export const ProjectCategoryInput = ({ value, setValue, categoryList = [], goBac
           lineHeight: '19px'
         }}
       >
-        You can select multiple categories (maximum {maxSelectedCategory})
+        You can select multiple categories
       </Text>
       <Box
         sx={{
@@ -59,8 +48,10 @@ export const ProjectCategoryInput = ({ value, setValue, categoryList = [], goBac
                 key={`${category.name}-checkbox`}
                 id={category.name}
                 name={category.name}
-                checked={!!(value && value[category.name])}
-                onChange={e => handleChange(category.name, e.target.checked)}
+                {...register(category.name)}
+                defaultChecked={
+                  currentValue ? (!!currentValue[category.name] ? 1 : 0) : 0
+                }
               />
               <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
             </Label>
@@ -120,6 +111,6 @@ export const ProjectCategoryInput = ({ value, setValue, categoryList = [], goBac
           </Text>
         </Button>
       </Flex>
-    </div>
+    </animated.section>
   )
 }

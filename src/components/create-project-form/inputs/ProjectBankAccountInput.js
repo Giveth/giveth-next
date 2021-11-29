@@ -1,10 +1,17 @@
-import React from 'react'
-import { Label, Text, Button } from 'theme-ui'
+import React, { useState } from 'react'
+import { Label, Input, Text, Button } from 'theme-ui'
 import { GET_LINK_BANK_CREATION } from '../../../apollo/gql/projects'
 import { useQuery } from '@apollo/client'
 import { animated } from 'react-spring'
 
-export const ProjectBankAccountInput = ({ animationStyle, projectId, finalize, goBack }) => {
+export const ProjectBankAccountInput = ({
+  register,
+  currentValue,
+  animationStyle,
+  projectId,
+  finalize,
+  goBack
+}) => {
   const { data, loading, error } = useQuery(GET_LINK_BANK_CREATION, {
     variables: {
       projectId: parseInt(projectId),
@@ -46,11 +53,15 @@ export const ProjectBankAccountInput = ({ animationStyle, projectId, finalize, g
           </Text>
         </li>
       </ul>
-      <Text mt={3} sx={{ variant: 'text.paragraph', color: 'secondary', width: '70%' }}>
-        If you don&apos;t connect your bank account you will receive donations in crypto to your
-        Giveth account. You an transfer your crypto funds or convert them to FIAT outside the Giveth
-        platform. By connecting a bank account in addition to crypto donations, your project will be
-        accepting donations in FIAT.
+      <Text
+        mt={3}
+        sx={{ variant: 'text.paragraph', color: 'secondary', width: '70%' }}
+      >
+        If you don't connect your bank account you will receive donations in
+        crypto to your Giveth account. You an transfer your crypto funds or
+        convert them to FIAT outside the Giveth platform. By connecting a bank
+        account in addition to crypto donations, your project will be accepting
+        donations in FIAT.
       </Text>
       <Button
         aria-label='Next'

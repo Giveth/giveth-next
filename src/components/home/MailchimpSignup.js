@@ -1,17 +1,19 @@
 import { Grid, Button, Input, Flex, Text } from 'theme-ui'
 import React, { useState } from 'react'
-import { useMediaQuery } from 'react-responsive'
+import { useAlert } from 'react-alert'
 import Toast from '../../components/toast'
-import SubscribedAnimation from '../animations/subscribed'
+
 // import addToMailchimp from 'gatsby-plugin-mailchimp'
+import SubscribedAnimation from '../animations/subscribed'
+import { useMediaQuery } from 'react-responsive'
 
 function validateEmail(email) {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(String(email).toLowerCase())
 }
 
 const MailchimpSignup = () => {
+  const alert = useAlert()
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
 
@@ -67,7 +69,10 @@ const MailchimpSignup = () => {
             placeholder='Your email address'
             onChange={handleChange}
           />
-          <Button sx={{ variant: 'buttons.default', minWidth: '180px' }} type='submit'>
+          <Button
+            sx={{ variant: 'buttons.default', minWidth: '180px' }}
+            type='submit'
+          >
             Subscribe
           </Button>
         </Grid>
@@ -80,7 +85,10 @@ const MailchimpSignup = () => {
             placeholder='Your email address'
             onChange={handleChange}
           />
-          <Button sx={{ variant: 'buttons.default', minWidth: '180px' }} type='submit'>
+          <Button
+            sx={{ variant: 'buttons.default', minWidth: '180px' }}
+            type='submit'
+          >
             Subscribe
           </Button>
         </Grid>

@@ -10,7 +10,7 @@ class linkType extends Link {
     let node = super.create(value)
     value = this.sanitize(value)
     node.target = '_blank'
-    node.href = /^(?:f|ht)tps?:\/\//.test(value) ? value : `//${value}`
+    node.href = /^(?:f|ht)tps?\:\/\//.test(value) ? value : `//${value}`
     node.removeAttribute('rel')
     return node
   }

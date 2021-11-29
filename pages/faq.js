@@ -1,39 +1,42 @@
-import { Box } from 'theme-ui'
-import React from 'react'
-import dynamic from 'next/dynamic'
-import { fetchEntries } from '../src/utils/contentfulPosts'
+import { Box } from "theme-ui";
+import { fetchEntries } from "../src/utils/contentfulPosts";
+import React from "react";
+import Seo from "../src/components/seo";
+import styled from "@emotion/styled";
 
-const ContentFaq = dynamic(() => import('../src/components/content/ContentFaq'))
-const Layout = dynamic(() => import('../src/components/layout'))
-const Seo = dynamic(() => import('../src/components/seo'))
+import Layout from "../src/components/layout";
+import ContentFaq from "../src/components/content/ContentFaq";
+
+const Main = styled(Box)``;
 
 const Faq = ({ faqs }) => {
+  // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
-      <Seo title='FAQ' />
-      <Box>
+      <Seo title="FAQ" />
+      <Main>
         <ContentFaq faqs={faqs} isopen />
-      </Box>
+      </Main>
     </Layout>
-  )
-}
+  );
+};
 
 export async function getServerSideProps() {
   // contentful
   const faqReq = await fetchEntries({
-    contentType: 'faqEntry'
-  })
+    contentType: "faqEntry",
+  });
 
-  const faqs = faqReq?.map(f => f.fields)
+  const faqs = faqReq?.map(f => f.fields);
 
   return {
     props: {
-      faqs: faqs || {}
-    }
-  }
+      faqs: faqs || {},
+    },
+  };
 }
 
-export default Faq
+export default Faq;
 
 // export const query = graphql`
 //   query Faq {

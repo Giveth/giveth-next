@@ -9,7 +9,7 @@
 //     sourceType: "module",
 //     allowImportExportEverywhere: true,
 //   },
-//   ignorePatterns: ["node_modules/*", ".next/*", ".out/*"],
+//   ignorePatterns: ["node_modules/*", ".next/*", ".out/*", "!.prettierrc.js"],
 //   extends: ["eslint:recommended", "plugin:prettier/recommended"],
 //   overrides: [
 //     {
@@ -37,26 +37,13 @@
 // };
 
 module.exports = {
-  extends: [
-    'next/core-web-vitals',
-    'plugin:@next/next/recommended',
-    'eslint:recommended',
-    'plugin:prettier/recommended'
-  ],
+  extends: 'next',
   rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        tabWidth: 2,
-        semi: false,
-        printWidth: 100,
-        endOfLine: 'auto',
-        singleQuote: true,
-        jsxSingleQuote: true,
-        arrowParens: 'avoid',
-        trailingComma: 'none'
-      }
-    ]
+    'react/no-unescaped-entities': 'off',
+    '@next/next/no-page-custom-font': 'off'
   },
-  env: { es6: true }
-}
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+};

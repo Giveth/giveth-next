@@ -1,4 +1,4 @@
-import { Text, Heading } from 'theme-ui'
+import { jsx, Flex, Image, Grid, Text, Box, Button, Heading } from 'theme-ui'
 import theme from '../../utils/theme-ui/index'
 import React, { useState, useEffect } from 'react'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
@@ -8,118 +8,6 @@ import styled from '@emotion/styled'
 import Collapsible from 'react-collapsible'
 
 import { AiOutlineDown } from 'react-icons/ai'
-
-const ContentFaq = ({ faqs, isopen }) => {
-  const [hash, setHash] = useState('')
-  console.log({ faqs })
-  const richTextOptions = {
-    renderNode: {
-      [BLOCKS.EMBEDDED_ASSET]: node => {
-        const { title, description, file } = node.fields
-        const mimeType = file['en-US'].contentType
-        const mimeGroup = mimeType.split('/')[0]
-
-        switch (mimeGroup) {
-          case 'image':
-            return (
-              <img
-                title={title ? title['en-US'] : null}
-                alt={description ? description['en-US'] : null}
-                src={file['en-US'].url}
-              />
-            )
-          case 'application':
-            return (
-              <a href={file['en-US'].url}>
-                {title ? title['en-US'] : file['en-US'].details.fileName}
-              </a>
-            )
-          default:
-            return (
-              <span style={{ backgroundColor: 'black', color: 'white' }}>
-                {' '}
-                {mimeType} embedded asset{' '}
-              </span>
-            )
-        }
-      }
-    }
-  }
-
-  useEffect(() => {
-    setHash((typeof window !== 'undefined' && window.location.hash) || '')
-  }, [hash])
-
-  const categories = faqs?.map(i => i?.category?.fields)
-
-  return (
-    <ContentContainer>
-      <div className='faqLinks'>
-        <Collapsible
-          trigger={
-            <QuestionSpan>
-              <Category>{categories[0].category}</Category>
-              <ArrowDown />
-            </QuestionSpan>
-          }
-          triggerWhenOpen={
-            <QuestionSpan>
-              <Category>{categories[0].category}</Category>
-              <ArrowUp />
-            </QuestionSpan>
-          }
-          open={isopen}
-        >
-          {faqs.map(edges => (
-            <ContentItem id={edges.linkId} key={edges.linkId}>
-              {hash === `#${edges.linkId}` ? (
-                <Collapsible
-                  trigger={
-                    <QuestionSpan>
-                      <Question>{edges.question}</Question>
-                      <ArrowDown />
-                    </QuestionSpan>
-                  }
-                  triggerWhenOpen={
-                    <QuestionSpan>
-                      <Question>{edges.question}</Question>
-                      <ArrowUp />
-                    </QuestionSpan>
-                  }
-                  open={true}
-                >
-                  <LongDescription sx={{ variant: 'text.default', color: 'colors.secondary' }}>
-                    {documentToReactComponents(edges?.answer.content[0])}
-                  </LongDescription>
-                </Collapsible>
-              ) : (
-                <Collapsible
-                  trigger={
-                    <QuestionSpan>
-                      <Question>{edges.question}</Question>
-                      <ArrowDown />
-                    </QuestionSpan>
-                  }
-                  triggerWhenOpen={
-                    <QuestionSpan>
-                      <Question>{edges.question}</Question>
-                      <ArrowUp />
-                    </QuestionSpan>
-                  }
-                  open={false}
-                >
-                  <LongDescription sx={{ variant: 'text.default', color: 'colors.secondary' }}>
-                    {documentToReactComponents(edges?.answer.content[0], richTextOptions)}
-                  </LongDescription>
-                </Collapsible>
-              )}
-            </ContentItem>
-          ))}
-        </Collapsible>
-      </div>
-    </ContentContainer>
-  )
-}
 
 const ContentContainer = styled.div`
   display: grid;
@@ -217,5 +105,125 @@ const ArrowUp = styled(AiOutlineDown)`
   margin: 0.5rem;
   padding: 0.1rem;
 `
+
+const ContentFaq = ({ faqs, isopen }) => {
+  const [hash, setHash] = useState('')
+  console.log({ faqs })
+  const richTextOptions = {
+    renderNode: {
+      [BLOCKS.EMBEDDED_ASSET]: node => {
+        const { title, description, file } = node.fields
+        const mimeType = file['en-US'].contentType
+        const mimeGroup = mimeType.split('/')[0]
+
+        switch (mimeGroup) {
+          case 'image':
+            return (
+              <img
+                title={title ? title['en-US'] : null}
+                alt={description ? description['en-US'] : null}
+                src={file['en-US'].url}
+              />
+            )
+          case 'application':
+            return (
+              <a
+                alt={description ? description['en-US'] : null}
+                href={file['en-US'].url}
+              >
+                {title ? title['en-US'] : file['en-US'].details.fileName}
+              </a>
+            )
+          default:
+            return (
+              <span style={{ backgroundColor: 'black', color: 'white' }}>
+                {' '}
+                {mimeType} embedded asset{' '}
+              </span>
+            )
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    setHash((typeof window !== 'undefined' && window.location.hash) || '')
+  }, [hash])
+
+  const categories = faqs?.map(i => i?.category?.fields)
+
+  return (
+    <ContentContainer>
+      <Collapsible
+        trigger={
+          <QuestionSpan>
+            <Category>{categories[0].category}</Category>
+            <ArrowDown />
+          </QuestionSpan>
+        }
+        triggerWhenOpen={
+          <QuestionSpan>
+            <Category>{categories[0].category}</Category>
+            <ArrowUp />
+          </QuestionSpan>
+        }
+        open={isopen}
+      >
+        {faqs.map(edges => (
+          <ContentItem id={edges.linkId} key={edges.linkId}>
+            {hash === `#${edges.linkId}` ? (
+              <Collapsible
+                trigger={
+                  <QuestionSpan>
+                    <Question>{edges.question}</Question>
+                    <ArrowDown />
+                  </QuestionSpan>
+                }
+                triggerWhenOpen={
+                  <QuestionSpan>
+                    <Question>{edges.question}</Question>
+                    <ArrowUp />
+                  </QuestionSpan>
+                }
+                open={true}
+              >
+                <LongDescription
+                  sx={{ variant: 'text.default', color: 'colors.secondary' }}
+                >
+                  {documentToReactComponents(edges?.answer.content[0])}
+                </LongDescription>
+              </Collapsible>
+            ) : (
+              <Collapsible
+                trigger={
+                  <QuestionSpan>
+                    <Question>{edges.question}</Question>
+                    <ArrowDown />
+                  </QuestionSpan>
+                }
+                triggerWhenOpen={
+                  <QuestionSpan>
+                    <Question>{edges.question}</Question>
+                    <ArrowUp />
+                  </QuestionSpan>
+                }
+                open={false}
+              >
+                <LongDescription
+                  sx={{ variant: 'text.default', color: 'colors.secondary' }}
+                >
+                  {documentToReactComponents(
+                    edges?.answer.content[0],
+                    richTextOptions
+                  )}
+                </LongDescription>
+              </Collapsible>
+            )}
+          </ContentItem>
+        ))}
+      </Collapsible>
+    </ContentContainer>
+  )
+}
 
 export default ContentFaq
