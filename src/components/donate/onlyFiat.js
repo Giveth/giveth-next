@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Flex, Text } from 'theme-ui'
+import { Flex, Button, Text } from 'theme-ui'
 import { startTransakDonation } from '../../services/donation'
 
 // import styled from '@emotion/styled'
@@ -9,7 +9,7 @@ import { startTransakDonation } from '../../services/donation'
 // import { useApolloClient } from '@apollo/client'
 // import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 
-const OnlyFiat = props => {
+const OnlyFiat = (props) => {
   const { project, setTransakTx } = props
   // const [amountSelect, setAmountSelect] = useState(null)
   // const [amountTyped, setAmountTyped] = useState(null)
@@ -125,27 +125,47 @@ const OnlyFiat = props => {
   // }
 
   useEffect(() => {
-    startTransakDonation({ project, setSuccess: setTransakTx })
+    // startTransakDonation({ project, setSuccess: setTransakTx })
   }, [])
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
-      <Text
+      <Flex sx={{ width: '450px', flexDirection: 'column' }}>
+        <Text
+          sx={{
+            variant: 'text.medium',
+            color: 'background',
+            mt: 4,
+          }}
+        >
+          Transak is a fiat on-ramp that allows you to donate with a credit card
+          just as easily as you would make a purchase online.
+        </Text>
+        <Text
+          sx={{
+            variant: 'text.medium',
+            color: 'background',
+            mb: 2,
+            mt: 1,
+          }}
+        >
+          You'll be redirected to Transak's page where your "purchase" will be
+          sent as crypto to the project's donation address.
+        </Text>
+      </Flex>
+
+      <Button
         sx={{
-          variant: 'headings.h5',
-          color: 'background',
-          mb: 2,
-          mt: 4
+          variant: 'buttons.default',
+          padding: '1.063rem 7.375rem',
+          marginTop: '2rem',
         }}
+        onClick={() =>
+          startTransakDonation({ project, setSuccess: setTransakTx })
+        }
       >
-        You are being redirected to Transak
-      </Text>
-      <Text
-        sx={{ variant: 'text.medium', cursor: 'pointer', color: 'background', mb: 10 }}
-        onClick={() => startTransakDonation({ project, setSuccess: setTransakTx })}
-      >
-        Click here to try again
-      </Text>
+        Continue with Transak
+      </Button>
       {/* <Flex>
         <img
           src={'/images/coming-soon-gear.png'}
