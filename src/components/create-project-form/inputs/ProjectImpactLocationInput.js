@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Input, Label, Button, Checkbox, Text } from 'theme-ui'
+import { animated } from 'react-spring'
 
-export const ProjectImpactLocationInput = ({ register, currentValue, goBack, setValue }) => {
-  const [location, setLocation] = useState(currentValue === 'Global' ? 'Global' : currentValue)
+export const ProjectImpactLocationInput = ({
+  register,
+  currentValue,
+  animationStyle,
+  goBack,
+  setValue,
+}) => {
+  const [location, setLocation] = useState(
+    currentValue === 'Global' ? 'Global' : currentValue
+  )
 
   const handleChange = value => {
     setValue('projectImpactLocation', value)
@@ -10,11 +19,16 @@ export const ProjectImpactLocationInput = ({ register, currentValue, goBack, set
   }
 
   useEffect(() => {
-    typeof window !== 'undefined' && window?.initMap(handleChange)
+    typeof window !== 'undefined' && window.initMap(handleChange)
   }, [])
 
   return (
-    <div style={{ marginTop: '30px' }}>
+    <animated.section
+      style={{
+        ...animationStyle,
+        marginTop: '30px'
+      }}
+    >
       <Label
         sx={{
           fontSize: 8,
@@ -63,16 +77,20 @@ export const ProjectImpactLocationInput = ({ register, currentValue, goBack, set
             defaultChecked={location === 'Global'}
             onChange={e => handleChange(e.target.checked ? 'Global' : '')}
           />
-          <Text sx={{ fontFamily: 'body', fontSize: 2 }}>This project has a global impact</Text>
+          <Text sx={{ fontFamily: 'body', fontSize: 2 }}>
+            This project has a global impact
+          </Text>
         </Label>
       </Flex>
 
       {location && (
-        <Text sx={{ fontFamily: 'body', color: 'muted', mt: 3, fontSize: 8 }}>{location}</Text>
+        <Text sx={{ fontFamily: 'body', color: 'muted', mt: 3, fontSize: 8 }}>
+          {location}
+        </Text>
       )}
 
       <div
-        style={{
+        css={{
           display: 'flex',
           flexDirection: 'column',
           width: '600px',
@@ -107,7 +125,7 @@ export const ProjectImpactLocationInput = ({ register, currentValue, goBack, set
               fontFamily: 'body',
               fontWeight: 'bold',
               fontSize: 2,
-              letterSpacing: '4%'
+              letterSpacing: '4%',
             }}
           >
             NEXT
@@ -136,6 +154,6 @@ export const ProjectImpactLocationInput = ({ register, currentValue, goBack, set
           </Text>
         </Button>
       </Flex>
-    </div>
+    </animated.section>
   )
 }

@@ -12,11 +12,16 @@ const Tooltip = styled.div`
     width: 180px;
     background-color: white;
     color: black;
+    text-align: center;
     border-radius: 6px;
     padding: 1rem;
-    margin: 5px 0 0 5px;
+    margin: 0 0 0 5px;
+
     text-align: left;
+
+    /* Position the tooltip */
     position: absolute;
+    margin-top: 5px;
     z-index: 1;
   }
 
@@ -94,7 +99,13 @@ const Tooltip = styled.div`
   }
 `
 
-export default function ToolTip({ content, contentStyle, textStyle, isArrow, placement }) {
+export default function ToolTip ({
+  content,
+  contentStyle,
+  textStyle,
+  isArrow,
+  placement
+}) {
   return (
     <Tooltip
       sx={{

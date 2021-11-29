@@ -1,17 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
-import Link from 'next/link'
-import { useApolloClient } from '@apollo/client'
-import styled from '@emotion/styled'
-
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
-import DeactivatedModal from './deactivatedModal'
+import CancelledModal from './cancelledModal'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
@@ -22,9 +17,16 @@ import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
 import { BsHeartFill } from 'react-icons/bs'
 
+import Link from 'next/link'
+import { useApolloClient } from '@apollo/client'
 import { TOGGLE_PROJECT_REACTION } from '../../apollo/gql/projects'
+import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
+
+// import RichTextViewer from '../richTextViewer'
+
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 const RichTextViewer = dynamic(() => import('../richTextViewer'), {
   ssr: false
@@ -41,30 +43,24 @@ const ProjectDonatorView = ({
   reactions: projectReactions,
   admin: projectAdmin
 }) => {
-  const {
-    state: { user },
-    actions: { showSign }
-  } = useContext(Web3Context)
-
-  const usePopup = useContext(PopupContext)
-
-  const { currentProjectView, setCurrentProjectView } = useContext(ProjectContext)
-
-  const client = useApolloClient()
-
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const router = useRouter()
-
+  const { user } = useWallet()
   const [ready, setReady] = useState(false)
   const [currentTab, setCurrentTab] = useState('description')
   const [totalGivers, setTotalGivers] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
-  const [isDeactivated, setIsDeactivated] = useState(false)
+  const [isCancelled, setIsCancelled] = useState(null)
+  const usePopup = React.useContext(PopupContext)
+  const isSSR = typeof window === 'undefined'
+  const client = useApolloClient()
+  const { currentProjectView, setCurrentProjectView } = React.useContext(
+    ProjectContext
+  )
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
   const donations = currentProjectView?.donations?.filter(el => el != null)
-  const isSSR = typeof window === 'undefined'
 
   const reactToProject = async () => {
     try {
@@ -83,7 +79,8 @@ const ProjectDonatorView = ({
       setHeartedCount(reactionCount)
       setHearted(hearted)
     } catch (error) {
-      showSign()
+      usePopup?.triggerPopup('WelcomeLoggedOut')
+      console.log({ error })
     }
   }
 
@@ -91,16 +88,15 @@ const ProjectDonatorView = ({
     const setup = async () => {
       try {
         if (project?.status?.id !== '5') {
-          setIsDeactivated(true)
+          setIsCancelled(true)
           return
         }
-        const ethBalance = projectDonations?.reduce((prev, current) => prev + current?.amount, 0)
-        setHeartedCount(projectReactions?.length)
-
-        if (user) {
-          setHearted(projectReactions?.find(o => o.userId === user.id))
-          !project?.fromTrace && setIsOwner(project?.admin === user.id)
-        }
+        const ethBalance = projectDonations?.reduce(
+          (prev, current) => prev + current?.amount,
+          0
+        )
+        setHeartedCount(projectReactions?.length || project?.totalHearts)
+        setHearted(projectReactions?.find(o => o.userId === user?.id))
 
         setCurrentProjectView({
           ...currentProjectView,
@@ -110,7 +106,11 @@ const ProjectDonatorView = ({
           admin: projectAdmin,
           updates: projectUpdates
         })
-        setTotalGivers([...new Set(projectDonations?.map(data => data?.fromWalletAddress))].length)
+        setTotalGivers(
+          [...new Set(projectDonations?.map(data => data?.fromWalletAddress))]
+            .length
+        )
+        setIsOwner(!project?.fromTrace && project?.admin === user.id)
 
         setReady(true)
       } catch (error) {
@@ -118,11 +118,12 @@ const ProjectDonatorView = ({
         setReady(true)
       }
     }
+    setup()
+  }, [project])
 
-    setup().then()
-  }, [project, user])
-
-  const showMap = process.env.OPEN_FOREST_MAP ? process.env.OPEN_FOREST_MAP : false
+  const showMap = process.env.OPEN_FOREST_MAP
+    ? process.env.OPEN_FOREST_MAP
+    : false
 
   const setImage = img => {
     if (/^\d+$/.test(img)) {
@@ -166,13 +167,14 @@ const ProjectDonatorView = ({
   const projectPic = () => {
     const isSVG = setImage(project?.image)
     if (isSVG) return isSVG
-    else if (project.image && project.image !== '/') {
+    else if (project.image) {
       return (
         <Image
           src={project.image}
           alt='project picture'
           onError={ev =>
-            (ev.target.src = 'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
+            (ev.target.src =
+              'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
           }
           sx={{
             objectFit: 'cover',
@@ -187,7 +189,11 @@ const ProjectDonatorView = ({
     } else {
       return (
         <NoImage>
-          <Image src='/images/no-image-available.jpg' width={250} alt='no-image-available image' />
+          <Image
+            src='/images/no-image-available.jpg'
+            width={250}
+            alt='no-image-available image'
+          />
         </NoImage>
       )
     }
@@ -195,8 +201,10 @@ const ProjectDonatorView = ({
 
   return (
     <>
-      <DeactivatedModal isOpen={isDeactivated} />
-      <Flex>{projectPic()}</Flex>
+      <CancelledModal isOpen={isCancelled} />
+      <Flex>
+        {projectPic()}
+      </Flex>
       <Flex
         sx={{
           width: '90%',
@@ -254,7 +262,8 @@ const ProjectDonatorView = ({
                   </Link>
                 )}
 
-                {(currentProjectView?.project?.impactLocation || project?.impactLocation) && (
+                {(currentProjectView?.project?.impactLocation ||
+                  project?.impactLocation) && (
                   <Flex>
                     <ImLocation size='24px' color={theme.colors.secondary} />
                     <Text
@@ -265,7 +274,8 @@ const ProjectDonatorView = ({
                         px: 2
                       }}
                     >
-                      {currentProjectView?.project?.impactLocation || project?.impactLocation}
+                      {currentProjectView?.project?.impactLocation ||
+                        project?.impactLocation}
                     </Text>
                   </Flex>
                 )}
@@ -324,8 +334,10 @@ const ProjectDonatorView = ({
                 sx={{
                   color: '#303B72',
                   paddingBottom: '0.5rem',
-                  borderBottomColor: currentTab === 'description' ? '#C2449F' : null,
-                  borderBottomStyle: currentTab === 'description' ? 'solid' : null
+                  borderBottomColor:
+                    currentTab === 'description' ? '#C2449F' : null,
+                  borderBottomStyle:
+                    currentTab === 'description' ? 'solid' : null
                 }}
               >
                 Description
@@ -345,13 +357,17 @@ const ProjectDonatorView = ({
                   sx={{
                     color: '#303B72',
                     paddingBottom: '0.5rem',
-                    borderBottomColor: currentTab === 'updates' ? '#C2449F' : null,
+                    borderBottomColor:
+                      currentTab === 'updates' ? '#C2449F' : null,
                     borderBottomStyle: currentTab === 'updates' ? 'solid' : null
                   }}
                 >
                   Updates
                   {currentProjectView?.updates ? (
-                    <Badge variant='blueDot' sx={{ ml: 2, textAlign: 'center' }}>
+                    <Badge
+                      variant='blueDot'
+                      sx={{ ml: 2, textAlign: 'center' }}
+                    >
                       <Text
                         sx={{
                           color: 'white',
@@ -383,12 +399,15 @@ const ProjectDonatorView = ({
                 sx={{
                   color: '#303B72',
                   paddingBottom: '0.5rem',
-                  borderBottomColor: currentTab === 'donation' ? '#C2449F' : null,
+                  borderBottomColor:
+                    currentTab === 'donation' ? '#C2449F' : null,
                   borderBottomStyle: currentTab === 'donation' ? 'solid' : null
                 }}
               >
                 Donations{' '}
-                {!isMobile && currentProjectView?.donations?.length > 0 && !project?.fromTrace
+                {!isMobile &&
+                currentProjectView?.donations?.length > 0 &&
+                !project?.fromTrace
                   ? `( ${currentProjectView.donations.length} )`
                   : ''}
               </Text>
@@ -407,7 +426,8 @@ const ProjectDonatorView = ({
                   sx={{
                     color: '#303B72',
                     paddingBottom: '0.5rem',
-                    borderBottomColor: currentTab === 'traces' ? '#C2449F' : null,
+                    borderBottomColor:
+                      currentTab === 'traces' ? '#C2449F' : null,
                     borderBottomStyle: currentTab === 'traces' ? 'solid' : null
                   }}
                 >
@@ -432,7 +452,10 @@ const ProjectDonatorView = ({
                   }}
                 >
                   <RichTextViewer
-                    content={currentProjectView?.project?.description || project?.description}
+                    content={
+                      currentProjectView?.project?.description ||
+                      project?.description
+                    }
                   />
                   {/* {project?.description} */}
                 </Text>
@@ -448,7 +471,10 @@ const ProjectDonatorView = ({
             ) : (
               !isSSR && (
                 <React.Suspense fallback={<div />}>
-                  <DonationsTab project={project} donations={currentProjectView?.donations} />
+                  <DonationsTab
+                    project={project}
+                    donations={currentProjectView?.donations}
+                  />
                 </React.Suspense>
               )
             )}
@@ -481,14 +507,18 @@ const ProjectDonatorView = ({
               isOwner
                 ? router.push(`/account?data=${project?.slug}&view=projects`)
                 : project?.fromTrace
-                ? router.push(`https://trace.giveth.io/campaign/${project?.slug}`)
+                ? router.push(
+                    `https://trace.giveth.io/campaign/${project?.slug}`
+                  )
                 : router.push(`/donate/${project?.slug}`)
             }
           >
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
 
-          {isOwner && !(project?.verified || project?.IOTraceable || project?.fromTrace) && (
+          {isOwner && !(project?.verified ||
+            project?.IOTraceable ||
+            project?.fromTrace) && (
             <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
               <Text
                 sx={{
@@ -502,7 +532,9 @@ const ProjectDonatorView = ({
             </Link>
           )}
 
-          {(project?.verified || project?.IOTraceable || project?.fromTrace) && (
+          {(project?.verified ||
+            project?.IOTraceable ||
+            project?.fromTrace) && (
             <Flex
               sx={{
                 // cursor: 'pointer',
@@ -513,7 +545,9 @@ const ProjectDonatorView = ({
             >
               <GoVerified color={theme.colors.blue} />
               <Text sx={{ variant: 'text.default', ml: 2 }}>
-                {project?.fromTrace || project?.IOTraceable ? 'Traceable' : 'Verified'}
+                {project?.fromTrace || project?.IOTraceable
+                  ? 'Traceable'
+                  : 'Verified'}
               </Text>
             </Flex>
           )}
@@ -540,7 +574,9 @@ const ProjectDonatorView = ({
             }}
           >
             {!project?.fromTrace && (
-              <Text sx={{ variant: 'text.default' }}>Givers: {totalGivers || 0}</Text>
+              <Text sx={{ variant: 'text.default' }}>
+                Givers: {totalGivers || 0}
+              </Text>
             )}
             <Text sx={{ variant: 'text.default' }}>
               Donations:{' '}
@@ -612,7 +648,9 @@ const ProjectDonatorView = ({
                     onClick={reactToProject}
                   />
                   {heartedCount && heartedCount > 0 && (
-                    <Text sx={{ variant: 'text.default', ml: 2 }}>{heartedCount}</Text>
+                    <Text sx={{ variant: 'text.default', ml: 2 }}>
+                      {heartedCount}
+                    </Text>
                   )}
                 </Flex>
                 <Flex
@@ -663,6 +701,7 @@ const ProjectDonatorView = ({
     </>
   )
 }
+
 
 const FloatingDonateView = styled(Flex)`
   @media screen and (max-width: 800px) {

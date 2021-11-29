@@ -1,10 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
 import { Button, Flex, Text, Spinner } from 'theme-ui'
+import { getEtherscanPrefix } from '../../utils'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import theme from '../../utils/theme-ui/index'
-import { ETHERSCAN_PREFIXES } from '../../lib/util'
 
-const UnconfirmedModal = ({ showModal, setShowModal, txHash, networkId }) => {
+const etherscanPrefix = getEtherscanPrefix()
+const UnconfirmedModal = ({ showModal, setShowModal, txHash }) => {
+  const { isLoggedIn } = useWallet()
   if (!showModal) return null
   return (
     <Flex
@@ -14,6 +17,7 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash, networkId }) => {
         top: '15%',
         right: [0, '15%', '30%'],
         zIndex: 5,
+        alignItems: 'center',
         padding: '6% 0',
         flexDirection: 'column',
         alignItems: 'center',
@@ -25,7 +29,9 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash, networkId }) => {
     >
       <Button
         type='button'
-        onClick={() => setShowModal(false)}
+        onClick={() => {
+          setShowModal(false)
+        }}
         aria-label='close'
         sx={{
           position: 'absolute',
@@ -53,22 +59,27 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash, networkId }) => {
           variant: 'text.default'
         }}
       >
-        Transaction has been submitted but we can&apos;t get a confirmation at the moment.
-        <a
-          style={{ textDecoration: 'none', color: theme.colors.primary }}
-          href={`${ETHERSCAN_PREFIXES[networkId]}tx/${txHash}`}
-          rel='noreferrer noopener'
-          target='_blank'
-        >
-          {' '}
-          View on Etherscan
-        </a>
+        Transaction has been submitted but we can't get a confirmation at the
+        moment.
+        <Link href={`https://${etherscanPrefix}etherscan.io/tx/${txHash}`}>
+          <a style={{ textDecoration: 'none', color: theme.colors.primary }}>
+            {' '}
+            View on Etherscan
+          </a>
+        </Link>
       </Text>
       <Text sx={{ mt: 2, mx: 5, textAlign: 'center', variant: 'text.default' }}>
-        You can safely close this window and return to Homepage. Your transaction will show in{' '}
-        <Link href='/account?view=donations'>
-          <a style={{ textDecoration: 'none', color: theme.colors.primary }}>My Account.</a>
-        </Link>
+        You can safely close this window and return to Homepage.{' '}
+        {isLoggedIn &&
+          `Your
+          transaction will show in ${' '}`}
+        {isLoggedIn && (
+          <Link href='/account?view=donations'>
+            <a style={{ textDecoration: 'none', color: theme.colors.primary }}>
+              My Account.
+            </a>
+          </Link>
+        )}
       </Text>
 
       <Button
@@ -81,10 +92,9 @@ const UnconfirmedModal = ({ showModal, setShowModal, txHash, networkId }) => {
           height: '52px',
           border: '2px solid #AAAFCA'
         }}
+        onClick={() => (window.location.href = '/')}
       >
-        <Link href={'/'}>
-          <a>GO TO HOMEPAGE</a>
-        </Link>
+        GO TO HOMEPAGE
       </Button>
     </Flex>
   )

@@ -13,14 +13,22 @@ function FirstGiveBadge() {
       }}
     >
       <Flex sx={{ flex: 0.2, mr: 2 }}>
-        <Image src={'/images/giverBadge@40x40.png'} sx={{ objectFit: 'contain' }} />
+        <Image
+          src={'/images/giverBadge@40x40.png'}
+          sx={{ objectFit: 'contain' }}
+        />
       </Flex>
       <Flex sx={{ flexDirection: 'column', flex: 0.8 }}>
-        <Text variant='text.default' color='secondary' sx={{ fontWeight: 'bold' }}>
+        <Text
+          variant='text.default'
+          color='secondary'
+          sx={{ fontWeight: 'bold' }}
+        >
           Be the first to give!
         </Text>
         <Text variant='text.small' color='secondary'>
-          Your early support will go a long way and help inspire others to donate.
+          Your early support will go a long way and help inspire others to
+          donate.
         </Text>
       </Flex>
     </Flex>

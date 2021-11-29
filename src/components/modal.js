@@ -1,19 +1,6 @@
 import React from 'react'
 import Modal from 'react-modal'
 
-function CustomModal(props) {
-  return (
-    <Modal
-      isOpen={props.isOpen}
-      onRequestClose={props.onRequestClose}
-      style={customStyles}
-      contentLabel={props.contentLabel}
-    >
-      {props.children}
-    </Modal>
-  )
-}
-
 const customStyles = {
   overlay: {
     position: 'fixed',
@@ -39,6 +26,19 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     filter: 'drop-shadow(0px 4px 68px #DFDAE8)'
   }
+}
+
+function CustomModal(props) {
+  return (
+    <Modal
+      isOpen={props.isOpen}
+      onRequestClose={props.onRequestClose}
+      style={customStyles}
+      contentLabel={props.contentLabel}
+    >
+      {props.children}
+    </Modal>
+  )
 }
 
 export default CustomModal

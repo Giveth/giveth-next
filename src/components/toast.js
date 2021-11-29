@@ -44,7 +44,9 @@ export default function Toast({
         icon = (
           <IoIosInformationCircle
             size={size}
-            color={type === 'dark' ? theme.colors.background : theme.colors.blue}
+            color={
+              type === 'dark' ? theme.colors.background : theme.colors.blue
+            }
           />
         )
     }
@@ -52,7 +54,9 @@ export default function Toast({
       icon = (
         <Spinner
           size={24}
-          color={type === 'dark' ? theme.colors.background : theme.colors.secondary}
+          color={
+            type === 'dark' ? theme.colors.background : theme.colors.secondary
+          }
         />
       )
     }

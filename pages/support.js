@@ -1,11 +1,9 @@
-import dynamic from 'next/dynamic'
 import { Flex, Grid } from 'theme-ui'
 import { fetchEntries } from '../src/utils/contentfulPosts'
-
-const Seo = dynamic(() => import('../src/components/seo'))
-const Layout = dynamic(() => import('../src/components/layout'))
-const Hero = dynamic(() => import('../src/components/content/SupportHero'))
-const SupportCard = dynamic(() => import('../src/components/content/SupportCard'))
+import Layout from '../src/components/layout'
+import Seo from '../src/components/seo'
+import Hero from '../src/components/content/SupportHero'
+import SupportCard from '../src/components/content/SupportCard'
 
 const SupportPage = ({ support }) => {
   return (
@@ -13,7 +11,12 @@ const SupportPage = ({ support }) => {
       <Seo title='Support' />
       <Hero />
       <Flex sx={{ justifyContent: 'center' }}>
-        <Grid mt='2rem' p={[1, 2, 2]} columns={[1, 1, 2]} sx={{ maxWidth: '80vw' }}>
+        <Grid
+          mt='2rem'
+          p={[1, 2, 2]}
+          columns={[1, 1, 2]}
+          sx={{ maxWidth: '80vw' }}
+        >
           <SupportCard data={support} />
         </Grid>
       </Flex>
@@ -21,7 +24,7 @@ const SupportPage = ({ support }) => {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps () {
   // contentful
   const supportReq = await fetchEntries({
     contentType: 'contentSupportProvider'

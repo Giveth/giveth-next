@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { GET_PROJECT_UPDATES, ADD_PROJECT_UPDATE } from '../../apollo/gql/projects'
+import {
+  GET_PROJECT_UPDATES,
+  ADD_PROJECT_UPDATE
+} from '../../apollo/gql/projects'
 import { useMutation, useQuery } from '@apollo/client'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import LoadingModal from '../loadingModal'
 import Toast from '../toast'
 import Timeline from './timeline'
 
-const UpdatesTab = ({ project, isOwner }) => {
+const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
   const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE)
   const [loading, setLoading] = useState(false)
-  const { currentProjectView, setCurrentProjectView } = React.useContext(ProjectContext)
-  const { data } = useQuery(GET_PROJECT_UPDATES, {
+  const { currentProjectView, setCurrentProjectView } = React.useContext(
+    ProjectContext
+  )
+  const { data, error } = useQuery(GET_PROJECT_UPDATES, {
     variables: {
       projectId: parseFloat(project?.id),
       take: 100,

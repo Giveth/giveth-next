@@ -4,7 +4,7 @@ import { Button, Flex, Text } from 'theme-ui'
 
 export const CloseModal = ({ showModal, setShowModal }) => (
   <div
-    style={{
+    css={{
       display: showModal ? 'flex' : 'none',
       position: 'absolute',
       right: '25%',
@@ -35,7 +35,9 @@ export const CloseModal = ({ showModal, setShowModal }) => (
     >
       Close
     </Button>
-    <Text sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}>
+    <Text
+      sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}
+    >
       Are you sure?
     </Text>
     <Flex
@@ -58,7 +60,7 @@ export const CloseModal = ({ showModal, setShowModal }) => (
         }}
       >
         <Link href='/' sx={{ textDecoration: 'none' }}>
-          <a>Yes</a>
+          Yes
         </Link>
       </Button>
       <Button

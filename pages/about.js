@@ -1,43 +1,45 @@
-import React from 'react'
-import dynamic from 'next/dynamic'
-import { Box } from 'theme-ui'
-import { fetchEntries } from '../src/utils/contentfulPosts'
+import React from "react";
+import { Box } from "theme-ui";
+import styled from "@emotion/styled";
+import { fetchEntries } from "../src/utils/contentfulPosts";
+import Seo from "../src/components/seo";
+import AboutPage from "../src/components/content/AboutPage";
 
-const AboutPage = dynamic(() => import('../src/components/content/AboutPage'))
-const Seo = dynamic(() => import('../src/components/seo'))
+const Main = styled(Box)``;
 
-const About = props => {
+const About = (props) => {
+  // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <>
-      <Seo title='FAQ' />
-      <Box>
+      <Seo title="FAQ" />
+      <Main>
         <AboutPage {...props} />
-      </Box>
+      </Main>
     </>
-  )
-}
+  );
+};
 
 export async function getServerSideProps() {
   // contentful
   const teamReq = await fetchEntries({
-    contentType: 'contentTeam'
-  })
+    contentType: "contentTeam",
+  });
   const aboutReq = await fetchEntries({
-    contentType: 'contentAbout'
-  })
+    contentType: "contentAbout",
+  });
 
-  const team = teamReq?.map(f => f.fields)
-  const about = aboutReq?.map(f => f.fields)
-  console.log({ team: JSON.stringify(team) })
+  const team = teamReq?.map(f => f.fields);
+  const about = aboutReq?.map(f => f.fields);
+  console.log({ team: JSON.stringify(team) });
   return {
     props: {
       team: team || {},
-      about: about || {}
-    }
-  }
+      about: about || {},
+    },
+  };
 }
 
-export default About
+export default About;
 
 // export const query = graphql`
 //   query AboutQuery {

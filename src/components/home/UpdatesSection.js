@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { Grid, Box, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
@@ -8,28 +8,13 @@ import MailchimpSignup from './MailchimpSignup'
 
 dayjs.extend(localizedFormat)
 
-const UpdatesSection = () => {
-  const [mediumPosts, setMediumPosts] = useState(null)
-
-  useEffect(() => {
-    const getPosts = async () => {
-      const medium = await fetch(
-        'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth'
-      )
-      const posts = await medium.json()
-      setMediumPosts(posts?.items?.slice(0, 2) || {})
-    }
-    getPosts()
-  }, [])
-
-  if (!mediumPosts) return null
-
+const UpdatesSection = ({ mediumPosts }) => {
   return (
     <React.Fragment>
       <div
         style={{
           position: 'absolute',
-          right: '10px'
+          right: '10px',
         }}
       >
         <Image
@@ -41,9 +26,14 @@ const UpdatesSection = () => {
       </div>
       <Container p={[2, 3, 5]} sx={{ position: 'relative' }}>
         <Main>
-          <Heading sx={{ variant: 'headings.h3' }}>Get the latest updates</Heading>
-          <Text sx={{ variant: 'text.larger', maxWidth: '780px', color: 'colors' }}>
-            Subscribe to our newsletter and get all updates straight to your mailbox!
+          <Heading sx={{ variant: 'headings.h3' }}>
+            Get the latest updates
+          </Heading>
+          <Text
+            sx={{ variant: 'text.larger', maxWidth: '780px', color: 'colors' }}
+          >
+            Subscribe to our newsletter and get all updates straight to your
+            mailbox!
           </Text>
           <MailchimpSignup />
           <Text sx={{ variant: 'text.overline' }}>From our Blog</Text>
@@ -77,7 +67,9 @@ const UpdatesSection = () => {
                     {/* {previewContent.subtitle} */}
                   </Text>
                   <Grid rows={2} gap={0}>
-                    <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>{node.author}</Text>
+                    <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>
+                      {node.author}
+                    </Text>
 
                     <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>
                       {/* {new Intl.DateTimeFormat('en-US', {

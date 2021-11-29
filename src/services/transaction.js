@@ -1,11 +1,13 @@
+import { ethers } from 'ethers'
 import Web3 from 'web3'
 import getSigner from './ethersSigner'
 
 export async function send(
-  web3,
   toAddress,
   contractAddress, // if none is set, it defaults to ETH
   subtotal,
+  fromOwnProvider,
+  isLoggedIn,
   sendTransaction,
   provider,
   txCallbacks,
@@ -20,18 +22,27 @@ export async function send(
     }
     let hash
 
-    const signer = getSigner(provider)
-    const signerTransaction = await sendTransaction(
-      web3,
-      transaction,
-      txCallbacks,
-      contractAddress,
-      signer,
-      traceable
-    )
-    console.log('look here', { signerTransaction })
-    hash = signerTransaction?.hash
-
+    if (fromOwnProvider && isLoggedIn) {
+      const regularTransaction = await sendTransaction(
+        transaction,
+        txCallbacks,
+        contractAddress,
+        null,
+        traceable
+      )
+      hash = regularTransaction?.transactionHash
+    } else {
+      const signer = getSigner(provider)
+      const signerTransaction = await sendTransaction(
+        transaction,
+        txCallbacks,
+        contractAddress,
+        signer,
+        traceable
+      )
+      console.log('look here', { signerTransaction })
+      hash = signerTransaction?.hash
+    }
     if (!hash) throw new Error('Transaction failed')
 
     return hash
@@ -70,7 +81,9 @@ export function notify(hash) {
 export async function getHashInfo(txHash, isXDAI) {
   try {
     const web3 = new Web3(
-      isXDAI ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL : process.env.NEXT_PUBLIC_ETHEREUM_NODE
+      isXDAI
+        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
     const txInfo = await web3.eth.getTransaction(txHash)
     console.log({ txInfo })
@@ -84,9 +97,12 @@ export async function getHashInfo(txHash, isXDAI) {
 export async function getTxFromHash(transactionHash, isXDAI) {
   try {
     const web3 = new Web3(
-      isXDAI ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL : process.env.NEXT_PUBLIC_ETHEREUM_NODE
+      isXDAI
+        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
-    return await web3.eth.getTransaction(transactionHash)
+    const tx = await web3.eth.getTransaction(transactionHash)
+    return tx
   } catch (error) {
     return false
   }
@@ -100,7 +116,9 @@ export async function confirmEtherTransaction(
 ) {
   try {
     const web3 = new Web3(
-      isXDAI ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL : process.env.NEXT_PUBLIC_ETHEREUM_NODE
+      isXDAI
+        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
     const MAX_INTENTS = 20 // one every second
     web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
@@ -118,7 +136,12 @@ export async function confirmEtherTransaction(
       } else {
         // Try again in 1 second
         setTimeout(function () {
-          confirmEtherTransaction(transactionHash, callbackFunction, ++count, isXDAI)
+          confirmEtherTransaction(
+            transactionHash,
+            callbackFunction,
+            ++count,
+            isXDAI
+          )
         }, 1000)
       }
     })

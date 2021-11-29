@@ -5,8 +5,8 @@ body {
   scroll-behavior: smooth;
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -18,9 +18,9 @@ a {
   box-sizing: border-box;
 }
 
-.pac-item {
-  /* For Google Autocomplete container*/
-  cursor: pointer !important;
+.pac-item {  
+  /* For Google Autocomplete container*/  
+  cursor: pointer !important;  
 }
 
 /* Fix Google Autocomplete container border */
@@ -35,8 +35,7 @@ a {
 }
 
 /* Fix quill emoji not clickable */
-#emoji-close-div,
-.textarea-emoji-control {
+#emoji-close-div, .textarea-emoji-control {
   display: none !important;
 }
 
@@ -44,24 +43,8 @@ a {
 .ql-editor {
   font-family: 'Red Hat Text', sans-serif;
 }
-.ql-editor img {
+.ql-editor img{
   max-width: 100%;
-}
-.tosTable tr,
-.tosTable td {
-  border: 1px solid black;
-  padding: 15px;
-}
-.tosTable thead {
-  background-color: #2c0b3f;
-  color: #ffffff;
-}
-.faqLinks a {
-  text-decoration: underline;
-}
-.faqLinks a:hover {
-  text-decoration: underline;
-  color: #c2449f;
 }
 .ql-video-wrapper {
   position: relative;
@@ -70,15 +53,10 @@ a {
   overflow: hidden;
   max-width: 100%;
 }
-.ql-video-wrapper iframe,
-.embed-container object,
-.embed-container embed {
+.ql-video-wrapper  iframe, .embed-container object, .embed-container embed{
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-}
-.ql-container.ql-disabled .ql-tooltip {
-  display: none;
 }

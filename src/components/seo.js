@@ -11,7 +11,7 @@ import { NextSeo } from 'next-seo'
 
 const DEFAULT_SEO_IMAGE = 'https://i.imgur.com/uPFEgJu.png'
 
-function Seo({ description, title, image }) {
+function Seo({ description, lang, meta, title, image }) {
   // const { site } = useStaticQuery(
   //   graphql`
   //     query {

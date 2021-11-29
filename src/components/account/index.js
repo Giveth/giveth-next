@@ -1,48 +1,50 @@
-import React, { useContext, useEffect } from 'react'
-import { Flex } from 'theme-ui'
+import React from 'react'
+import { useRouter } from 'next/router'
+import { jsx, Text, Flex, Spinner, Box } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
-
+import styled from '@emotion/styled'
+import { useWallet } from '../../contextProvider/WalletProvider'
+import { BsArrowLeft } from 'react-icons/bs'
 import LoadingModal from '../../components/loadingModal'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
 import { FETCH_MY_PROJECTS } from '../../apollo/gql/projects'
 import AccountTop from '../../components/account/AccountTop'
 import AccountNav from '../../components/account/AccountNav'
 import AccountBody from '../../components/account/AccountBody'
-import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
-const Main = () => {
-  const {
-    state: { user },
-    actions: { signModalContent, setToken }
-  } = useContext(Web3Context)
+const UserSpan = styled.span`
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  align-items: center;
+  justify-self: end;
+  @media (max-width: 1030px) {
+    grid-row: 1;
+    grid-column: 3;
+  }
+`
 
-  useEffect(() => {
-    if (user && !user.token) setToken()
-  }, [user])
-
-  return user && user.token ? (
-    <AccountPage />
-  ) : (
-    <div style={{ margin: '150px 0', textAlign: 'center' }}>{signModalContent()}</div>
-  )
-}
-
-const AccountPage = () => {
+const AccountPage = props => {
+  const router = useRouter()
+  const { user, isLoggedIn } = useWallet()
+  const userWallets = user.walletAddresses
   const { data: donations, loading: dataLoading } = useQuery(USERS_DONATIONS, {
     fetchPolicy: 'network-only'
   })
   const userDonations = donations?.donationsByDonor
 
-  const { data: userProjects, loading: projectsLoading } = useQuery(FETCH_MY_PROJECTS, {
-    fetchPolicy: 'network-only'
-  })
+  const { data: userProjects, loading: projectsLoading, error } = useQuery(
+    FETCH_MY_PROJECTS,
+    {
+      fetchPolicy: 'network-only'
+    }
+  )
   const projectsList = userProjects?.myProjects
   const [query, setQuery] = useQueryParams({
     view: StringParam,
     data: StringParam
   })
-
   const isSSR = typeof window === 'undefined'
   if (dataLoading || projectsLoading) {
     return (
@@ -52,6 +54,11 @@ const AccountPage = () => {
         <LoadingModal isOpen />
       </>
     )
+  }
+
+  if (!isLoggedIn) {
+    router.push('/', { state: { welcome: true } })
+    return null
   }
 
   return (
@@ -82,4 +89,4 @@ const AccountPage = () => {
   )
 }
 
-export default Main
+export default AccountPage

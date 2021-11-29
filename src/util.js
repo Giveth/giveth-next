@@ -1,12 +1,16 @@
 import { formatUnits } from '@ethersproject/units'
 
-export const ETHERSCAN_PREFIXES = {
-  1: 'https://etherscan.io/',
-  3: 'https://ropsten.etherscan.io/',
-  4: 'https://rinkeby.etherscan.io/',
-  5: 'https://goerli.etherscan.io/',
-  42: 'https://kovan.etherscan.io/',
-  100: 'https://blockscout.com/poa/xdai/'
+export function shortenHex (hex, length = 4) {
+  return `${hex.substring(0, length + 2)}…${hex.substring(hex.length - length)}`
+}
+
+const ETHERSCAN_PREFIXES = {
+  1: 'etherscan.io/',
+  3: 'ropsten.etherscan.io/',
+  4: 'rinkeby.etherscan.io/address/',
+  5: 'goerli.etherscan.io/address/',
+  42: 'kovan.etherscan.io/address/',
+  100: 'blockscout.com/poa/xdai/'
 }
 
 /**
@@ -14,15 +18,15 @@ export const ETHERSCAN_PREFIXES = {
  * @param {("Account"|"Transaction")} type
  * @param {[number, string]} data
  */
-export function formatEtherscanLink(type, data) {
+export function formatEtherscanLink (type, data) {
   switch (type) {
     case 'Account': {
       const [chainId, address] = data
-      return `${ETHERSCAN_PREFIXES[chainId]}address/${address}`
+      return `https://${ETHERSCAN_PREFIXES[chainId]}address/${address}`
     }
     case 'Transaction': {
       const [chainId, hash] = data
-      return `${ETHERSCAN_PREFIXES[chainId]}tx/${hash}`
+      return `https://${ETHERSCAN_PREFIXES[chainId]}tx/${hash}`
     }
   }
 }

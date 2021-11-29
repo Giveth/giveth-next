@@ -1,6 +1,6 @@
 import React from 'react'
-import { useRouter } from 'next/router'
-import { Flex, Image, Grid, Text, Button } from 'theme-ui'
+import { useRouter } from "next/router";
+import { Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
 import styled from '@emotion/styled'
@@ -41,7 +41,10 @@ const AboutPage = ({ about, team }) => {
             )
           case 'application':
             return (
-              <a href={file['en-US'].url}>
+              <a
+                alt={description ? description['en-US'] : null}
+                href={file['en-US'].url}
+              >
                 {title ? title['en-US'] : file['en-US'].details.fileName}
               </a>
             )
@@ -122,7 +125,8 @@ const AboutPage = ({ about, team }) => {
                 sx={{
                   color: '#303B72',
                   paddingBottom: '30px',
-                  borderBottomColor: currentTab === 'mission' ? '#C2449F' : null,
+                  borderBottomColor:
+                    currentTab === 'mission' ? '#C2449F' : null,
                   borderBottomStyle: currentTab === 'mission' ? 'solid' : null
                 }}
               >
@@ -141,7 +145,8 @@ const AboutPage = ({ about, team }) => {
                 sx={{
                   color: '#303B72',
                   paddingBottom: '30px',
-                  borderBottomColor: currentTab === 'history' ? '#C2449F' : null,
+                  borderBottomColor:
+                    currentTab === 'history' ? '#C2449F' : null,
                   borderBottomStyle: currentTab === 'history' ? 'solid' : null
                 }}
               >
@@ -160,7 +165,8 @@ const AboutPage = ({ about, team }) => {
                 sx={{
                   color: '#303B72',
                   paddingBottom: '30px',
-                  borderBottomColor: currentTab === 'donation' ? '#C2449F' : null,
+                  borderBottomColor:
+                    currentTab === 'donation' ? '#C2449F' : null,
                   borderBottomStyle: currentTab === 'donation' ? 'solid' : null
                 }}
               >
@@ -185,7 +191,10 @@ const AboutPage = ({ about, team }) => {
                   color: 'black'
                 }}
               >
-                {documentToReactComponents(about?.length > 0 && about[0].history, richTextOptions)}
+                {documentToReactComponents(
+                  about?.length > 0 && about[0].history,
+                  richTextOptions
+                )}
               </Text>
             ) : (
               <Text

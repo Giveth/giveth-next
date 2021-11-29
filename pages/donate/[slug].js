@@ -1,30 +1,31 @@
 import { client } from '../../src/apollo/client'
-import fetch from 'isomorphic-fetch'
-import dynamic from 'next/dynamic'
+import DonationView from '../../src/components/donate'
+import Layout from '../../src/components/layout'
+import Seo from '../../src/components/seo'
 import { FETCH_PROJECT_BY_SLUG } from '../../src/apollo/gql/projects'
-import NotFoundPage from '../404'
-
-const Seo = dynamic(() => import('../../src/components/seo'))
-const Layout = dynamic(() => import('../../src/components/layout'))
-const DonationView = dynamic(() => import('../../src/components/donate'))
+import NotFoundPage from "../404";
 
 const Donate = props => {
-  return props.error ? (
-    <NotFoundPage />
-  ) : (
-    <Layout asDialog>
-      <Seo
-        title={
-          props?.project?.title ? `Donate to ${props?.project?.title}` : 'Donate to this project!'
-        }
-        image={props?.project?.image}
-      />
-      <DonationView {...props} />
-    </Layout>
+  return (
+    props.error ? (
+      <NotFoundPage />
+    ) : (
+      <Layout asDialog>
+        <Seo
+          title={
+            props?.project?.title
+              ? `Donate to ${props?.project?.title}`
+              : "Donate to this project!"
+          }
+          image={props?.project?.image}
+        />
+        <DonationView {...props} />
+      </Layout>
+    )
   )
 }
 
-export async function getServerSideProps(props) {
+export async function getServerSideProps (props) {
   const { query } = props
   const slug = decodeURI(query?.slug).replace(/\s/g, '')
 
@@ -32,13 +33,12 @@ export async function getServerSideProps(props) {
     errors = null
   try {
     // Fetch Project
-    const { error, data: fetchProject } = await client.query({
+    const { loading, error, data: fetchProject } = await client.query({
       query: FETCH_PROJECT_BY_SLUG,
       variables: { slug: slug },
       fetchPolicy: 'network-only'
     })
     project = fetchProject?.projectBySlug
-
     if (error) errors = JSON.stringify(error)
   } catch (e) {
     console.log({ e })
@@ -47,7 +47,7 @@ export async function getServerSideProps(props) {
 
   // Try to fetch from TRACE
   const traceProject = await fetch(
-    `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?givethIoProjectId=${project?.id}`
+    `${process.env.NEXT_PUBLIC_FEATHERS}/campaigns?slug=${slug}`
   ).then(async function (response) {
     if (response.status >= 400) {
       errors = new Error('Bad response from server')
