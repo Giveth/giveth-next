@@ -3,19 +3,18 @@ import { Flex, Text, Button } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { ProfileHeader, UserDonations, UserProjects } from './index'
 
-const PublicProfileView = props => {
+const PublicProfileView = (props) => {
   const [query, setQuery] = useQueryParams({
-    tab: StringParam
+    tab: StringParam,
   })
-
   const Tab = ({ name }) => {
     const tab = query?.tab?.toLowerCase() || 'projects'
     return (
       <Button
-        variant='nofill'
-        type='button'
+        variant="nofill"
+        type="button"
         sx={{ mx: 2 }}
-        onClick={e => {
+        onClick={(e) => {
           e.preventDefault()
           setQuery({ tab: name })
         }}
@@ -26,7 +25,7 @@ const PublicProfileView = props => {
             paddingBottom: '0.5rem',
             borderBottomColor: tab === name ? '#C2449F' : null,
             borderBottomStyle: tab === name ? 'solid' : null,
-            textTransform: 'capitalize'
+            textTransform: 'capitalize',
           }}
         >
           {name}
@@ -50,8 +49,8 @@ const PublicProfileView = props => {
     <Flex sx={{ flexDirection: 'column' }}>
       <ProfileHeader {...props} />
       <Flex sx={{ width: ['100%', '500px', '500px'], ml: 4 }}>
-        <Tab name='projects' />
-        <Tab name='donations' />
+        <Tab name="projects" />
+        <Tab name="donations" />
       </Flex>
       {showTab()}
     </Flex>

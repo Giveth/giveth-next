@@ -6,17 +6,18 @@ import { Flex, Text } from 'theme-ui'
 import useComponentVisible from '../utils/useComponentVisible'
 
 const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
-  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false)
 
   return (
     <Flex sx={{ width: '100%', flexDirection: 'column' }}>
       {upperLabel && (
-        <Text variant='text.overlineSmall' color='secondary' sx={{ mb: 2 }}>
+        <Text variant="text.overlineSmall" color="secondary" sx={{ mb: 2 }}>
           {upperLabel}
         </Text>
       )}
       <Dropdown
-        variant='forms.search'
+        variant="forms.search"
         sx={{
           width: '100%',
           cursor: 'pointer',
@@ -30,25 +31,25 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
             fontWeight: 500,
             fontSize: '0.875rem',
             lineHeight: '1.188rem',
-            color: '#AAAFCA'
-          }
+            color: '#AAAFCA',
+          },
         }}
         ref={ref}
         onClick={() => setIsComponentVisible(!isComponentVisible)}
-        onMouseEnter={() => setIsComponentVisible(true)}
+        // onMouseEnter={() => setIsComponentVisible(true)}
       >
         <Flex
           sx={{
             justifyContent: 'space-between',
             flexDirection: 'row',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <Text
             sx={{
               variant: 'text.medium',
               fontWeight: 'bold',
-              color: 'secondary'
+              color: 'secondary',
             }}
           >
             {current.name}
@@ -57,9 +58,11 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
         </Flex>
 
         {isComponentVisible && (
-          <DropdownContent id='dropdownContent'>
-            <DropList onMouseLeave={() => setIsComponentVisible(!isComponentVisible)}>
-              {options?.map(i => {
+          <DropdownContent id="dropdownContent">
+            <DropList
+            // onMouseLeave={() => setIsComponentVisible(!isComponentVisible)}
+            >
+              {options?.map((i) => {
                 return (
                   <DropItem
                     key={i.name}
@@ -72,7 +75,7 @@ const DropdownInput = ({ current, setCurrent, upperLabel, options }) => {
                       sx={{
                         variant: 'text.medium',
                         fontWeight: 'bold',
-                        color: 'secondary'
+                        color: 'secondary',
                       }}
                     >
                       {i.name}
@@ -98,14 +101,15 @@ const DropdownContent = styled.div`
   position: absolute;
   z-index: 1;
   width: 100%;
-  max-height: 200px;
-  overflow: scroll;
+  height: 200px;
   background: ${theme.colors.background};
   border: 1px solid #f5f5f5;
   box-sizing: border-box;
   box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
   border-radius: 6px;
   margin: 15px 0 0 -11px;
+  overflow-y: scroll;
+  padding-right: 20px;
 `
 
 const DropList = styled(Flex)`

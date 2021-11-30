@@ -23,13 +23,26 @@ const sortByObj = [
   { name: 'Amount Raised', value: gqlEnums.DONATIONS },
   { name: 'Hearts', value: gqlEnums.HEARTS },
   { name: 'Creation Date (Desc)', value: gqlEnums.CREATIONDATE },
-  { name: 'Creation Date (Asc)', value: gqlEnums.CREATIONDATE, direction: gqlEnums.ASC }
+  {
+    name: 'Creation Date (Asc)',
+    value: gqlEnums.CREATIONDATE,
+    direction: gqlEnums.ASC,
+  },
 ]
 
-const filterByObj = [{ name: 'None' }, { name: 'Verified', value: gqlEnums.VERIFIED }]
+const filterByObj = [
+  { name: 'None' },
+  { name: 'Verified', value: gqlEnums.VERIFIED },
+]
 
-const ProjectsList = props => {
-  const { projects, categories, totalCount: _totalCount, itemsPerPage, query } = props
+const ProjectsList = (props) => {
+  const {
+    projects,
+    categories,
+    totalCount: _totalCount,
+    itemsPerPage,
+    query,
+  } = props
 
   const [search, setSearch] = useState()
   const [category, setCategory] = useState(allCategoryObj)
@@ -58,21 +71,24 @@ const ProjectsList = props => {
         sortByQuery: sortBy,
         searchQuery: search,
         skip: itemsPerPage * currentPage,
-        filterQuery: filterBy.value
+        filterQuery: filterBy.value,
       })
     } else isFirstRender.current = false
   }, [category.name, sortBy.name, search, currentPage, filterBy.value])
 
-  const fetchProjects = queries => {
-    const { searchQuery, categoryQuery, sortByQuery, skip, filterQuery } = queries
+  const fetchProjects = (queries) => {
+    const { searchQuery, categoryQuery, sortByQuery, skip, filterQuery } =
+      queries
     const variables = {
       orderBy: { field: sortByQuery.value, direction: gqlEnums.DESC },
       limit: itemsPerPage,
-      skip
+      skip,
     }
 
-    if (sortByQuery.direction) variables.orderBy.direction = sortByQuery.direction
-    if (categoryQuery && categoryQuery !== 'All') variables.category = categoryQuery
+    if (sortByQuery.direction)
+      variables.orderBy.direction = sortByQuery.direction
+    if (categoryQuery && categoryQuery !== 'All')
+      variables.category = categoryQuery
     if (searchQuery) variables.searchTerm = searchQuery
     if (filterQuery) variables.filterBy = { field: filterQuery, value: true }
     else delete variables.filterBy
@@ -83,20 +99,20 @@ const ProjectsList = props => {
       .query({
         query: FETCH_ALL_PROJECTS,
         variables,
-        fetchPolicy: 'no-cache'
+        fetchPolicy: 'no-cache',
       })
-      .then(res => {
+      .then((res) => {
         const data = res.data?.projects?.projects
         const count = res.data?.projects?.totalCount
         if (data) setFilteredProjects(data)
         if (count) setTotalCount(count)
         setIsLoading(false)
       })
-      .catch(err => {
+      .catch((err) => {
         setIsLoading(false)
         Toast({
           content: err.message || JSON.stringify(err),
-          type: 'error'
+          type: 'error',
         })
       })
   }
@@ -104,7 +120,7 @@ const ProjectsList = props => {
   function checkCategory() {
     const categoryFromQuery = query?.category
     if (categoryFromQuery) {
-      categories.some(i => i.name === categoryFromQuery && setCategory(i))
+      categories.some((i) => i.name === categoryFromQuery && setCategory(i))
     }
   }
 
@@ -114,13 +130,13 @@ const ProjectsList = props => {
         sx={{
           p: ['0 1em', '0 5em', '0 5em'],
           justifyContent: 'space-between',
-          margin: '1.5em 0'
+          margin: '1.5em 0',
         }}
       >
         <Flex
           sx={{
             flexDirection: 'row',
-            alignItems: 'flex-end'
+            alignItems: 'flex-end',
           }}
         >
           <Box
@@ -129,13 +145,13 @@ const ProjectsList = props => {
               width: ['100%', null, null],
               fontWeight: '500',
               fontSize: ['8', '3.25rem', '3.25rem'],
-              color: 'secondary'
+              color: 'secondary',
             }}
           >
             Projects{' '}
           </Box>
         </Flex>
-        <Link href='/create' passHref>
+        <Link href="/create" passHref>
           <CreateLink>Create a project</CreateLink>
         </Link>
       </Flex>
@@ -146,7 +162,7 @@ const ProjectsList = props => {
             alignItems: 'center',
             margin: '0 auto',
             maxWidth: '1440px',
-            paddingTop: 40
+            paddingTop: 40,
           }}
         >
           <Flex sx={{ flexDirection: ['column', null, 'row'] }}>
@@ -154,7 +170,7 @@ const ProjectsList = props => {
               sx={{
                 flex: [1, null, 0.6],
                 flexDirection: ['column', null, 'row'],
-                justifyContent: ['space-around', null, null]
+                justifyContent: ['space-around', null, null],
               }}
             >
               <Flex
@@ -162,14 +178,14 @@ const ProjectsList = props => {
                   flex: 0.4,
                   alignItems: 'center',
                   mt: [4, 0, 0],
-                  mx: 10
+                  mx: 10,
                 }}
               >
                 <DropdownInput
-                  upperLabel='CATEGORY'
+                  upperLabel="CATEGORY"
                   options={categories}
                   current={category}
-                  setCurrent={e => {
+                  setCurrent={(e) => {
                     setCurrentPage(0)
                     setCategory(e)
                   }}
@@ -181,14 +197,14 @@ const ProjectsList = props => {
                   flex: 0.4,
                   alignItems: 'center',
                   mt: [4, 0, 0],
-                  mx: 10
+                  mx: 10,
                 }}
               >
                 <DropdownInput
-                  upperLabel='SORT BY'
+                  upperLabel="SORT BY"
                   options={sortByObj}
                   current={sortBy}
-                  setCurrent={e => {
+                  setCurrent={(e) => {
                     setCurrentPage(0)
                     setSortBy(e)
                   }}
@@ -201,14 +217,14 @@ const ProjectsList = props => {
                   flex: 0.4,
                   alignItems: 'center',
                   mt: [4, 0, 0],
-                  mx: 10
+                  mx: 10,
                 }}
               >
                 <DropdownInput
-                  upperLabel='FILTER BY'
+                  upperLabel="FILTER BY"
                   options={filterByObj}
                   current={filterBy}
-                  setCurrent={e => {
+                  setCurrent={(e) => {
                     setCurrentPage(0)
                     setFilterBy(e)
                   }}
@@ -223,17 +239,17 @@ const ProjectsList = props => {
                 width: '100%',
                 padding: '0 3% 0 0',
                 mt: [4, 0, 0],
-                alignSelf: 'flex-end'
+                alignSelf: 'flex-end',
               }}
             >
               <Input
-                placeholder='Search Projects'
-                variant='forms.search'
+                placeholder="Search Projects"
+                variant="forms.search"
                 style={{
                   width: '100%',
-                  margin: '20px 0 0 0'
+                  margin: '20px 0 0 0',
                 }}
-                onChange={e => {
+                onChange={(e) => {
                   setCurrentPage(0)
                   debouncedSearch.current(e.target.value)
                 }}
@@ -245,18 +261,18 @@ const ProjectsList = props => {
           <Flex
             sx={{
               width: '100%',
-              flexDirection: ['column-reverse', 'row', 'row']
+              flexDirection: ['column-reverse', 'row', 'row'],
             }}
           >
             <div
               style={{
                 width: '100%',
-                margin: '0 0 50px 0'
+                margin: '0 0 50px 0',
               }}
             >
               {isLoading ? (
                 <Flex sx={{ justifyContent: 'center', py: 5 }}>
-                  <Spinner variant='spinner.medium' />
+                  <Spinner variant="spinner.medium" />
                 </Flex>
               ) : (
                 <Grid
@@ -266,34 +282,38 @@ const ProjectsList = props => {
                     columnGap: '2.375em',
                     justifyItems: 'center',
                     marginTop: 20,
-                    marginBottom: 60
+                    marginBottom: 60,
                   }}
                 >
-                  {(filteredProjects || projects.slice(0, itemsPerPage)).map((project, index) => (
-                    <ProjectCard
-                      shadowed
-                      id={project.id}
-                      listingId={project.title + '-' + index}
-                      key={project.title + '-' + index}
-                      name={project.title}
-                      slug={project.slug}
-                      donateAddress={project.donateAddress}
-                      image={project.image || '/images/no-image-available.jpg'}
-                      raised={project.balance}
-                      project={project}
-                    />
-                  ))}
+                  {(filteredProjects || projects.slice(0, itemsPerPage)).map(
+                    (project, index) => (
+                      <ProjectCard
+                        shadowed
+                        id={project.id}
+                        listingId={project.title + '-' + index}
+                        key={project.title + '-' + index}
+                        name={project.title}
+                        slug={project.slug}
+                        donateAddress={project.donateAddress}
+                        image={
+                          project.image || '/images/no-image-available.jpg'
+                        }
+                        raised={project.balance}
+                        project={project}
+                      />
+                    )
+                  )}
                 </Grid>
               )}
 
               {pageCount > 1 && (
                 <PaginationCard
-                  breakLabel='...'
-                  nextLabel='>'
-                  onPageChange={e => setCurrentPage(e.selected)}
+                  breakLabel="..."
+                  nextLabel=">"
+                  onPageChange={(e) => setCurrentPage(e.selected)}
                   pageRangeDisplayed={5}
                   pageCount={pageCount}
-                  previousLabel='<'
+                  previousLabel="<"
                   forcePage={currentPage}
                   renderOnZeroPageCount={null}
                 />
@@ -322,6 +342,7 @@ const CreateLink = styled.a`
 
 const IconSearch = styled(SearchIcon)`
   margin-left: -2.5rem;
+  margin-top: 1rem;
 `
 
 const PaginationCard = styled(Pagination)`
