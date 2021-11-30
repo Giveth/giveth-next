@@ -90,27 +90,29 @@ const FETCH_PROJECTS = gql`
 const FETCH_USER_PROJECTS = gql`
   query FetchProjects($limit: Int, $skip: Int, $orderBy: OrderBy, $admin: Float) {
     projects(take: $limit, skip: $skip, orderBy: $orderBy, admin: $admin) {
-      id
-      title
-      balance
-      description
-      image
-      slug
-      creationDate
-      admin
-      walletAddress
-      impactLocation
-      listed
-      categories {
-        name
-      }
-      reactions {
-        reaction
+      projects {
         id
-        projectUpdateId
-        userId
+        title
+        balance
+        description
+        image
+        slug
+        creationDate
+        admin
+        walletAddress
+        impactLocation
+        listed
+        categories {
+          name
+        }
+        reactions {
+          reaction
+          id
+          projectUpdateId
+          userId
+        }
+        qualityScore
       }
-      qualityScore
     }
   }
 `
