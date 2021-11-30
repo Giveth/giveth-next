@@ -3,25 +3,24 @@ import { useRouter } from 'next/router'
 import { Flex, Button, Text, Image } from 'theme-ui'
 import LevitatingCard from './hoc/levitatingCard'
 
-function GR11 () {
+function GR12() {
   const router = useRouter()
 
   const today = new Date()
-  const firstDay = new Date('09/08/2021')
-  const lastDay = new Date('09/23/2021')
+  const firstDay = new Date('12/01/2021')
+  const lastDay = new Date('12/16/2021')
 
   const showme = today >= firstDay && today <= lastDay
   if (!showme && process.env.NEXT_PUBLIC_NETWORK !== 'ropsten') return null
-
   return (
     <>
-      <LevitatingCard style={{ margin: '0 15% 5% 15%' }}>
+      <LevitatingCard style={{ margin: '0 15% 5% 15%', zIndex: 1 }}>
         <Flex
           sx={{
             flex: 1,
             width: '100%',
             flexDirection: ['column-reverse', 'row', 'row'],
-            mb: ['25%', 0, 0]
+            mb: ['25%', 0, 0],
           }}
         >
           <Flex
@@ -30,27 +29,27 @@ function GR11 () {
               width: '100%',
               flexDirection: 'column',
               alignItems: 'center',
-              background: '#0C0631',
+              background: '#f6f4d7',
               padding: '50px 0',
               borderTopLeftRadius: [0, '16px', '16px'],
-              borderBottomLeftRadius: [0, '16px', '16px']
+              borderBottomLeftRadius: [0, '16px', '16px'],
             }}
           >
             <Image
-              src='/images/GR11.png'
+              src="/images/GR12PNG.png"
               style={{
                 objectFit: 'cover',
-                objectPosition: '3px 0'
+                objectPosition: '3px 0',
               }}
             />
             <Text
               sx={{
                 variant: 'text.default',
                 fontSize: '24px',
-                color: 'background'
+                color: '#56b890',
               }}
             >
-              Sept 8-23
+              Dec 1-16
             </Text>
           </Flex>
           <Flex
@@ -60,20 +59,17 @@ function GR11 () {
               pt: '50px',
               pb: '-50px',
               flexDirection: 'column',
-              background: '#5326EC',
+              background: '#56b890',
               position: 'relative',
-              '*': {
-                zIndex: 2
-              },
               borderTopRightRadius: [0, '16px', '16px'],
-              borderBottomRightRadius: [0, '16px', '16px']
+              borderBottomRightRadius: [0, '16px', '16px'],
             }}
           >
             <Text
               sx={{
                 variant: 'headings.h2',
                 px: 4,
-                color: 'background'
+                color: 'background',
               }}
             >
               Gitcoin Grants
@@ -82,52 +78,50 @@ function GR11 () {
               sx={{
                 variant: 'headings.h2',
                 px: 4,
-                color: 'background'
+                color: 'background',
               }}
             >
-              Round 11 is here!
+              Round 12 is here!
             </Text>
             <Text
               sx={{
                 variant: 'text.default',
                 fontSize: '24px',
                 color: 'background',
-                px: 4
+                px: 4,
               }}
             >
               Donate to support Giveth with the power of Quadratic Funding
             </Text>
-            <a
-              target='_blank'
-              rel='noopener noreferrer'
-              href='https://gitcoin.co/grants/795/givethio-panvala-league'
+            <Button
+              type="submit"
+              variant="buttons.default"
+              sx={{
+                maxWidth: '230px',
+                height: '52px',
+                fontWeight: 'bold',
+                fontSize: 2,
+                lineHeight: 'button',
+                letterSpacing: 'normal',
+                mt: 4,
+                ml: 4,
+                zIndex: 0,
+                mb: 4,
+              }}
+              onClick={() =>
+                router.push('https://gitcoin.co/grants/795/giveth-20')
+              }
             >
-              <Button
-                type='submit'
-                variant='buttons.default'
-                sx={{
-                  maxWidth: '300px',
-                  height: '52px',
-                  fontWeight: 'bold',
-                  fontSize: 2,
-                  lineHeight: 'button',
-                  letterSpacing: 'normal',
-                  mt: 4,
-                  ml: 4,
-                  mb: [4, 0, 0]
-                }}
-              >
-                DONATE
-              </Button>
-            </a>
+              DONATE
+            </Button>
             <Image
-              src='/images/arc-1.png'
+              src="/images/arc-1.png"
               sx={{
                 position: 'absolute',
                 right: 0,
                 bottom: 0,
-                zIndex: 1,
-                maxHeight: '400px'
+                zIndex: -1,
+                maxHeight: '400px',
               }}
             />
           </Flex>
@@ -137,4 +131,4 @@ function GR11 () {
   )
 }
 
-export default GR11
+export default GR12

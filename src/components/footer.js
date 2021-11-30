@@ -1,26 +1,26 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { Box, Grid, Text, Flex } from 'theme-ui';
-import { useMediaQuery } from 'react-responsive';
-import styled from '@emotion/styled';
-import { FiExternalLink } from 'react-icons/fi';
-import theme from '../utils/theme-ui';
-import SocialNetworks from './content/SocialNetworks';
+import Link from 'next/link'
+import Image from 'next/image'
+import { Box, Grid, Text, Flex } from 'theme-ui'
+import { useMediaQuery } from 'react-responsive'
+import styled from '@emotion/styled'
+import { FiExternalLink } from 'react-icons/fi'
+import theme from '../utils/theme-ui'
+import SocialNetworks from './content/SocialNetworks'
 
 const Footer = () => {
-  const isMobile = useMediaQuery({ query: '(max-width: 800px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
   function romanize(num) {
-    if (!+num) return false;
+    if (!+num) return false
     const digits = String(+num).split('')
     let roman = '',
-      i = 3;
-    while (i--) roman = (key[+digits.pop() + i * 10] || '') + roman;
-    return Array(+digits.join('') + 1).join('M') + roman;
+      i = 3
+    while (i--) roman = (key[+digits.pop() + i * 10] || '') + roman
+    return Array(+digits.join('') + 1).join('M') + roman
   }
 
-  const currentTime = new Date();
+  const currentTime = new Date()
 
-  const strRomanDate = romanize(currentTime.getFullYear());
+  const strRomanDate = romanize(currentTime.getFullYear())
 
   return (
     <Container p={[0, 3, 5]} sx={{ position: 'relative' }}>
@@ -55,21 +55,21 @@ const Footer = () => {
             target='_blank'
             rel='noopener noreferrer'
           >
-              What is Giveth? <ExtIcon />
+            What is Giveth? <ExtIcon />
           </FooterExternalLink>
           <FooterExternalLink
             href='https://docs.giveth.io/dapps/'
             target='_blank'
             rel='noopener noreferrer'
           >
-              User Guides <ExtIcon />
+            User Guides <ExtIcon />
           </FooterExternalLink>
           <FooterExternalLink
             href='https://docs.giveth.io/dapps/givethioinstallation'
             target='_blank'
             rel='noopener noreferrer'
           >
-              Developer Docs <ExtIcon />
+            Developer Docs <ExtIcon />
           </FooterExternalLink>
           <FooterLink href='/tos'>Terms of Use</FooterLink>
         </LinkBox>
@@ -80,14 +80,14 @@ const Footer = () => {
             target='_blank'
             rel='noopener noreferrer'
           >
-              Giveth TRACE <ExtIcon />
+            Giveth TRACE <ExtIcon />
           </FooterExternalLink>
           <FooterExternalLink
             href='https://commonsstack.org'
             target='_blank'
             rel='noopener noreferrer'
           >
-              Commons Stack <ExtIcon />
+            Commons Stack <ExtIcon />
           </FooterExternalLink>
           <FooterLink href='/partnerships'>Partnerships</FooterLink>
           <FooterExternalLink
@@ -95,7 +95,7 @@ const Footer = () => {
             target='_blank'
             rel='noopener noreferrer'
           >
-            We're Hiring! <ExtIcon />
+            We`&apos;re Hiring! <ExtIcon />
           </FooterExternalLink>
         </LinkBox>
       </InnerGrid>
@@ -112,10 +112,7 @@ const Footer = () => {
           }}
         >
           Support us{' '}
-          <FooterLink
-            href={`/donate/${theme.donationSlug}`}
-            sx={{ variant: 'links.nav' }}
-          >
+          <FooterLink href={`/donate/${theme.donationSlug}`} sx={{ variant: 'links.nav' }}>
             with your donation
           </FooterLink>
         </Text>
@@ -124,17 +121,14 @@ const Footer = () => {
       <CreditsSection>
         <Text sx={{ textAlign: 'center' }}>
           {strRomanDate} - No Rights Reserved -{' '}
-          <a
-            href='https://wiki.giveth.io/dac/'
-            sx={{ variant: 'links.light'}}
-          >
+          <a href='https://wiki.giveth.io/dac/' sx={{ variant: 'links.light' }}>
             The Giveth DAC
           </a>
         </Text>
       </CreditsSection>
     </Container>
-  );
-};
+  )
+}
 
 const key = [
   '',
@@ -167,7 +161,7 @@ const key = [
   'VII',
   'VIII',
   'IX'
-];
+]
 
 const Container = styled(Box)`
   padding: 10px;
@@ -176,7 +170,7 @@ const Container = styled(Box)`
   @media (max-width: 850px) {
     background-color: ${theme.colors.lightestBlue};
   }
-`;
+`
 
 const FooterLink = styled.a`
   font-family: ${theme.fonts.heading}, sans-serif;
@@ -184,7 +178,7 @@ const FooterLink = styled.a`
   :hover {
     color: ${theme.colors.accent};
   }
-`;
+`
 
 const FooterExternalLink = styled.a`
   font-family: ${theme.fonts.heading}, sans-serif;
@@ -193,19 +187,19 @@ const FooterExternalLink = styled.a`
   :hover {
     color: ${theme.colors.accent};
   }
-`;
+`
 
 const ExtIcon = styled(FiExternalLink)`
   size: 16px;
   @media (max-width: 850px) {
     size: 8px;
   }
-`;
+`
 
 const InnerGrid = styled.div`
   display: flex;
   justify-content: space-between;
-`;
+`
 
 const LinkBox = styled(Box)`
   display: flex;
@@ -215,7 +209,7 @@ const LinkBox = styled(Box)`
   @media (max-width: 400px) {
     font-size: 10px;
   }
-`;
+`
 
 const DonateSection = styled(Flex)`
   display: flex;
@@ -226,10 +220,10 @@ const DonateSection = styled(Flex)`
   @media (max-width: 850px) {
     margin-top: 5px;
   }
-`;
+`
 
 const CreditsSection = styled(Grid)`
   padding: 40px 0;
-`;
+`
 
-export default Footer;
+export default Footer

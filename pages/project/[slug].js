@@ -1,8 +1,6 @@
 import { client } from '../../src/apollo/client'
-import DonatorView from '../../src/components/project/donatorView'
-import NotFoundPage from '../404'
-import Layout from '../../src/components/layout'
-import Seo from '../../src/components/seo'
+import fetch from 'isomorphic-fetch'
+import dynamic from 'next/dynamic'
 import {
   GET_PROJECT_UPDATES,
   FETCH_PROJECT_BY_SLUG,
@@ -10,28 +8,29 @@ import {
 } from '../../src/apollo/gql/projects'
 import { GET_USER } from '../../src/apollo/gql/auth'
 import { PROJECT_DONATIONS } from '../../src/apollo/gql/donations'
+import NotFoundPage from '../404'
+
+const Seo = dynamic(() => import('../../src/components/seo'))
+const Layout = dynamic(() => import('../../src/components/layout'))
+const DonatorView = dynamic(() => import('../../src/components/project/donatorView'))
 
 const Project = props => {
-  return (
-    props.error ? (
-      <NotFoundPage />
-    ) : (
-      <Layout>
-        <Seo
-          title={
-            props.project?.title
-              ? `Check out ${props.project?.title}`
-              : 'Check out this project!'
-          }
-          image={props.project?.image}
-        />
-        <DonatorView {...props} />
-      </Layout>
-    )
+  return props.error ? (
+    <NotFoundPage />
+  ) : (
+    <Layout>
+      <Seo
+        title={
+          props.project?.title ? `Check out ${props.project?.title}` : 'Check out this project!'
+        }
+        image={props.project?.image}
+      />
+      <DonatorView {...props} />
+    </Layout>
   )
 }
 
-export async function getServerSideProps (props) {
+export async function getServerSideProps(props) {
   const { query } = props
   const slug = decodeURI(query?.slug).replace(/\s/g, '')
 
@@ -125,7 +124,7 @@ export async function getServerSideProps (props) {
       updates: updates || null,
       reactions: reactions || null,
       admin: admin?.data?.user || {},
-      error: !!errors ? JSON.stringify(errors) : false
+      error: errors ? JSON.stringify(errors) : false
     }
   }
 }

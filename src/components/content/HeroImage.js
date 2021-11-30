@@ -22,4 +22,5 @@ const HeroImage = styled.div`
   background-position: left top;
   background-repeat: no-repeat;
 `
+
 export default HeroImage

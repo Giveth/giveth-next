@@ -1,14 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
-import * as Auth from '../services/auth'
+import Web3 from 'web3'
 import { client } from '../apollo/client'
 import { DO_LOGIN, VALIDATE_TOKEN } from '../apollo/gql/auth'
-import Web3 from 'web3'
 import Logger from '../Logger'
-/**
- * Ok the user has a token, but is it still valid?
- * @param {} user
- * @param {*} signedMessage
- */
+
 export async function validateAuthToken(token) {
   try {
     const { data } = await client.mutate({
@@ -18,38 +12,29 @@ export async function validateAuthToken(token) {
       }
     })
 
-    const isValid = data.validateToken
-    return isValid
+    return data.validateToken
   } catch (error) {
     console.error('Error in token login', error)
     Logger.captureException(error)
   }
 }
 
-export async function getToken(user, signedMessage, isXDAI) {
-  if (signedMessage) {
+export async function getToken(user, signedMessage, networkId) {
+  if (signedMessage && user) {
     try {
       const { data } = await client.mutate({
         mutation: DO_LOGIN,
         variables: {
-          walletAddress: Web3.utils.toChecksumAddress(user?.getWalletAddress()),
+          walletAddress: Web3.utils.toChecksumAddress(user.walletAddress),
           signature: signedMessage,
-          email: user?.email,
-          avatar: user?.avatar,
-          name: user?.name,
+          email: user.email,
+          avatar: user.avatar,
+          name: user.name,
           hostname: window.location.hostname,
-          isXDAI: isXDAI
+          networkId
         }
       })
-
-      const token = data?.loginWallet?.token
-      const userIDFromDB = data?.loginWallet?.user?.id
-      if (!userIDFromDB) throw new Error('No userId returned from the database')
-      return {
-        userIDFromDB,
-        dbUser: data?.loginWallet?.user,
-        token
-      }
+      return data?.loginWallet?.token
     } catch (error) {
       console.log('Error in token login', error)
       Logger.captureException(error)

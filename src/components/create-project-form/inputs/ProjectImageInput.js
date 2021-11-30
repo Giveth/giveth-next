@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Label, Grid, Box, Image, Text, Flex, Button } from 'theme-ui'
 import NextImage from 'next/image'
-import { animated } from 'react-spring'
 import { useDropzone } from 'react-dropzone'
-import theme from '../../../utils/theme-ui'
 import styled from '@emotion/styled'
 
 import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
@@ -11,6 +9,7 @@ import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery
 import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
 import { toBase64 } from '../../../utils'
+import theme from '../../../utils/theme-ui'
 
 const Selection = styled(Box)`
   cursor: pointer;
@@ -23,14 +22,8 @@ const Selection = styled(Box)`
   background-color: ${theme.colors.background};
 `
 
-export const ProjectImageInput = ({
-  register,
-  currentValue,
-  setValue,
-  animationStyle,
-  goBack
-}) => {
-  const [image, setImage] = useState()
+export const ProjectImageInput = ({ register, currentValue, setValue, goBack }) => {
+  const image = undefined
   const [displayImage, setDisplayImage] = useState(currentValue)
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -64,7 +57,7 @@ export const ProjectImageInput = ({
   }, [displayImage])
 
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '10px' }}>
+    <div style={{ marginTop: '10px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -109,17 +102,11 @@ export const ProjectImageInput = ({
             {...register('projectImage')}
           />
           {displayImage === undefined ? (
-            <NextImage
-              src={'/placeholder.png'}
-              width='100%'
-              height='100%'
-              objectFit='cover'
-            />
-          ) : displayImage?.startsWith('data:') ? (
-            <Image
-              src={displayImage}
-              sx={{ objectFit: 'cover', maxHeight: '150px' }}
-            />
+            <NextImage src={'/placeholder.png'} width='100%' height='100%' objectFit='cover' />
+          ) : displayImage?.startsWith('data:') ||
+            displayImage?.startsWith('http') ||
+            displayImage?.startsWith('/assets') ? (
+            <Image alt='image' src={displayImage} sx={{ objectFit: 'cover', maxHeight: '150px' }} />
           ) : (
             <Flex sx={{ justifyContent: 'center' }}>
               {displayImage === '1' && (
@@ -139,9 +126,7 @@ export const ProjectImageInput = ({
 
           <Text sx={{ marginTop: '30px' }}>
             Drag & drop an image here or{' '}
-            <Text sx={{ display: 'inline-block', color: 'primary' }}>
-              Upload from computer
-            </Text>
+            <Text sx={{ display: 'inline-block', color: 'primary' }}>Upload from computer</Text>
           </Text>
           <Text
             sx={{
@@ -163,19 +148,15 @@ export const ProjectImageInput = ({
           mt: '16px'
         }}
       >
-        {[1, 2, 3, 4].map((i, index) => {
-          return (
-            <Selection
-              key={index}
-              type='button'
-              onClick={() => {
-                setDisplayImage(i?.toString())
-              }}
-            >
-              {ProjectImage(i)}
-            </Selection>
-          )
-        })}
+        {[1, 2, 3, 4].map(i => (
+          <Selection
+            key={i}
+            type='button'
+            onClick={() => setDisplayImage(`/assets/create/projectImageGallery${i}.svg`)}
+          >
+            {ProjectImage(i)}
+          </Selection>
+        ))}
       </Grid>
       <Flex
         sx={{
@@ -230,6 +211,6 @@ export const ProjectImageInput = ({
           </Text>
         </Button>
       </Flex>
-    </animated.section>
+    </div>
   )
 }

@@ -1,19 +1,18 @@
 import { Grid, Text } from 'theme-ui'
+import dynamic from 'next/dynamic'
 import { fetchEntries } from '../src/utils/contentfulPosts'
-import Layout from '../src/components/layout'
-import Seo from '../src/components/seo'
-import Hero from '../src/components/content/JoinPageHero'
-import JoinChatCard from '../src/components/content/JoinPageCard'
+
+const Seo = dynamic(() => import('../src/components/seo'))
+const Layout = dynamic(() => import('../src/components/layout'))
+const Hero = dynamic(() => import('../src/components/content/JoinPageHero'))
+const JoinChatCard = dynamic(() => import('../src/components/content/JoinPageCard'))
 
 const JoinPage = ({ joinChat, joinConsume }) => {
   return (
     <Layout>
       <Seo title='Join our community' />
       <Hero />
-      <Grid
-        rows={2}
-        sx={{ justifyContent: 'center', backgroundColor: 'lightestBlue' }}
-      >
+      <Grid rows={2} sx={{ justifyContent: 'center', backgroundColor: 'lightestBlue' }}>
         <Text
           sx={{
             variant: 'headings.h4',
@@ -24,19 +23,12 @@ const JoinPage = ({ joinChat, joinConsume }) => {
         >
           Engage
         </Text>
-        <Grid
-          p={[1, 2, 2]}
-          columns={[1, 1, 2]}
-          sx={{ paddingLeft: '10vw', paddingRight: '10vw' }}
-        >
+        <Grid p={[1, 2, 2]} columns={[1, 1, 2]} sx={{ paddingLeft: '10vw', paddingRight: '10vw' }}>
           <JoinChatCard data={joinChat} />
         </Grid>
       </Grid>
       <div style={{ height: '10vh' }} />
-      <Grid
-        rows={2}
-        sx={{ justifyContent: 'center', backgroundColor: 'lightestBlue' }}
-      >
+      <Grid rows={2} sx={{ justifyContent: 'center', backgroundColor: 'lightestBlue' }}>
         <Text
           sx={{
             variant: 'headings.h4',
@@ -47,11 +39,7 @@ const JoinPage = ({ joinChat, joinConsume }) => {
         >
           Consume
         </Text>
-        <Grid
-          p={[1, 2, 2]}
-          columns={[1, 1, 2]}
-          sx={{ paddingLeft: '10vw', paddingRight: '10vw' }}
-        >
+        <Grid p={[1, 2, 2]} columns={[1, 1, 2]} sx={{ paddingLeft: '10vw', paddingRight: '10vw' }}>
           <JoinChatCard data={joinConsume} />
         </Grid>
       </Grid>
@@ -59,7 +47,7 @@ const JoinPage = ({ joinChat, joinConsume }) => {
   )
 }
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
   // contentful
   const joinReq = await fetchEntries({
     contentType: 'contentJoinChatprovider'

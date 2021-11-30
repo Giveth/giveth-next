@@ -10,17 +10,13 @@ const GithubIssue = props => {
 
   React.useEffect(() => {
     const issueAlreadyClosed =
-      typeof window !== 'undefined' &&
-      window.localStorage.getItem('githubIssueClosed')
+      typeof window !== 'undefined' && window.localStorage.getItem('githubIssueClosed')
     if (!issueAlreadyClosed) {
       setShowIssuePopup(true)
     } else {
       if (isNaN(parseInt(issueAlreadyClosed))) {
         // Starts date of closing the popup
-        window.localStorage.setItem(
-          'githubIssueClosed',
-          new Date().getTime().toString()
-        )
+        window.localStorage.setItem('githubIssueClosed', new Date().getTime().toString())
       } else {
         // check if it's been more than 3 days
         const now = new Date().getTime().toString()
@@ -67,12 +63,7 @@ const GithubIssue = props => {
         <Text variant='headings.h6' mb={1} color='secondary'>
           Tell us what you think
         </Text>
-        <Text
-          variant='text.default'
-          color='secondary'
-          mb={2}
-          sx={{ fontSize: '14px' }}
-        >
+        <Text variant='text.default' color='secondary' mb={2} sx={{ fontSize: '14px' }}>
           How can we be better? <br /> Report an issue or request a new feature
         </Text>
         <Button
@@ -120,10 +111,7 @@ const GithubIssue = props => {
       <IoMdClose
         onClick={() => {
           typeof window !== 'undefined' &&
-            window.localStorage.setItem(
-              'githubIssueClosed',
-              new Date().getTime().toString()
-            )
+            window.localStorage.setItem('githubIssueClosed', new Date().getTime().toString())
           setShowIssuePopup(false)
         }}
         style={{
