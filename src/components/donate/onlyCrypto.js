@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import fetch from 'isomorphic-fetch'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
@@ -32,7 +38,7 @@ import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 const Select = dynamic(() => import('../selectWithAutocomplete'), {
-  ssr: false
+  ssr: false,
 })
 
 const xdaiChain = { id: 100, name: 'xdai', mainToken: 'XDAI' }
@@ -42,15 +48,31 @@ const stableCoins = [xdaiChain.mainToken, 'DAI', 'USDT']
 const GIVETH_DONATION_AMOUNT = 5
 const POLL_DELAY_TOKENS = 5000
 
-const OnlyCrypto = props => {
+const OnlyCrypto = (props) => {
   const {
-    state: { validProvider, balance, web3, account, isEnabled, networkId, provider, user },
-    actions: { switchWallet, enableProvider, switchToXdai, initOnBoard, setToken }
+    state: {
+      validProvider,
+      balance,
+      web3,
+      account,
+      isEnabled,
+      networkId,
+      provider,
+      user,
+    },
+    actions: {
+      switchWallet,
+      enableProvider,
+      switchToXdai,
+      initOnBoard,
+      setToken,
+    },
   } = useContext(Web3Context)
 
   const usePopup = useContext(PopupContext)
 
-  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false)
 
   const { triggerPopup } = usePopup
 
@@ -83,7 +105,7 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     if (networkId) {
-      const tokens = getERC20List(networkId).tokens.map(token => {
+      const tokens = getERC20List(networkId).tokens.map((token) => {
         token.value = { symbol: token.symbol }
         token.label = token.symbol
         return token
@@ -121,7 +143,7 @@ const OnlyCrypto = props => {
   }, [selectedToken, mainTokenPrice])
 
   useEffect(() => {
-    web3?.eth.getGasPrice().then(wei => {
+    web3?.eth.getGasPrice().then((wei) => {
       const gwei = isXdai ? 1 : web3.utils.fromWei(wei, 'gwei')
       const ethFromGwei = web3.utils.fromWei(wei, 'ether')
       gwei && setGasPrice(Number(gwei))
@@ -131,9 +153,13 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     let img = ''
-    const found = iconManifest?.find(i => i.symbol === tokenSymbol?.toUpperCase())
+    const found = iconManifest?.find(
+      (i) => i.symbol === tokenSymbol?.toUpperCase()
+    )
     if (found) {
-      img = `/assets/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() || 'eth'}.png`
+      img = `/assets/cryptocurrency-icons/32/color/${
+        tokenSymbol?.toLowerCase() || 'eth'
+      }.png`
       setIcon(img)
     } else {
       setIcon(`/assets/cryptocurrency-icons/32/color/eth.png`)
@@ -159,20 +185,26 @@ const OnlyCrypto = props => {
       () => ({
         request: async () => {
           try {
-            const instance = new web3.eth.Contract(tokenAbi, selectedToken.address)
-            return (await instance.methods.balanceOf(account).call()) / 10 ** selectedToken.decimals
+            const instance = new web3.eth.Contract(
+              tokenAbi,
+              selectedToken.address
+            )
+            return (
+              (await instance.methods.balanceOf(account).call()) /
+              10 ** selectedToken.decimals
+            )
           } catch (e) {
             return 0
           }
         },
-        onResult: _balance => {
+        onResult: (_balance) => {
           if (
             _balance !== undefined &&
             (!selectedTokenBalance || selectedTokenBalance !== _balance)
           ) {
             setSelectedTokenBalance(_balance)
           }
-        }
+        },
       }),
       POLL_DELAY_TOKENS
     )()
@@ -182,30 +214,33 @@ const OnlyCrypto = props => {
     return fetch(
       `https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`
     )
-      .then(response => response.json())
-      .then(data => parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2)))
-      .catch(err => {
+      .then((response) => response.json())
+      .then((data) => parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2)))
+      .catch((err) => {
         console.log('Error fetching prices: ', err)
         setTokenPrice(0)
       })
   }
 
   const fetchEthPrice = () => {
-    return fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
-      .then(response => response.json())
-      .then(data => data.ethereum.usd)
-      .catch(err => {
+    return fetch(
+      'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
+    )
+      .then((response) => response.json())
+      .then((data) => data.ethereum.usd)
+      .catch((err) => {
         console.log('Error fetching ETH price: ', err)
         setMainTokenPrice(0)
       })
   }
 
   const donation = parseFloat(amountTyped)
-  const givethFee = Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
+  const givethFee =
+    Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
 
   const subtotal = donation + (donateToGiveth === true ? givethFee : 0)
 
-  const mainTokenToUSD = amountOfToken => {
+  const mainTokenToUSD = (amountOfToken) => {
     const USDValue = (amountOfToken * mainTokenPrice).toFixed(2)
     if (USDValue > 0) {
       return `$${USDValue}`
@@ -213,7 +248,7 @@ const OnlyCrypto = props => {
     return 'less than $0.01'
   }
 
-  const donationTokenToUSD = amountOfToken => {
+  const donationTokenToUSD = (amountOfToken) => {
     const USDValue = (amountOfToken * tokenPrice).toFixed(2)
     if (isXdai) return ''
     if (USDValue > 0) {
@@ -232,20 +267,20 @@ const OnlyCrypto = props => {
             width: ['50%', '50%'],
             color: 'background',
             position: 'relative',
-            display: 'flex'
+            display: 'flex',
           }}
         >
           {title}
           {logo && (
             <Tooltip
-              placement='top'
+              placement="top"
               isArrow
-              content='The fee required to successfully conduct a transaction on the Ethereum blockchain.'
+              content="The fee required to successfully conduct a transaction on the Ethereum blockchain."
               contentStyle={{
-                backgroundColor: '#AF9BD3'
+                backgroundColor: '#AF9BD3',
               }}
               textStyle={{
-                color: 'white'
+                color: 'white',
               }}
             />
           )}
@@ -256,7 +291,7 @@ const OnlyCrypto = props => {
               sx={{
                 variant: isLarge ? 'text.large' : 'text.small',
                 color: 'anotherGrey',
-                paddingRight: '5px'
+                paddingRight: '5px',
               }}
             >
               {amount[0]}
@@ -265,7 +300,7 @@ const OnlyCrypto = props => {
               sx={{
                 variant: isLarge ? 'text.large' : 'text.overline',
                 color: 'background',
-                textAlign: 'end'
+                textAlign: 'end',
               }}
             >
               {' '}
@@ -277,7 +312,7 @@ const OnlyCrypto = props => {
             sx={{
               variant: isLarge ? 'text.large' : 'text.small',
               textAlign: 'right',
-              color: 'anotherGrey'
+              color: 'anotherGrey',
             }}
           >
             {amount}
@@ -307,7 +342,7 @@ const OnlyCrypto = props => {
       if (!project?.walletAddress) {
         return Toast({
           content: 'There is no eth address assigned for this project',
-          type: 'error'
+          type: 'error',
         })
       }
 
@@ -327,7 +362,7 @@ const OnlyCrypto = props => {
         type: 'dark',
         customPosition: 'top-left',
         isLoading: true,
-        noAutoClose: true
+        noAutoClose: true,
       })
 
       const toAddress = isAddressENS(project.walletAddress)
@@ -344,26 +379,27 @@ const OnlyCrypto = props => {
         sendTransaction,
         web3Provider,
         {
-          onTransactionHash: async transactionHash => {
+          onTransactionHash: async (transactionHash) => {
             // Save initial txn details to db
-            const { donationId, savedDonation, saveDonationErrors } = await saveDonation(
-              account,
-              toAddress,
-              transactionHash,
-              networkId,
-              Number(subtotal),
-              tokenSymbol,
-              Number(project.id)
-            )
+            const { donationId, savedDonation, saveDonationErrors } =
+              await saveDonation(
+                account,
+                toAddress,
+                transactionHash,
+                networkId,
+                Number(subtotal),
+                tokenSymbol,
+                Number(project.id)
+              )
             console.log('DONATION RESPONSE: ', {
               donationId,
               savedDonation,
-              saveDonationErrors
+              saveDonationErrors,
             })
             // onTransactionHash callback for event emitter
             transaction.confirmEtherTransaction(
               transactionHash,
-              res => {
+              (res) => {
                 try {
                   if (!res) return
                   toast.dismiss()
@@ -378,7 +414,7 @@ const OnlyCrypto = props => {
                     props.setHashSent({
                       transactionHash,
                       tokenSymbol,
-                      subtotal
+                      subtotal,
                     })
                     setUnconfirmed(false)
                   } else {
@@ -388,12 +424,12 @@ const OnlyCrypto = props => {
                     if (res?.error) {
                       Toast({
                         content: res?.error?.message,
-                        type: 'error'
+                        type: 'error',
                       })
                     } else {
                       Toast({
                         content: `Transaction couldn't be confirmed or it failed`,
-                        type: 'error'
+                        type: 'error',
                       })
                     }
                   }
@@ -407,11 +443,11 @@ const OnlyCrypto = props => {
             )
             await saveDonationTransaction(transactionHash, donationId)
           },
-          onReceiptGenerated: receipt => {
+          onReceiptGenerated: (receipt) => {
             props.setHashSent({
               transactionHash: receipt?.transactionHash,
               subtotal,
-              tokenSymbol
+              tokenSymbol,
             })
           },
           onError: () => {
@@ -421,7 +457,7 @@ const OnlyCrypto = props => {
             //   content: error?.error?.message || error?.message || error,
             //   type: 'error'
             // })
-          }
+          },
         },
         traceable
       )
@@ -444,7 +480,7 @@ const OnlyCrypto = props => {
           error?.error?.message ||
           error?.message ||
           error,
-        type: 'error'
+        type: 'error',
       })
     }
   }
@@ -470,7 +506,11 @@ const OnlyCrypto = props => {
           txHash={txHash}
           networkId={networkId}
         />
-        <Modal isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)} contentLabel='QR Modal'>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setIsOpen(false)}
+          contentLabel="QR Modal"
+        >
           <Flex
             sx={{
               flexDirection: 'column',
@@ -478,7 +518,7 @@ const OnlyCrypto = props => {
               py: 5,
               px: 4,
               maxWidth: ['85vw', '60vw', '60vw'],
-              textAlign: 'center'
+              textAlign: 'center',
             }}
           >
             <Text
@@ -491,7 +531,7 @@ const OnlyCrypto = props => {
                 overflowWrap: 'normal',
                 color: 'secondary',
                 mt: 2,
-                mb: 4
+                mb: 4,
               }}
             >
               DONATE TO
@@ -501,12 +541,12 @@ const OnlyCrypto = props => {
                 color: 'secondary',
                 variant: 'headings.h4',
                 mt: 2,
-                mb: 4
+                mb: 4,
               }}
             >
               {project?.title}
             </Text>
-            <QRCode value={project?.walletAddress} size={250} />
+            {/* <QRCode value={project?.walletAddress} size={250} /> */}
             <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
               Please send ETH or ERC20 tokens using this address
             </Text>
@@ -515,19 +555,19 @@ const OnlyCrypto = props => {
                 backgroundColor: 'lightGray',
                 alignItems: 'center',
                 px: 3,
-                mt: 3
+                mt: 3,
               }}
             >
               <Text
                 sx={{
                   variant: 'text.default',
                   color: 'secondary',
-                  py: 2
+                  py: 2,
                 }}
               >
                 {project?.walletAddress}
               </Text>
-              <CopyToClipboard size='18px' text={project?.walletAddress} />
+              <CopyToClipboard size="18px" text={project?.walletAddress} />
             </Flex>
           </Flex>
           <Text
@@ -538,7 +578,7 @@ const OnlyCrypto = props => {
               position: 'absolute',
               top: '20px',
               right: '24px',
-              variant: 'text.default'
+              variant: 'text.default',
             }}
           >
             Close
@@ -555,28 +595,30 @@ const OnlyCrypto = props => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                mb: 2
+                mb: 2,
               }}
             >
               <Text
                 sx={{
                   variant: 'text.large',
-                  color: 'anotherGrey'
+                  color: 'anotherGrey',
                 }}
               >
-                {!isNaN(tokenPrice) && !!tokenSymbol ? `1 ${tokenSymbol} ≈ ${tokenPrice} USD` : ''}
+                {!isNaN(tokenPrice) && !!tokenSymbol
+                  ? `1 ${tokenSymbol} ≈ ${tokenPrice} USD`
+                  : ''}
               </Text>
 
               <Text
                 sx={{
                   variant: 'text.small',
-                  color: 'anotherGrey'
+                  color: 'anotherGrey',
                 }}
               >
                 Available:{' '}
                 {parseFloat(selectedTokenBalance).toLocaleString('en-US', {
                   minimumFractionDigits: 2,
-                  maximumFractionDigits: 6
+                  maximumFractionDigits: 6,
                 })}{' '}
                 {tokenSymbol}
               </Text>
@@ -589,19 +631,19 @@ const OnlyCrypto = props => {
                     position: 'absolute',
                     backgroundColor: 'background',
                     marginTop: '100px',
-                    right: '0'
+                    right: '0',
                   }}
                 >
                   <Select
-                    width='250px'
+                    width="250px"
                     content={erc20List}
                     isTokenList
                     menuIsOpen
-                    onSelect={i => {
+                    onSelect={(i) => {
                       setSelectedToken(i || selectedToken)
                       setIsComponentVisible(false)
                     }}
-                    placeholder='search for a token'
+                    placeholder="search for a token"
                   />
                 </Flex>
               )}
@@ -610,15 +652,18 @@ const OnlyCrypto = props => {
                   variant: 'text.large',
                   color: 'secondary',
                   '::placeholder': {
-                    color: 'anotherGrey'
-                  }
+                    color: 'anotherGrey',
+                  },
                 }}
-                placeholder='Amount'
-                type='number'
+                placeholder="Amount"
+                type="number"
                 value={amountTyped}
-                onChange={e => {
+                onChange={(e) => {
                   e.preventDefault()
-                  if (parseFloat(e.target.value) !== 0 && parseFloat(e.target.value) < 0.001) {
+                  if (
+                    parseFloat(e.target.value) !== 0 &&
+                    parseFloat(e.target.value) < 0.001
+                  ) {
                     return
                   }
                   setAmountTyped(e.target.value)
@@ -631,13 +676,15 @@ const OnlyCrypto = props => {
                   position: 'absolute',
                   cursor: 'pointer',
                   right: '20px',
-                  ml: 3
+                  ml: 3,
                 }}
               >
                 <Image
-                  src={icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
+                  src={
+                    icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`
+                  }
                   alt={tokenSymbol || ''}
-                  onError={ev => {
+                  onError={(ev) => {
                     ev.target.src = ETHIcon
                     ev.target.onerror = null
                   }}
@@ -646,7 +693,7 @@ const OnlyCrypto = props => {
                   style={{ width: '32px', height: '32px' }}
                 />
                 <Text sx={{ ml: 2, mr: 3 }}>{tokenSymbol}</Text>
-                <BsCaretDownFill size='12px' color={theme.colors.secondary} />
+                <BsCaretDownFill size="12px" color={theme.colors.secondary} />
               </Flex>
             </OpenAmount>
           </AmountContainer>
@@ -694,10 +741,10 @@ const OnlyCrypto = props => {
                     title: 'Support Giveth',
                     amount: [
                       `$${GIVETH_DONATION_AMOUNT}`,
-                      `≈ ${selectedToken.symbol} ${(GIVETH_DONATION_AMOUNT / tokenPrice).toFixed(
-                        2
-                      )}`
-                    ]
+                      `≈ ${selectedToken.symbol} ${(
+                        GIVETH_DONATION_AMOUNT / tokenPrice
+                      ).toFixed(2)}`,
+                    ],
                   })}
 
                 {SummaryRow({
@@ -705,8 +752,8 @@ const OnlyCrypto = props => {
                   isLarge: true,
                   amount: [
                     `${donationTokenToUSD(donation)}`,
-                    `${parseFloat(donation)} ${selectedToken.symbol}`
-                  ]
+                    `${parseFloat(donation)} ${selectedToken.symbol}`,
+                  ],
                 })}
 
                 {gasPrice &&
@@ -714,12 +761,16 @@ const OnlyCrypto = props => {
                     title: 'Network fee',
                     logo: { iconQuestionMark },
                     amount: [
-                      `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(gasPrice)} GWEI`,
+                      `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(
+                        gasPrice
+                      )} GWEI`,
                       `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                         minimumFractionDigits: 2,
-                        maximumFractionDigits: 6
-                      })} ${isXdai ? xdaiChain.mainToken : ethereumChain.mainToken}`
-                    ]
+                        maximumFractionDigits: 6,
+                      })} ${
+                        isXdai ? xdaiChain.mainToken : ethereumChain.mainToken
+                      }`,
+                    ],
                   })}
               </Summary>
             )}
@@ -754,19 +805,21 @@ const OnlyCrypto = props => {
               // )}
             }
             {!switchTraceable && !isXdai && (
-              <SaveGasMessage sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}>
+              <SaveGasMessage
+                sx={{ mt: project?.IOTraceable || project?.fromTrace ? 3 : 0 }}
+              >
                 <Image
-                  src='/images/icon-streamline-gas.svg'
-                  height='18px'
-                  width='18px'
-                  alt='gas icon'
+                  src="/images/icon-streamline-gas.svg"
+                  height="18px"
+                  width="18px"
+                  alt="gas icon"
                 />
                 <Text
                   sx={{
                     variant: 'text.medium',
                     textAlign: 'left',
                     color: 'background',
-                    marginLeft: '12px'
+                    marginLeft: '12px',
                   }}
                 >
                   Save on gas fees, switch to xDAI network.
@@ -778,7 +831,7 @@ const OnlyCrypto = props => {
                     variant: 'text.medium',
                     textAlign: 'left',
                     color: 'yellow',
-                    marginLeft: '12px'
+                    marginLeft: '12px',
                   }}
                 >
                   Switch network
@@ -793,7 +846,7 @@ const OnlyCrypto = props => {
                 alignItems: 'center',
                 textAlign: 'center',
                 justifyContent: 'space-between',
-                my: 3
+                my: 3,
               }}
             >
               {isEnabled && (
@@ -804,7 +857,7 @@ const OnlyCrypto = props => {
                     mt: 2,
                     mr: 2,
                     textTransform: 'uppercase',
-                    width: '80%'
+                    width: '80%',
                   }}
                 >
                   Donate
@@ -816,7 +869,7 @@ const OnlyCrypto = props => {
                   sx={{
                     cursor: 'pointer',
                     width: isEnabled ? '25px' : '100%',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
                   }}
                   onClick={() => setIsOpen(true)}
                 >
@@ -844,7 +897,7 @@ const OnlyCrypto = props => {
                 sx={{
                   variant: 'buttons.default',
                   my: 2,
-                  textTransform: 'uppercase'
+                  textTransform: 'uppercase',
                 }}
               >
                 Connect Wallet
@@ -859,8 +912,8 @@ const OnlyCrypto = props => {
                   cursor: 'pointer',
                   color: 'background',
                   '&:hover': {
-                    color: 'accent'
-                  }
+                    color: 'accent',
+                  },
                 }}
                 onClick={switchWallet}
               >
