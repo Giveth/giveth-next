@@ -88,13 +88,8 @@ const FETCH_PROJECTS = gql`
 `
 
 const FETCH_USER_PROJECTS = gql`
-  query FetchProjects(
-    $limit: Int
-    $skip: Int
-    $orderBy: OrderBy
-    $admin: Float
-  ) {
-    projects(take: $limit, skip: $skip, orderBy: $orderBy, admin: $admin) {
+  query FetchUserProjects($take: Float, $skip: Float, $userId: Int!) {
+    projectsByUserId(take: $take, skip: $skip, userId: $userId) {
       projects {
         id
         title
