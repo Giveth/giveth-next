@@ -28,40 +28,41 @@ const wallets = [
   { walletName: 'torus' },
   {
     walletName: 'portis',
-    apiKey: portisKey
+    apiKey: portisKey,
   },
   {
     walletName: 'trezor',
     appUrl: 'https://giveth.io/',
-    rpcUrl
+    rpcUrl,
   },
   {
     walletName: 'lattice',
     appName: 'Giveth 2.0',
-    rpcUrl
+    rpcUrl,
   },
   {
     walletName: 'ledger',
-    rpcUrl
+    rpcUrl,
   },
   { walletName: 'dapper' },
   { walletName: 'coinbase' },
   { walletName: 'status' },
   { walletName: 'unilogin' },
-  { walletName: 'authereum', disableNotifications: true },
+  // { walletName: 'authereum', disableNotifications: true },
+  // { walletName: 'gnosis' },
   {
     walletName: 'walletConnect',
-    infuraKey
+    infuraKey,
   },
   { walletName: 'opera' },
   { walletName: 'operaTouch' },
   { walletName: 'imToken', rpcUrl },
   { walletName: 'meetone' },
   { walletName: 'mykey' },
-  { walletName: 'wallet.io', rpcUrl }
+  { walletName: 'wallet.io', rpcUrl },
 ]
 
-const Web3Provider = props => {
+const Web3Provider = (props) => {
   const [validProvider, setValidProvider] = useState(false)
   const [networkId, setNetworkId] = useState()
   const [web3, setWeb3] = useState()
@@ -82,7 +83,7 @@ const Web3Provider = props => {
       dappId,
       networkId: defaultNetworkId,
       subscriptions: {
-        wallet: wallet => {
+        wallet: (wallet) => {
           window.localStorage.setItem('selectedWallet', wallet.name)
           const _web3 = new Web3(wallet.provider)
           _web3[wallet.name] = true
@@ -90,35 +91,38 @@ const Web3Provider = props => {
           setWeb3(_web3)
           setProvider(wallet.provider)
         },
-        network: _network => setNetworkId(_network),
-        address: _address => {
+        network: (_network) => setNetworkId(_network),
+        address: (_address) => {
           if (!_address || _address !== Auth.getUser()?.walletAddress) {
             Auth.logout()
           }
           if (user) setUser(undefined)
           setAccount(_address)
         },
-        balance: _balance => setBalance(_balance / 10 ** nativeTokenDecimals)
+        balance: (_balance) => setBalance(_balance / 10 ** nativeTokenDecimals),
       },
       walletSelect: {
-        wallets
-      }
+        wallets,
+      },
     })
 
-    const previouslySelectedWallet = window.localStorage.getItem('selectedWallet')
+    const previouslySelectedWallet =
+      window.localStorage.getItem('selectedWallet')
     if (previouslySelectedWallet) {
       _onboard
         .walletSelect(previouslySelectedWallet)
-        .then(selected => selected && _onboard.walletCheck().then())
+        .then((selected) => selected && _onboard.walletCheck().then())
     } else {
-      _onboard.walletSelect().then(selected => selected && _onboard.walletCheck().then())
+      _onboard
+        .walletSelect()
+        .then((selected) => selected && _onboard.walletCheck().then())
     }
     setOnboard(_onboard)
   }
 
   const switchWallet = async () => {
     setUser()
-    onboard.walletSelect().then(selected => {
+    onboard.walletSelect().then((selected) => {
       if (selected) {
         onboard.walletCheck().then()
       }
@@ -134,9 +138,9 @@ const Web3Provider = props => {
           chainName: 'xDai',
           nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
           rpcUrls: ['https://rpc.xdaichain.com/'],
-          blockExplorerUrls: ['https://blockscout.com/xdai/mainnet']
-        }
-      ]
+          blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
+        },
+      ],
     })
   }
 
@@ -151,18 +155,18 @@ const Web3Provider = props => {
       .query({
         query: GET_USER_BY_ADDRESS,
         variables: {
-          address: account?.toLowerCase()
+          address: account?.toLowerCase(),
         },
-        fetchPolicy: 'network-only'
+        fetchPolicy: 'network-only',
       })
-      .then(res => {
+      .then((res) => {
         return res.data?.userByAddress
       })
       .catch(console.log)
   }
 
   const updateUser = () => {
-    fetchUser().then(res => {
+    fetchUser().then((res) => {
       if (res) {
         const newUser = new User(user)
         newUser.parseDbUser(res)
@@ -200,14 +204,14 @@ const Web3Provider = props => {
         sx={{
           flexDirection: 'column',
           p: 4,
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <Text
           sx={{
             variant: 'text.large',
             color: 'secondary',
-            marginBottom: '25px'
+            marginBottom: '25px',
           }}
         >
           Please Sign with your wallet to authenticate
@@ -217,7 +221,7 @@ const Web3Provider = props => {
           sx={{
             cursor: 'pointer',
             width: '170px',
-            background: theme.colors.primary
+            background: theme.colors.primary,
           }}
         >
           Sign
@@ -242,7 +246,7 @@ const Web3Provider = props => {
         newUser.setToken(_user.token)
         setUser(newUser)
       } else {
-        fetchUser().then(res => {
+        fetchUser().then((res) => {
           if (res) {
             newUser.parseDbUser(res)
             Auth.setUser(newUser)
@@ -260,7 +264,7 @@ const Web3Provider = props => {
     if (networkId) {
       onboard.config({ networkId })
       if (isXdai) setNetworkName('xDai')
-      else web3?.eth.net.getNetworkType().then(name => setNetworkName(name))
+      else web3?.eth.net.getNetworkType().then((name) => setNetworkName(name))
     }
   }, [networkId])
 
@@ -278,7 +282,7 @@ const Web3Provider = props => {
           networkId,
           networkName,
           provider,
-          user
+          user,
         },
         actions: {
           switchWallet,
@@ -288,12 +292,15 @@ const Web3Provider = props => {
           updateUser,
           showSign,
           signModalContent,
-          setToken
-        }
+          setToken,
+        },
       }}
     >
       {showSignModal && (
-        <Modal isOpen={showSignModal} onRequestClose={() => setShowSignModal(false)}>
+        <Modal
+          isOpen={showSignModal}
+          onRequestClose={() => setShowSignModal(false)}
+        >
           {signModalContent()}
         </Modal>
       )}
