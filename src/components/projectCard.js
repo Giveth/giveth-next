@@ -165,7 +165,7 @@ const ProjectCard = props => {
           </Link>
 
           <div style={{ position: 'relative' }}>
-            {project?.fromTrace || project?.IOTraceable
+            {project?.traceCampaignId
               ? projectBadge('TRACEABLE')
               : project?.verified
               ? projectBadge('VERIFIED')

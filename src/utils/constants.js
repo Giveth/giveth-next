@@ -35,10 +35,9 @@ export const gqlEnums = {
   CREATIONDATE: 'CreationDate',
   BALANCE: 'Balance',
   VERIFIED: 'Verified',
+  TRACEABLE: 'Traceable',
   HEARTS: 'Reactions',
   DONATIONS: 'Donations',
-  RECENTLYADDED: 'RecentlyAdded',
-  OLD: 'OldProjects',
   DESC: 'DESC',
   ASC: 'ASC'
 }
