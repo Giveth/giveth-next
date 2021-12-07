@@ -17,14 +17,16 @@ const StyledOption = styled.div`
   }
 `
 
-const SelectWithAutocomplete = ({
-  content,
-  width,
-  placeholder,
-  onSelect,
-  menuIsOpen,
-  isTokenList
-}) => {
+const SelectWithAutocomplete = (props) => {
+  const {
+    content,
+    width,
+    placeholder,
+    onSelect,
+    onInputChange,
+    menuIsOpen,
+    isTokenList,
+  } = props
   const options = content || []
 
   const CustomOption = ({ children, value, innerProps, isDisabled }) => {
@@ -32,7 +34,9 @@ const SelectWithAutocomplete = ({
     let toShow = children
     // Special render for tokens, showing extra info
     if (isTokenList) {
-      const found = iconManifest.find(i => i.symbol === value.symbol?.toUpperCase())
+      const found = iconManifest.find(
+        (i) => i.symbol === value.symbol?.toUpperCase()
+      )
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
           {found ? (
@@ -45,22 +49,22 @@ const SelectWithAutocomplete = ({
                   : `/assets/tokens/${value?.symbol?.toUpperCase()}.png`
               }
               alt={value?.symbol}
-              onError={ev => {
+              onError={(ev) => {
                 ev.target.src = ETHIcon
                 ev.target.onerror = null
               }}
-              width='32px'
-              height='32px'
+              width="32px"
+              height="32px"
             />
           ) : (
             <Image
               src={`/assets/cryptocurrency-icons/32/color/eth.png`}
-              width='32px'
-              height='32px'
+              width="32px"
+              height="32px"
             />
           )}
 
-          <Text variant='text.default' color='secondary' sx={{ pl: 2 }}>
+          <Text variant="text.default" color="secondary" sx={{ pl: 2 }}>
             {`${value?.symbol}`}
           </Text>
         </Flex>
@@ -73,7 +77,7 @@ const SelectWithAutocomplete = ({
           cursor: 'pointer',
           color: theme.colors.secondary,
           fontFamily: theme.fonts.body,
-          padding: 20
+          padding: 20,
         }}
       >
         {toShow}
@@ -83,44 +87,48 @@ const SelectWithAutocomplete = ({
 
   return (
     <Select
+      {...props}
       options={options}
       components={{ Option: CustomOption }}
       placeholder={placeholder || 'Select an option'}
       onChange={onSelect}
       menuIsOpen={menuIsOpen}
+      onInputChange={onInputChange}
       styles={{
-        placeholder: provided => ({
+        placeholder: (provided) => ({
           ...provided,
-          color: theme.colors.anotherGrey
+          color: theme.colors.anotherGrey,
         }),
-        valueContainer: provided => ({
+        valueContainer: (provided) => ({
           ...provided,
           padding: 15,
           margin: 0,
           fontSize: '18px',
           fontFamily: theme.fonts.body,
-          color: theme.colors.secondary
+          color: theme.colors.secondary,
         }),
-        menu: provided => ({
+        menu: (provided) => ({
           ...provided,
-          marginTop: '-5px'
+          marginTop: '-5px',
+          height: '200px',
         }),
-        menuList: provided => ({
+        menuList: (provided) => ({
           ...provided,
-          maxHeight: '300px'
+          maxHeight: '300px',
+          height: '200px',
         }),
         control: () => ({
           // none of react-select's styles are passed to <Control />
           display: 'flex',
           flexDirection: 'row',
-          width: width
+          width: width,
         }),
         singleValue: (provided, state) => {
           const opacity = state.isDisabled ? 0.5 : 1
           const transition = 'opacity 300ms'
 
           return { ...provided, opacity, transition }
-        }
+        },
       }}
     />
   )

@@ -10,12 +10,17 @@ import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { Button, Flex, Text } from 'theme-ui'
-import QRCode from 'qrcode.react'
+// import QRCode from 'qrcode.react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { ethers } from 'ethers'
 
 import Modal from '../modal'
-import { checkNetwork, getERC20List, pollEvery } from '../../utils'
+import {
+  checkNetwork,
+  getERC20List,
+  pollEvery,
+  getERC20Info,
+} from '../../utils'
 import useComponentVisible from '../../utils/useComponentVisible'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
@@ -81,6 +86,7 @@ const OnlyCrypto = (props) => {
   const { project } = props
   const [selectedToken, setSelectedToken] = useState({})
   const [selectedTokenBalance, setSelectedTokenBalance] = useState()
+  const [customInput, setCustomInput] = useState()
   const [tokenPrice, setTokenPrice] = useState(1)
   const [mainTokenPrice, setMainTokenPrice] = useState(0)
   const [gasPrice, setGasPrice] = useState(null)
@@ -635,15 +641,33 @@ const OnlyCrypto = (props) => {
                   }}
                 >
                   <Select
-                    width="250px"
+                    width="400px"
                     content={erc20List}
                     isTokenList
                     menuIsOpen
+                    inputValue={customInput}
                     onSelect={(i) => {
                       setSelectedToken(i || selectedToken)
                       setIsComponentVisible(false)
                     }}
-                    placeholder="search for a token"
+                    onInputChange={(i) => {
+                      // It's a contract
+                      if (i?.length === 42) {
+                        getERC20Info({
+                          tokenAbi,
+                          contractAddress: i,
+                          web3,
+                        }).then((pastedToken) => {
+                          if (!pastedToken) return
+                          setErc20List([...erc20List, pastedToken])
+                          console.log({ pastedToken, customInput })
+                          setCustomInput(pastedToken?.symbol)
+                          // setSelectedToken(pastedToken)
+                          // setIsComponentVisible(false)
+                        })
+                      }
+                    }}
+                    placeholder="search for a token or paste address"
                   />
                 </Flex>
               )}
