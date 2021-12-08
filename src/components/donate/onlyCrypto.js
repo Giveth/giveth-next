@@ -647,7 +647,8 @@ const OnlyCrypto = (props) => {
                     menuIsOpen
                     inputValue={customInput}
                     onSelect={(i) => {
-                      setSelectedToken(i || selectedToken)
+                      // setSelectedToken(i || selectedToken)
+                      setSelectedToken(i)
                       setIsComponentVisible(false)
                     }}
                     onInputChange={(i) => {
