@@ -55,38 +55,48 @@ const Header = () => {
         </Link>
       </MainRoutes>
 
-      <Button small onClick={() => router.push(Routes.CreateProject)}>
-        CREATE A PROJECT
-      </Button>
-
-      <GivMenu>
-        <Image width={24} height={24} src='/images/GIV_menu-01.svg' alt='giv icon' />
-        <GivBalance>0</GivBalance>
-      </GivMenu>
-
-      {account ? (
-        <WalletMenu />
-      ) : (
-        <Button small onClick={switchWallet}>
-          CONNECT WALLET
+      <RightMenus>
+        <Button small onClick={() => router.push(Routes.CreateProject)}>
+          CREATE A PROJECT
         </Button>
-      )}
+
+        <GivMenu>
+          <Image width={24} height={24} src='/images/GIV_menu-01.svg' alt='giv icon' />
+          <GivBalance>0</GivBalance>
+        </GivMenu>
+
+        {account ? (
+          <WalletMenu />
+        ) : (
+          <Button small onClick={switchWallet}>
+            CONNECT WALLET
+          </Button>
+        )}
+      </RightMenus>
     </Wrapper>
   )
 }
+
+const RightMenus = styled.div`
+  display: flex;
+  gap: 8px;
+  box-shadow: none;
+  > * {
+    box-shadow: ${Shadow.Dark[500]};
+  }
+`
 
 const GivBalance = styled.span`
   margin-left: 8px;
 `
 
 const GivMenu = styled(FlexCenter)`
-  padding: 0 12.5px;
+  padding: 0 14.5px;
   cursor: pointer;
   border-radius: 48px;
   background: white;
   height: 48px;
   color: ${Primary_Deep_800};
-  box-shadow: ${Shadow.Dark['500']};
 `
 
 const RoutesItem = styled.a`

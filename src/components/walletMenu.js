@@ -24,11 +24,13 @@ import config from '../../config'
 
 const WalletMenu = () => {
   const {
-    state: { account, user, web3, networkId, networkName, balance },
+    state: { account, user, web3, networkId, balance },
     actions: { switchWallet }
   } = useContext(Web3Context)
 
   const [isOpen, setIsOpen] = useState(false)
+
+  const networkName = networkInfo(networkId).networkName
 
   return (
     <Wrapper
@@ -53,7 +55,7 @@ const WalletMenu = () => {
         </Subtitle>
         <Title>NETWORK</Title>
         <Subtitle>
-          <LeftSection>{networkInfo(networkId).networkName}</LeftSection>
+          <LeftSection>{networkName}</LeftSection>
           {web3?.MetaMask && (
             <StyledButton onClick={() => switchNetwork(networkId)}>Switch network</StyledButton>
           )}
@@ -133,7 +135,7 @@ const WalletOpened = styled.div`
   right: 32px;
   top: 55px;
   z-index: -1;
-  padding: 40px 0;
+  padding: 40px 0 5px 0;
   color: ${Primary_Deep_800};
   max-height: ${props => (props.isOpen ? '600px' : '0px')};
   transition: max-height 0.25s ease-in, opacity 0.25s ease-in;
