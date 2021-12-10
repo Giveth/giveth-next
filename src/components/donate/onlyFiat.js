@@ -9,7 +9,7 @@ import { startTransakDonation } from '../../services/donation'
 // import { useApolloClient } from '@apollo/client'
 // import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 
-const OnlyFiat = (props) => {
+const OnlyFiat = props => {
   const { project, setTransakTx } = props
   // const [amountSelect, setAmountSelect] = useState(null)
   // const [amountTyped, setAmountTyped] = useState(null)
@@ -135,7 +135,7 @@ const OnlyFiat = (props) => {
           sx={{
             variant: 'text.large',
             color: 'background',
-            mt: 4,
+            mt: 4
           }}
         >
           {/* Transak is a fiat on-ramp that allows you to donate with a credit card
@@ -147,7 +147,7 @@ const OnlyFiat = (props) => {
             variant: 'text.medium',
             color: 'background',
             mb: 2,
-            mt: 1,
+            mt: 1
           }}
         >
           You'll be redirected to Transak's page where your "purchase" will be
@@ -159,11 +159,9 @@ const OnlyFiat = (props) => {
         sx={{
           variant: 'buttons.default',
           padding: '1.063rem 7.375rem',
-          marginTop: '2rem',
+          marginTop: '2rem'
         }}
-        onClick={() =>
-          startTransakDonation({ project, setSuccess: setTransakTx })
-        }
+        onClick={() => startTransakDonation({ project, setSuccess: setTransakTx })}
       >
         Continue with Transak
       </Button> */}

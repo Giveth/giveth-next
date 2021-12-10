@@ -30,6 +30,7 @@ const FETCH_ALL_PROJECTS = gql`
         impactLocation
         qualityScore
         verified
+        traceCampaignId
         listed
         status {
           id
@@ -132,6 +133,8 @@ const FETCH_MY_PROJECTS = gql`
       walletAddress
       impactLocation
       qualityScore
+      verified
+      traceCampaignId
       listed
       categories {
         name
@@ -188,6 +191,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
       qualityScore
       listed
       verified
+      traceCampaignId
       categories {
         name
       }
@@ -221,18 +225,11 @@ const ADD_BANK_ACCOUNT = gql`
 `
 
 const GET_LINK_BANK_CREATION = gql`
-  query SetProjectBankAccount(
-    $projectId: Float!
-    $returnUrl: String!
-    $refreshUrl: String!
-  ) {
-    setProjectBankAccount(
-      projectId: $projectId
-      returnUrl: $returnUrl
-      refreshUrl: $refreshUrl
-    )
+  query SetProjectBankAccount($projectId: Float!, $returnUrl: String!, $refreshUrl: String!) {
+    setProjectBankAccount(projectId: $projectId, returnUrl: $returnUrl, refreshUrl: $refreshUrl)
   }
 `
+
 const GET_DONATION_SESSION = gql`
   query GetStripeProjectDonationSession(
     $projectId: Float!
@@ -362,11 +359,7 @@ const GET_PROJECT_UPDATES = gql`
 `
 
 const EDIT_PROJECT_UPDATE = gql`
-  mutation EditProjectUpdate(
-    $content: String!
-    $title: String!
-    $updateId: Float!
-  ) {
+  mutation EditProjectUpdate($content: String!, $title: String!, $updateId: Float!) {
     editProjectUpdate(content: $content, title: $title, updateId: $updateId) {
       id
       title
@@ -526,5 +519,5 @@ export {
   WALLET_ADDRESS_IS_VALID,
   GET_CATEGORIES,
   UPLOAD_IMAGE,
-  TITLE_IS_VALID,
+  TITLE_IS_VALID
 }

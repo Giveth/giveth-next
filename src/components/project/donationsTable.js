@@ -31,8 +31,7 @@ const DonationsTable = ({ donations = [] }) => {
   // const client = useApolloClient()
   const filter = 0
 
-  const fromTrace =
-    currentProjectView?.project?.fromTrace || currentProjectView?.project?.IOTraceable
+  const fromTrace = currentProjectView?.project?.traceCampaignId
 
   const traceDonationsFetch = useSWR(
     `${process.env.NEXT_PUBLIC_FEATHERS}/donations?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView?.project?._id}`,

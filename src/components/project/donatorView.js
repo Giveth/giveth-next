@@ -393,7 +393,7 @@ const ProjectDonatorView = ({
                   : ''}
               </Text>
             </Button>
-            {(project?.fromTrace || project?.IOTraceable) && (
+            {project?.traceCampaignId && (
               <Button
                 variant='nofill'
                 type='button'
@@ -488,7 +488,7 @@ const ProjectDonatorView = ({
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
 
-          {isOwner && !(project?.verified || project?.IOTraceable || project?.fromTrace) && (
+          {isOwner && !(project?.verified || project?.traceCampaignId) && (
             <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
               <Text
                 sx={{
@@ -502,7 +502,7 @@ const ProjectDonatorView = ({
             </Link>
           )}
 
-          {(project?.verified || project?.IOTraceable || project?.fromTrace) && (
+          {(project?.verified || project?.traceCampaignId) && (
             <Flex
               sx={{
                 // cursor: 'pointer',
@@ -513,7 +513,7 @@ const ProjectDonatorView = ({
             >
               <GoVerified color={theme.colors.blue} />
               <Text sx={{ variant: 'text.default', ml: 2 }}>
-                {project?.fromTrace || project?.IOTraceable ? 'Traceable' : 'Verified'}
+                {project?.traceCampaignId ? 'Traceable' : 'Verified'}
               </Text>
             </Flex>
           )}
