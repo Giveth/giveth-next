@@ -1,8 +1,5 @@
 import transakSDK from '@transak/transak-sdk'
-import {
-  SAVE_DONATION,
-  SAVE_DONATION_TRANSACTION,
-} from '../apollo/gql/donations'
+import { SAVE_DONATION, SAVE_DONATION_TRANSACTION } from '../apollo/gql/donations'
 import { client } from '../apollo/client'
 
 export async function saveDonation(
@@ -29,8 +26,8 @@ export async function saveDonation(
         token,
         projectId,
         transakId: null,
-        transakStatus: null,
-      },
+        transakStatus: null
+      }
     })
     const { saveDonation: saveDonationId } = data
     donationId = saveDonationId
@@ -40,7 +37,7 @@ export async function saveDonation(
   return {
     donationId,
     saveDonationErrors,
-    savedDonation: saveDonationErrors.length === 0,
+    savedDonation: saveDonationErrors.length === 0
   }
 }
 
@@ -68,8 +65,8 @@ export async function saveDonationFromTransak(
         token,
         projectId,
         transakId,
-        transakStatus,
-      },
+        transakStatus
+      }
     })
     const { saveDonation: saveDonationId } = data
     donationId = saveDonationId
@@ -80,14 +77,11 @@ export async function saveDonationFromTransak(
   return {
     donationId,
     saveDonationErrors,
-    savedDonation: saveDonationErrors.length === 0,
+    savedDonation: saveDonationErrors.length === 0
   }
 }
 
-export async function saveDonationTransaction(
-  hash: string,
-  donationId: Number
-) {
+export async function saveDonationTransaction(hash: string, donationId: Number) {
   const saveDonationTransactionErrors = []
   let savedDonationTransaction: any = 0
   try {
@@ -95,9 +89,9 @@ export async function saveDonationTransaction(
       mutation: SAVE_DONATION_TRANSACTION,
       variables: {
         transactionId: hash?.toString(),
-        donationId,
+        donationId
         // anonymous: false
-      },
+      }
     })
     savedDonationTransaction = data
   } catch (error) {
@@ -106,7 +100,7 @@ export async function saveDonationTransaction(
 
   return {
     savedDonationTransaction,
-    saveDonationTransactionErrors,
+    saveDonationTransactionErrors
   }
 }
 
@@ -116,8 +110,7 @@ export async function startTransakDonation({ project, setSuccess }) {
   const apiKey = response?.apiKey
   const transak = new transakSDK({
     apiKey: apiKey, // Your API Key
-    environment:
-      process.env.NEXT_PUBLIC_ENVIRONMENT == 'live' ? 'PRODUCTION' : 'STAGING', // STAGING/PRODUCTION
+    environment: process.env.NEXT_PUBLIC_ENVIRONMENT == 'live' ? 'PRODUCTION' : 'STAGING', // STAGING/PRODUCTION
     defaultCryptoCurrency: 'DAI',
     walletAddress: project.walletAddress, // Your customer's wallet address
     themeColor: '000000', // App theme color
@@ -130,12 +123,12 @@ export async function startTransakDonation({ project, setSuccess }) {
     widgetHeight: '550px',
     widgetWidth: '450px',
     exchangeScreenTitle: `Donate to ${project.title}`,
-    hideMenu: true,
+    hideMenu: true
   })
 
   transak.init()
 
-  transak.on(transak.ALL_EVENTS, async (data) => {
+  transak.on(transak.ALL_EVENTS, async data => {
     if (data?.eventName === 'TRANSAK_ORDER_SUCCESSFUL') {
       transak.close()
       setSuccess(data.status.walletLink)

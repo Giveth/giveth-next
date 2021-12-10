@@ -72,7 +72,7 @@ const Tos = () => {
               responsibility to periodically review these Terms of Use to stay informed of updates.
               You will be subject to, and will be deemed to have been made aware of and to have
               accepted, the changes in any revised Terms of Use by your continued use of the Site(s)
-              after the date such revised Terms of Use are posted.​
+              after the date such revised Terms of Use are posted.
             </p>
             <h4>
               <strong>CONTACT US</strong>
@@ -169,7 +169,7 @@ const Tos = () => {
               501(c)(3), 509(a)(1), and 170(b)(1)(A)(vi). All money and property transferred to The
               SDG Impact Fund shall be an irrevocable gift to the charity.
             </p>
-            <h3>​COST AND FEES</h3>
+            <h3>COST AND FEES</h3>
             <p>
               Use of the Giveth Site and Tools is free. When donating cryptocurrency there are
               transaction fees associated with using the selected Blockchain, these are considered
@@ -279,8 +279,8 @@ const Tos = () => {
             <h3>LEGAL REPRESENTATION</h3>
 
             <p>
-              ​​The information provided on the Site(s) is not intended for distribution to or use
-              by any person or entity in any jurisdiction or country where such distribution or use
+              The information provided on the Site(s) is not intended for distribution to or use by
+              any person or entity in any jurisdiction or country where such distribution or use
               would be contrary to law or regulation or which would subject us to any registration
               requirement within such jurisdiction or country. Accordingly, those persons who choose
               to access the Site(s) from other locations do so on their own initiative and are
@@ -298,7 +298,6 @@ const Tos = () => {
               Tools if and when you fully comply with those limitations and conditions. We can’t and
               won’t be responsible for your using the Tools in a way that breaks the law.
             </p>
-            <p>​</p>
             <p>
               You acknowledge and agree that any questions, comments, suggestions, ideas, feedback,
               or other information regarding the Site(s) or the Tools (&quot;Submissions&quot;)
@@ -313,7 +312,7 @@ const Tos = () => {
               OF DISPUTES DESCRIBED IN THE ARBITRATION AGREEMENT SECTION BELOW, YOU AGREE THAT
               DISPUTES BETWEEN YOU AND US WILL BE RESOLVED BY BINDING, INDIVIDUAL ARBITRATION AND
               YOU WAIVE YOUR RIGHT TO PARTICIPATE IN A CLASS ACTION LAWSUIT OR CLASS-WIDE
-              ARBITRATION.​
+              ARBITRATION.
             </p>
             <h2>CHARITABLE ENTITIES AND DONORS</h2>
 
@@ -331,7 +330,7 @@ const Tos = () => {
               upon, and you agree to hold us harmless from any errors, omissions, or
               misrepresentations contained within the Site’s content.
             </p>
-            <h3>​PROJECT VERIFICATION</h3>
+            <h3>PROJECT VERIFICATION</h3>
 
             <p>
               Giveth takes steps to confirm each Verified project that claims to be a nonprofit is a
@@ -847,7 +846,7 @@ const Tos = () => {
               failure to deliver such notice shall not eliminate or reduce your indemnification
               obligations hereunder).
             </p>
-            <h3>​ASSIGNMENT</h3>
+            <h3>ASSIGNMENT</h3>
             <p>
               You may not assign, delegate or transfer these Terms or your rights or obligations
               hereunder, or your Services account, in any way (by operation of law or otherwise)

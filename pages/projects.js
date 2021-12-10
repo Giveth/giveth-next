@@ -12,7 +12,7 @@ const Layout = dynamic(() => import('../src/components/layout'))
 
 const itemsPerPage = 15
 
-const Project = props => {
+const Projects = props => {
   const { projects, categories, totalCount, errors, query } = props
 
   return (
@@ -25,7 +25,6 @@ const Project = props => {
           projects={projects}
           categories={categories}
           totalCount={totalCount}
-          itemsPerPage={itemsPerPage}
         />
       ) : (
         <ErrorPage json={errors} />
@@ -69,4 +68,4 @@ export async function getServerSideProps(props) {
   }
 }
 
-export default Project
+export default Projects

@@ -20,7 +20,7 @@ function GR12() {
             flex: 1,
             width: '100%',
             flexDirection: ['column-reverse', 'row', 'row'],
-            mb: ['25%', 0, 0],
+            mb: ['25%', 0, 0]
           }}
         >
           <Flex
@@ -32,21 +32,21 @@ function GR12() {
               background: '#f6f4d7',
               padding: '50px 0',
               borderTopLeftRadius: [0, '16px', '16px'],
-              borderBottomLeftRadius: [0, '16px', '16px'],
+              borderBottomLeftRadius: [0, '16px', '16px']
             }}
           >
             <Image
-              src="/images/GR12PNG.png"
+              src='/images/GR12PNG.png'
               style={{
                 objectFit: 'cover',
-                objectPosition: '3px 0',
+                objectPosition: '3px 0'
               }}
             />
             <Text
               sx={{
                 variant: 'text.default',
                 fontSize: '24px',
-                color: '#56b890',
+                color: '#56b890'
               }}
             >
               Dec 1-16
@@ -62,14 +62,14 @@ function GR12() {
               background: '#56b890',
               position: 'relative',
               borderTopRightRadius: [0, '16px', '16px'],
-              borderBottomRightRadius: [0, '16px', '16px'],
+              borderBottomRightRadius: [0, '16px', '16px']
             }}
           >
             <Text
               sx={{
                 variant: 'headings.h2',
                 px: 4,
-                color: 'background',
+                color: 'background'
               }}
             >
               Gitcoin Grants
@@ -78,7 +78,7 @@ function GR12() {
               sx={{
                 variant: 'headings.h2',
                 px: 4,
-                color: 'background',
+                color: 'background'
               }}
             >
               Round 12 is here!
@@ -88,14 +88,14 @@ function GR12() {
                 variant: 'text.default',
                 fontSize: '24px',
                 color: 'background',
-                px: 4,
+                px: 4
               }}
             >
               Donate to support Giveth with the power of Quadratic Funding
             </Text>
             <Button
-              type="submit"
-              variant="buttons.default"
+              type='submit'
+              variant='buttons.default'
               sx={{
                 maxWidth: '230px',
                 height: '52px',
@@ -106,22 +106,20 @@ function GR12() {
                 mt: 4,
                 ml: 4,
                 zIndex: 0,
-                mb: 4,
+                mb: 4
               }}
-              onClick={() =>
-                router.push('https://gitcoin.co/grants/795/giveth-20')
-              }
+              onClick={() => router.push('https://gitcoin.co/grants/795/giveth-20')}
             >
               DONATE
             </Button>
             <Image
-              src="/images/arc-1.png"
+              src='/images/arc-1.png'
               sx={{
                 position: 'absolute',
                 right: 0,
                 bottom: 0,
                 zIndex: -1,
-                maxHeight: '400px',
+                maxHeight: '400px'
               }}
             />
           </Flex>
