@@ -133,15 +133,16 @@ const OnlyFiat = (props) => {
       <Flex sx={{ width: '450px', flexDirection: 'column' }}>
         <Text
           sx={{
-            variant: 'text.medium',
+            variant: 'text.large',
             color: 'background',
             mt: 4,
           }}
         >
-          Transak is a fiat on-ramp that allows you to donate with a credit card
-          just as easily as you would make a purchase online.
+          {/* Transak is a fiat on-ramp that allows you to donate with a credit card
+          just as easily as you would make a purchase online. */}
+          Coming Soon
         </Text>
-        <Text
+        {/* <Text
           sx={{
             variant: 'text.medium',
             color: 'background',
@@ -151,10 +152,10 @@ const OnlyFiat = (props) => {
         >
           You'll be redirected to Transak's page where your "purchase" will be
           sent as crypto to the project's donation address.
-        </Text>
+        </Text> */}
       </Flex>
 
-      <Button
+      {/* <Button
         sx={{
           variant: 'buttons.default',
           padding: '1.063rem 7.375rem',
@@ -165,7 +166,7 @@ const OnlyFiat = (props) => {
         }
       >
         Continue with Transak
-      </Button>
+      </Button> */}
       {/* <Flex>
         <img
           src={'/images/coming-soon-gear.png'}
