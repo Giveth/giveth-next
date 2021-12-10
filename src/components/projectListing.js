@@ -200,7 +200,7 @@ const ProjectListing = props => {
               />
             )}
 
-            {project?.fromTrace || project?.IOTraceable
+            {project?.traceCampaignId
               ? projectBadge('TRACEABLE')
               : project?.verified
               ? projectBadge('VERIFIED')
