@@ -99,13 +99,12 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
     } else {
       return (
         <>
-          {!noHeader ? (
-            <Header
-              // siteTitle={data.site.siteMetadata.title}
-              isHomePage={isHomePage}
-            />
-          ) : null}
-          <div style={{ marginTop: '150px' }} />
+          {!noHeader && (
+            <>
+              <Header isHomePage={isHomePage} />
+              <div style={{ marginTop: '150px' }} />
+            </>
+          )}
           <div
             style={{
               // applies width 100% to all viewport widths,
