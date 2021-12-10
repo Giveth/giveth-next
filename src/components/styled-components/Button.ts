@@ -12,6 +12,7 @@ interface IButtonProps {
 }
 
 export const Button = styled.button<IButtonProps>`
+  font-family: Red Hat Text, sans-serif;
   background: ${props => {
     if (props.background) return props.background
     else if (props.ghost || props.outline) return 'unset'

@@ -105,6 +105,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
               isHomePage={isHomePage}
             />
           ) : null}
+          <div style={{ marginTop: '150px' }} />
           <div
             style={{
               // applies width 100% to all viewport widths,
