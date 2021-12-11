@@ -77,7 +77,8 @@ const OnlyCrypto = props => {
   const switchTraceable = false
   const donateToGiveth = false
 
-  const tokenSymbol = selectedToken.symbol
+  const tokenSymbol = selectedToken?.symbol
+  const tokenAddress = selectedToken?.address
   const isXdai = networkId === xdaiChain.id
   const isGivingBlockProject = project?.givingBlocksId
 
@@ -202,7 +203,7 @@ const OnlyCrypto = props => {
   }, [account, networkId, tokenSymbol, balance])
 
   const checkGIVTokenAvailability = () => {
-    if (!isGivingBlockProject) return
+    if (!isGivingBlockProject) return true
     if (selectedToken?.symbol === 'GIV') {
       setGeminiModal(true)
       return false
@@ -386,7 +387,8 @@ const OnlyCrypto = props => {
               networkId,
               Number(subtotal),
               tokenSymbol,
-              Number(project.id)
+              Number(project.id),
+              tokenAddress
             )
             console.log('DONATION RESPONSE: ', {
               donationId,
@@ -652,7 +654,6 @@ const OnlyCrypto = props => {
                         }).then(pastedToken => {
                           if (!pastedToken) return
                           setErc20List([...erc20List, pastedToken])
-                          console.log({ pastedToken, customInput })
                           setCustomInput(pastedToken?.symbol)
                           // setSelectedToken(pastedToken)
                           // setIsComponentVisible(false)

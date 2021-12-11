@@ -9,7 +9,8 @@ export async function saveDonation(
   transactionNetworkId: number,
   amount: number,
   token: string,
-  projectId: number
+  projectId: number,
+  tokenAddress: string
 ) {
   const saveDonationErrors = []
   let donationId: any = 0
@@ -26,7 +27,8 @@ export async function saveDonation(
         token,
         projectId,
         transakId: null,
-        transakStatus: null
+        transakStatus: null,
+        tokenAddress
       }
     })
     const { saveDonation: saveDonationId } = data
