@@ -624,6 +624,225 @@ const mainnetTokens = {
       symbol: 'IDEX',
       name: 'IDEX',
       decimals: 18
+    },
+    // ADD THESE TO MONOSWAP
+    {
+      chainId: 1,
+      address: '0x4fE83213D56308330EC302a8BD641f1d0113A4Cc',
+      symbol: 'NU',
+      name: 'NuCypher',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x875773784Af8135eA0ef43b5a374AaD105c5D39e',
+      symbol: 'IDLE',
+      name: 'Idle Finance',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x25f8087ead173b73d6e8b84329989a8eea16cf73',
+      symbol: 'YGG',
+      name: 'Yield Guild',
+      decimals: 18
+    },
+    // THESE ARE TAKEN FROM THE GIVING BLOCK LIST
+    {
+      chainId: 1,
+      address: '0xdbdb4d16eda451d0503b854cf79d55697f90c8df',
+      symbol: 'ALCX',
+      name: 'Alchemix',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xff20817765cb7f73d4bde2e66e067e58d11095c2',
+      symbol: 'AMP',
+      name: 'Amp',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x8290333cef9e6d528dd5618fb97a76f268f3edd4',
+      symbol: 'ANKR',
+      name: 'Ankr Network',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xbb0e17ef65f82ab018d8edd776e8dd940327b28b',
+      symbol: 'AXS',
+      name: 'Axie Infinity Shard',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x0391D2021f89DC339F60Fff84546EA23E337750f',
+      symbol: 'BOND',
+      name: 'BarnBridge Governance Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x321c2fe4446c7c963dc41dd58879af648838f98d',
+      symbol: 'CTX',
+      name: 'Cryptex',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x4e15361fd6b4bb609fa63c81a2be19d873717870',
+      symbol: 'FTM',
+      name: 'Fantom Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc944e90c64b2c07662a292be6244bdf05cda44a7',
+      symbol: 'GRT',
+      name: 'Graph Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30',
+      symbol: 'INJ',
+      name: 'Injective Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x58b6a8a3302369daec383334672404ee733ab239',
+      symbol: 'LPT',
+      name: 'Livepeer Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xfc98e825a2264d890f9a1e68ed50e1526abccacd',
+      symbol: 'MCO2',
+      name: 'Moss Carbon Credit',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x4575f41308EC1483f3d399aa9a2826d74Da13Deb',
+      symbol: 'OXT',
+      name: 'Orchid',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
+      symbol: 'SAND',
+      name: 'The Sandbox',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x00c83aecc790e8a4453e5dd3b0b4b3680501a7a7',
+      symbol: 'SKALE',
+      name: 'Skale',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xcc8fa225d80b9c7d42f96e9570156c65d6caaa25',
+      symbol: 'SLP',
+      name: 'Smooth Love Potion',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xdf801468a808a32656d2ed2d2d80b72a129739f4',
+      symbol: 'CUBE',
+      name: 'Somnium Space Cubes',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xb64ef51c888972c908cfacf59b47c1afbc0ab8ac',
+      symbol: 'STORJ',
+      name: 'Storj',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xd2877702675e6ceb975b4a1dff9fb7baf4c91ea9',
+      symbol: 'LUNA',
+      name: 'Wrapped LUNA Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828',
+      symbol: 'UMA',
+      name: 'UMA Voting Token v1',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+      symbol: 'UNI',
+      name: 'Uniswap',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc221b7e65ffc80de234bbb6667abdd46593d34f0',
+      symbol: 'wCFG',
+      name: 'Wrapped Centrifuge',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x18aAA7115705e8be94bfFEBDE57Af9BFc265B998',
+      symbol: 'AUDIO',
+      name: 'Audius',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+      symbol: 'MASK',
+      name: 'Mask Network',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x31c8eacbffdd875c74b94b077895bd78cf1e64a3',
+      symbol: 'RAD',
+      name: 'Radicle',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x0b38210ea11411557c13457D4dA7dC6ea731B88a',
+      symbol: 'API3',
+      name: 'API3',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x71590d4ed14d9cbacb2cff8abf919ac4d22c5b7b',
+      symbol: 'ASH',
+      name: 'The Burn Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xba5bde662c17e2adff1075610382b9b691296350',
+      symbol: 'RARE',
+      name: 'SuperRare',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xaea46A60368A7bD060eec7DF8CBa43b7EF41Ad85',
+      symbol: 'FET',
+      name: 'Fetch',
+      decimals: 18
     }
   ],
   logoURI: 'ipfs://QmQAGtNJ2rSGpnP6dh6PPKNSmZL8RTZXmgFwgTdy5Nz5mx'
