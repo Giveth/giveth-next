@@ -18,6 +18,8 @@ import Success from './success'
 import ProjectListing from '../projectListing'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
+// import { Giv_900, Giv_100 } from '../styled-components/Colors'
+
 const OnlyCrypto = dynamic(() => import('./onlyCrypto'), { ssr: false })
 
 // CONSTANTS
@@ -38,6 +40,8 @@ const DonateIndex = props => {
   const [paymentSessionId, setPaymentSessionId] = useState(null)
   const [isCancelled, setIsCancelled] = useState(null)
   const [transakTx, setTransakTx] = useState(null)
+
+  const isGivingBlockProject = project?.givingBlocksId
 
   useEffect(() => {
     if (project?.status?.id !== '5') {
@@ -206,6 +210,29 @@ const DonateIndex = props => {
           listingId='key1'
           key='key1'
         />
+        {/* {isGivingBlockProject && (
+          <Flex
+            sx={{
+              position: 'absolute',
+              bottom: '-30px',
+              right: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              background: 'white',
+              alignSelf: 'center',
+              mb: 4,
+              px: 4,
+              py: 2,
+              textAlign: 'center',
+              borderRadius: '4px',
+              alignItems: 'center'
+            }}
+          >
+            {' '}
+            <Text sx={{ variant: 'text.default', mr: 2, color: Giv_900 }}>Project by</Text>
+            <img src='/images/thegivingblock.svg' />
+          </Flex>
+        )} */}
         <ShareIcons message="Can't donate? Share this page instead." centered />
       </ProjectContainer>
       <Payment>{PaymentOptions()}</Payment>
