@@ -39,9 +39,17 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
           mt: '16px'
         }}
       >
-        Your project is published and ready to raise funds.
+        Your project is being reviewed by our team.
       </Text>
-
+      <Text
+        sx={{
+          fontSize: 6,
+          fontFamily: 'body',
+          color: 'secondary'
+        }}
+      >
+        You'll receive an email from us once your project is listed.
+      </Text>
       <Flex
         sx={{
           width: ['100%', '80%', '80%'],
