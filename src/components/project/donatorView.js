@@ -177,7 +177,7 @@ const ProjectDonatorView = ({
             (ev.target.src = 'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
           }
           sx={{
-            objectFit: 'cover',
+            objectFit: project?.givingBlocksId ? 'contain' : 'cover',
             // objectPosition: '100% 25%',
             width: '100vw',
             margin: '0 5%',
