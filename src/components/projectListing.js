@@ -21,7 +21,8 @@ const RichTextViewer = dynamic(() => import('./richTextViewer'), {
 const StyledImage = styled(Image)`
   cursor: pointer;
   border-radius: 12px 12px 0 0;
-  object-fit: cover;
+  background: ${props => (props.isGivingBlockProject ? 'white' : 'none')};
+  object-fit: ${props => (props.isGivingBlockProject ? 'contain' : 'cover')};
 `
 
 const CardContainer = styled(Card)`
@@ -53,11 +54,14 @@ const CardContent = styled.span`
 
 const Badge = styled.span`
   padding: 3px 11.76px;
-  margin: 0.2rem;
+  margin: ${props => (props.isGivingBlock ? '1rem' : '0.2rem')};
   align-items: center;
-  border: 1px solid ${theme.colors.bodyLight};
+  border: ${props => (props.isGivingBlock ? 'none' : `1px solid ${theme.colors.bodyLight}`)};
   border-radius: 48px;
   color: ${theme.colors.bodyLight};
+  position: ${props => (props.isGivingBlock ? 'absolute' : 'relative')};
+  left: ${props => (props.isGivingBlock ? '0' : 'none')};
+  bottom: ${props => (props.isGivingBlock ? '-10px' : 'none')};
 `
 
 const AltCardContent = styled.span`
@@ -87,14 +91,16 @@ const CardFooter = styled.span`
   flex-wrap: wrap;
   justify-content: flex-start;
   padding: 1rem 0.5rem;
+  margin: ${props => (props.isGivingBlock ? '3rem 0 2px 0' : '1rem 0')};
 `
 
 const Categories = ({ categories }) => {
   return categories.length
     ? categories.map((category, index) => {
         if (!category) return null
+        const isGivingBlock = category?.name === 'the-giving-block'
         return (
-          <Badge key={index}>
+          <Badge key={index} isGivingBlock={isGivingBlock}>
             <Text
               sx={{
                 variant: 'text.default',
@@ -104,7 +110,7 @@ const Categories = ({ categories }) => {
                 textTransform: 'uppercase'
               }}
             >
-              {category?.name}
+              {isGivingBlock ? <img src='/images/thegivingblock.svg' /> : category?.name}
             </Text>
           </Badge>
         )
@@ -117,6 +123,7 @@ const ProjectListing = props => {
   const router = useRouter()
   const [hoverStyle, setHoverStyle] = React.useState(false)
   const image = props.image || '/images/no-image-available.jpg'
+  const isGivingBlockProject = project?.givingBlocksId
 
   return (
     <Box
@@ -182,7 +189,13 @@ const ProjectListing = props => {
                   position: 'relative'
                 }}
               >
-                <StyledImage src={image} layout='fill' priority={true} quality={40} />
+                <StyledImage
+                  src={image}
+                  layout='fill'
+                  priority={true}
+                  quality={40}
+                  isGivingBlockProject={isGivingBlockProject}
+                />
               </div>
             ) : (
               <div
@@ -295,7 +308,7 @@ const ProjectListing = props => {
             </Text>
           </CardContent>
           {props?.categories && props.categories.length > 0 && (
-            <CardFooter>
+            <CardFooter isGivingBlock={project?.givingBlocksId}>
               <Categories categories={props?.categories} />
             </CardFooter>
           )}

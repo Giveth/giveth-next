@@ -23,6 +23,7 @@ import * as transaction from '../../services/transaction'
 import { saveDonation, saveDonationTransaction } from '../../services/donation'
 import InProgressModal from './inProgressModal'
 import UnconfirmedModal from './unconfirmedModal'
+import GeminiModal from './geminiModal'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
@@ -67,6 +68,7 @@ const OnlyCrypto = props => {
   const [amountTyped, setAmountTyped] = useState('')
   const [inProgress, setInProgress] = useState(false)
   const [unconfirmed, setUnconfirmed] = useState(false)
+  const [geminiModal, setGeminiModal] = useState(false)
   const [txHash, setTxHash] = useState(null)
   const [erc20List, setErc20List] = useState([])
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -77,6 +79,7 @@ const OnlyCrypto = props => {
 
   const tokenSymbol = selectedToken.symbol
   const isXdai = networkId === xdaiChain.id
+  const isGivingBlockProject = project?.givingBlocksId
 
   useEffect(() => {
     fetchEthPrice().then(setMainTokenPrice)
@@ -84,11 +87,30 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     if (networkId) {
-      const tokens = getERC20List(networkId).tokens.map(token => {
+      let netId = networkId
+      if (!!isGivingBlockProject) netId = 'thegivingblock'
+      let givIndex = null
+      const tokens = getERC20List(netId).tokens.map((token, index) => {
         token.value = { symbol: token.symbol }
         token.label = token.symbol
+        if (token.symbol === 'GIV') {
+          givIndex = index
+        }
         return token
       })
+      const givToken = tokens[givIndex]
+      if (givIndex) {
+        tokens.splice(givIndex, 1)
+      }
+      tokens?.sort((a, b) => {
+        var tokenA = a.name.toUpperCase()
+        var tokenB = b.name.toUpperCase()
+        return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0
+      })
+      if (!!givToken) {
+        console.log('doin it')
+        tokens.splice(0, 0, givToken)
+      }
       setErc20List(tokens)
       setSelectedToken(tokens[0])
     }
@@ -178,6 +200,16 @@ const OnlyCrypto = props => {
       POLL_DELAY_TOKENS
     )()
   }, [account, networkId, tokenSymbol, balance])
+
+  const checkGIVTokenAvailability = () => {
+    if (!isGivingBlockProject) return
+    if (selectedToken?.symbol === 'GIV') {
+      setGeminiModal(true)
+      return false
+    } else {
+      return true
+    }
+  }
 
   const fetchPrices = (chain, tokenAddress) => {
     return fetch(
@@ -471,6 +503,7 @@ const OnlyCrypto = props => {
           txHash={txHash}
           networkId={networkId}
         />
+        <GeminiModal showModal={geminiModal} setShowModal={setGeminiModal} />
         <Modal isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)} contentLabel='QR Modal'>
           <Flex
             sx={{
@@ -568,19 +601,24 @@ const OnlyCrypto = props => {
                 {!isNaN(tokenPrice) && !!tokenSymbol ? `1 ${tokenSymbol} ≈ ${tokenPrice} USD` : ''}
               </Text>
 
-              <Text
-                sx={{
-                  variant: 'text.small',
-                  color: 'anotherGrey'
-                }}
-              >
-                Available:{' '}
-                {parseFloat(selectedTokenBalance).toLocaleString('en-US', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 6
-                })}{' '}
-                {tokenSymbol}
-              </Text>
+              {!isNaN(selectedTokenBalance) && (
+                <Text
+                  sx={{
+                    variant: 'text.small',
+                    color: 'anotherGrey'
+                  }}
+                >
+                  Available:{' '}
+                  {parseFloat(selectedTokenBalance).toLocaleString(
+                    'en-US',
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6
+                    } || ''
+                  )}{' '}
+                  {tokenSymbol}
+                </Text>
+              )}
             </Flex>
 
             <OpenAmount>
@@ -621,7 +659,11 @@ const OnlyCrypto = props => {
                         })
                       }
                     }}
-                    placeholder='search for a token or paste address'
+                    placeholder={
+                      isGivingBlockProject
+                        ? 'search for a token'
+                        : 'search for a token or paste address'
+                    }
                   />
                 </Flex>
               )}
@@ -641,7 +683,8 @@ const OnlyCrypto = props => {
                   if (parseFloat(e.target.value) !== 0 && parseFloat(e.target.value) < 0.001) {
                     return
                   }
-                  setAmountTyped(e.target.value)
+                  const checkGIV = checkGIVTokenAvailability()
+                  if (!!checkGIV) setAmountTyped(e.target.value)
                 }}
               />
               <Flex
@@ -773,7 +816,8 @@ const OnlyCrypto = props => {
               //   </SaveGasMessage>
               // )}
             }
-            {!switchTraceable && !isXdai && (
+
+            {!switchTraceable && !isXdai && !isGivingBlockProject && (
               <SaveGasMessage sx={{ mt: project?.traceCampaignId ? 3 : 0 }}>
                 <Image
                   src='/images/icon-streamline-gas.svg'
@@ -824,14 +868,14 @@ const OnlyCrypto = props => {
                     mt: 2,
                     mr: 2,
                     textTransform: 'uppercase',
-                    width: '80%'
+                    width: '100%'
                   }}
                 >
                   Donate
                 </Button>
               )}
 
-              {isEnabled && (
+              {false && (
                 <Flex
                   sx={{
                     cursor: 'pointer',
