@@ -11,6 +11,7 @@ const SAVE_DONATION = gql`
     $projectId: Float!
     $transakId: String
     $transakStatus: String
+    $tokenAddress: String
   ) {
     saveDonation(
       chainId: $chainId
@@ -23,6 +24,7 @@ const SAVE_DONATION = gql`
       projectId: $projectId
       transakId: $transakId
       transakStatus: $transakStatus
+      tokenAddress: $tokenAddress
     )
   }
 `
