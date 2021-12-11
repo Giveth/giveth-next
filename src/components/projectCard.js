@@ -140,29 +140,31 @@ const ProjectCard = props => {
                   }}
                 />
               ) : (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '186px',
-                    margin: '0 auto',
-                    cursor: 'pointer',
-                    borderRadius: '12px 12px 0px 0px',
-                    backgroundColor: '#cccccc',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    position: 'relative'
-                  }}
-                >
-                  <StyledImage
-                    src={image}
-                    layout='fill'
-                    priority={true}
-                    quality={40}
-                    isGivingBlockProject={project?.givingBlocksId}
-                    // placeholder='blur'
-                    // blurDataURL='/images/giveth_bg.jpg'
-                  />
-                </div>
+                image && (
+                  <div
+                    style={{
+                      width: '100%',
+                      height: '186px',
+                      margin: '0 auto',
+                      cursor: 'pointer',
+                      borderRadius: '12px 12px 0px 0px',
+                      backgroundColor: '#cccccc',
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'no-repeat',
+                      position: 'relative'
+                    }}
+                  >
+                    <StyledImage
+                      src={image}
+                      layout='fill'
+                      priority={true}
+                      quality={40}
+                      isGivingBlockProject={project?.givingBlocksId}
+                      // placeholder='blur'
+                      // blurDataURL='/images/giveth_bg.jpg'
+                    />
+                  </div>
+                )
               )}
             </a>
           </Link>
@@ -409,8 +411,8 @@ const StyledImage = styled(Image)`
   cursor: pointer;
   border-radius: 12px 12px 0px 0px;
   object-fit: cover;
-  background: ${props => (props.isGivingBlockProject ? 'white' : 'none')};
-  object-fit: ${props => (props.isGivingBlockProject ? 'contain' : 'cover')};
+  background: ${props => (props?.isGivingBlockProject ? 'white' : 'none')};
+  object-fit: ${props => (props?.isGivingBlockProject ? 'contain' : 'cover')};
 `
 
 export default ProjectCard
