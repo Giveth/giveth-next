@@ -174,7 +174,8 @@ const ProjectDonatorView = ({
           src={project.image}
           alt='project picture'
           onError={ev =>
-            (ev.target.src = 'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
+            (ev.target.src =
+              'https://htmlcolorcodes.com/assets/images/colors/light-gray-color-solid-background-1920x1080.png')
           }
           sx={{
             objectFit: project?.givingBlocksId ? 'contain' : 'cover',
