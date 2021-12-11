@@ -71,6 +71,7 @@ const OnlyCrypto = props => {
   const [geminiModal, setGeminiModal] = useState(false)
   const [txHash, setTxHash] = useState(null)
   const [erc20List, setErc20List] = useState([])
+  const [erc20OriginalList, setErc20OriginalList] = useState([])
   const [modalIsOpen, setIsOpen] = useState(false)
   const [icon, setIcon] = useState(null)
   // const [anonymous, setAnonymous] = useState(false)
@@ -113,6 +114,7 @@ const OnlyCrypto = props => {
         tokens.splice(0, 0, givToken)
       }
       setErc20List(tokens)
+      setErc20OriginalList(tokens)
       setSelectedToken(tokens[0])
     }
   }, [networkId])
@@ -643,6 +645,8 @@ const OnlyCrypto = props => {
                       // setSelectedToken(i || selectedToken)
                       setSelectedToken(i)
                       setIsComponentVisible(false)
+                      setCustomInput('')
+                      setErc20List([...erc20OriginalList])
                     }}
                     onInputChange={i => {
                       // It's a contract
@@ -658,6 +662,9 @@ const OnlyCrypto = props => {
                           // setSelectedToken(pastedToken)
                           // setIsComponentVisible(false)
                         })
+                      } else {
+                        setCustomInput(i)
+                        setErc20List([...erc20OriginalList])
                       }
                     }}
                     placeholder={
