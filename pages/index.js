@@ -112,11 +112,6 @@ export async function getServerSideProps(props) {
     }
   })
 
-  // const medium = await fetch(
-  //   'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth'
-  // )
-  // const mediumPosts = await medium.json()
-
   return {
     props: {
       topProjects: response?.projects?.projects,

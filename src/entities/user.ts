@@ -1,8 +1,3 @@
-import { getLocalStorageTokenLabel } from '../services/auth'
-// import { shortenAddress } from '../lib/helpers'
-
-const tokenLabel = getLocalStorageTokenLabel()
-
 export default class User {
   id: number
   token: string
@@ -11,7 +6,6 @@ export default class User {
   firstName?: string
   lastName?: string
   name?: string
-  password?: string
   avatar?: string
   url?: string
   location?: string
@@ -48,7 +42,6 @@ export default class User {
 
   setToken(token) {
     this.token = token
-    localStorage.setItem(tokenLabel, token)
   }
 
   addWalletAddress(address) {

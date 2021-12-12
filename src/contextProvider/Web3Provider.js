@@ -11,56 +11,14 @@ import { getToken } from '../services/token'
 import { signMessage } from '../lib/helpers'
 import Modal from '../components/modal'
 import theme from '../utils/theme-ui'
+import { onboardWallets } from '../utils/constants'
 
 const Context = createContext({})
 const { Provider } = Context
 
 const nativeTokenDecimals = 18
-
 const defaultNetworkId = Number(process.env.NEXT_PUBLIC_NETWORK_ID)
-const rpcUrl = process.env.NEXT_PUBLIC_ETHEREUM_NODE
 const dappId = process.env.NEXT_PUBLIC_BLOCK_NATIVE_DAPP_ID
-const portisKey = process.env.NEXT_PUBLIC_PORTIS_KEY
-const infuraKey = process.env.NEXT_PUBLIC_INFURA_ID
-
-const wallets = [
-  { walletName: 'metamask' },
-  { walletName: 'torus' },
-  {
-    walletName: 'portis',
-    apiKey: portisKey
-  },
-  {
-    walletName: 'trezor',
-    appUrl: 'https://giveth.io/',
-    rpcUrl
-  },
-  {
-    walletName: 'lattice',
-    appName: 'Giveth 2.0',
-    rpcUrl
-  },
-  {
-    walletName: 'ledger',
-    rpcUrl
-  },
-  { walletName: 'dapper' },
-  { walletName: 'coinbase' },
-  { walletName: 'status' },
-  { walletName: 'unilogin' },
-  // { walletName: 'authereum', disableNotifications: true },
-  // { walletName: 'gnosis' },
-  {
-    walletName: 'walletConnect',
-    infuraKey
-  },
-  { walletName: 'opera' },
-  { walletName: 'operaTouch' },
-  { walletName: 'imToken', rpcUrl },
-  { walletName: 'meetone' },
-  { walletName: 'mykey' },
-  { walletName: 'wallet.io', rpcUrl }
-]
 
 const Web3Provider = props => {
   const [networkId, setNetworkId] = useState()
@@ -71,8 +29,10 @@ const Web3Provider = props => {
   const [onboard, setOnboard] = useState({})
   const [networkName, setNetworkName] = useState()
   const [user, setUser] = useState()
-  const [showSignModal, setShowSignModal] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
+  const isEnabled = !!web3 && !!account && !!networkId && !!user
+  const isSignedIn = isEnabled && user.token
   const isXdai = networkId === 100
 
   const initOnBoard = initialRun => {
@@ -94,7 +54,7 @@ const Web3Provider = props => {
         balance: _balance => setBalance(_balance / 10 ** nativeTokenDecimals)
       },
       walletSelect: {
-        wallets
+        wallets: onboardWallets
       }
     })
 
@@ -125,12 +85,8 @@ const Web3Provider = props => {
   }
 
   const fetchLocalUser = () => {
-    const _user = Auth.getUser()
-    const newUser = new User()
-    newUser.addWalletAddress(_user.walletAddress)
-    newUser.parseDbUser(_user)
-    newUser.setToken(_user.token)
-    return newUser
+    const localUser = Auth.getUser()
+    return new User(localUser)
   }
 
   const fetchDBUser = () => {
@@ -142,10 +98,7 @@ const Web3Provider = props => {
         },
         fetchPolicy: 'network-only'
       })
-      .then(res => {
-        console.log(res.data?.userByAddress)
-        return res.data?.userByAddress
-      })
+      .then(res => res.data?.userByAddress)
       .catch(console.log)
   }
 
@@ -180,25 +133,29 @@ const Web3Provider = props => {
       const newUser = new User(DBUser)
       newUser.setToken(token)
       Auth.setUser(newUser)
-      client.resetStore().then()
+      await client.resetStore()
       setUser(newUser)
     } else {
       localUser.setToken(token)
       Auth.setUser(localUser)
+      await client.resetStore()
       setUser(localUser)
     }
     return true
   }
 
   const signOut = () => {
-    Auth.logout()
-    setUser(undefined)
+    const _user = new User(user)
+    _user.setToken(undefined)
+    Auth.setUser(_user)
+    client.resetStore().then()
+    setUser(_user)
   }
 
-  const signModalContent = () => {
+  const loginModalContent = () => {
     const handleClick = () => {
-      showSignModal && setShowSignModal(false)
-      signIn().then()
+      showLoginModal && setShowLoginModal(false)
+      isEnabled ? signIn().then() : connectWallet()
     }
     return (
       <Flex
@@ -215,7 +172,7 @@ const Web3Provider = props => {
             marginBottom: '25px'
           }}
         >
-          Please Sign with your wallet to authenticate
+          Please {isEnabled ? 'Sign with your wallet' : 'Connect Wallet'} to authenticate
         </Text>
         <Button
           onClick={handleClick}
@@ -225,13 +182,13 @@ const Web3Provider = props => {
             background: theme.colors.primary
           }}
         >
-          Sign
+          {isEnabled ? 'Sign' : 'Connect Wallet'}
         </Button>
       </Flex>
     )
   }
 
-  const showSign = () => setShowSignModal(true)
+  const loginModal = () => setShowLoginModal(true)
 
   useEffect(() => {
     const localUser = fetchLocalUser()
@@ -271,11 +228,6 @@ const Web3Provider = props => {
     }
   }, [networkId])
 
-  const isEnabled = !!web3 && !!account && !!networkId && !!user
-  const isSignedIn = isEnabled && user.token
-
-  console.log(user, Auth.getUser())
-
   return (
     <Provider
       value={{
@@ -294,16 +246,16 @@ const Web3Provider = props => {
           switchWallet,
           connectWallet,
           updateUser,
-          showSign,
-          signModalContent,
+          loginModal,
+          loginModalContent,
           signIn,
           signOut
         }
       }}
     >
-      {showSignModal && (
-        <Modal isOpen={showSignModal} onRequestClose={() => setShowSignModal(false)}>
-          {signModalContent()}
+      {showLoginModal && (
+        <Modal isOpen={showLoginModal} onRequestClose={() => setShowLoginModal(false)}>
+          {loginModalContent()}
         </Modal>
       )}
       {props.children}

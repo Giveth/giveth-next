@@ -28,14 +28,14 @@ import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 
 const Main = props => {
   const {
-    state: { user },
-    actions: { signModalContent }
+    state: { isSignedIn },
+    actions: { loginModalContent }
   } = useContext(Web3Context)
 
-  return user && user.token ? (
+  return isSignedIn ? (
     <CreateProjectForm {...props} />
   ) : (
-    <div style={{ margin: '150px 0', textAlign: 'center' }}>{signModalContent()}</div>
+    <div style={{ margin: '150px 0', textAlign: 'center' }}>{loginModalContent()}</div>
   )
 }
 

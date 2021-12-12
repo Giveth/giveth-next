@@ -4,7 +4,7 @@ import { setContext } from '@apollo/client/link/context'
 import merge from 'deepmerge'
 import isEqual from 'lodash.isequal'
 
-import { getLocalStorageTokenLabel, getLocalStorageUserLabel } from '../services/auth'
+import { getUser } from '../services/auth'
 import { isSSR } from '../lib/helpers'
 
 let apolloClient
@@ -16,24 +16,15 @@ const httpLink = createHttpLink({
 })
 
 function createApolloClient() {
-  // Declare variable to store authToken
   let token
   const ssrMode = isSSR()
-  const appUser = getLocalStorageUserLabel()
 
   const authLink = setContext((_, { headers }) => {
-    // get the authentication token from local storage if it exists
-    if (!ssrMode) token = localStorage.getItem(getLocalStorageTokenLabel())
-
-    // return the headers to the context so httpLink can read them
+    const localUser = getUser()
+    token = localUser.token
     const mutation = {
-      Authorization: token ? `Bearer ${token}` : ''
-    }
-    if (!ssrMode && localStorage.getItem(appUser)) {
-      const user = JSON.parse(localStorage.getItem(appUser))
-      const userAddress = user?.addresses && user.addresses[0]
-
-      if (userAddress) mutation['wallet-address'] = userAddress
+      Authorization: token ? `Bearer ${token}` : '',
+      'wallet-address': localUser.walletAddress || ''
     }
 
     return {

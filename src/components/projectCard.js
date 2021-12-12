@@ -51,21 +51,22 @@ const Categories = ({ categories }) => {
 
 const ProjectCard = props => {
   const {
-    state: { user },
-    actions: { showSign }
+    state: { user, isSignedIn },
+    actions: { loginModal }
   } = useContext(Web3Context)
   const usePopup = useContext(PopupContext)
   const client = useApolloClient()
 
   const { project, fromViewStyle, isATrace } = props
 
-  const isGivingBlock = project?.givingBlocksId
   const [altStyle, setAltStyle] = useState(false)
   const [heartedByUser, setHeartedByUser] = useState(null)
   const [heartedCount, setHeartedCount] = useState(null)
 
   const reactToProject = async () => {
     try {
+      if (!isSignedIn) return loginModal()
+
       const reaction = await client?.mutate({
         mutation: TOGGLE_PROJECT_REACTION,
         variables: {
@@ -80,7 +81,7 @@ const ProjectCard = props => {
       setHeartedCount(reactionCount)
       setHeartedByUser(hearted)
     } catch (err) {
-      showSign()
+      console.log(err)
     }
   }
 
@@ -393,7 +394,6 @@ const CardFooter = styled.span`
 const StyledImage = styled(Image)`
   cursor: pointer;
   border-radius: 12px 12px 0 0;
-  object-fit: cover;
   background: ${props => (props?.isGivingBlockProject ? 'white' : 'none')};
   object-fit: ${props => (props?.isGivingBlockProject ? 'contain' : 'cover')};
 `

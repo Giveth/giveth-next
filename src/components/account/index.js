@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { Flex } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
@@ -13,20 +13,14 @@ import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
 const Main = () => {
   const {
-    state: { user },
-    actions: { signModalContent, signIn }
+    state: { isSignedIn },
+    actions: { loginModalContent }
   } = useContext(Web3Context)
 
-  useEffect(() => {
-    if (user && !user.token) signIn()
-  }, [user])
-
-  return !user ? (
-    <></>
-  ) : user && user.token ? (
+  return isSignedIn ? (
     <AccountPage />
   ) : (
-    <div style={{ margin: '150px 0', textAlign: 'center' }}>{signModalContent()}</div>
+    <div style={{ margin: '150px 0', textAlign: 'center' }}>{loginModalContent()}</div>
   )
 }
 
@@ -45,7 +39,6 @@ const AccountPage = () => {
     data: StringParam
   })
 
-  const isSSR = typeof window === 'undefined'
   if (dataLoading || projectsLoading) {
     return (
       <>
@@ -75,7 +68,6 @@ const AccountPage = () => {
         <AccountBody
           setQuery={setQuery}
           query={query}
-          isSSR={isSSR}
           userDonations={userDonations}
           projectsList={projectsList}
         />
