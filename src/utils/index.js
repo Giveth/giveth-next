@@ -1,8 +1,8 @@
 import fetch from 'isomorphic-fetch'
+import Web3 from 'web3'
 import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import ERC20List from './erc20TokenList'
-import Web3 from 'web3'
 
 const xDaiChainId = 100
 const appNetworkId = process.env.NEXT_PUBLIC_NETWORK_ID
@@ -42,8 +42,8 @@ export async function getERC20Info({ tokenAbi, contractAddress, web3 }) {
       chainId,
       decimals,
       value: {
-        symbol,
-      },
+        symbol
+      }
     }
     return ERC20Info
   } catch (error) {
@@ -81,51 +81,46 @@ export function base64ToBlob(base64) {
   return new Blob([bytes], { type: 'application/pdf' })
 }
 
-export const toBase64 = (file) =>
+export const toBase64 = file =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
+    reader.onerror = error => reject(error)
   })
 
 export const getImageFile = async (base64Data, projectName) => {
   const imageFile = await fetch(base64Data)
-    .then((res) => res.blob())
-    .then((blob) => {
+    .then(res => res.blob())
+    .then(blob => {
       return new File([blob], projectName)
     })
   return imageFile
 }
 
-export async function getEtherscanTxs(
-  address,
-  apolloClient = false,
-  isDonor = false
-) {
+export async function getEtherscanTxs(address, apolloClient = false, isDonor = false) {
   try {
     const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
-    const api =
-      process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
+    const api = process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
     const balance = await fetch(
       `https://${api}.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
     )
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         return data?.result
       })
 
     return await fetch(
       `https://${api}.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=${apiKey}`
     )
-      .then((response) => response.json())
-      .then(async (data) => {
+      .then(response => response.json())
+      .then(async data => {
         const modified = []
         if (data?.status === '0' || typeof data?.result === 'string') {
           return {
             balance,
             txs: [],
-            error: data?.result,
+            error: data?.result
           }
         }
         for (const t of data?.result) {
@@ -135,8 +130,8 @@ export async function getEtherscanTxs(
                 constiables: {
                   address: isDonor
                     ? Web3.utils.toChecksumAddress(t?.from)
-                    : Web3.utils.toChecksumAddress(t?.to),
-                },
+                    : Web3.utils.toChecksumAddress(t?.to)
+                }
               })
             : null
           modified.push({
@@ -144,12 +139,12 @@ export async function getEtherscanTxs(
             extra: extra?.data || null,
             donor: t.from,
             createdAt: t.timeStamp,
-            currency: 'ETH',
+            currency: 'ETH'
           })
         }
         return {
           balance,
-          txs: modified,
+          txs: modified
         }
       })
   } catch (error) {

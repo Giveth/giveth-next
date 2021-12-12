@@ -41,8 +41,6 @@ const DonateIndex = props => {
   const [isCancelled, setIsCancelled] = useState(null)
   const [transakTx, setTransakTx] = useState(null)
 
-  const isGivingBlockProject = project?.givingBlocksId
-
   useEffect(() => {
     if (project?.status?.id !== '5') {
       setIsCancelled(true)

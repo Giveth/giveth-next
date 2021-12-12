@@ -2,7 +2,8 @@ import React from 'react'
 import { Flex, Button, Text } from 'theme-ui'
 import Modal from 'react-modal'
 import { TwitterShareButton } from 'react-share'
-const GeminiModal = ({ showModal, setShowModal, txHash, networkId }) => {
+
+const GeminiModal = ({ showModal, setShowModal }) => {
   return (
     <Modal
       isOpen={showModal}
