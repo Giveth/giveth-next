@@ -44,7 +44,6 @@ const PublicProfileView = props => {
         return <UserProjects {...props} />
     }
   }
-
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <ProfileHeader {...props} />

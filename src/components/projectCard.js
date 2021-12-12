@@ -26,8 +26,9 @@ const RichTextViewer = dynamic(() => import('./richTextViewer'), {
 
 const Categories = ({ categories }) => {
   const BadgeContent = ({ index, name }) => {
+    const isGivingBlock = name === 'the-giving-block'
     return (
-      <Badge key={index}>
+      <Badge key={index} isGivingBlock={isGivingBlock}>
         <Text
           sx={{ variant: 'text.paragraph', fontSize: 1 }}
           style={{
@@ -35,7 +36,7 @@ const Categories = ({ categories }) => {
             textTransform: 'uppercase'
           }}
         >
-          {name}
+          {isGivingBlock ? <img src='/images/thegivingblock.svg' /> : name}
         </Text>
       </Badge>
     )
@@ -58,6 +59,7 @@ const ProjectCard = props => {
 
   const { project, fromViewStyle, isATrace } = props
 
+  const isGivingBlock = project?.givingBlocksId
   const [altStyle, setAltStyle] = useState(false)
   const [heartedByUser, setHeartedByUser] = useState(null)
   const [heartedCount, setHeartedCount] = useState(null)
@@ -138,28 +140,31 @@ const ProjectCard = props => {
                   }}
                 />
               ) : (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '186px',
-                    margin: '0 auto',
-                    cursor: 'pointer',
-                    borderRadius: '12px 12px 0px 0px',
-                    backgroundColor: '#cccccc',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    position: 'relative'
-                  }}
-                >
-                  <StyledImage
-                    src={image}
-                    layout='fill'
-                    priority={true}
-                    quality={40}
-                    // placeholder='blur'
-                    // blurDataURL='/images/giveth_bg.jpg'
-                  />
-                </div>
+                image && (
+                  <div
+                    style={{
+                      width: '100%',
+                      height: '186px',
+                      margin: '0 auto',
+                      cursor: 'pointer',
+                      borderRadius: '12px 12px 0px 0px',
+                      backgroundColor: '#cccccc',
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'no-repeat',
+                      position: 'relative'
+                    }}
+                  >
+                    <StyledImage
+                      src={image}
+                      layout='fill'
+                      priority={true}
+                      quality={40}
+                      isGivingBlockProject={project?.givingBlocksId}
+                      // placeholder='blur'
+                      // blurDataURL='/images/giveth_bg.jpg'
+                    />
+                  </div>
+                )
               )}
             </a>
           </Link>
@@ -300,16 +305,16 @@ const ProjectCard = props => {
                 <RichTextViewer
                   content={project?.description
                     ?.replace(/<img .*?>/g, '')
-                    .replace(/<iframe .*?>/g, '')}
+                    .replace(/<iframe .*?>/g, '')
+                    .replace(/<[^>]*>/g, '')}
                 />
               )}
-
               {
                 /* Description String */
                 // project?.description
               }
             </Text>
-            <CardFooter>
+            <CardFooter isGivingBlock>
               <Categories categories={project?.categories} />
             </CardFooter>
           </CardContent>
@@ -356,11 +361,14 @@ const AltCardContent = styled.span`
 `
 
 const Badge = styled.span`
+  position: ${props => (props.isGivingBlock ? 'absolute' : 'relative')};
+  left: ${props => (props.isGivingBlock ? '0' : 'none')};
+  bottom: ${props => (props.isGivingBlock ? '-10px' : 'none')};
   padding: 3px 11.76px;
-  margin: 0.4rem;
+  margin: ${props => (props.isGivingBlock ? '1rem' : '0.4rem')};
   align-items: center;
   text-align: center;
-  border: 1px solid ${theme.colors.bodyLight};
+  border: ${props => (props.isGivingBlock ? 'none' : `1px solid ${theme.colors.bodyLight}`)};
   border-radius: 48px;
   color: ${theme.colors.bodyLight};
 `
@@ -379,13 +387,15 @@ const CardFooter = styled.span`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin: 1rem 0;
+  margin: ${props => (props.isGivingBlock ? '3rem 0 2px 0' : '1rem 0')};
 `
 
 const StyledImage = styled(Image)`
   cursor: pointer;
   border-radius: 12px 12px 0 0;
   object-fit: cover;
+  background: ${props => (props?.isGivingBlockProject ? 'white' : 'none')};
+  object-fit: ${props => (props?.isGivingBlockProject ? 'contain' : 'cover')};
 `
 
 export default ProjectCard

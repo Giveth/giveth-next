@@ -2,7 +2,9 @@ const env = process.env.NEXT_PUBLIC_ENVIRONMENT
 const isDevelopment = env === 'dev'
 
 const theme = {
-  donationSlug: isDevelopment ? 'giveth' : 'the-giveth-community-of-makers',
+  donationSlug: isDevelopment
+    ? 'giveth-2021:-retreat-to-the-future'
+    : 'the-giveth-community-of-makers',
   breakpoints: ['850px', '1024px', '1280px'],
   colors: {
     text: '#2C0B3F',

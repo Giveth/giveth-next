@@ -27,6 +27,31 @@ export function pollEvery(fn, delay) {
   }
 }
 
+export async function getERC20Info({ tokenAbi, contractAddress, web3 }) {
+  try {
+    const instance = new web3.eth.Contract(tokenAbi, contractAddress)
+    const name = await instance.methods.name().call()
+    const symbol = await instance.methods.symbol().call()
+    const chainId = await web3.eth.getChainId()
+    const decimals = await instance.methods.decimals().call()
+    const ERC20Info = {
+      name,
+      symbol,
+      address: contractAddress,
+      label: symbol,
+      chainId,
+      decimals,
+      value: {
+        symbol,
+      },
+    }
+    return ERC20Info
+  } catch (error) {
+    console.log({ error })
+    return false
+  }
+}
+
 export function checkNetwork(networkId) {
   const isXdai = networkId === xDaiChainId
   return networkId?.toString() === appNetworkId || isXdai
@@ -56,46 +81,51 @@ export function base64ToBlob(base64) {
   return new Blob([bytes], { type: 'application/pdf' })
 }
 
-export const toBase64 = file =>
+export const toBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => resolve(reader.result)
-    reader.onerror = error => reject(error)
+    reader.onerror = (error) => reject(error)
   })
 
 export const getImageFile = async (base64Data, projectName) => {
   const imageFile = await fetch(base64Data)
-    .then(res => res.blob())
-    .then(blob => {
+    .then((res) => res.blob())
+    .then((blob) => {
       return new File([blob], projectName)
     })
   return imageFile
 }
 
-export async function getEtherscanTxs(address, apolloClient = false, isDonor = false) {
+export async function getEtherscanTxs(
+  address,
+  apolloClient = false,
+  isDonor = false
+) {
   try {
     const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
-    const api = process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
+    const api =
+      process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
     const balance = await fetch(
       `https://${api}.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
     )
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         return data?.result
       })
 
     return await fetch(
       `https://${api}.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=${apiKey}`
     )
-      .then(response => response.json())
-      .then(async data => {
+      .then((response) => response.json())
+      .then(async (data) => {
         const modified = []
         if (data?.status === '0' || typeof data?.result === 'string') {
           return {
             balance,
             txs: [],
-            error: data?.result
+            error: data?.result,
           }
         }
         for (const t of data?.result) {
@@ -105,8 +135,8 @@ export async function getEtherscanTxs(address, apolloClient = false, isDonor = f
                 constiables: {
                   address: isDonor
                     ? Web3.utils.toChecksumAddress(t?.from)
-                    : Web3.utils.toChecksumAddress(t?.to)
-                }
+                    : Web3.utils.toChecksumAddress(t?.to),
+                },
               })
             : null
           modified.push({
@@ -114,12 +144,12 @@ export async function getEtherscanTxs(address, apolloClient = false, isDonor = f
             extra: extra?.data || null,
             donor: t.from,
             createdAt: t.timeStamp,
-            currency: 'ETH'
+            currency: 'ETH',
           })
         }
         return {
           balance,
-          txs: modified
+          txs: modified,
         }
       })
   } catch (error) {

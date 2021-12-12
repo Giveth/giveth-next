@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import Jdenticon from 'react-jdenticon'
 import styled from '@emotion/styled'
+import { BsHeartFill } from 'react-icons/bs'
 import { useApolloClient } from '@apollo/client'
 
 import ConfirmationModal from '../../confirmationModal'
@@ -106,8 +107,8 @@ const TimelineCard = props => {
   const client = useApolloClient()
 
   const { content, reactions, number, isOwner } = props
-
   const [currentContent, setCurrentContent] = useState('')
+  const [hearted, setHearted] = useState(false)
   const [newTitle, setNewTitle] = useState(undefined)
   const [newInput, setNewInput] = useState('')
   const [editInput, setEditInput] = useState('')
@@ -137,10 +138,12 @@ const TimelineCard = props => {
           }
         ]
       })
+      setHearted(!hearted)
       // return Toast({ content: 'You liked it!', type: 'success' })
       return true
     } catch (error) {
       console.log({ error })
+      showSign()
     }
   }
 
@@ -215,7 +218,9 @@ const TimelineCard = props => {
             userId: parseInt(props?.content?.userId)
           }
         })
+        const userLiked = props?.reactions?.find(i => i?.userId == currentUser?.id)
         setUser(userInfo?.data?.user)
+        setHearted(!!userLiked)
         setEditInput(props?.content?.content)
       } catch (error) {
         console.log({ error })
@@ -467,22 +472,24 @@ const TimelineCard = props => {
           )}
         </CardContent>
         <CardFooter>
-          <div>
-            <IconButton onClick={react} sx={{ cursor: 'pointer' }}>
-              <img
-                src='/images/icon-heart.svg'
-                alt=''
-                style={{
-                  '-webkit-filter': likedByUser
-                    ? 'invert(40%) grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(400%) contrast(2)'
-                    : null
-                }}
-              />
-            </IconButton>
-            <Text sx={{ variant: 'text.default', ml: -2 }}>
-              {' '}
-              {reactions?.length > 0 ? reactions?.length : ''}{' '}
-            </Text>
+          <div
+            style={{
+              marginTop: 20,
+              marginLeft: 20,
+              marginBottom: 10,
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            <BsHeartFill
+              style={{ cursor: 'pointer' }}
+              size='18px'
+              color={hearted ? theme.colors.red : theme.colors.muted}
+              onClick={react}
+            />
+            {reactions?.length > 0 && (
+              <Text sx={{ variant: 'text.default', ml: 2 }}>{reactions?.length}</Text>
+            )}
           </div>
           {isOwner && (
             <Flex>

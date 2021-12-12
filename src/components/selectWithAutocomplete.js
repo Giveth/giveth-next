@@ -17,14 +17,8 @@ const StyledOption = styled.div`
   }
 `
 
-const SelectWithAutocomplete = ({
-  content,
-  width,
-  placeholder,
-  onSelect,
-  menuIsOpen,
-  isTokenList
-}) => {
+const SelectWithAutocomplete = props => {
+  const { content, width, placeholder, onSelect, onInputChange, menuIsOpen, isTokenList } = props
   const options = content || []
 
   const CustomOption = ({ children, value, innerProps, isDisabled }) => {
@@ -83,12 +77,18 @@ const SelectWithAutocomplete = ({
 
   return (
     <Select
+      {...props}
       options={options}
       components={{ Option: CustomOption }}
       placeholder={placeholder || 'Select an option'}
       onChange={onSelect}
       menuIsOpen={menuIsOpen}
+      onInputChange={onInputChange}
       styles={{
+        input: provided => ({
+          ...provided,
+          color: theme.colors.bodyDark
+        }),
         placeholder: provided => ({
           ...provided,
           color: theme.colors.anotherGrey
@@ -103,11 +103,13 @@ const SelectWithAutocomplete = ({
         }),
         menu: provided => ({
           ...provided,
-          marginTop: '-5px'
+          marginTop: '-5px',
+          height: '200px'
         }),
         menuList: provided => ({
           ...provided,
-          maxHeight: '300px'
+          maxHeight: '300px',
+          height: '200px'
         }),
         control: () => ({
           // none of react-select's styles are passed to <Control />

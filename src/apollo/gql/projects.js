@@ -32,6 +32,7 @@ const FETCH_ALL_PROJECTS = gql`
         verified
         traceCampaignId
         listed
+        givingBlocksId
         status {
           id
           symbol
@@ -72,6 +73,7 @@ const FETCH_PROJECTS = gql`
         walletAddress
         impactLocation
         listed
+        givingBlocksId
         categories {
           name
         }
@@ -103,6 +105,7 @@ const FETCH_USER_PROJECTS = gql`
         walletAddress
         impactLocation
         listed
+        givingBlocksId
         categories {
           name
         }
@@ -163,6 +166,7 @@ const FETCH_PROJECT = gql`
       impactLocation
       qualityScore
       listed
+      givingBlocksId
       status {
         id
         symbol
@@ -192,6 +196,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
       listed
       verified
       traceCampaignId
+      givingBlocksId
       categories {
         name
       }

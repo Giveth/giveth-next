@@ -26,6 +26,8 @@ import { TOGGLE_PROJECT_REACTION } from '../../apollo/gql/projects'
 import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
 
+import { Gray_600 } from '../styled-components/Colors'
+
 const RichTextViewer = dynamic(() => import('../richTextViewer'), {
   ssr: false
 })
@@ -172,10 +174,11 @@ const ProjectDonatorView = ({
           src={project.image}
           alt='project picture'
           onError={ev =>
-            (ev.target.src = 'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
+            (ev.target.src =
+              'https://htmlcolorcodes.com/assets/images/colors/light-gray-color-solid-background-1920x1080.png')
           }
           sx={{
-            objectFit: 'cover',
+            objectFit: project?.givingBlocksId ? 'contain' : 'cover',
             // objectPosition: '100% 25%',
             width: '100vw',
             margin: '0 5%',
@@ -487,6 +490,22 @@ const ProjectDonatorView = ({
           >
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
+
+          {!!project?.givingBlocksId && (
+            <Flex
+              sx={{
+                // cursor: 'pointer',
+                alignSelf: 'center',
+                mt: 2,
+                mb: 4,
+                alignItems: 'center'
+              }}
+            >
+              {' '}
+              <Text sx={{ variant: 'text.default', mr: 2, color: Gray_600 }}>Project by</Text>
+              <img src='/images/thegivingblock.svg' />
+            </Flex>
+          )}
 
           {isOwner && !(project?.verified || project?.traceCampaignId) && (
             <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
