@@ -1,13 +1,15 @@
 import { Flex } from 'theme-ui'
 import React from 'react'
 import MyProjects from './myProjects'
+import { isSSR } from '../../lib/helpers'
 
 const MyAccount = React.lazy(() => import('../../components/account/myAccount'))
 const MyDonations = React.lazy(() => import('../../components/account/myDonations'))
 
 const SetView = props => {
-  const { query, projectsList, isSSR, userDonations } = props
+  const { query, projectsList, userDonations } = props
   const { view, data } = query
+  const SSR = isSSR()
   switch (view) {
     case 'projects':
       switch (data) {
@@ -18,7 +20,7 @@ const SetView = props => {
       }
     case 'donations':
       return (
-        !isSSR && (
+        !SSR && (
           <React.Suspense fallback={<div />}>
             <MyDonations donations={userDonations} />
           </React.Suspense>
@@ -26,7 +28,7 @@ const SetView = props => {
       )
     default:
       return (
-        !isSSR && (
+        !SSR && (
           <React.Suspense fallback={<div />}>
             <MyAccount
               info={{
@@ -40,7 +42,7 @@ const SetView = props => {
   }
 }
 const AccountBody = props => {
-  const { query, projectsList, isSSR, userDonations } = props
+  const { query, projectsList, userDonations } = props
 
   return (
     <Flex
@@ -50,12 +52,7 @@ const AccountBody = props => {
         mt: ['100px', '140px', '140px']
       }}
     >
-      <SetView
-        query={query}
-        projectsList={projectsList}
-        isSSR={isSSR}
-        userDonations={userDonations}
-      />
+      <SetView query={query} projectsList={projectsList} userDonations={userDonations} />
     </Flex>
   )
 }

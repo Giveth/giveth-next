@@ -25,10 +25,6 @@ module.exports = withBundleAnalyzer({
     ignoreBuildErrors: true
   },
   webpack: config => {
-    config.module.rules.push({
-      test: /\.md$/,
-      use: 'raw-loader'
-    })
     config.optimization = {
       ...config.optimization,
       sideEffects: true
@@ -46,11 +42,6 @@ module.exports = withBundleAnalyzer({
       'ipfs.giveth.io',
       'static.tgbwidget.com'
     ]
-  },
-  // cleanDistDir: false,
-  eslint: {
-    // Warning: Dangerously allow production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true
   }
+  // cleanDistDir: false,
 })

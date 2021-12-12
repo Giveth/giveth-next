@@ -48,7 +48,7 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
           color: 'secondary'
         }}
       >
-        You'll receive an email from us once your project is listed.
+        You&apos;ll receive an email from us once your project is listed.
       </Text>
       <Flex
         sx={{

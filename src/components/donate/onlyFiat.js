@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Flex, Button, Text } from 'theme-ui'
-import { startTransakDonation } from '../../services/donation'
+import { Flex, Text } from 'theme-ui'
+// import { startTransakDonation } from '../../services/donation'
 
 // import styled from '@emotion/styled'
 // import theme from '../../utils/theme-ui'
@@ -9,8 +9,8 @@ import { startTransakDonation } from '../../services/donation'
 // import { useApolloClient } from '@apollo/client'
 // import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 
-const OnlyFiat = props => {
-  const { project, setTransakTx } = props
+const OnlyFiat = () => {
+  // const { project, setTransakTx } = props
   // const [amountSelect, setAmountSelect] = useState(null)
   // const [amountTyped, setAmountTyped] = useState(null)
   // const [donateToGiveth, setDonateToGiveth] = useState(false)

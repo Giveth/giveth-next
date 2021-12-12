@@ -44,8 +44,8 @@ const ProjectDonatorView = ({
   admin: projectAdmin
 }) => {
   const {
-    state: { user },
-    actions: { showSign }
+    state: { user, isSignedIn },
+    actions: { loginModal }
   } = useContext(Web3Context)
 
   const usePopup = useContext(PopupContext)
@@ -70,6 +70,8 @@ const ProjectDonatorView = ({
 
   const reactToProject = async () => {
     try {
+      if (!isSignedIn) return loginModal()
+
       const reaction = await client?.mutate({
         mutation: TOGGLE_PROJECT_REACTION,
         variables: {
@@ -81,11 +83,10 @@ const ProjectDonatorView = ({
       const { data } = reaction
       const { toggleProjectReaction } = data
       const { reaction: hearted, reactionCount } = toggleProjectReaction
-      console.log({ hearted })
       setHeartedCount(reactionCount)
       setHearted(hearted)
     } catch (error) {
-      showSign()
+      console.log(error)
     }
   }
 

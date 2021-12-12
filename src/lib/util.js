@@ -62,3 +62,18 @@ export const switchNetwork = currentNetworkId => {
     })
     .then()
 }
+
+export const switchToXdai = () => {
+  window?.ethereum.request({
+    method: 'wallet_addEthereumChain',
+    params: [
+      {
+        chainId: '0x64',
+        chainName: 'xDai',
+        nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
+        rpcUrls: ['https://rpc.xdaichain.com/'],
+        blockExplorerUrls: ['https://blockscout.com/xdai/mainnet']
+      }
+    ]
+  })
+}

@@ -7,7 +7,6 @@ export const categoryList = [
   { name: 'research', value: 'Research', source: 'adhoc' },
   { name: 'nutrition', value: 'Nutrition', source: 'adhoc' },
   { name: 'art-culture', value: 'Art & Culture', source: 'adhoc' },
-
   { name: 'agriculture', value: 'Agriculture', source: 'IRIS' },
   { name: 'air', value: 'Air', source: 'IRIS' },
   { name: 'biodiversity', value: 'Biodiversity', source: 'IRIS' },
@@ -41,3 +40,46 @@ export const gqlEnums = {
   DESC: 'DESC',
   ASC: 'ASC'
 }
+
+const rpcUrl = process.env.NEXT_PUBLIC_ETHEREUM_NODE
+const portisKey = process.env.NEXT_PUBLIC_PORTIS_KEY
+const infuraKey = process.env.NEXT_PUBLIC_INFURA_ID
+
+export const onboardWallets = [
+  { walletName: 'metamask' },
+  { walletName: 'torus' },
+  {
+    walletName: 'portis',
+    apiKey: portisKey
+  },
+  {
+    walletName: 'trezor',
+    appUrl: 'https://giveth.io/',
+    rpcUrl
+  },
+  {
+    walletName: 'lattice',
+    appName: 'Giveth 2.0',
+    rpcUrl
+  },
+  {
+    walletName: 'ledger',
+    rpcUrl
+  },
+  { walletName: 'dapper' },
+  { walletName: 'coinbase' },
+  { walletName: 'status' },
+  { walletName: 'unilogin' },
+  // { walletName: 'authereum', disableNotifications: true },
+  // { walletName: 'gnosis' },
+  {
+    walletName: 'walletConnect',
+    infuraKey
+  },
+  { walletName: 'opera' },
+  { walletName: 'operaTouch' },
+  { walletName: 'imToken', rpcUrl },
+  { walletName: 'meetone' },
+  { walletName: 'mykey' },
+  { walletName: 'wallet.io', rpcUrl }
+]

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Avatar, Heading, Badge, Box, Button, Card, IconButton, Input, Flex, Text } from 'theme-ui'
+import { Avatar, Heading, Badge, Box, Button, Card, Input, Flex, Text } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -19,6 +19,7 @@ import Toast from '../../../components/toast'
 import theme from '../../../utils/theme-ui'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
+import { isSSR } from '../../../lib/helpers'
 
 // import RichTextViewer from '../../richTextViewer'
 
@@ -100,8 +101,8 @@ const RaisedHandsImg = styled.img`
 
 const TimelineCard = props => {
   const {
-    state: { user: currentUser },
-    actions: { showSign }
+    state: { user: currentUser, isSignedIn },
+    actions: { loginModal }
   } = useContext(Web3Context)
 
   const client = useApolloClient()
@@ -117,10 +118,10 @@ const TimelineCard = props => {
   const [openEdit, setOpenEdit] = useState(false)
   const [user, setUser] = useState(undefined)
 
-  const isSSR = typeof window === 'undefined'
-
   const react = async () => {
     try {
+      if (!isSignedIn) return loginModal()
+
       await client?.mutate({
         mutation: TOGGLE_UPDATE_REACTION,
         variables: {
@@ -143,11 +144,8 @@ const TimelineCard = props => {
       return true
     } catch (error) {
       console.log({ error })
-      showSign()
     }
   }
-
-  const likedByUser = reactions?.find(r => r?.userId === user?.id)
 
   const editUpdate = async () => {
     try {
@@ -275,7 +273,7 @@ const TimelineCard = props => {
             value={newInput}
             onChange={e => setNewInput(e.target.value)}
           /> */}
-          {!isSSR && (
+          {!isSSR() && (
             <React.Suspense fallback={<div />}>
               <RichTextInput
                 projectId={props?.projectId}
@@ -309,7 +307,7 @@ const TimelineCard = props => {
               }}
               onClick={async () => {
                 try {
-                  if (currentUser && !currentUser.token) return showSign()
+                  if (!isSignedIn) return loginModal()
 
                   const res = await props.newUpdateOption({
                     title: newTitle,
@@ -507,7 +505,7 @@ const TimelineCard = props => {
                     setEditInput(currentContent)
                     return setOpenEdit(false)
                   } else {
-                    currentUser && !currentUser.token ? showSign() : setConfirmDelete(true)
+                    !isSignedIn ? loginModal() : setConfirmDelete(true)
                   }
                 }}
               >
@@ -525,7 +523,7 @@ const TimelineCard = props => {
                   if (!openEdit) {
                     return setOpenEdit(true)
                   } else {
-                    currentUser && !currentUser.token ? showSign() : editUpdate()
+                    !isSignedIn ? loginModal() : editUpdate()
                   }
                 }}
               >

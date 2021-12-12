@@ -24,8 +24,8 @@ import config from '../../config'
 
 const WalletMenu = () => {
   const {
-    state: { account, user, web3, networkId, balance },
-    actions: { switchWallet }
+    state: { user, web3, networkId, balance },
+    actions: { switchWallet, signOut }
   } = useContext(Web3Context)
 
   const [isOpen, setIsOpen] = useState(false)
@@ -40,7 +40,9 @@ const WalletMenu = () => {
     >
       <UserAvatar src={defaultProfileIcon} />
       <UserDetails>
-        <Link_Medium color={Primary_Deep_800}>{user?.name || shortenAddress(account)}</Link_Medium>
+        <Link_Medium color={Primary_Deep_800}>
+          {user?.name || shortenAddress(user.walletAddress)}
+        </Link_Medium>
         <Overline_Small color={Giv_800}>Connected to {networkName}</Overline_Small>
       </UserDetails>
 
@@ -66,7 +68,7 @@ const WalletMenu = () => {
               <MenuItem>{i.title}</MenuItem>
             </Link>
           ))}
-          <MenuItem>Sign out</MenuItem>
+          <MenuItem onClick={signOut}>Sign out</MenuItem>
         </Menus>
       </WalletOpened>
     </Wrapper>

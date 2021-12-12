@@ -5,8 +5,8 @@ import Script from 'next/script'
 import PropTypes from 'prop-types'
 import { Link, Flex, Text, Image } from 'theme-ui'
 import styled from '@emotion/styled'
-import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import theme from '../utils/theme-ui'
 import GlobalProvider from '../contextProvider/globalProvider'
@@ -23,14 +23,13 @@ const CookiesBanner = () => {
   const [softLaunchSeen, setSoftLaunchSeen] = useState('none')
 
   useEffect(() => {
-    const cookies = typeof window !== 'undefined' && window.localStorage.getItem('cookiesAccepted')
+    const cookies = window?.localStorage.getItem('cookiesAccepted')
     setCookiesAccepted(cookies)
-    const softLaunch =
-      typeof window !== 'undefined' && window.localStorage.getItem('softLaunchSeen')
+    const softLaunch = window?.localStorage.getItem('softLaunchSeen')
     if (!softLaunch) {
       setSoftLaunchSeen('false')
       // now the user has seen it
-      window.localStorage.setItem('softLaunchSeen', 'true')
+      window?.localStorage.setItem('softLaunchSeen', 'true')
     } else {
       setSoftLaunchSeen('true')
     }

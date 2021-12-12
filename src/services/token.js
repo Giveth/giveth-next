@@ -19,17 +19,14 @@ export async function validateAuthToken(token) {
   }
 }
 
-export async function getToken(user, signedMessage, networkId) {
-  if (signedMessage && user) {
+export async function getToken(walletAddress, signedMessage, networkId) {
+  if (signedMessage && walletAddress) {
     try {
       const { data } = await client.mutate({
         mutation: DO_LOGIN,
         variables: {
-          walletAddress: Web3.utils.toChecksumAddress(user.walletAddress),
+          walletAddress: Web3.utils.toChecksumAddress(walletAddress),
           signature: signedMessage,
-          email: user.email,
-          avatar: user.avatar,
-          name: user.name,
           hostname: window.location.hostname,
           networkId
         }

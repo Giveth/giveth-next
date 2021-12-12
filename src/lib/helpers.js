@@ -13,6 +13,10 @@ export const compareAddresses = (add1, add2) => {
   return add1?.toLowerCase() === add2?.toLowerCase()
 }
 
+export const isSSR = () => {
+  return typeof window === 'undefined'
+}
+
 export const isNewProject = creationDate => {
   if (!creationDate) return null
   const currentTime = new Date()
