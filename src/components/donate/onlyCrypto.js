@@ -12,7 +12,7 @@ import Modal from '../modal'
 import { checkNetwork, getERC20List, pollEvery, getERC20Info } from '../../utils'
 import useComponentVisible from '../../utils/useComponentVisible'
 import CopyToClipboard from '../copyToClipboard'
-import SVGLogo from '../../images/svg/donation/qr.svg'
+// import SVGLogo from '../../images/svg/donation/qr.svg'
 import iconQuestionMark from '../../images/icon-question-mark.svg'
 import theme from '../../utils/theme-ui'
 import tokenAbi from 'human-standard-token-abi'
@@ -29,6 +29,7 @@ import { PopupContext } from '../../contextProvider/popupProvider'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
 import { isUserRegistered, sendTransaction } from '../../lib/helpers'
 import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
+import { switchToXdai } from '../../lib/util'
 
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
@@ -46,7 +47,7 @@ const POLL_DELAY_TOKENS = 5000
 const OnlyCrypto = props => {
   const {
     state: { balance, web3, account, isEnabled, networkId, provider, user },
-    actions: { switchWallet, connectWallet, switchToXdai, signIn }
+    actions: { switchWallet, connectWallet, signIn }
   } = useContext(Web3Context)
 
   const usePopup = useContext(PopupContext)
@@ -90,7 +91,7 @@ const OnlyCrypto = props => {
   useEffect(() => {
     if (networkId) {
       let netId = networkId
-      if (!!isGivingBlockProject) netId = 'thegivingblock'
+      if (isGivingBlockProject) netId = 'thegivingblock'
       let givIndex = null
       const tokens = getERC20List(netId).tokens.map((token, index) => {
         token.value = { symbol: token.symbol }
@@ -109,7 +110,7 @@ const OnlyCrypto = props => {
         var tokenB = b.name.toUpperCase()
         return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0
       })
-      if (!!givToken) {
+      if (givToken) {
         console.log('doin it')
         tokens.splice(0, 0, givToken)
       }
@@ -692,7 +693,7 @@ const OnlyCrypto = props => {
                     return
                   }
                   const checkGIV = checkGIVTokenAvailability()
-                  if (!!checkGIV) setAmountTyped(e.target.value)
+                  if (checkGIV) setAmountTyped(e.target.value)
                 }}
               />
               <Flex
@@ -883,18 +884,18 @@ const OnlyCrypto = props => {
                 </Button>
               )}
 
-              {false && (
-                <Flex
-                  sx={{
-                    cursor: 'pointer',
-                    width: isEnabled ? '25px' : '100%',
-                    justifyContent: 'center'
-                  }}
-                  onClick={() => setIsOpen(true)}
-                >
-                  <SVGLogo />
-                </Flex>
-              )}
+              {/*{false && (*/}
+              {/*  <Flex*/}
+              {/*    sx={{*/}
+              {/*      cursor: 'pointer',*/}
+              {/*      width: isEnabled ? '25px' : '100%',*/}
+              {/*      justifyContent: 'center'*/}
+              {/*    }}*/}
+              {/*    onClick={() => setIsOpen(true)}*/}
+              {/*  >*/}
+              {/*    <SVGLogo />*/}
+              {/*  </Flex>*/}
+              {/*)}*/}
             </Flex>
             {/* {project?.listed === false && (
               <Text

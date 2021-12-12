@@ -75,7 +75,7 @@ const Web3Provider = props => {
 
   const isXdai = networkId === 100
 
-  const initOnBoard = () => {
+  const initOnBoard = initialRun => {
     if (web3) return
 
     const _onboard = Onboard({
@@ -90,13 +90,7 @@ const Web3Provider = props => {
           setProvider(wallet.provider)
         },
         network: _network => setNetworkId(_network),
-        address: _address => {
-          if (!_address || _address !== Auth.getUser()?.walletAddress) {
-            Auth.logout()
-          }
-          if (user) setUser(undefined)
-          setAccount(_address)
-        },
+        address: _address => setAccount(_address),
         balance: _balance => setBalance(_balance / 10 ** nativeTokenDecimals)
       },
       walletSelect: {
@@ -106,35 +100,19 @@ const Web3Provider = props => {
 
     const previouslySelectedWallet = window?.localStorage.getItem('selectedWallet')
     if (previouslySelectedWallet) {
-      _onboard
-        .walletSelect(previouslySelectedWallet)
-        .then(selected => selected && _onboard.walletCheck().then())
-    } else {
-      _onboard.walletSelect().then(selected => selected && _onboard.walletCheck().then())
+      _onboard.walletSelect(previouslySelectedWallet).then()
+    } else if (!initialRun) {
+      switchWallet()
     }
+
     setOnboard(_onboard)
   }
 
-  const switchWallet = async () => {
+  const switchWallet = () => {
     onboard.walletSelect().then(selected => {
       if (selected) {
         onboard.walletCheck().then()
       }
-    })
-  }
-
-  const switchToXdai = () => {
-    window?.ethereum.request({
-      method: 'wallet_addEthereumChain',
-      params: [
-        {
-          chainId: '0x64',
-          chainName: 'xDai',
-          nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
-          rpcUrls: ['https://rpc.xdaichain.com/'],
-          blockExplorerUrls: ['https://blockscout.com/xdai/mainnet']
-        }
-      ]
     })
   }
 
@@ -206,6 +184,7 @@ const Web3Provider = props => {
       setUser(newUser)
     } else {
       localUser.setToken(token)
+      Auth.setUser(localUser)
       setUser(localUser)
     }
     return true
@@ -254,13 +233,10 @@ const Web3Provider = props => {
 
   const showSign = () => setShowSignModal(true)
 
-  // useEffect(() => {
-  //   initOnBoard()
-  // }, [])
-
   useEffect(() => {
     const localUser = fetchLocalUser()
     setUser(localUser)
+    initOnBoard(true)
   }, [])
 
   useEffect(() => {
@@ -282,6 +258,8 @@ const Web3Provider = props => {
           }
         })
       }
+    } else {
+      if (user) setUser(undefined)
     }
   }, [account])
 
@@ -295,8 +273,6 @@ const Web3Provider = props => {
 
   const isEnabled = !!web3 && !!account && !!networkId && !!user
   const isSignedIn = isEnabled && user.token
-
-  console.log(user)
 
   return (
     <Provider
@@ -314,7 +290,6 @@ const Web3Provider = props => {
         },
         actions: {
           switchWallet,
-          switchToXdai,
           connectWallet,
           updateUser,
           showSign,
