@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react'
-import { Box, Heading, Flex, Button, Spinner, Progress, Text } from 'theme-ui'
+import { Box, Flex, Spinner, Progress, Text } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
@@ -268,7 +268,7 @@ const CreateProjectForm = props => {
 
   return (
     <>
-      <Progress max={steps.length} value={progressPercentage}>
+      <Progress style={{ position: 'fixed', top: 0 }} max={steps.length} value={progressPercentage}>
         <Text>Progress bar test text</Text>
       </Progress>
       <Box
@@ -279,28 +279,6 @@ const CreateProjectForm = props => {
         }}
       >
         <>
-          <Flex
-            sx={{
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}
-          >
-            <Heading as='h5'>CREATE A NEW PROJECT</Heading>
-            <Button
-              type='button'
-              aria-label='Cancel'
-              onClick={() => setShowCloseModal(!showCloseModal)}
-              sx={{
-                fontSize: '3',
-                fontFamily: 'body',
-                color: 'secondary',
-                background: 'unset',
-                cursor: 'pointer'
-              }}
-            >
-              Cancel
-            </Button>
-          </Flex>
           {currentStep === steps.length ? (
             <p>Creating project, please wait</p>
           ) : (

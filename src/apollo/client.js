@@ -1,26 +1,25 @@
 import { useMemo } from 'react'
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloClient, InMemoryCache, createHttpLink, gql } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import gql from 'graphql-tag'
-import { createUploadLink } from 'apollo-upload-client'
 import merge from 'deepmerge'
 import isEqual from 'lodash.isequal'
+
 import { getLocalStorageTokenLabel, getLocalStorageUserLabel } from '../services/auth'
+import { isSSR } from '../lib/helpers'
 
 let apolloClient
 
-const ssrMode = typeof window === 'undefined'
-
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
+
+const httpLink = createHttpLink({
+  uri: process.env.NEXT_PUBLIC_APOLLO_SERVER
+})
 
 function createApolloClient() {
   // Declare variable to store authToken
   let token
+  const ssrMode = isSSR()
   const appUser = getLocalStorageUserLabel()
-
-  const httpLink = createUploadLink({
-    uri: process.env.NEXT_PUBLIC_APOLLO_SERVER
-  })
 
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
@@ -106,7 +105,7 @@ export function initializeApollo(initialState = null) {
     _apolloClient.cache.restore(data)
   }
   // For SSG and SSR always create a new Apollo Client
-  if (ssrMode) return _apolloClient
+  if (isSSR()) return _apolloClient
   // Create the Apollo Client once in the client
   if (!apolloClient) apolloClient = _apolloClient
 

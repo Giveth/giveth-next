@@ -25,10 +25,6 @@ module.exports = withBundleAnalyzer({
     ignoreBuildErrors: true
   },
   webpack: config => {
-    config.module.rules.push({
-      test: /\.md$/,
-      use: 'raw-loader'
-    })
     config.optimization = {
       ...config.optimization,
       sideEffects: true
@@ -43,7 +39,8 @@ module.exports = withBundleAnalyzer({
       'feathers.beta.giveth.io',
       'feathers.giveth.io',
       'feathers.develop.giveth.io',
-      'ipfs.giveth.io'
+      'ipfs.giveth.io',
+      'static.tgbwidget.com'
     ]
   },
   // cleanDistDir: false,

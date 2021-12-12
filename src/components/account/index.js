@@ -14,14 +14,16 @@ import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 const Main = () => {
   const {
     state: { user },
-    actions: { signModalContent, setToken }
+    actions: { signModalContent, signIn }
   } = useContext(Web3Context)
 
   useEffect(() => {
-    if (user && !user.token) setToken()
+    if (user && !user.token) signIn()
   }, [user])
 
-  return user && user.token ? (
+  return !user ? (
+    <></>
+  ) : user && user.token ? (
     <AccountPage />
   ) : (
     <div style={{ margin: '150px 0', textAlign: 'center' }}>{signModalContent()}</div>

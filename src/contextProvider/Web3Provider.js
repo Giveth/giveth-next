@@ -63,7 +63,6 @@ const wallets = [
 ]
 
 const Web3Provider = props => {
-  const [validProvider, setValidProvider] = useState(false)
   const [networkId, setNetworkId] = useState()
   const [web3, setWeb3] = useState()
   const [provider, setProvider] = useState()
@@ -77,17 +76,16 @@ const Web3Provider = props => {
   const isXdai = networkId === 100
 
   const initOnBoard = () => {
-    if (validProvider) return
+    if (web3) return
 
     const _onboard = Onboard({
       dappId,
       networkId: defaultNetworkId,
       subscriptions: {
         wallet: wallet => {
-          window.localStorage.setItem('selectedWallet', wallet.name)
+          window?.localStorage.setItem('selectedWallet', wallet.name)
           const _web3 = new Web3(wallet.provider)
           _web3[wallet.name] = true
-          setValidProvider(!!wallet.provider)
           setWeb3(_web3)
           setProvider(wallet.provider)
         },
@@ -106,7 +104,7 @@ const Web3Provider = props => {
       }
     })
 
-    const previouslySelectedWallet = window.localStorage.getItem('selectedWallet')
+    const previouslySelectedWallet = window?.localStorage.getItem('selectedWallet')
     if (previouslySelectedWallet) {
       _onboard
         .walletSelect(previouslySelectedWallet)
@@ -118,7 +116,6 @@ const Web3Provider = props => {
   }
 
   const switchWallet = async () => {
-    setUser()
     onboard.walletSelect().then(selected => {
       if (selected) {
         onboard.walletCheck().then()
@@ -141,13 +138,24 @@ const Web3Provider = props => {
     })
   }
 
-  const enableProvider = () => {
-    if (validProvider) {
+  const connectWallet = () => {
+    if (web3) {
       onboard.walletCheck()
+    } else {
+      initOnBoard()
     }
   }
 
-  const fetchUser = () => {
+  const fetchLocalUser = () => {
+    const _user = Auth.getUser()
+    const newUser = new User()
+    newUser.addWalletAddress(_user.walletAddress)
+    newUser.parseDbUser(_user)
+    newUser.setToken(_user.token)
+    return newUser
+  }
+
+  const fetchDBUser = () => {
     return client
       .query({
         query: GET_USER_BY_ADDRESS,
@@ -157,23 +165,26 @@ const Web3Provider = props => {
         fetchPolicy: 'network-only'
       })
       .then(res => {
+        console.log(res.data?.userByAddress)
         return res.data?.userByAddress
       })
       .catch(console.log)
   }
 
   const updateUser = () => {
-    fetchUser().then(res => {
+    fetchDBUser().then(res => {
       if (res) {
-        const newUser = new User(user)
-        newUser.parseDbUser(res)
+        const newUser = new User(res)
+        newUser.setToken(user.token)
         Auth.setUser(newUser)
         setUser(newUser)
       }
     })
   }
 
-  const setToken = async () => {
+  const signIn = async () => {
+    if (!web3) return false
+
     const signedMessage = await signMessage(
       process.env.NEXT_PUBLIC_OUR_SECRET,
       account,
@@ -181,20 +192,34 @@ const Web3Provider = props => {
       web3
     )
     if (!signedMessage) return false
-    const userWithAddress = { ...user, walletAddress: account }
-    const token = await getToken(userWithAddress, signedMessage, networkId)
-    const newUser = new User(user)
-    newUser.setToken(token)
-    Auth.setUser(newUser)
-    client.resetStore().then()
-    setUser(newUser)
+    const token = await getToken(account, signedMessage, networkId)
+
+    const localUser = fetchLocalUser()
+
+    if (account !== localUser?.walletAddress) {
+      Auth.logout()
+      const DBUser = await fetchDBUser()
+      const newUser = new User(DBUser)
+      newUser.setToken(token)
+      Auth.setUser(newUser)
+      client.resetStore().then()
+      setUser(newUser)
+    } else {
+      localUser.setToken(token)
+      setUser(localUser)
+    }
     return true
+  }
+
+  const signOut = () => {
+    Auth.logout()
+    setUser(undefined)
   }
 
   const signModalContent = () => {
     const handleClick = () => {
       showSignModal && setShowSignModal(false)
-      setToken().then()
+      signIn().then()
     }
     return (
       <Flex
@@ -229,23 +254,26 @@ const Web3Provider = props => {
 
   const showSign = () => setShowSignModal(true)
 
+  // useEffect(() => {
+  //   initOnBoard()
+  // }, [])
+
   useEffect(() => {
-    initOnBoard()
+    const localUser = fetchLocalUser()
+    setUser(localUser)
   }, [])
 
   useEffect(() => {
     if (account) {
       const _user = Auth.getUser()
-      const newUser = new User()
-      newUser.addWalletAddress(account)
       if (account === _user?.walletAddress) {
-        newUser.parseDbUser(_user)
-        newUser.setToken(_user.token)
+        const newUser = new User(_user)
         setUser(newUser)
       } else {
-        fetchUser().then(res => {
+        Auth.logout()
+        fetchDBUser().then(res => {
           if (res) {
-            newUser.parseDbUser(res)
+            const newUser = new User(res)
             Auth.setUser(newUser)
             setUser(newUser)
           } else {
@@ -266,6 +294,9 @@ const Web3Provider = props => {
   }, [networkId])
 
   const isEnabled = !!web3 && !!account && !!networkId && !!user
+  const isSignedIn = isEnabled && user.token
+
+  console.log(user)
 
   return (
     <Provider
@@ -273,23 +304,23 @@ const Web3Provider = props => {
         state: {
           account,
           balance,
-          validProvider,
           isEnabled,
           web3,
           networkId,
           networkName,
           provider,
-          user
+          user,
+          isSignedIn
         },
         actions: {
           switchWallet,
           switchToXdai,
-          enableProvider,
-          initOnBoard,
+          connectWallet,
           updateUser,
           showSign,
           signModalContent,
-          setToken
+          signIn,
+          signOut
         }
       }}
     >

@@ -233,10 +233,6 @@ const ProjectCard = props => {
           </Heading>
           {altStyle && (
             <AltCardContent>
-              <Givers>
-                {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
-              <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
-              </Givers>
               <Link
                 // href={
                 //   project?.fromTrace
@@ -386,22 +382,9 @@ const CardFooter = styled.span`
   margin: 1rem 0;
 `
 
-const Givers = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-self: center;
-  margin: 1.2rem 0 0.5rem 0;
-  div:first-child {
-    border-right: 2px solid #edf0fa;
-  }
-  div {
-    padding: 0 1rem;
-  }
-`
-
 const StyledImage = styled(Image)`
   cursor: pointer;
-  border-radius: 12px 12px 0px 0px;
+  border-radius: 12px 12px 0 0;
   object-fit: cover;
 `
 

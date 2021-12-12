@@ -1,7 +1,7 @@
-export const isBrowser = () => typeof window !== 'undefined'
+import { isSSR } from '../lib/helpers'
 
 export const getUser = () =>
-  isBrowser() && window.localStorage.getItem(getLocalStorageUserLabel())
+  !isSSR() && window.localStorage.getItem(getLocalStorageUserLabel())
     ? JSON.parse(window.localStorage.getItem(getLocalStorageUserLabel()))
     : {}
 
@@ -10,7 +10,7 @@ export function setUser(user) {
 }
 
 export const logout = () => {
-  if (isBrowser()) {
+  if (!isSSR()) {
     window.localStorage.removeItem(getLocalStorageUserLabel())
     window.localStorage.removeItem(getLocalStorageTokenLabel())
     window.localStorage.removeItem('create-form')

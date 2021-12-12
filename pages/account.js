@@ -7,7 +7,7 @@ const AccountIndex = dynamic(() => import('../src/components/account'))
 
 const AccountPage = () => {
   return (
-    <Layout noHeader>
+    <Layout>
       <Seo title='account' />
       <AccountIndex />
     </Layout>

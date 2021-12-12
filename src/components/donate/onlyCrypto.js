@@ -43,8 +43,8 @@ const POLL_DELAY_TOKENS = 5000
 
 const OnlyCrypto = props => {
   const {
-    state: { validProvider, balance, web3, account, isEnabled, networkId, provider, user },
-    actions: { switchWallet, enableProvider, switchToXdai, initOnBoard, setToken }
+    state: { balance, web3, account, isEnabled, networkId, provider, user },
+    actions: { switchWallet, connectWallet, switchToXdai, signIn }
   } = useContext(Web3Context)
 
   const usePopup = useContext(PopupContext)
@@ -299,7 +299,7 @@ const OnlyCrypto = props => {
 
       // Sign message for registered users to get user info, no need to sign for anonymous
       if (isUserRegistered(user) && !user.token) {
-        const isSigned = await setToken()
+        const isSigned = await signIn()
         if (!isSigned) return
       }
 
@@ -839,7 +839,7 @@ const OnlyCrypto = props => {
 
             {!isEnabled && (
               <Button
-                onClick={validProvider ? enableProvider : initOnBoard}
+                onClick={connectWallet}
                 sx={{
                   variant: 'buttons.default',
                   my: 2,
@@ -850,7 +850,7 @@ const OnlyCrypto = props => {
               </Button>
             )}
 
-            {validProvider && (
+            {!!web3 && (
               <Text
                 sx={{
                   mt: 2,

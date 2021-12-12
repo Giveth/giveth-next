@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const FETCH_ALL_PROJECTS = gql`
   query FetchAllProjects(

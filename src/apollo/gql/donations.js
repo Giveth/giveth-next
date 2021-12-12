@@ -1,4 +1,5 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
+
 const SAVE_DONATION = gql`
   mutation (
     $chainId: Float!
