@@ -274,6 +274,8 @@ const Web3Provider = props => {
   const isEnabled = !!web3 && !!account && !!networkId && !!user
   const isSignedIn = isEnabled && user.token
 
+  console.log(user, Auth.getUser())
+
   return (
     <Provider
       value={{
