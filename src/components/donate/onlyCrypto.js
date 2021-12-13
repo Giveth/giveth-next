@@ -663,7 +663,8 @@ const OnlyCrypto = props => {
                             web3
                           }).then(pastedToken => {
                             if (!pastedToken) return
-                            setErc20List([...erc20List, pastedToken])
+                            const found = erc20List?.find(t => t?.symbol === pastedToken?.symbol)
+                            !found && setErc20List([...erc20List, pastedToken])
                             setCustomInput(pastedToken?.symbol)
                             setSelectLoading(false)
                             // setSelectedToken(pastedToken)
