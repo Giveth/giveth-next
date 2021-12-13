@@ -350,7 +350,8 @@ const OnlyCrypto = props => {
       }
 
       const isCorrectNetwork = checkNetwork(networkId)
-      if (isGivingBlockProject && networkId !== 1) return triggerPopup('WrongNetwork', networkId)
+      if (isGivingBlockProject && networkId !== config.PRIMARY_NETWORK.id)
+        return triggerPopup('WrongNetwork', networkId)
       if (!isCorrectNetwork) return triggerPopup('WrongNetwork')
 
       if (!amountTyped || parseFloat(amountTyped) <= 0) {
