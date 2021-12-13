@@ -1103,7 +1103,7 @@ const ropstenTheGivingBlockTokens = {
       decimals: 18
     },
     {
-      chainId: 1,
+      chainId: 3,
       name: 'ETH',
       symbol: 'ETH',
       decimals: 18
@@ -1121,6 +1121,12 @@ const theGivingBlockTokens = {
       address: '0x067ea48882e6d728a37acfd1535ec03f8e33794a',
       symbol: 'GIV',
       name: 'GIV Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      name: 'ETH',
+      symbol: 'ETH',
       decimals: 18
     },
     {
