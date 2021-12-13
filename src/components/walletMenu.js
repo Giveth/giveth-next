@@ -24,7 +24,7 @@ import config from '../../config'
 
 const WalletMenu = () => {
   const {
-    state: { user, web3, networkId, balance },
+    state: { user, web3, networkId, account },
     actions: { switchWallet, signOut }
   } = useContext(Web3Context)
 
@@ -49,15 +49,12 @@ const WalletMenu = () => {
       <WalletOpened isOpen={isOpen}>
         <Title>WALLET</Title>
         <Subtitle>
-          <LeftSection>
-            {Math.round(balance * 100) / 100 + ' '}
-            <span>{networkInfo(networkId).networkToken}</span>
-          </LeftSection>
+          <Body_P bold>{shortenAddress(account)}</Body_P>
           <StyledButton onClick={switchWallet}>Change wallet</StyledButton>
         </Subtitle>
         <Title>NETWORK</Title>
         <Subtitle>
-          <LeftSection>{networkName}</LeftSection>
+          <Body_P bold>{networkName}</Body_P>
           {web3?.MetaMask && (
             <StyledButton onClick={() => switchNetwork(networkId)}>Switch network</StyledButton>
           )}
@@ -155,15 +152,6 @@ const WalletOpened = styled.div`
 const StyledButton = styled(Subline)`
   color: ${Pinky_500};
   cursor: pointer;
-`
-
-const LeftSection = styled(Body_P)`
-  font-weight: 500;
-
-  > span {
-    font-size: 14px;
-    font-weight: 400;
-  }
 `
 
 const Subtitle = styled(Overline_Small)`

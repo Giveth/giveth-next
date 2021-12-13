@@ -40,7 +40,8 @@ module.exports = withBundleAnalyzer({
       'feathers.giveth.io',
       'feathers.develop.giveth.io',
       'ipfs.giveth.io',
-      'static.tgbwidget.com'
+      'static.tgbwidget.com',
+      'tgb-production-static.s3.us-east-1.amazonaws.com'
     ]
   }
   // cleanDistDir: false,
