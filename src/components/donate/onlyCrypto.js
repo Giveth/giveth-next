@@ -104,7 +104,7 @@ const OnlyCrypto = props => {
         return token
       })
       const givToken = tokens[givIndex]
-      if (!!givToken) {
+      if (givToken) {
         tokens.splice(givIndex, 1)
       }
       tokens?.sort((a, b) => {
