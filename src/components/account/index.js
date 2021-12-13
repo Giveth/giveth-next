@@ -6,7 +6,6 @@ import { useQuery } from '@apollo/client'
 import LoadingModal from '../../components/loadingModal'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
 import { FETCH_MY_PROJECTS } from '../../apollo/gql/projects'
-import AccountTop from '../../components/account/AccountTop'
 import AccountNav from '../../components/account/AccountNav'
 import AccountBody from '../../components/account/AccountBody'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
@@ -42,7 +41,6 @@ const AccountPage = () => {
   if (dataLoading || projectsLoading) {
     return (
       <>
-        <AccountTop />
         <Flex sx={{ height: '80vh' }} />
         <LoadingModal isOpen />
       </>
@@ -51,7 +49,6 @@ const AccountPage = () => {
 
   return (
     <>
-      <AccountTop query={query} />
       <Flex
         sx={{
           ml: '5%',
