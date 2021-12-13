@@ -3,7 +3,7 @@ import fetch from 'isomorphic-fetch'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { Button, Flex, Text } from 'theme-ui'
+import { Button, Flex, Text, Label, Checkbox } from 'theme-ui'
 // import QRCode from 'qrcode.react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { ethers } from 'ethers'
@@ -29,7 +29,8 @@ import { PopupContext } from '../../contextProvider/popupProvider'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
 import { isUserRegistered, sendTransaction } from '../../lib/helpers'
 import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
-import { switchToXdai } from '../../lib/util'
+import { switchToXdai, switchNetwork } from '../../lib/util'
+import config from '../../../config'
 
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
@@ -46,10 +47,9 @@ const POLL_DELAY_TOKENS = 5000
 
 const OnlyCrypto = props => {
   const {
-    state: { balance, web3, account, isEnabled, networkId, provider, user },
+    state: { balance, web3, account, isEnabled, networkId, provider, user, isSignedIn },
     actions: { switchWallet, connectWallet, signIn }
   } = useContext(Web3Context)
-
   const usePopup = useContext(PopupContext)
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
@@ -75,7 +75,7 @@ const OnlyCrypto = props => {
   const [erc20OriginalList, setErc20OriginalList] = useState([])
   const [modalIsOpen, setIsOpen] = useState(false)
   const [icon, setIcon] = useState(null)
-  // const [anonymous, setAnonymous] = useState(false)
+  const [anonymous, setAnonymous] = useState(false)
   const switchTraceable = false
   const donateToGiveth = false
 
@@ -92,17 +92,18 @@ const OnlyCrypto = props => {
     if (networkId) {
       let netId = networkId
       if (isGivingBlockProject) netId = 'thegivingblock'
+      if (isGivingBlockProject && networkId === 3) netId = 'ropsten_thegivingblock'
       let givIndex = null
       const tokens = getERC20List(netId).tokens.map((token, index) => {
         token.value = { symbol: token.symbol }
         token.label = token.symbol
-        if (token.symbol === 'GIV') {
+        if (token.symbol === 'GIV' || token.symbol === 'TestGIV' || token.name === 'Giveth') {
           givIndex = index
         }
         return token
       })
       const givToken = tokens[givIndex]
-      if (givIndex) {
+      if (!!givToken) {
         tokens.splice(givIndex, 1)
       }
       tokens?.sort((a, b) => {
@@ -111,7 +112,6 @@ const OnlyCrypto = props => {
         return tokenA < tokenB ? -1 : tokenA > tokenB ? 1 : 0
       })
       if (givToken) {
-        console.log('doin it')
         tokens.splice(0, 0, givToken)
       }
       setErc20List(tokens)
@@ -349,6 +349,7 @@ const OnlyCrypto = props => {
       }
 
       const isCorrectNetwork = checkNetwork(networkId)
+      if (isGivingBlockProject && networkId !== 1) return triggerPopup('WrongNetwork', networkId)
       if (!isCorrectNetwork) return triggerPopup('WrongNetwork')
 
       if (!amountTyped || parseFloat(amountTyped) <= 0) {
@@ -372,7 +373,7 @@ const OnlyCrypto = props => {
         : project.walletAddress
 
       const web3Provider = new ethers.providers.Web3Provider(provider)
-
+      console.log({ anonymous })
       await transaction.send(
         web3,
         toAddress,
@@ -391,7 +392,8 @@ const OnlyCrypto = props => {
               Number(subtotal),
               tokenSymbol,
               Number(project.id),
-              tokenAddress
+              tokenAddress,
+              anonymous
             )
             console.log('DONATION RESPONSE: ', {
               donationId,
@@ -492,7 +494,6 @@ const OnlyCrypto = props => {
   //   (project?.traceCampaignId) &&
   //   traceableNetwork &&
   //   traceTokenList?.tokens?.find(i => i?.symbol === selectedToken.symbol)
-
   return (
     <>
       <Content ref={ref}>
@@ -706,7 +707,7 @@ const OnlyCrypto = props => {
                   ml: 3
                 }}
               >
-                <Image
+                <img
                   src={icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
                   alt={tokenSymbol || ''}
                   onError={ev => {
@@ -740,20 +741,6 @@ const OnlyCrypto = props => {
               </Text>
             </>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
-          </CheckboxLabel> */}
-            {/* <CheckboxLabel
-            sx={{ mb: '12px', alignItems: 'center', color: 'background' }}
-          >
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox
-                defaultChecked={anonymous}
-                onClick={() => setAnonymous(!anonymous)}
-              />
-              <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
-                Donate anonymously
-              </Text>
-            </div>
-            <Tooltip content='When you donate anonymously, your name will never appear in public as a donor. But, your name will be recorded so that we can send a tax donation receipt.' />
           </CheckboxLabel> */}
             {/* <Label sx={{ mb: '10px', alignItems: 'center' }}>
             <Checkbox defaultChecked={false} />
@@ -826,6 +813,33 @@ const OnlyCrypto = props => {
               // )}
             }
 
+            {isGivingBlockProject && networkId !== config.PRIMARY_NETWORK.id && (
+              <SaveGasMessage sx={{ mt: project?.traceCampaignId ? 3 : 0 }}>
+                <Text
+                  sx={{
+                    variant: 'text.medium',
+                    textAlign: 'left',
+                    color: 'background',
+                    marginLeft: '12px'
+                  }}
+                >
+                  Projects from The Giving Block only accept donations on mainnet.
+                </Text>
+                <Text
+                  onClick={() => switchNetwork()}
+                  sx={{
+                    cursor: 'pointer',
+                    variant: 'text.medium',
+                    textAlign: 'left',
+                    color: 'yellow',
+                    marginLeft: '12px'
+                  }}
+                >
+                  Switch Network
+                </Text>
+              </SaveGasMessage>
+            )}
+
             {!switchTraceable && !isXdai && !isGivingBlockProject && (
               <SaveGasMessage sx={{ mt: project?.traceCampaignId ? 3 : 0 }}>
                 <Image
@@ -859,6 +873,19 @@ const OnlyCrypto = props => {
               </SaveGasMessage>
             )}
           </>
+          {!!isSignedIn && (
+            <CheckboxLabel sx={{ mt: 3, mb: '12px', alignItems: 'center', color: 'background' }}>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <Checkbox defaultChecked={anonymous} onClick={() => setAnonymous(!anonymous)} />
+                <Text
+                  sx={{ variant: 'text.medium', textAlign: 'left', color: theme.colors.background }}
+                >
+                  Donate anonymously
+                </Text>
+              </div>
+              <Tooltip content='When you donate anonymously, your name will never appear in public as a donor. But, your name will be recorded so that we can send a tax donation receipt.' />
+            </CheckboxLabel>
+          )}
           <Flex sx={{ flexDirection: 'column', width: '100%' }}>
             <Flex
               sx={{
@@ -1022,19 +1049,20 @@ const SaveGasMessage = styled(Flex)`
   background: #3e50a7;
   border-radius: 4px;
   height: 40px;
+  max-width: 460px;
   align-items: center;
   padding: 0.5rem 1rem;
   word-wrap: break-word;
   margin-bottom: 10px;
 `
 
-// const CheckboxLabel = styled(Label)`
-//   @media (max-width: 800px) {
-//     display: flex;
-//     justify-content: space-between;
-//     width: 100%;
-//   }
-//   cursor: pointer;
-// `
+const CheckboxLabel = styled(Label)`
+  @media (max-width: 800px) {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  cursor: pointer;
+`
 
 export default OnlyCrypto

@@ -12,6 +12,13 @@ const mainnetTokens = {
   tokens: [
     {
       chainId: 1,
+      name: 'Giveth Token',
+      symbol: 'GIV',
+      address: '0xb94c53b0e67fabac3d97173482663ef597d4174a',
+      decimals: 18
+    },
+    {
+      chainId: 1,
       name: 'ETH',
       symbol: 'ETH',
       decimals: 18
@@ -857,7 +864,7 @@ const ropstenTokens = {
       chainId: 3,
       address: '0x067eA48882E6D728A37acfd1535ec03f8E33794a',
       symbol: 'YAY',
-      name: 'Giveth Ropsten Test',
+      name: 'Giveth',
       decimals: 18
     },
     {
@@ -888,6 +895,13 @@ const xDaiTokens = {
   timestamp: null,
   keywords: ['custom', 'erc20'],
   tokens: [
+    {
+      chainId: 100,
+      name: 'TestGIV',
+      symbol: 'TestGIV',
+      address: '0x5d32A9BaF31A793dBA7275F77856A47A0F5d09b3',
+      decimals: 18
+    },
     {
       chainId: 100,
       name: 'XDAI',
@@ -1072,6 +1086,27 @@ const traceTokens = {
       rateEqSymbol: 'USD',
       coingeckoId: 'usd-coin',
       decimals: 3
+    }
+  ]
+}
+
+const ropstenTheGivingBlockTokens = {
+  name: 'THE GIVING BLOCK ROPSTEN WHITELIST',
+  timestamp: null,
+  keywords: ['giving-block', 'erc20', 'ropsten'],
+  tokens: [
+    {
+      chainId: 3,
+      address: '0x067eA48882E6D728A37acfd1535ec03f8E33794a',
+      symbol: 'YAY',
+      name: 'Giveth',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
     }
   ]
 }
@@ -1495,6 +1530,9 @@ const getTokens = network => {
       break
     case 'thegivingblock':
       tokens = theGivingBlockTokens
+      break
+    case 'ropsten_thegivingblock':
+      tokens = ropstenTheGivingBlockTokens
       break
     default:
       tokens = mainnetTokens

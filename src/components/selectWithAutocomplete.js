@@ -87,11 +87,27 @@ const SelectWithAutocomplete = props => {
       styles={{
         input: provided => ({
           ...provided,
-          color: theme.colors.bodyDark
+          color: theme.colors.bodyDark,
+          /* expand the Input Component div */
+          flex: '1 1 auto',
+          /* expand the Input Component child div */
+          '> div': {
+            width: '100%'
+          },
+          /* expand the Input Component input */
+          input: {
+            width: '100% !important',
+            textAlign: 'left'
+          }
         }),
         placeholder: provided => ({
           ...provided,
-          color: theme.colors.anotherGrey
+          color: theme.colors.anotherGrey,
+          pointerEvents: 'none',
+          userSelect: 'none',
+          MozUserSelect: 'none',
+          WebkitUserSelect: 'none',
+          msUserSelect: 'none'
         }),
         valueContainer: provided => ({
           ...provided,

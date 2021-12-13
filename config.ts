@@ -25,7 +25,7 @@ const config = {
   }
 }
 
-if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'develop') {
+if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev') {
   config.LINKS.FRONTEND = 'http://localhost:3000/'
   config.PRIMARY_NETWORK = {
     name: 'Ropsten',
