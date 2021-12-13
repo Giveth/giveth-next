@@ -21,8 +21,6 @@ import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
 import { isSSR } from '../../../lib/helpers'
 
-// import RichTextViewer from '../../richTextViewer'
-
 const RichTextViewer = dynamic(() => import('../../richTextViewer'), {
   ssr: false
 })
@@ -466,7 +464,7 @@ const TimelineCard = props => {
               />
             </>
           ) : (
-            <RichTextViewer content={currentContent} />
+            <RichTextViewer content={currentContent || ''} />
           )}
         </CardContent>
         <CardFooter>

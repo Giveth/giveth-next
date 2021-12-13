@@ -304,10 +304,12 @@ const ProjectCard = props => {
                 project?.description
               ) : (
                 <RichTextViewer
-                  content={project?.description
-                    ?.replace(/<img .*?>/g, '')
-                    .replace(/<iframe .*?>/g, '')
-                    .replace(/<[^>]*>/g, '')}
+                  content={
+                    project?.description
+                      ?.replace(/<img .*?>/g, '')
+                      .replace(/<iframe .*?>/g, '')
+                      .replace(/<[^>]*>/g, '') || ''
+                  }
                 />
               )}
               {
