@@ -12,6 +12,7 @@ import {
 import { PopupContext } from '../contextProvider/popupProvider'
 import CopyToClipboard from '../components/copyToClipboard'
 import Modal from './modal'
+import { switchNetwork } from '../lib/util'
 
 const isDev = process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
 
@@ -60,14 +61,11 @@ function ChangeNetworkPopup({ close }) {
           backgroundColor: 'secondary'
         }}
         onClick={() => {
-          try {
-            close()
-          } catch (error) {
-            console.log({ error })
-          }
+          switchNetwork()
+          close()
         }}
       >
-        Ok, try again
+        CHANGE NETWORK
       </Button>
       <Image
         src={'/images/worried_woman.png'}
