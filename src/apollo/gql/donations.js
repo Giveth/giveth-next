@@ -13,7 +13,6 @@ const SAVE_DONATION = gql`
     $transakId: String
     $transakStatus: String
     $tokenAddress: String
-    $anonymous: Boolean
   ) {
     saveDonation(
       chainId: $chainId
@@ -27,7 +26,6 @@ const SAVE_DONATION = gql`
       transakId: $transakId
       transakStatus: $transakStatus
       tokenAddress: $tokenAddress
-      anonymous: $anonymous
     )
   }
 `

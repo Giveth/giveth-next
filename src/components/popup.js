@@ -16,7 +16,7 @@ import { switchNetwork } from '../lib/util'
 
 const isDev = process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
 
-function ChangeNetworkPopup({ close, onlyMainnet }) {
+function ChangeNetworkPopup({ close }) {
   return (
     <Flex
       sx={{
@@ -44,13 +44,13 @@ function ChangeNetworkPopup({ close, onlyMainnet }) {
         style={{ alignSelf: 'center' }}
         alt='decorator-exclamation img'
       />
-      <Flex sx={{ flexDirection: 'column', alignItems: 'center', mx: 6 }}>
+      <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
         <Text color='secondary' variant='headings.h4' sx={{ mx: 4, pt: 4 }}>
           Please change the Network
         </Text>
         <Text color='secondary' variant='text.default' sx={{ mx: 4, width: '50%' }}>
-          Please select the {isDev ? 'Ropsten' : 'Ethereum Mainnet'} {onlyMainnet ? '' : ' or xDAI'}{' '}
-          network in your wallet and try again
+          Please select the {isDev ? 'Ropsten' : 'Ethereum Mainnet'} or xDAI network in your wallet
+          and try again
         </Text>
       </Flex>
       <Button
@@ -261,7 +261,7 @@ function Popup() {
       case 'InsufficientFunds':
         return <InsufficientFundsPopup close={clearPopup} />
       case 'WrongNetwork':
-        return <ChangeNetworkPopup close={clearPopup} onlyMainnet={value?.extra} />
+        return <ChangeNetworkPopup close={clearPopup} />
       case 'share':
         return <SharePopup title={value?.extra?.title} description={value?.extra?.description} />
       default:

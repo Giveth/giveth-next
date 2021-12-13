@@ -4,7 +4,6 @@ import Modal from 'react-modal'
 import { TwitterShareButton } from 'react-share'
 
 const GeminiModal = ({ showModal, setShowModal }) => {
-  const url = typeof window !== 'undefined' ? window?.location?.href : null
   return (
     <Modal
       isOpen={showModal}
@@ -84,7 +83,7 @@ const GeminiModal = ({ showModal, setShowModal }) => {
             title={
               'Hey @gemini - I want to donate $GIV to this @thegivingblock project on @givethio! Help me support them by listing $GIV on gemini.com @tyler @cameron'
             }
-            url={url}
+            url={'url'}
             hashtags={['gemini', 'giveth', 'giv', 'donation']}
           >
             {' '}

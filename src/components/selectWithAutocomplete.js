@@ -18,16 +18,7 @@ const StyledOption = styled.div`
 `
 
 const SelectWithAutocomplete = props => {
-  const {
-    content,
-    width,
-    placeholder,
-    onSelect,
-    onInputChange,
-    menuIsOpen,
-    isTokenList,
-    isLoading
-  } = props
+  const { content, width, placeholder, onSelect, onInputChange, menuIsOpen, isTokenList } = props
   const options = content || []
 
   const CustomOption = ({ children, value, innerProps, isDisabled }) => {
@@ -93,31 +84,14 @@ const SelectWithAutocomplete = props => {
       onChange={onSelect}
       menuIsOpen={menuIsOpen}
       onInputChange={onInputChange}
-      isLoading={isLoading}
       styles={{
         input: provided => ({
           ...provided,
-          color: theme.colors.bodyDark,
-          /* expand the Input Component div */
-          flex: '1 1 auto',
-          /* expand the Input Component child div */
-          '> div': {
-            width: '100%'
-          },
-          /* expand the Input Component input */
-          input: {
-            width: '100% !important',
-            textAlign: 'left'
-          }
+          color: theme.colors.bodyDark
         }),
         placeholder: provided => ({
           ...provided,
-          color: theme.colors.anotherGrey,
-          pointerEvents: 'none',
-          userSelect: 'none',
-          MozUserSelect: 'none',
-          WebkitUserSelect: 'none',
-          msUserSelect: 'none'
+          color: theme.colors.anotherGrey
         }),
         valueContainer: provided => ({
           ...provided,

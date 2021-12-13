@@ -193,7 +193,7 @@ const DonationsTable = ({ donations = [] }) => {
                         ml: 2
                       }}
                     >
-                      {i.user === null || i?.anonymous
+                      {i.user === null
                         ? 'Anonymous'
                         : i.user?.name
                         ? i.user.name

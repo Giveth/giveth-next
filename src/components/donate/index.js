@@ -102,7 +102,7 @@ const DonateIndex = props => {
       <>
         <Text sx={{ variant: 'headings.h5', color: 'white' }}>Donate With</Text>
         <Options>
-          <OptionType title={CRYPTO} subtitle='Zero Added Fees' style={RIGHT_BOX_STYLE} />
+          <OptionType title={CRYPTO} subtitle='Zero Fees' style={RIGHT_BOX_STYLE} />
           <OptionType title={CREDIT} subtitle='Bank Fees' style={LEFT_BOX_STYLE} />
         </Options>
         {ShowPaymentOption()}

@@ -10,8 +10,7 @@ export async function saveDonation(
   amount: number,
   token: string,
   projectId: number,
-  tokenAddress: string,
-  isAnonymous: boolean
+  tokenAddress: string
 ) {
   const saveDonationErrors = []
   let donationId: any = 0
@@ -29,8 +28,7 @@ export async function saveDonation(
         projectId,
         transakId: null,
         transakStatus: null,
-        tokenAddress,
-        anonymous: isAnonymous
+        tokenAddress
       }
     })
     const { saveDonation: saveDonationId } = data
