@@ -436,7 +436,7 @@ const ProjectDonatorView = ({
                   }}
                 >
                   <RichTextViewer
-                    content={currentProjectView?.project?.description || project?.description}
+                    content={currentProjectView?.project?.description || project?.description || ''}
                   />
                   {/* {project?.description} */}
                 </Text>
