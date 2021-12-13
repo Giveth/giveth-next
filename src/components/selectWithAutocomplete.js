@@ -18,7 +18,16 @@ const StyledOption = styled.div`
 `
 
 const SelectWithAutocomplete = props => {
-  const { content, width, placeholder, onSelect, onInputChange, menuIsOpen, isTokenList } = props
+  const {
+    content,
+    width,
+    placeholder,
+    onSelect,
+    onInputChange,
+    menuIsOpen,
+    isTokenList,
+    isLoading
+  } = props
   const options = content || []
 
   const CustomOption = ({ children, value, innerProps, isDisabled }) => {
@@ -84,6 +93,7 @@ const SelectWithAutocomplete = props => {
       onChange={onSelect}
       menuIsOpen={menuIsOpen}
       onInputChange={onInputChange}
+      isLoading={isLoading}
       styles={{
         input: provided => ({
           ...provided,

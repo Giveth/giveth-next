@@ -76,6 +76,7 @@ const OnlyCrypto = props => {
   const [modalIsOpen, setIsOpen] = useState(false)
   const [icon, setIcon] = useState(null)
   const [anonymous, setAnonymous] = useState(false)
+  const [selectLoading, setSelectLoading] = useState(false)
   const switchTraceable = false
   const donateToGiveth = false
 
@@ -643,6 +644,7 @@ const OnlyCrypto = props => {
                     isTokenList
                     menuIsOpen
                     inputValue={customInput}
+                    isLoading={selectLoading}
                     onSelect={i => {
                       // setSelectedToken(i || selectedToken)
                       setSelectedToken(i)
@@ -653,17 +655,23 @@ const OnlyCrypto = props => {
                     onInputChange={i => {
                       // It's a contract
                       if (i?.length === 42) {
-                        getERC20Info({
-                          tokenAbi,
-                          contractAddress: i,
-                          web3
-                        }).then(pastedToken => {
-                          if (!pastedToken) return
-                          setErc20List([...erc20List, pastedToken])
-                          setCustomInput(pastedToken?.symbol)
-                          // setSelectedToken(pastedToken)
-                          // setIsComponentVisible(false)
-                        })
+                        try {
+                          setSelectLoading(true)
+                          getERC20Info({
+                            tokenAbi,
+                            contractAddress: i,
+                            web3
+                          }).then(pastedToken => {
+                            if (!pastedToken) return
+                            setErc20List([...erc20List, pastedToken])
+                            setCustomInput(pastedToken?.symbol)
+                            setSelectLoading(false)
+                            // setSelectedToken(pastedToken)
+                            // setIsComponentVisible(false)
+                          })
+                        } catch (error) {
+                          setSelectLoading(false)
+                        }
                       } else {
                         setCustomInput(i)
                         setErc20List([...erc20OriginalList])
