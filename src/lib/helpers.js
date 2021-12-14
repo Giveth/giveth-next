@@ -3,6 +3,7 @@ import tokenAbi from 'human-standard-token-abi'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
 import Toast from '../components/toast'
+import { walletsArray } from '../utils/constants'
 // import { GivethBridge } from '@giveth/bridge-contract'
 
 export const isUserRegistered = user => {
@@ -15,6 +16,13 @@ export const compareAddresses = (add1, add2) => {
 
 export const isSSR = () => {
   return typeof window === 'undefined'
+}
+
+export const mediaQueries = {
+  sm: '@media (min-width: 500px)',
+  md: '@media (min-width: 768px)',
+  lg: '@media (min-width: 992px)',
+  xl: '@media (min-width: 1200px)'
 }
 
 export const isNewProject = creationDate => {
@@ -33,6 +41,17 @@ export const shortenAddress = (address, charsLength = 4) => {
     return address
   }
   return `${address.slice(0, charsLength + prefixLength)}…${address.slice(-charsLength)}`
+}
+
+export const checkWalletName = web3 => {
+  if (!web3) return null
+  let walletName = ''
+  walletsArray.some(i => {
+    if (web3[i.name] === true) {
+      walletName = i.name
+    }
+  })
+  return walletName
 }
 
 export async function sendTransaction(
