@@ -25,7 +25,7 @@ import config from '../../config'
 const WalletMenu = () => {
   const {
     state: { user, web3, networkId, account },
-    actions: { switchWallet, signOut }
+    actions: { showWalletModal, signOut }
   } = useContext(Web3Context)
 
   const [isOpen, setIsOpen] = useState(false)
@@ -50,7 +50,7 @@ const WalletMenu = () => {
         <Title>WALLET</Title>
         <Subtitle>
           <Body_P bold>{shortenAddress(account)}</Body_P>
-          <StyledButton onClick={switchWallet}>Change wallet</StyledButton>
+          <StyledButton onClick={showWalletModal}>Change wallet</StyledButton>
         </Subtitle>
         <Title>NETWORK</Title>
         <Subtitle>

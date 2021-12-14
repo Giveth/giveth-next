@@ -48,7 +48,7 @@ const POLL_DELAY_TOKENS = 5000
 const OnlyCrypto = props => {
   const {
     state: { balance, web3, account, isEnabled, networkId, provider, user, isSignedIn },
-    actions: { switchWallet, connectWallet, signIn }
+    actions: { showWalletModal, connectWallet, signIn }
   } = useContext(Web3Context)
   const usePopup = useContext(PopupContext)
 
@@ -972,7 +972,7 @@ const OnlyCrypto = props => {
                     color: 'accent'
                   }
                 }}
-                onClick={switchWallet}
+                onClick={showWalletModal}
               >
                 click here to use another wallet
               </Text>

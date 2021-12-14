@@ -9,6 +9,10 @@ body {
     Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+h6 {
+  margin: 0;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -16,6 +20,10 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .pac-item {
