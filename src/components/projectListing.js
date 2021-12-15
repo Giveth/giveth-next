@@ -299,7 +299,12 @@ const ProjectListing = props => {
               }}
             >
               <RichTextViewer
-                content={props?.description?.replace(/<img .*?>/g, '').replace(/<iframe .*?>/g, '')}
+                content={
+                  props?.description
+                    ?.replace(/<img .*?>/g, '')
+                    .replace(/<iframe .*?>/g, '')
+                    .replace(/<[^>]*>/g, '') || ''
+                }
               />
               {
                 /* Description String */

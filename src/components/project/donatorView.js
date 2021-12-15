@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import Link from 'next/link'
 import { useApolloClient } from '@apollo/client'
+import Tooltip from '../tooltip'
 import styled from '@emotion/styled'
 
 import { ProjectContext } from '../../contextProvider/projectProvider'
@@ -535,6 +536,17 @@ const ProjectDonatorView = ({
               <Text sx={{ variant: 'text.default', ml: 2 }}>
                 {project?.traceCampaignId ? 'Traceable' : 'Verified'}
               </Text>
+              <Tooltip
+                placement='bottom'
+                isArrow
+                content='A traceable project has been verified as well as upgraded to a Campaign on Giveth TRACE for transparent and accountable fund management.'
+                contentStyle={{
+                  backgroundColor: '#AF9BD3'
+                }}
+                textStyle={{
+                  color: 'white'
+                }}
+              />
             </Flex>
           )}
           {/* {project?.listed === false && (
@@ -626,7 +638,7 @@ const ProjectDonatorView = ({
               >
                 <Flex sx={{ alignItems: 'center', mr: 3 }}>
                   <BsHeartFill
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', marginRight: '8px' }}
                     size='18px'
                     color={hearted ? theme.colors.red : theme.colors.muted}
                     onClick={reactToProject}
