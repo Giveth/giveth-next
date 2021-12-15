@@ -101,6 +101,7 @@ const GivMenu = styled(FlexCenter)`
   background: white;
   height: 48px;
   color: ${Primary_Deep_800};
+  z-index: -2;
 `
 
 const RoutesItem = styled.a`
