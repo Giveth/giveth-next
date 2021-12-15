@@ -14,7 +14,7 @@ import { checkWalletName } from '../lib/helpers'
 const WalletModal = ({ showModal, closeModal }) => {
   const {
     state: { web3 },
-    actions: { switchWallet }
+    actions: { switchWallet, connectWallet }
   } = useContext(Web3Context)
 
   const [showInfo, setShowInfo] = useState(false)
@@ -86,6 +86,8 @@ const WalletModal = ({ showModal, closeModal }) => {
   const handleSelect = selected => {
     if (selectedWallet !== selected) {
       switchWallet(selected)
+    } else {
+      connectWallet()
     }
     closeModal()
   }
