@@ -8,10 +8,11 @@ import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import User from '../entities/user'
 import * as Auth from '../services/auth'
 import { getToken } from '../services/token'
-import { signMessage } from '../lib/helpers'
+import { compareAddresses, signMessage } from '../lib/helpers'
 import Modal from '../components/modal'
 import theme from '../utils/theme-ui'
 import { onboardWallets } from '../utils/constants'
+import WalletModal from '../components/WalletModal'
 
 const Context = createContext({})
 const { Provider } = Context
@@ -30,6 +31,7 @@ const Web3Provider = props => {
   const [networkName, setNetworkName] = useState()
   const [user, setUser] = useState()
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [showWalletModal, setShowWalletModal] = useState(false)
 
   const isEnabled = !!web3 && !!account && !!networkId && !!user
   const isSignedIn = isEnabled && user.token
@@ -60,16 +62,20 @@ const Web3Provider = props => {
 
     const previouslySelectedWallet = window?.localStorage.getItem('selectedWallet')
     if (previouslySelectedWallet) {
-      _onboard.walletSelect(previouslySelectedWallet).then()
+      _onboard.walletSelect(previouslySelectedWallet).then(selected => {
+        if (selected) {
+          _onboard.walletCheck().then()
+        }
+      })
     } else if (!initialRun) {
-      switchWallet()
+      setShowWalletModal(true)
     }
 
     setOnboard(_onboard)
   }
 
-  const switchWallet = () => {
-    onboard.walletSelect().then(selected => {
+  const switchWallet = walletName => {
+    onboard.walletSelect(walletName).then(selected => {
       if (selected) {
         onboard.walletCheck().then()
       }
@@ -199,7 +205,7 @@ const Web3Provider = props => {
   useEffect(() => {
     if (account) {
       const _user = Auth.getUser()
-      if (account === _user?.walletAddress) {
+      if (compareAddresses(account, _user?.walletAddress)) {
         const newUser = new User(_user)
         setUser(newUser)
       } else {
@@ -249,7 +255,8 @@ const Web3Provider = props => {
           loginModal,
           loginModalContent,
           signIn,
-          signOut
+          signOut,
+          showWalletModal: () => setShowWalletModal(true)
         }
       }}
     >
@@ -257,6 +264,9 @@ const Web3Provider = props => {
         <Modal isOpen={showLoginModal} onRequestClose={() => setShowLoginModal(false)}>
           {loginModalContent()}
         </Modal>
+      )}
+      {showWalletModal && (
+        <WalletModal showModal={showWalletModal} closeModal={() => setShowWalletModal(false)} />
       )}
       {props.children}
     </Provider>

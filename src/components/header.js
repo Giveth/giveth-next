@@ -16,7 +16,7 @@ import config from '../../config'
 const Header = () => {
   const {
     state: { account, isSignedIn },
-    actions: { signIn, connectWallet }
+    actions: { signIn, showWalletModal }
   } = useContext(Web3Context)
 
   const router = useRouter()
@@ -72,8 +72,8 @@ const Header = () => {
             SIGN IN
           </Button>
         ) : (
-          <Button small onClick={connectWallet}>
-            CONNECT WALLET
+          <Button small onClick={showWalletModal}>
+            SELECT WALLET
           </Button>
         )}
       </RightMenus>
@@ -101,6 +101,7 @@ const GivMenu = styled(FlexCenter)`
   background: white;
   height: 48px;
   color: ${Primary_Deep_800};
+  z-index: -2;
 `
 
 const RoutesItem = styled.a`

@@ -66,20 +66,55 @@ export const onboardWallets = [
     walletName: 'ledger',
     rpcUrl
   },
-  { walletName: 'dapper' },
-  { walletName: 'coinbase' },
-  { walletName: 'status' },
-  { walletName: 'unilogin' },
+  // { walletName: 'dapper' },
+  // { walletName: 'coinbase' },
+  // { walletName: 'status' },
+  // { walletName: 'unilogin' },
   // { walletName: 'authereum', disableNotifications: true },
   // { walletName: 'gnosis' },
   {
     walletName: 'walletConnect',
     infuraKey
   },
-  { walletName: 'opera' },
-  { walletName: 'operaTouch' },
-  { walletName: 'imToken', rpcUrl },
-  { walletName: 'meetone' },
-  { walletName: 'mykey' },
-  { walletName: 'wallet.io', rpcUrl }
+  { walletName: 'opera' }
+  // { walletName: 'operaTouch' },
+  // { walletName: 'imToken', rpcUrl },
+  // { walletName: 'meetone' },
+  // { walletName: 'mykey' },
+  // { walletName: 'wallet.io', rpcUrl }
+]
+
+export const walletsArray = [
+  {
+    name: 'MetaMask',
+    image: '/images/wallets/metamask.svg'
+  },
+  {
+    name: 'Torus',
+    image: '/images/wallets/torus.svg'
+  },
+  {
+    name: 'Portis',
+    image: '/images/wallets/portis.svg'
+  },
+  {
+    name: 'Ledger',
+    image: '/images/wallets/ledger.svg'
+  },
+  {
+    name: 'Trezor',
+    image: '/images/wallets/trezor.svg'
+  },
+  {
+    name: 'WalletConnect',
+    image: '/images/wallets/walletConnect.svg'
+  },
+  {
+    name: 'Lattice',
+    image: '/images/wallets/lattice.svg'
+  },
+  {
+    name: 'Opera',
+    image: '/images/wallets/opera.svg'
+  }
 ]
