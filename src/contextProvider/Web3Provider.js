@@ -62,7 +62,11 @@ const Web3Provider = props => {
 
     const previouslySelectedWallet = window?.localStorage.getItem('selectedWallet')
     if (previouslySelectedWallet) {
-      _onboard.walletSelect(previouslySelectedWallet).then()
+      _onboard.walletSelect(previouslySelectedWallet).then(selected => {
+        if (selected) {
+          _onboard.walletCheck().then()
+        }
+      })
     } else if (!initialRun) {
       setShowWalletModal(true)
     }
