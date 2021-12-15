@@ -624,7 +624,7 @@ const ProjectDonatorView = ({
                 View similar projects
               </Text>
             </Link>
-          </Flex> */}
+          </Flex>  */}
           {!project?.fromTrace && (
             <>
               <Flex
