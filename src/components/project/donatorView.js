@@ -541,7 +541,12 @@ const ProjectDonatorView = ({
               <Tooltip
                 placement='bottom'
                 isArrow
-                content='A traceable project has been verified as well as upgraded to a Campaign on Giveth TRACE for transparent and accountable fund management.'
+                content={
+                  project?.traceCampaignId
+                    ? 'A traceable project has been verified as well as upgraded to a Campaign on Giveth TRACE for transparent and accountable fund management.'
+                    : project?.verified &&
+                      'Verified is a top tier status for projects that are participating in the GIVbacks program. The GIVbacks program is a revolutionary concept that rewards donors to verified projects with GIV tokens.'
+                }
                 contentStyle={{
                   backgroundColor: '#AF9BD3'
                 }}
