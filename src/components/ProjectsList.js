@@ -23,6 +23,7 @@ const allCategoryObj = { name: 'All' }
 const sortByObj = [
   { name: 'Default', value: gqlEnums.QUALITYSCORE },
   { name: 'Amount Raised', value: gqlEnums.DONATIONS },
+  { name: 'Accepts GIV Token', value: gqlEnums.ACCEPTGIV },
   { name: 'Hearts', value: gqlEnums.HEARTS },
   { name: 'Newest', value: gqlEnums.CREATIONDATE },
   {
@@ -64,9 +65,13 @@ const ProjectsList = props => {
 
   const fetchProjects = loadNum => {
     const variables = {
-      orderBy: { field: sortBy.value, direction: gqlEnums.DESC },
+      orderBy:
+        sortBy.value === gqlEnums.ACCEPTGIV
+          ? { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC }
+          : { field: sortBy.value, direction: gqlEnums.DESC },
       limit: itemsPerPage,
-      skip: itemsPerPage * (loadNum || 0)
+      skip: itemsPerPage * (loadNum || 0),
+      filterBy: sortBy.value === gqlEnums.ACCEPTGIV ? { field: sortBy.value, value: true } : null
     }
 
     if (sortBy.direction) variables.orderBy.direction = sortBy.direction
@@ -91,6 +96,7 @@ const ProjectsList = props => {
       })
       .catch(err => {
         setIsLoading(false)
+        console.log({ err })
         Toast({
           content: err.message || JSON.stringify(err),
           type: 'error'

@@ -98,5 +98,8 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "resolutions": {
+    "graphql-upload": "^11.0.0"
   }
 }
