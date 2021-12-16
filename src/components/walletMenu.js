@@ -60,20 +60,12 @@ const WalletMenu = () => {
           )}
         </Subtitle>
         <Menus>
-          {walletMenuArray.map(i =>
-            i.external === true ? (
-              <MenuItem>
-                <a target='_blank' rel='noreferrer noopener' href={i.url}>
-                  {i.title}
-                </a>
-              </MenuItem>
-            ) : (
-              <Link href={i.url} key={i.title} passHref>
-                <MenuItem>{i.title}</MenuItem>
-              </Link>
-            )
-          )}
-          <MenuItem onClick={signOut}>Sign out</MenuItem>
+          {walletMenuArray.map(i => (
+            <Link href={i.url} key={i.title} passHref>
+              <MenuItem>{i.title}</MenuItem>
+            </Link>
+          ))}
+          {user?.token && <MenuItem onClick={signOut}>Sign out</MenuItem>}
         </Menus>
       </WalletOpened>
     </Wrapper>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Flex } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
@@ -13,14 +13,15 @@ import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 const Main = () => {
   const {
     state: { isSignedIn },
-    actions: { loginModalContent }
+    actions: { loginModal, closeLoginModal }
   } = useContext(Web3Context)
 
-  return isSignedIn ? (
-    <AccountPage />
-  ) : (
-    <div style={{ margin: '150px 0', textAlign: 'center' }}>{loginModalContent()}</div>
-  )
+  useEffect(() => {
+    if (!isSignedIn) loginModal()
+    else closeLoginModal()
+  }, [isSignedIn])
+
+  return isSignedIn ? <AccountPage /> : null
 }
 
 const AccountPage = () => {

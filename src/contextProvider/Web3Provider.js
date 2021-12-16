@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
 import Onboard from 'bnc-onboard'
 import Web3 from 'web3'
-import { Button, Flex, Text } from 'theme-ui'
 
 import { client } from '../apollo/client'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
@@ -9,10 +8,9 @@ import User from '../entities/user'
 import * as Auth from '../services/auth'
 import { getToken } from '../services/token'
 import { compareAddresses, signMessage } from '../lib/helpers'
-import Modal from '../components/modal'
-import theme from '../utils/theme-ui'
 import { onboardWallets } from '../utils/constants'
 import WalletModal from '../components/WalletModal'
+import LoginModal from '../components/loginModal'
 
 const Context = createContext({})
 const { Provider } = Context
@@ -68,18 +66,22 @@ const Web3Provider = props => {
         }
       })
     } else if (!initialRun) {
-      setShowWalletModal(true)
+      setShowLoginModal(true)
     }
 
     setOnboard(_onboard)
   }
 
   const switchWallet = walletName => {
-    onboard.walletSelect(walletName).then(selected => {
-      if (selected) {
-        onboard.walletCheck().then()
-      }
-    })
+    if (onboard.walletSelect) {
+      onboard.walletSelect(walletName).then(selected => {
+        if (selected) {
+          onboard.walletCheck().then()
+        }
+      })
+    } else {
+      initOnBoard()
+    }
   }
 
   const connectWallet = () => {
@@ -151,50 +153,13 @@ const Web3Provider = props => {
   }
 
   const signOut = () => {
-    const _user = new User(user)
-    _user.setToken(undefined)
-    Auth.setUser(_user)
+    Auth.logout()
+    window.localStorage.removeItem('selectedWallet')
     client.resetStore().then()
-    setUser(_user)
+    onboard.walletReset()
+    setUser(undefined)
+    setNetworkName(undefined)
   }
-
-  const loginModalContent = () => {
-    const handleClick = () => {
-      showLoginModal && setShowLoginModal(false)
-      isEnabled ? signIn().then() : connectWallet()
-    }
-    return (
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          p: 4,
-          alignItems: 'center'
-        }}
-      >
-        <Text
-          sx={{
-            variant: 'text.large',
-            color: 'secondary',
-            marginBottom: '25px'
-          }}
-        >
-          Please {isEnabled ? 'Sign with your wallet' : 'Connect Wallet'} to authenticate
-        </Text>
-        <Button
-          onClick={handleClick}
-          sx={{
-            cursor: 'pointer',
-            width: '170px',
-            background: theme.colors.primary
-          }}
-        >
-          {isEnabled ? 'Sign' : 'Connect Wallet'}
-        </Button>
-      </Flex>
-    )
-  }
-
-  const loginModal = () => setShowLoginModal(true)
 
   useEffect(() => {
     const localUser = fetchLocalUser()
@@ -252,8 +217,8 @@ const Web3Provider = props => {
           switchWallet,
           connectWallet,
           updateUser,
-          loginModal,
-          loginModalContent,
+          loginModal: () => setShowLoginModal(true),
+          closeLoginModal: () => setShowLoginModal(false),
           signIn,
           signOut,
           showWalletModal: () => setShowWalletModal(true)
@@ -261,9 +226,7 @@ const Web3Provider = props => {
       }}
     >
       {showLoginModal && (
-        <Modal isOpen={showLoginModal} onRequestClose={() => setShowLoginModal(false)}>
-          {loginModalContent()}
-        </Modal>
+        <LoginModal showModal={showLoginModal} closeModal={() => setShowLoginModal(false)} />
       )}
       {showWalletModal && (
         <WalletModal showModal={showWalletModal} closeModal={() => setShowWalletModal(false)} />
