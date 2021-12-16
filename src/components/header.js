@@ -15,8 +15,8 @@ import config from '../../config'
 
 const Header = () => {
   const {
-    state: { account, isSignedIn },
-    actions: { signIn, showWalletModal }
+    state: { isEnabled },
+    actions: { loginModal }
   } = useContext(Web3Context)
 
   const router = useRouter()
@@ -65,15 +65,11 @@ const Header = () => {
           <GivBalance>0</GivBalance>
         </GivMenu>
 
-        {isSignedIn ? (
+        {isEnabled ? (
           <WalletMenu />
-        ) : account ? (
-          <Button small onClick={signIn}>
-            SIGN IN
-          </Button>
         ) : (
-          <Button small onClick={showWalletModal}>
-            SELECT WALLET
+          <Button small onClick={loginModal}>
+            SIGN IN
           </Button>
         )}
       </RightMenus>

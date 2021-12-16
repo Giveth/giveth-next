@@ -93,6 +93,7 @@ const WalletModal = ({ showModal, closeModal }) => {
   }
 
   if (!showModal) return null
+  Modal.setAppElement('body')
   return (
     <Modal isOpen={showModal} onRequestClose={closeModal} style={customStyles}>
       <CloseButton onClick={closeModal}>
@@ -220,7 +221,7 @@ const customStyles = {
   },
   overlay: {
     backgroundColor: 'rgb(9 4 70 / 70%)',
-    zIndex: 1070
+    zIndex: 1080
   }
 }
 

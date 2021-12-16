@@ -88,6 +88,9 @@ const ProjectCard = props => {
   useEffect(() => {
     if (project) setHeartedCount(project.reactions?.length)
     if (user) setHeartedByUser(project?.reactions?.find(r => r.userId === user.id))
+    else {
+      if (heartedByUser) setHeartedByUser(false)
+    }
   }, [project, user])
 
   const image = props?.image || project?.image

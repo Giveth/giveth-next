@@ -104,6 +104,8 @@ const ProjectDonatorView = ({
         if (user) {
           setHearted(projectReactions?.find(o => o.userId === user.id))
           !project?.fromTrace && setIsOwner(project?.admin === user.id)
+        } else {
+          if (hearted) setHearted(false)
         }
 
         setCurrentProjectView({
