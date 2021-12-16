@@ -60,11 +60,19 @@ const WalletMenu = () => {
           )}
         </Subtitle>
         <Menus>
-          {walletMenuArray.map(i => (
-            <Link href={i.url} key={i.title} passHref>
-              <MenuItem>{i.title}</MenuItem>
-            </Link>
-          ))}
+          {walletMenuArray.map(i =>
+            i.external === true ? (
+              <MenuItem>
+                <a target='_blank' rel='noreferrer noopener' href={i.url}>
+                  {i.title}
+                </a>
+              </MenuItem>
+            ) : (
+              <Link href={i.url} key={i.title} passHref>
+                <MenuItem>{i.title}</MenuItem>
+              </Link>
+            )
+          )}
           <MenuItem onClick={signOut}>Sign out</MenuItem>
         </Menus>
       </WalletOpened>
@@ -82,7 +90,7 @@ const walletMenuArray = [
   { title: 'My Projects', url: Routes.MyProjects },
   { title: 'My Donations', url: Routes.MyDonations },
   { title: 'Create a Project', url: Routes.CreateProject },
-  { title: 'Report a bug', url: config.LINKS.REPORT_ISSUE },
+  { title: 'Report a bug', url: config.LINKS.REPORT_ISSUE, external: true },
   { title: 'Support', url: Routes.Support }
 ]
 
