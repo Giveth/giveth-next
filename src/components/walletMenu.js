@@ -65,7 +65,7 @@ const WalletMenu = () => {
               <MenuItem>{i.title}</MenuItem>
             </Link>
           ))}
-          <MenuItem onClick={signOut}>Sign out</MenuItem>
+          {user?.token && <MenuItem onClick={signOut}>Sign out</MenuItem>}
         </Menus>
       </WalletOpened>
     </Wrapper>

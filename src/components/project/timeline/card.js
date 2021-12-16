@@ -30,73 +30,6 @@ const RichTextInput = dynamic(() => import('../../richTextInput'), {
 
 dayjs.extend(localizedFormat)
 
-const CardContainer = styled(Card)`
-  position: relative;
-  background-color: ${theme.colors.background};
-  border: 1px solid ${theme.colors.muted};
-  box-sizing: border-box;
-  border-radius: 12px;
-  margin: 0.5rem 0;
-  width: 100%;
-`
-const SpecialCardContainer = styled(Flex)`
-  width: 100%;
-  min-height: 240px;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-  background-color: ${theme.colors.secondary};
-  border: 1px solid ${theme.colors.muted};
-  box-sizing: border-box;
-  border-radius: 12px;
-  margin: 0.5rem 0;
-`
-
-const CardContent = styled(Flex)`
-  flex: 1;
-  flex-direction: column;
-  word-wrap: break-word;
-  padding: 0.5rem 1.5rem 0 1.5rem;
-`
-
-const CardFooter = styled.span`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin: -0.5rem 0 0.5rem 0;
-  padding: 0 1rem;
-`
-const Top = styled(Flex)`
-  padding: 0.5rem 0 1rem 0;
-  justify-content: space-between;
-`
-
-const Creator = styled(Flex)`
-  text-align: center;
-  align-items: center;
-  margin: 1rem 0;
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`
-const CreatorName = styled(Flex)`
-  align-items: center;
-  flex-direction: row;
-`
-
-const RaisedHandsImg = styled.img`
-  position: absolute;
-  bottom: 0;
-  right: 24px;
-  @media (max-width: 800px) {
-    display: none;
-    align-items: flex-start;
-  }
-`
-
 const TimelineCard = props => {
   const {
     state: { user: currentUser, isSignedIn },
@@ -214,7 +147,7 @@ const TimelineCard = props => {
             userId: parseInt(props?.content?.userId)
           }
         })
-        const userLiked = props?.reactions?.find(i => i?.userId == currentUser?.id)
+        const userLiked = props?.reactions?.find(i => i?.userId === currentUser?.id)
         setUser(userInfo?.data?.user)
         setHearted(!!userLiked)
         setEditInput(props?.content?.content)
@@ -222,8 +155,11 @@ const TimelineCard = props => {
         console.log({ error })
       }
     }
-    setup()
-  }, [])
+    if (currentUser) setup().then()
+    else {
+      if (hearted) setHearted(false)
+    }
+  }, [currentUser])
 
   useEffect(() => {
     setCurrentContent(props?.content?.content)
@@ -540,5 +476,72 @@ const TimelineCard = props => {
     </Box>
   )
 }
+
+const CardContainer = styled(Card)`
+  position: relative;
+  background-color: ${theme.colors.background};
+  border: 1px solid ${theme.colors.muted};
+  box-sizing: border-box;
+  border-radius: 12px;
+  margin: 0.5rem 0;
+  width: 100%;
+`
+const SpecialCardContainer = styled(Flex)`
+  width: 100%;
+  min-height: 240px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  background-color: ${theme.colors.secondary};
+  border: 1px solid ${theme.colors.muted};
+  box-sizing: border-box;
+  border-radius: 12px;
+  margin: 0.5rem 0;
+`
+
+const CardContent = styled(Flex)`
+  flex: 1;
+  flex-direction: column;
+  word-wrap: break-word;
+  padding: 0.5rem 1.5rem 0 1.5rem;
+`
+
+const CardFooter = styled.span`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: -0.5rem 0 0.5rem 0;
+  padding: 0 1rem;
+`
+const Top = styled(Flex)`
+  padding: 0.5rem 0 1rem 0;
+  justify-content: space-between;
+`
+
+const Creator = styled(Flex)`
+  text-align: center;
+  align-items: center;
+  margin: 1rem 0;
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`
+const CreatorName = styled(Flex)`
+  align-items: center;
+  flex-direction: row;
+`
+
+const RaisedHandsImg = styled.img`
+  position: absolute;
+  bottom: 0;
+  right: 24px;
+  @media (max-width: 800px) {
+    display: none;
+    align-items: flex-start;
+  }
+`
 
 export default TimelineCard
