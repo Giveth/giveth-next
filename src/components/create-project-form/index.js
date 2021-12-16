@@ -296,7 +296,9 @@ const CreateProjectForm = props => {
                     <Spinner variant='spinner.medium' />
                   </Flex>
                 ) : (
-                  <Step />
+                  <Flex sx={{ minHeight: '700px' }}>
+                    <Step />
+                  </Flex>
                 )}
                 <ConfirmationModal
                   showModal={showCloseModal}
