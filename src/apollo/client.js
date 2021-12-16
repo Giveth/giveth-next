@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { ApolloClient, InMemoryCache, createHttpLink, gql } from '@apollo/client'
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
+import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from '@apollo/client/link/context'
 import merge from 'deepmerge'
 import isEqual from 'lodash.isequal'
@@ -11,7 +12,7 @@ let apolloClient
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: process.env.NEXT_PUBLIC_APOLLO_SERVER
 })
 
