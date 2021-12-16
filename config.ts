@@ -22,6 +22,10 @@ const config = {
     TWITTER: 'https://twitter.com/Givethio',
     YOUTUBE: 'https://www.youtube.com/channel/UClfutpRoY0WTVnq0oB0E0wQ',
     REDDIT: 'https://reddit.com/r/giveth'
+  },
+  GIV_TOKEN: {
+    MAINNET: '0x067eA48882E6D728A37acfd1535ec03f8E33794a',
+    XDAI: '0x5d32A9BaF31A793dBA7275F77856A47A0F5d09b3'
   }
 }
 

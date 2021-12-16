@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef, useCallback } from 'react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 import Image from 'next/image'
+import tokenAbi from 'human-standard-token-abi'
 import { useRouter } from 'next/router'
-
+import { pollEvery } from '../utils'
 import { Giv_100, Primary_Deep_800 } from './styled-components/Colors'
 import { FlexCenter } from './styled-components/Grid'
 import { Shadow } from './styled-components/Shadow'
@@ -13,13 +14,23 @@ import WalletMenu from './walletMenu'
 import { Context as Web3Context } from '../contextProvider/Web3Provider'
 import config from '../../config'
 
+const POLL_DELAY_TOKENS = 5000
+
 const Header = () => {
   const {
-    state: { isEnabled },
+    state: { account, networkId, web3, isEnabled },
     actions: { loginModal }
   } = useContext(Web3Context)
-
+  const [givBalance, setGivBalance] = useState(0)
+  const stopPolling = useRef()
   const router = useRouter()
+
+  const clearPoll = () => {
+    if (stopPolling.current) {
+      stopPolling.current()
+      stopPolling.current = undefined
+    }
+  }
 
   let activeTab = ''
   switch (router.pathname) {
@@ -33,6 +44,44 @@ const Header = () => {
       activeTab = 'join'
       break
   }
+
+  const pollToken = useCallback(() => {
+    clearPoll()
+
+    stopPolling.current = pollEvery(
+      () => ({
+        request: async () => {
+          try {
+            const env = process.env.NEXT_PUBLIC_ENVIRONMENT
+            const isDev = env === 'dev'
+            // TODO: REMOVE THIS WHEN WE HAVE OUR TOKEN DEPLOYED
+            if (!isDev) return 0
+            const instance = new web3.eth.Contract(
+              tokenAbi,
+              networkId === 100 ? config.GIV_TOKEN.XDAI : config.GIV_TOKEN.MAINNET
+            )
+            console.log({ instance })
+            return (await instance.methods.balanceOf(account).call()) / 10 ** 18
+          } catch (e) {
+            console.log({ e })
+            return 0
+          }
+        },
+        onResult: _balance => {
+          if (_balance !== undefined && (!givBalance || givBalance !== _balance)) {
+            setGivBalance(_balance)
+          }
+        }
+      }),
+      POLL_DELAY_TOKENS
+    )()
+  }, [account, networkId])
+
+  useEffect(() => {
+    if (isEnabled) pollToken()
+
+    return () => clearPoll()
+  }, [isEnabled, account, networkId])
 
   return (
     <Wrapper>
@@ -62,7 +111,7 @@ const Header = () => {
 
         <GivMenu>
           <Image width={24} height={24} src='/images/GIV_menu-01.svg' alt='giv icon' />
-          <GivBalance>0</GivBalance>
+          <GivBalance>{parseFloat(givBalance).toLocaleString('en-US')} </GivBalance>
         </GivMenu>
 
         {isEnabled ? (
