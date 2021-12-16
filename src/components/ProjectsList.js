@@ -24,9 +24,9 @@ const sortByObj = [
   { name: 'Default', value: gqlEnums.QUALITYSCORE },
   { name: 'Amount Raised', value: gqlEnums.DONATIONS },
   { name: 'Hearts', value: gqlEnums.HEARTS },
-  { name: 'Date Created - Descending', value: gqlEnums.CREATIONDATE },
+  { name: 'Newest', value: gqlEnums.CREATIONDATE },
   {
-    name: 'Date Created - Ascending',
+    name: 'Oldest',
     value: gqlEnums.CREATIONDATE,
     direction: gqlEnums.ASC
   },
