@@ -60,16 +60,29 @@ const JoinChatCard = ({ data }) => (
                     position: 'relative'
                   }}
                 >
-                  <Button
-                    mt={2}
-                    mb={'2rem'}
-                    ml={'1rem'}
-                    sx={{
-                      variant: 'buttons.default'
-                    }}
-                  >
-                    Join us on {join.platformTitle}
-                  </Button>
+                  {join.platformTitle === 'Forum' ? (
+                    <Button
+                      mt={2}
+                      mb={'2rem'}
+                      ml={'1rem'}
+                      sx={{
+                        variant: 'buttons.default'
+                      }}
+                    >
+                      Join us on our {join.platformTitle}
+                    </Button>
+                  ) : (
+                    <Button
+                      mt={2}
+                      mb={'2rem'}
+                      ml={'1rem'}
+                      sx={{
+                        variant: 'buttons.default'
+                      }}
+                    >
+                      Join us on {join.platformTitle}
+                    </Button>
+                  )}
                 </a>
               </Link>
             </div>

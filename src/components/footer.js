@@ -112,7 +112,7 @@ const Footer = () => {
             target='_blank'
             rel='noopener noreferrer'
           >
-            We`&apos;re Hiring! <ExtIcon />
+            We&apos;re Hiring! <ExtIcon />
           </FooterExternalLink>
         </LinkBox>
       </InnerGrid>

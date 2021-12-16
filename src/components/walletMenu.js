@@ -82,7 +82,7 @@ const walletMenuArray = [
   { title: 'My Projects', url: Routes.MyProjects },
   { title: 'My Donations', url: Routes.MyDonations },
   { title: 'Create a Project', url: Routes.CreateProject },
-  { title: 'Report a bug', url: config.LINKS.REPORT_ISSUE },
+  { title: 'Report a bug', url: config.LINKS.REPORT_ISSUE, external: true },
   { title: 'Support', url: Routes.Support }
 ]
 
