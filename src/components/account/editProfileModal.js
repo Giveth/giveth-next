@@ -3,7 +3,7 @@ import { Box, Button, Input, Text, Flex } from 'theme-ui'
 import Modal from 'react-modal'
 import { useMutation } from '@apollo/client'
 import { IoMdClose } from 'react-icons/io'
-import { useForm, FormProvider } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { UPDATE_USER } from '../../apollo/gql/auth'
 import theme from '../../utils/theme-ui/index'
