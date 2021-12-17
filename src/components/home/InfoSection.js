@@ -183,12 +183,12 @@ const InfoSection = ({ content }) => {
           <Text sx={{ variant: 'headings.h4', color: 'background' }}>{content.userType1Title}</Text>
           <Text pb={3} sx={{ variant: 'text.paragraph', color: 'background' }}>
             <br />
-            <Link href='/create' className='intextlink'>
+            <Link href='/create' className='intextlink' passHref>
               Create your project
             </Link>{' '}
             and start raising funds.
           </Text>
-          <Link href='/create'>
+          <Link href='/create' passHref>
             <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}>
               Create a project
             </Button>
@@ -214,12 +214,12 @@ const InfoSection = ({ content }) => {
           <Text sx={{ variant: 'headings.h4', color: 'background' }}>For Givers</Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
             Use our platform to give donations to a cause or a project. Easily donate to the{' '}
-            <Link href='/projects' className='intextlink'>
+            <Link href='/projects' className='intextlink' passHref>
               project
             </Link>{' '}
             you most care about.
           </Text>
-          <Link href='/projects'>
+          <Link href='/projects' passHref>
             <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}>
               Donate to a project
             </Button>
@@ -228,7 +228,7 @@ const InfoSection = ({ content }) => {
       </Grid>
       {!isMobile ? (
         <Decorator>
-          <img
+          <Image
             src={'/images/decorator-cloud1.svg'}
             alt=''
             sx={{
@@ -238,7 +238,7 @@ const InfoSection = ({ content }) => {
             }}
             className='semitransparent'
           />
-          <img
+          <Image
             src={'/images/decorator-cloud2.svg'}
             alt=''
             sx={{
@@ -248,7 +248,7 @@ const InfoSection = ({ content }) => {
             }}
             className='semitransparent'
           />
-          <img
+          <Image
             src={'/images/decorator-cloud2.svg'}
             alt=''
             sx={{
@@ -258,7 +258,7 @@ const InfoSection = ({ content }) => {
             }}
             className='semitransparent'
           />
-          <img
+          <Image
             src={'/images/decorator-fizzy-square-rotated.svg'}
             alt=''
             sx={{

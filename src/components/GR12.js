@@ -36,6 +36,7 @@ function GR12() {
             }}
           >
             <Image
+              alt='gr12'
               src='/images/GR12PNG.png'
               style={{
                 objectFit: 'cover',
@@ -113,6 +114,7 @@ function GR12() {
               DONATE
             </Button>
             <Image
+              alt='arc-1'
               src='/images/arc-1.png'
               sx={{
                 position: 'absolute',

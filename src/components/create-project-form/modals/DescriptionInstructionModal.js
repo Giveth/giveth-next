@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Text } from 'theme-ui'
+import Link from 'next/link'
 
 export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
   <div
@@ -60,9 +61,9 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
     </ol>
     <Text sx={{ mt: '20px', fontSize: 4, textAlign: 'left', fontFamily: 'body' }}>
       See how others have done it:{' '}
-      <a target='_blank' href='/projects' style={{ textDecoration: 'none' }}>
-        <Text sx={{ color: 'primary' }}>Browse examples.</Text>
-      </a>
+      <Link target='_blank' href='/projects' style={{ textDecoration: 'none' }} passHref>
+        <Text sx={{ color: 'primary', cursor: 'pointer' }}>Browse examples.</Text>
+      </Link>
     </Text>
     <Text sx={{ mt: '20px', fontSize: 4, textAlign: 'left', fontFamily: 'body' }}>
       Read this blog post tutorial: <br />

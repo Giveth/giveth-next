@@ -44,6 +44,7 @@ module.exports = {
     'plugin:prettier/recommended'
   ],
   rules: {
+    'react-hooks/exhaustive-deps': 'off',
     'prettier/prettier': [
       'error',
       {

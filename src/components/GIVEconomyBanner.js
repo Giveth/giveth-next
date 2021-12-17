@@ -64,7 +64,7 @@ function GIVEconomyBanner() {
               The GIVeconomy
             </Text>
             <Flex sx={{ textAlign: 'center', mt: '-10px' }}>
-              <Image src='/images/yellowGurve.svg' width='146px' height='30px' />
+              <Image src='/images/yellowGurve.svg' width='146px' height='30px' alt='gurve' />
               <Text
                 sx={{
                   fontFamily: 'TeX Gyre Adventor',

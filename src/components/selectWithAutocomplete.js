@@ -57,6 +57,7 @@ const SelectWithAutocomplete = props => {
             />
           ) : (
             <Image
+              alt='eth'
               src={`/assets/cryptocurrency-icons/32/color/eth.png`}
               width='32px'
               height='32px'

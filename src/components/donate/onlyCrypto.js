@@ -2,8 +2,8 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import fetch from 'isomorphic-fetch'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
-import { Button, Flex, Text, Label, Checkbox } from 'theme-ui'
+import NextImage from 'next/image'
+import { Button, Flex, Text, Label, Checkbox, Image } from 'theme-ui'
 // import QRCode from 'qrcode.react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { ethers } from 'ethers'
@@ -718,7 +718,7 @@ const OnlyCrypto = props => {
                   ml: 3
                 }}
               >
-                <img
+                <Image
                   src={icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
                   alt={tokenSymbol || ''}
                   onError={ev => {
@@ -853,7 +853,7 @@ const OnlyCrypto = props => {
 
             {!switchTraceable && !isXdai && !isGivingBlockProject && (
               <SaveGasMessage sx={{ mt: project?.traceCampaignId ? 3 : 0 }}>
-                <Image
+                <NextImage
                   src='/images/icon-streamline-gas.svg'
                   height='18px'
                   width='18px'
