@@ -9,6 +9,7 @@ import { Giv_100, Primary_Deep_800, Pinky_500 } from './styled-components/Colors
 import { FlexCenter } from './styled-components/Grid'
 import { Shadow } from './styled-components/Shadow'
 import { Button } from './styled-components/Button'
+import Tooltip from '../components/tooltip'
 import Routes from '../lib/Routes'
 import WalletMenu from './walletMenu'
 import { Context as Web3Context } from '../contextProvider/Web3Provider'
@@ -106,11 +107,22 @@ const Header = () => {
         <Button small onClick={() => router.push(Routes.CreateProject)}>
           CREATE A PROJECT
         </Button>
-
-        <GivMenu>
-          <Image width={24} height={24} src='/images/GIV_menu-01.svg' alt='giv icon' />
-          <GivBalance>{parseFloat(givBalance).toLocaleString('en-US')} </GivBalance>
-        </GivMenu>
+        <Tooltip
+          placement='bottom'
+          content='GIV currently in wallet'
+          contentStyle={{
+            marginTop: '30px',
+            backgroundColor: '#AF9BD3'
+          }}
+          textStyle={{
+            color: 'white'
+          }}
+        >
+          <GivMenu onClick={() => router.push(config.LINKS.GIVECONOMY)}>
+            <Image width={24} height={24} src='/images/GIV_menu-01.svg' alt='giv icon' />
+            <GivBalance>{parseFloat(givBalance).toLocaleString('en-US')} </GivBalance>
+          </GivMenu>
+        </Tooltip>
 
         {isEnabled ? (
           <WalletMenu />
@@ -140,11 +152,10 @@ const GivBalance = styled.span`
 const GivMenu = styled(FlexCenter)`
   padding: 0 14.5px;
   cursor: pointer;
-  border-radius: 48px;
   background: white;
+  border-radius: 48px;
   height: 48px;
   color: ${Primary_Deep_800};
-  z-index: -2;
 `
 
 const RoutesItem = styled.a`

@@ -5,6 +5,7 @@ import ErrorPage from '../src/components/errorPage'
 import { client } from '../src/apollo/client'
 import ProjectsList from '../src/components/ProjectsList'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
+import GIVEconBanner from '../src/components/GIVEconomyBanner'
 
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
@@ -17,6 +18,7 @@ const Projects = props => {
   return (
     <Layout>
       <Seo title='Projects' />
+      <GIVEconBanner />
       {projects && !errors ? (
         <ProjectsList
           query={query}

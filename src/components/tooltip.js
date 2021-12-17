@@ -6,7 +6,7 @@ import TooltipImg from '../images/svg/general/decorators/tooltip.svg'
 const Tooltip = styled.div`
   margin: 0 0.5rem;
   position: relative;
-
+  border-radius: 48px;
   .tooltip-text {
     visibility: hidden;
     width: 180px;
@@ -39,6 +39,7 @@ const Tooltip = styled.div`
       visibility: visible;
     }
   }
+
   @media (max-width: 600px) {
     .tooltip-text {
       margin: 10% 0 0 0;
@@ -94,7 +95,14 @@ const Tooltip = styled.div`
   }
 `
 
-export default function ToolTip({ content, contentStyle, textStyle, isArrow, placement }) {
+export default function ToolTip({
+  content,
+  contentStyle,
+  textStyle,
+  isArrow,
+  placement,
+  children
+}) {
   return (
     <Tooltip
       sx={{
@@ -104,7 +112,7 @@ export default function ToolTip({ content, contentStyle, textStyle, isArrow, pla
       }}
       className={placement}
     >
-      <TooltipImg style={{ cursor: 'pointer' }} />
+      {children ? children : <TooltipImg style={{ cursor: 'pointer' }} />}
       {isArrow && <div className='tooltip-arrow' />}
       <span className='tooltip-text' style={contentStyle}>
         <Text sx={{ variant: 'text.small' }} style={textStyle}>
