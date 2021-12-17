@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Grid, Text, Box, Button } from 'theme-ui'
+import { Flex, Grid, Text, Box, Button, Image } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
@@ -25,7 +25,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
   //       switch (mimeGroup) {
   //         case "image":
   //           return (
-  //             <img
+  //             <Image
   //               title={title ? title["en-US"] : null}
   //               alt={description ? description["en-US"] : null}
   //               src={file["en-US"].url}
@@ -59,7 +59,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
       <Seo title='Our Partnerships & Friends' />
       {!isMobile ? (
         <Decorator>
-          <img
+          <Image
             src={'/images/decorator-puzzlepieces.svg'}
             alt=''
             style={{
@@ -109,7 +109,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
                 }}
               >
                 <Flex sx={{ flexDirection: 'column' }}>
-                  <img
+                  <Image
                     width='100%'
                     height='50px'
                     style={{ objectFit: 'contain' }}
@@ -130,7 +130,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
         </Grid>
 
         <SpecialCardContainer sx={{ maxWidth: '800px' }}>
-          <img
+          <Image
             src='/images/svg/general/decorators/dark-clouds.svg'
             style={{ position: 'absolute', top: '41px', right: '42px' }}
             alt='dark clouds img'
@@ -156,7 +156,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
           >
             We&apos;re always open for new partnerships
           </Text>
-          <Link href='/contact'>
+          <Link href='/contact' passHref>
             <Button
               mt={1}
               p={3}

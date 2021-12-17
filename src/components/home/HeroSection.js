@@ -54,7 +54,7 @@ const Hero = ({ content }) => {
             justifyContent: ['center', 'start', 'start']
           }}
         >
-          <Link href='/projects'>
+          <Link href='/projects' passHref>
             <Button
               mt={[4, 5, 5]}
               sx={{
@@ -65,7 +65,7 @@ const Hero = ({ content }) => {
               {content.mainButton}
             </Button>
           </Link>
-          <Link href='/create'>
+          <Link href='/create' passHref>
             <Text
               sx={{
                 variant: 'links.nav',

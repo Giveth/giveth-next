@@ -114,7 +114,7 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
             </Text>
           </Link> */}
           <Flex sx={{ flexDirection: 'column' }}>
-            <Link href={`/project/${addedProject?.slug}`}>
+            <Link href={`/project/${addedProject?.slug}`} passHref>
               <Text
                 sx={{
                   cursor: 'pointer',
@@ -127,7 +127,7 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
                 View my project
               </Text>
             </Link>
-            <Link href={`https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5`}>
+            <Link href={`https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5`} passHref>
               <Text
                 sx={{
                   cursor: 'pointer',
@@ -140,7 +140,7 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
                 Verify my project
               </Text>
             </Link>
-            <Link href='/'>
+            <Link href='/' passHref>
               <Text
                 sx={{
                   cursor: 'pointer',

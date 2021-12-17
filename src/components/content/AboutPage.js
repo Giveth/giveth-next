@@ -33,7 +33,7 @@ const AboutPage = ({ about, team }) => {
         switch (mimeGroup) {
           case 'image':
             return (
-              <img
+              <Image
                 title={title ? title['en-US'] : null}
                 alt={description ? description['en-US'] : null}
                 src={file['en-US'].url}

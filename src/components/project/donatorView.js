@@ -507,12 +507,12 @@ const ProjectDonatorView = ({
             >
               {' '}
               <Text sx={{ variant: 'text.default', mr: 2, color: Gray_600 }}>Project by</Text>
-              <img src='/images/thegivingblock.svg' />
+              <Image src='/images/thegivingblock.svg' alt='the-giving-block' />
             </Flex>
           )}
 
           {isOwner && !(project?.verified || project?.traceCampaignId) && (
-            <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
+            <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5' passHref>
               <Text
                 sx={{
                   cursor: 'pointer',

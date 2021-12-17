@@ -1,4 +1,4 @@
-import { Text, Heading } from 'theme-ui'
+import { Text, Heading, Image } from 'theme-ui'
 import theme from '../../utils/theme-ui/index'
 import React, { useState, useEffect } from 'react'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
@@ -11,7 +11,6 @@ import { AiOutlineDown } from 'react-icons/ai'
 
 const ContentFaq = ({ faqs, isopen }) => {
   const [hash, setHash] = useState('')
-  console.log({ faqs })
   const richTextOptions = {
     renderNode: {
       [BLOCKS.EMBEDDED_ASSET]: node => {
@@ -22,7 +21,7 @@ const ContentFaq = ({ faqs, isopen }) => {
         switch (mimeGroup) {
           case 'image':
             return (
-              <img
+              <Image
                 title={title ? title['en-US'] : null}
                 alt={description ? description['en-US'] : null}
                 src={file['en-US'].url}

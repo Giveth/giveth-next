@@ -1,6 +1,6 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
-import { Label, Input, Grid, Text, Button, Textarea } from 'theme-ui'
+import { Label, Input, Grid, Text, Button, Textarea, Image } from 'theme-ui'
 import styled from '@emotion/styled'
 import useMediaQuery from 'react-responsive'
 import theme from '../src/utils/theme-ui'
@@ -14,7 +14,7 @@ const Contact = () => {
     <Layout>
       <Seo title='Contact us' />
       {!isMobile ? (
-        <img
+        <Image
           src={'/images/decorator-circles.svg'}
           alt=''
           style={{
@@ -26,7 +26,7 @@ const Contact = () => {
         />
       ) : null}
       {!isMobile ? (
-        <img
+        <Image
           src={'/images/decorator-fizzy-square-rotated.svg'}
           alt=''
           style={{

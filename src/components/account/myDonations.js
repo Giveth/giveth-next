@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import Pagination from 'react-js-pagination'
-import { Input, Flex, Spinner, Text } from 'theme-ui'
+import { Input, Flex, Spinner, Text, Image } from 'theme-ui'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
@@ -165,7 +165,7 @@ const MyDonations = props => {
                         color: 'secondary'
                       }}
                     >
-                      <img
+                      <Image
                         src={i?.icon || `/assets/tokens/${i?.currency?.toUpperCase()}.png`}
                         alt={i.currency}
                         onError={ev => {
