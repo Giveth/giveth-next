@@ -1,13 +1,14 @@
-const space = process.env.CONTENTFUL_SPACE_ID
-const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN
+import { createClient } from 'contentful'
 
 export async function fetchEntries({ contentType }) {
   try {
-    const client = require('contentful').createClient({
-      space: space,
-      accessToken: accessToken
-    })
+    const space = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID
+    const accessToken = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN
 
+    const client = createClient({
+      space: space, // ID of a Compose-compatible space to be used \
+      accessToken: accessToken // delivery API key for the space \
+    })
     const entries = await client.getEntries({
       content_type: contentType
     })
