@@ -106,7 +106,9 @@ const CreateProjectForm = props => {
         goBack={goBack}
       />
     ),
-    () => <ProjectEthAddressInput value={EthAddress} onChange={setEthAddress} goBack={goBack} />,
+    () => (
+      <ProjectEthAddressInput value={EthAddress} onChange={setEthereumAddress} goBack={goBack} />
+    ),
     () => (
       <FinalVerificationStep
         formData={formData}
@@ -195,18 +197,24 @@ const CreateProjectForm = props => {
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
-
+      window?.scrollTo(0, 0)
       setInputLoading(false)
       setFormData(project)
       doNextStep()
     } catch (error) {
       console.log({ error })
       setInputLoading(false)
+      window?.scrollTo(0, 0)
       Toast({
         content: error?.message || JSON.stringify(error),
         type: 'error'
       })
     }
+  }
+
+  const setEthereumAddress = addr => {
+    if (addr?.length > 42) return null
+    return setEthAddress(addr)
   }
 
   useEffect(() => {
