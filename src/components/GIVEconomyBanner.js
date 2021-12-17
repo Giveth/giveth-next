@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { Flex, Button, Text } from 'theme-ui'
 import LevitatingCard from './hoc/levitatingCard'
 import { Mustard_500 } from './styled-components/Colors'
+import config from '../../config'
 
 function GIVEconomyBanner() {
   const router = useRouter()
@@ -20,7 +21,7 @@ function GIVEconomyBanner() {
       e.preventDefault()
       e.stopPropagation()
     } else {
-      router.push('https://liquidity-mining-dapp.vercel.app')
+      router.push(config.LINKS.GIVECONOMY)
     }
   }
 
@@ -101,10 +102,9 @@ function GIVEconomyBanner() {
                 letterSpacing: 'normal',
                 ml: 4,
                 zIndex: 2,
-                px: 5,
-                pb: 4
+                px: 5
               }}
-              onClick={() => router.push('https://liquidity-mining-dapp.vercel.app/claim')}
+              onClick={() => router.push(`${config.LINKS.GIVECONOMY}/claim`)}
             >
               Check your airdrop
             </Button>
