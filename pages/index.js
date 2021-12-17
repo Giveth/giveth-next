@@ -12,6 +12,8 @@ const InfoSection = dynamic(() => import('../src/components/home/InfoSection'))
 const HomeTopProjects = dynamic(() => import('../src/components/home/HomeTopProjects'))
 const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSection'))
 
+import GIVEconBanner from '../src/components/GIVEconomyBanner'
+
 const projectsNumToShowInHomePage = 3
 
 // import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
@@ -41,6 +43,7 @@ const IndexContent = ({ hideInfo, content, topProjects }) => {
   return (
     <>
       <Hero content={content} />
+      <GIVEconBanner />
       <HomeTopProjects projects={topProjects} />
       {!hideInfo === true && <InfoSection content={content} />}
       <UpdatesSection />
