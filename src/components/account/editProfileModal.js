@@ -3,7 +3,7 @@ import { Box, Button, Input, Text, Flex } from 'theme-ui'
 import Modal from 'react-modal'
 import { useMutation } from '@apollo/client'
 import { IoMdClose } from 'react-icons/io'
-import { useForm } from 'react-hook-form'
+import { useForm, FormProvider } from 'react-hook-form'
 
 import { UPDATE_USER } from '../../apollo/gql/auth'
 import theme from '../../utils/theme-ui/index'
@@ -13,7 +13,7 @@ import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 import { checkIfURLisValid } from '../../utils'
 
 const InputBox = props => {
-  const { title, placeholderText, name, register, errors, refExtras = null } = props
+  const { title, placeholderText, name, register, errors, refExtras = {} } = props
   return (
     <Box sx={{ mt: 3, mb: 2, width: '100%' }}>
       <Text
@@ -51,10 +51,15 @@ function EditProfileModal(props) {
     actions: { updateUser }
   } = useContext(Web3Context)
 
-  const { register, handleSubmit, reset, errors } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm({
     // defaultValues: user
     defaultValues: React.useMemo(() => {
-      return user
+      return user ?? {}
     }, [user])
   })
   const [updateUserInDB] = useMutation(UPDATE_USER)

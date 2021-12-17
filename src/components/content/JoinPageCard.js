@@ -59,6 +59,8 @@ const JoinChatCard = ({ data }) => (
                     lineHeight: '150%',
                     position: 'relative'
                   }}
+                  rel='noreferrer'
+                  target='_blank'
                 >
                   {join.platformTitle === 'Forum' ? (
                     <Button

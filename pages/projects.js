@@ -5,7 +5,6 @@ import ErrorPage from '../src/components/errorPage'
 import { client } from '../src/apollo/client'
 import ProjectsList from '../src/components/ProjectsList'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
-import GR12 from '../src/components/GR12'
 
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
@@ -18,7 +17,6 @@ const Projects = props => {
   return (
     <Layout>
       <Seo title='Projects' />
-      <GR12 />
       {projects && !errors ? (
         <ProjectsList
           query={query}

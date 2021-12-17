@@ -5,7 +5,7 @@ import Image from 'next/image'
 import tokenAbi from 'human-standard-token-abi'
 import { useRouter } from 'next/router'
 import { pollEvery } from '../utils'
-import { Giv_100, Primary_Deep_800 } from './styled-components/Colors'
+import { Giv_100, Primary_Deep_800, Pinky_500 } from './styled-components/Colors'
 import { FlexCenter } from './styled-components/Grid'
 import { Shadow } from './styled-components/Shadow'
 import { Button } from './styled-components/Button'
@@ -60,10 +60,8 @@ const Header = () => {
               tokenAbi,
               networkId === 100 ? config.GIV_TOKEN.XDAI : config.GIV_TOKEN.MAINNET
             )
-            console.log({ instance })
             return (await instance.methods.balanceOf(account).call()) / 10 ** 18
           } catch (e) {
-            console.log({ e })
             return 0
           }
         },
@@ -154,9 +152,14 @@ const RoutesItem = styled.a`
   font-weight: 400;
   cursor: pointer;
   border-radius: 72px;
-
+  :hover {
+    color: ${Pinky_500} !important;
+  }
   &.active {
     background: ${Giv_100};
+    :hover {
+      color: ${Primary_Deep_800} !important;
+    }
   }
 `
 
