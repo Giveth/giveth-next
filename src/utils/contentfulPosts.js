@@ -2,8 +2,8 @@ import { createClient } from 'contentful'
 
 export async function fetchEntries({ contentType }) {
   try {
-    const space = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID
-    const accessToken = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN
+    const space = process.env.CONTENTFUL_SPACE_ID
+    const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN
 
     const client = createClient({
       space: space, // ID of a Compose-compatible space to be used \
