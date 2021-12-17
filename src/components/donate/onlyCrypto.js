@@ -47,11 +47,11 @@ const POLL_DELAY_TOKENS = 5000
 
 const OnlyCrypto = props => {
   const {
-    state: { balance, web3, account, isEnabled, networkId, provider, user, isSignedIn },
+    state: { balance, web3, account, isEnabled, networkId, provider, user },
     actions: { showWalletModal, connectWallet, signIn }
   } = useContext(Web3Context)
   const usePopup = useContext(PopupContext)
-
+  const isSignedIn = user?.id
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false)
 
   const { triggerPopup } = usePopup
@@ -278,7 +278,9 @@ const OnlyCrypto = props => {
             <Tooltip
               placement='top'
               isArrow
-              content='The fee required to successfully conduct a transaction on the Ethereum blockchain.'
+              content={`The fee required to successfully conduct a transaction on the ${
+                isXdai ? 'xDAI' : 'Ethereum'
+              } blockchain.`}
               contentStyle={{
                 backgroundColor: '#AF9BD3'
               }}
@@ -324,7 +326,6 @@ const OnlyCrypto = props => {
       </SmRow>
     )
   }
-
   const confirmDonation = async () => {
     try {
       // Traceable by default if it comes from Trace only
@@ -893,7 +894,6 @@ const OnlyCrypto = props => {
                   Donate anonymously
                 </Text>
               </div>
-              <Tooltip content='When you donate anonymously, your name will never appear in public as a donor. But, your name will be recorded so that we can send a tax donation receipt.' />
             </CheckboxLabel>
           )}
           <Flex sx={{ flexDirection: 'column', width: '100%' }}>

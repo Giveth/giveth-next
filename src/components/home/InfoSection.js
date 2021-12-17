@@ -182,7 +182,7 @@ const InfoSection = ({ content }) => {
         >
           <Text sx={{ variant: 'headings.h4', color: 'background' }}>{content.userType1Title}</Text>
           <Text pb={3} sx={{ variant: 'text.paragraph', color: 'background' }}>
-            Create a project and get donations in crypto.{' '}
+            <br />
             <Link href='/create' className='intextlink'>
               Create your project
             </Link>{' '}

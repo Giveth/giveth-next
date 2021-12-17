@@ -5,7 +5,6 @@ import GivethContent from '../src/content/giveth.json'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
 import { gqlEnums } from '../src/utils/constants'
 
-const GR12 = dynamic(() => import('../src/components/GR12'))
 const Hero = dynamic(() => import('../src/components/home/HeroSection'))
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
@@ -42,7 +41,6 @@ const IndexContent = ({ hideInfo, content, topProjects }) => {
   return (
     <>
       <Hero content={content} />
-      <GR12 />
       <HomeTopProjects projects={topProjects} />
       {!hideInfo === true && <InfoSection content={content} />}
       <UpdatesSection />

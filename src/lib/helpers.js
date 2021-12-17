@@ -101,7 +101,6 @@ export async function sendTransaction(
       const instance = fromSigner
         ? new ethers.Contract(contractAddress, tokenAbi, fromSigner)
         : new web3Provider.Contract(tokenAbi, contractAddress)
-      console.log({ instance })
       const decimals = instance?.decimals
         ? await instance.decimals()
         : await instance.methods.decimals().call()
