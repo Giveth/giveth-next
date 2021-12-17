@@ -106,7 +106,7 @@ function GIVEconomyBanner() {
               }}
               onClick={() => router.push(`${config.LINKS.GIVECONOMY}/claim`)}
             >
-              Check your airdrop
+              Check your GIVdrop
             </Button>
           </Flex>
         </Flex>
