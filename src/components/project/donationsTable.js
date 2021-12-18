@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import useSWR from 'swr'
-import { FiCopy, FiExternalLink } from 'react-icons/fi'
+import { FiExternalLink } from 'react-icons/fi'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
@@ -41,10 +41,6 @@ const DonationsTable = ({ donations = [] }) => {
   )
 
   const traceDonations = fromTrace && traceDonationsFetch?.data
-
-  const copy = hash => {
-    navigator.clipboard.writeText(hash)
-  }
 
   React.useEffect(() => {
     if (!traceDonations) {
