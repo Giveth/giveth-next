@@ -28,7 +28,7 @@ const GithubIssue = props => {
         }
       }
     }
-  })
+  }, [])
 
   if (!showIssuePopup) return null
   let style = {
@@ -97,6 +97,7 @@ const GithubIssue = props => {
         </Button>
       </Flex>
       <Image
+        alt='corner-leave'
         src={'/images/corner-leave.png'}
         width={[60, 80, 80]}
         sx={{

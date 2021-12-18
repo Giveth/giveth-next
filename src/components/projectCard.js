@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Heading, Box, Button, Card, Flex, Text } from 'theme-ui'
+import { Heading, Box, Button, Card, Flex, Text, Image } from 'theme-ui'
 import Link from 'next/link'
-import Image from 'next/image'
+import NextImage from 'next/image'
 import dynamic from 'next/dynamic'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
@@ -36,7 +36,7 @@ const Categories = ({ categories }) => {
             textTransform: 'uppercase'
           }}
         >
-          {isGivingBlock ? <img src='/images/thegivingblock.svg' /> : name}
+          {isGivingBlock ? <Image src='/images/thegivingblock.svg' alt='giving-block' /> : name}
         </Text>
       </Badge>
     )
@@ -93,7 +93,7 @@ const ProjectCard = props => {
     }
   }, [project, user])
 
-  const image = props?.image || project?.image
+  const image = props?.image || project?.image || '/images/no-image-available.jpg'
 
   return (
     <Box
@@ -396,7 +396,7 @@ const CardFooter = styled.span`
   margin: ${props => (props.isGivingBlock ? '3rem 0 2px 0' : '1rem 0')};
 `
 
-const StyledImage = styled(Image)`
+const StyledImage = styled(NextImage)`
   cursor: pointer;
   border-radius: 12px 12px 0 0;
   background: ${props => (props?.isgivingblockproject ? 'white' : 'none')};

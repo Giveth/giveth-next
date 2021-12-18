@@ -13,7 +13,11 @@ function FirstGiveBadge() {
       }}
     >
       <Flex sx={{ flex: 0.2, mr: 2 }}>
-        <Image src={'/images/giverBadge@40x40.png'} sx={{ objectFit: 'contain' }} />
+        <Image
+          src={'/images/giverBadge@40x40.png'}
+          sx={{ objectFit: 'contain' }}
+          alt='first-giver-badge'
+        />
       </Flex>
       <Flex sx={{ flexDirection: 'column', flex: 0.8 }}>
         <Text variant='text.default' color='secondary' sx={{ fontWeight: 'bold' }}>

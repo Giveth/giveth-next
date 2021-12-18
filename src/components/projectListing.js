@@ -1,10 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { Heading, Box, Card, Flex, Button, Text } from 'theme-ui'
+import { Heading, Box, Card, Flex, Button, Text, Image } from 'theme-ui'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
-import Image from 'next/image'
+import NextImage from 'next/image'
 
 import theme from '../utils/theme-ui/index'
 import projectBadge from './projectBadge'
@@ -18,7 +18,7 @@ const RichTextViewer = dynamic(() => import('./richTextViewer'), {
   ssr: false
 })
 
-const StyledImage = styled(Image)`
+const StyledImage = styled(NextImage)`
   cursor: pointer;
   border-radius: 12px 12px 0 0;
   background: ${props => (props.isgivingblockproject ? 'white' : 'none')};
@@ -110,7 +110,11 @@ const Categories = ({ categories }) => {
                 textTransform: 'uppercase'
               }}
             >
-              {isGivingBlock ? <img src='/images/thegivingblock.svg' /> : category?.name}
+              {isGivingBlock ? (
+                <Image src='/images/thegivingblock.svg' alt='giving-block' />
+              ) : (
+                category?.name
+              )}
             </Text>
           </Badge>
         )
@@ -124,7 +128,6 @@ const ProjectListing = props => {
   const [hoverStyle, setHoverStyle] = React.useState(false)
   const image = props.image || '/images/no-image-available.jpg'
   const isGivingBlockProject = project?.givingBlocksId
-
   return (
     <Box
       key={props.listingId + '_box'}

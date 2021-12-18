@@ -1,5 +1,6 @@
 import React from 'react'
 import { Grid, Button, Heading, Text, IconButton } from 'theme-ui'
+import Image from 'next/image'
 import styled from '@emotion/styled'
 
 import ProjectCard from '../src/components/projectCard'
@@ -145,24 +146,24 @@ const ViewStyles = () => {
               <Text sx={{ variant: 'text.styleGuide' }}>Icons</Text>
               <Container>
                 <IconButton>
-                  <img src={iconHeart} alt='' />
+                  <Image src={iconHeart} alt='' width='100%' height='100%' />
                 </IconButton>
                 <br />
                 <IconButton>
-                  <img src={iconShare} alt='' />
+                  <Image src={iconShare} alt='' width='100%' height='100%' />
                 </IconButton>
                 <br />
                 <IconButton>
-                  <img src={iconUser} alt='' />
+                  <Image src={iconUser} alt='' width='100%' height='100%' />
                 </IconButton>
                 <br />
-                <img src={iconVerticalLine} alt='' />
+                <Image src={iconVerticalLine} alt='' width='100%' height='100%' />
                 <br />
                 <IconButton>
-                  <img src={iconSearch} alt='' />
+                  <Image src={iconSearch} alt='' width='100%' height='100%' />
                 </IconButton>
                 <IconButton>
-                  <img src={iconStreamlineGas} alt='' />
+                  <Image src={iconStreamlineGas} alt='' width='100%' height='100%' />
                 </IconButton>
               </Container>
             </StyleGuide>
@@ -170,37 +171,37 @@ const ViewStyles = () => {
             <StyleGuide>
               <Text sx={{ variant: 'text.styleGuide' }}>Illustrations - People</Text>
               <Container>
-                <img src={imgPeopleHeader} alt='' width='400px' />
+                <Image src={imgPeopleHeader} alt='' width='400px' height='100%' />
                 <br />
-                <img src={imgPeopleAnnounce} alt='' />
+                <Image src={imgPeopleAnnounce} alt='' width='100%' height='100%' />
                 <br />
-                <img src={imgPeoplePuzzle} alt='' />
+                <Image src={imgPeoplePuzzle} alt='' width='100%' height='100%' />
                 <br />
-                <img src={imgPeopleStretching} alt='' />
+                <Image src={imgPeopleStretching} alt='' width='100%' height='100%' />
               </Container>
             </StyleGuide>
 
             <StyleGuide>
               <Text sx={{ variant: 'text.styleGuide' }}>Illustrations - Elements</Text>
               <Container>
-                <img src={imgDecoratorCloud1} alt='' />
+                <Image src={imgDecoratorCloud1} alt='' width='100%' height='100%' />
                 <br />
-                <img src={imgDecoratorCloud2} alt='' />
+                <Image src={imgDecoratorCloud2} alt='' width='100%' height='100%' />
                 <br />
-                <img src={imgDecoratorElements} alt='' />
+                <Image src={imgDecoratorElements} alt='' width='100%' height='100%' />
                 <br />
-                <img src={imgDecoratorFizzyRot} alt='' />
+                <Image src={imgDecoratorFizzyRot} alt='' width='100%' height='100%' />
                 <br />
-                <img src={imgDecoratorFizzy} alt='' />
+                <Image src={imgDecoratorFizzy} alt='' width='100%' height='100%' />
                 <br />
-                <img src={imgDecoratorLeaf} alt='' />
+                <Image src={imgDecoratorLeaf} alt='' width='100%' height='100%' />
               </Container>
             </StyleGuide>
 
             <StyleGuide>
               <Text sx={{ variant: 'text.styleGuide' }}>Other Assets</Text>
               <Container>
-                <img src={noImage} alt='' />
+                <Image src={noImage} alt='' width='100%' height='100%' />
               </Container>
             </StyleGuide>
           </Grid>

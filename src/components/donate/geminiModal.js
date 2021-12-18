@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Button, Text } from 'theme-ui'
+import { Flex, Button, Text, Image } from 'theme-ui'
 import Modal from 'react-modal'
 import { TwitterShareButton } from 'react-share'
 
@@ -43,7 +43,7 @@ const GeminiModal = ({ showModal, setShowModal }) => {
             cursor: 'pointer'
           }}
         >
-          <img src='/images/x-icon.svg' />
+          <Image src='/images/x-icon.svg' alt='exit' />
         </Button>
         <Text
           sx={{
@@ -65,7 +65,7 @@ const GeminiModal = ({ showModal, setShowModal }) => {
         >
           Help us get GIV on Gemini!{' '}
         </Text>
-        <img src='/images/twitter-modal.svg' />
+        <Image src='/images/twitter-modal.svg' alt='tw-modal' />
 
         <Button
           type='button'
@@ -89,7 +89,8 @@ const GeminiModal = ({ showModal, setShowModal }) => {
           >
             {' '}
             <a style={{ display: 'flex', justifyContent: 'center' }}>
-              TWEET NOW <img src='/images/tw-icon.svg' style={{ marginLeft: '6px' }} />
+              TWEET NOW{' '}
+              <Image src='/images/tw-icon.svg' style={{ marginLeft: '6px' }} alt='tweet-now' />
             </a>
           </TwitterShareButton>
         </Button>

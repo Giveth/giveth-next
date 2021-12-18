@@ -28,7 +28,6 @@ export async function getServerSideProps() {
 
   const team = teamReq?.map(f => f.fields)
   const about = aboutReq?.map(f => f.fields)
-  console.log({ team: JSON.stringify(team) })
   return {
     props: {
       team: team || {},
