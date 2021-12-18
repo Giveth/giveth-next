@@ -1,6 +1,7 @@
 const MyAccount = '/account'
 
 const Routes = {
+  Home: '/',
   CreateProject: '/create',
   Projects: '/projects',
   Project: '/project',

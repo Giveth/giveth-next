@@ -13,7 +13,7 @@ import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
 import { QueryParamProvider } from '../contextProvider/queryParamProvider'
 
-const Header = dynamic(() => import('./header'))
+const Header = dynamic(() => import('./header/headerIndex'))
 const Dialog = dynamic(() => import('./dialog'))
 const Footer = dynamic(() => import('./footer'))
 const Popup = dynamic(() => import('./popup'))

@@ -163,7 +163,7 @@ const ProjectCard = props => {
                       layout='fill'
                       priority={true}
                       quality={40}
-                      isGivingBlockProject={project?.givingBlocksId}
+                      isgivingblockproject={project?.givingBlocksId}
                       // placeholder='blur'
                       // blurDataURL='/images/giveth_bg.jpg'
                     />
@@ -399,8 +399,8 @@ const CardFooter = styled.span`
 const StyledImage = styled(NextImage)`
   cursor: pointer;
   border-radius: 12px 12px 0 0;
-  background: ${props => (props?.isGivingBlockProject ? 'white' : 'none')};
-  object-fit: ${props => (props?.isGivingBlockProject ? 'contain' : 'cover')};
+  background: ${props => (props?.isgivingblockproject ? 'white' : 'none')};
+  object-fit: ${props => (props?.isgivingblockproject ? 'contain' : 'cover')};
 `
 
 export default ProjectCard
