@@ -20,7 +20,7 @@ const LoginModal = ({ showModal, closeModal }) => {
     return (
       <>
         <H3>Sign in to Giveth</H3>
-        <Body_P>Please Sign in to your account and start using Giveth.</Body_P>
+        <Body_P>Please Sign in to your account to start using Giveth.</Body_P>
         <Ethereum
           onClick={() => {
             showWalletModal()

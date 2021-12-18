@@ -279,8 +279,8 @@ const OnlyCrypto = props => {
               placement='top'
               isArrow
               content={`The fee required to successfully conduct a transaction on the ${
-                isXdai ? 'xDAI' : 'Ethereum'
-              } blockchain.`}
+                isXdai ? 'xDai' : 'Ethereum'
+              } network.`}
               contentStyle={{
                 backgroundColor: '#AF9BD3'
               }}
