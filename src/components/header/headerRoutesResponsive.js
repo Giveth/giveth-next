@@ -12,7 +12,7 @@ import HeaderRoutesItem from './headerRoutesItem'
 const HeaderRoutesResponsive = () => {
   const router = useRouter()
   const activeIndex = headerRoutes.findIndex(i => router.pathname === i.href)
-  const activeMenu = headerRoutes[activeIndex].title
+  const activeMenu = headerRoutes[activeIndex]?.title
   const [isOpen, setIsOpen] = useState(false)
 
   return (
