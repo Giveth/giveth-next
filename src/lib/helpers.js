@@ -18,11 +18,18 @@ export const isSSR = () => {
   return typeof window === 'undefined'
 }
 
+export const breakPoints = {
+  sm: 500,
+  md: 768,
+  lg: 992,
+  xl: 1200
+}
+
 export const mediaQueries = {
-  sm: '@media (min-width: 500px)',
-  md: '@media (min-width: 768px)',
-  lg: '@media (min-width: 992px)',
-  xl: '@media (min-width: 1200px)'
+  sm: `@media (min-width: ${breakPoints.sm}px)`,
+  md: `@media (min-width: ${breakPoints.md}px)`,
+  lg: `@media (min-width: ${breakPoints.lg}px)`,
+  xl: `@media (min-width: ${breakPoints.xl}px)`
 }
 
 export const isNewProject = creationDate => {

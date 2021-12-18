@@ -21,8 +21,8 @@ const RichTextViewer = dynamic(() => import('./richTextViewer'), {
 const StyledImage = styled(Image)`
   cursor: pointer;
   border-radius: 12px 12px 0 0;
-  background: ${props => (props.isGivingBlockProject ? 'white' : 'none')};
-  object-fit: ${props => (props.isGivingBlockProject ? 'contain' : 'cover')};
+  background: ${props => (props.isgivingblockproject ? 'white' : 'none')};
+  object-fit: ${props => (props.isgivingblockproject ? 'contain' : 'cover')};
 `
 
 const CardContainer = styled(Card)`
@@ -194,7 +194,7 @@ const ProjectListing = props => {
                   layout='fill'
                   priority={true}
                   quality={40}
-                  isGivingBlockProject={isGivingBlockProject}
+                  isgivingblockproject={isGivingBlockProject}
                 />
               </div>
             ) : (

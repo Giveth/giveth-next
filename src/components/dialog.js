@@ -3,7 +3,7 @@ import { Container } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../utils/theme-ui'
 import Confetti from '../images/svg/donation/confetti.svg'
-import Header from './header'
+import HeaderIndex from './header/headerIndex'
 
 // import LeftArrow from '../images/svg/general/left-arrow.svg'
 import decoratorClouds from '../images/decorator-clouds.svg'
@@ -27,7 +27,7 @@ export default function Dialog({ children }) {
       {/*    Giveth*/}
       {/*  </Text>*/}
       {/*</BackButton>*/}
-      <Header />
+      <HeaderIndex />
       <Main>
         <DialogContent>{children}</DialogContent>
       </Main>
