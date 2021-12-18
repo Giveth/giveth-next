@@ -6,26 +6,22 @@ import { useQuery } from '@apollo/client'
 import LoadingModal from '../../components/loadingModal'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
 import { FETCH_MY_PROJECTS } from '../../apollo/gql/projects'
-import AccountTop from '../../components/account/AccountTop'
 import AccountNav from '../../components/account/AccountNav'
 import AccountBody from '../../components/account/AccountBody'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 
 const Main = () => {
   const {
-    state: { user },
-    actions: { signModalContent, setToken }
+    state: { isSignedIn },
+    actions: { loginModal, closeLoginModal }
   } = useContext(Web3Context)
 
   useEffect(() => {
-    if (user && !user.token) setToken()
-  }, [user])
+    if (!isSignedIn) loginModal()
+    else closeLoginModal()
+  }, [isSignedIn])
 
-  return user && user.token ? (
-    <AccountPage />
-  ) : (
-    <div style={{ margin: '150px 0', textAlign: 'center' }}>{signModalContent()}</div>
-  )
+  return isSignedIn ? <AccountPage /> : null
 }
 
 const AccountPage = () => {
@@ -43,11 +39,9 @@ const AccountPage = () => {
     data: StringParam
   })
 
-  const isSSR = typeof window === 'undefined'
   if (dataLoading || projectsLoading) {
     return (
       <>
-        <AccountTop />
         <Flex sx={{ height: '80vh' }} />
         <LoadingModal isOpen />
       </>
@@ -56,7 +50,6 @@ const AccountPage = () => {
 
   return (
     <>
-      <AccountTop query={query} />
       <Flex
         sx={{
           ml: '5%',
@@ -73,7 +66,6 @@ const AccountPage = () => {
         <AccountBody
           setQuery={setQuery}
           query={query}
-          isSSR={isSSR}
           userDonations={userDonations}
           projectsList={projectsList}
         />

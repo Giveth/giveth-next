@@ -12,6 +12,13 @@ const mainnetTokens = {
   tokens: [
     {
       chainId: 1,
+      name: 'Giveth Token',
+      symbol: 'GIV',
+      address: '0xb94c53b0e67fabac3d97173482663ef597d4174a',
+      decimals: 18
+    },
+    {
+      chainId: 1,
       name: 'ETH',
       symbol: 'ETH',
       decimals: 18
@@ -209,7 +216,7 @@ const mainnetTokens = {
       chainId: 1,
       address: '0xe41d2489571d322189246dafa5ebde1f4699f498',
       symbol: 'ZRX',
-      name: '0x',
+      name: 'ZRX 0x',
       decimals: 18
     },
     {
@@ -244,7 +251,7 @@ const mainnetTokens = {
       chainId: 1,
       address: '0x80fb784b7ed66730e8b1dbd9820afd29931aab03',
       symbol: 'LEND',
-      name: 'Aave',
+      name: 'Lend Aave',
       decimals: 18
     },
     {
@@ -624,6 +631,225 @@ const mainnetTokens = {
       symbol: 'IDEX',
       name: 'IDEX',
       decimals: 18
+    },
+    // ADD THESE TO MONOSWAP
+    {
+      chainId: 1,
+      address: '0x4fE83213D56308330EC302a8BD641f1d0113A4Cc',
+      symbol: 'NU',
+      name: 'NuCypher',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x875773784Af8135eA0ef43b5a374AaD105c5D39e',
+      symbol: 'IDLE',
+      name: 'Idle Finance',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x25f8087ead173b73d6e8b84329989a8eea16cf73',
+      symbol: 'YGG',
+      name: 'Yield Guild',
+      decimals: 18
+    },
+    // THESE ARE TAKEN FROM THE GIVING BLOCK LIST
+    {
+      chainId: 1,
+      address: '0xdbdb4d16eda451d0503b854cf79d55697f90c8df',
+      symbol: 'ALCX',
+      name: 'Alchemix',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xff20817765cb7f73d4bde2e66e067e58d11095c2',
+      symbol: 'AMP',
+      name: 'Amp',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x8290333cef9e6d528dd5618fb97a76f268f3edd4',
+      symbol: 'ANKR',
+      name: 'Ankr Network',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xbb0e17ef65f82ab018d8edd776e8dd940327b28b',
+      symbol: 'AXS',
+      name: 'Axie Infinity Shard',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x0391D2021f89DC339F60Fff84546EA23E337750f',
+      symbol: 'BOND',
+      name: 'BarnBridge Governance Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x321c2fe4446c7c963dc41dd58879af648838f98d',
+      symbol: 'CTX',
+      name: 'Cryptex',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x4e15361fd6b4bb609fa63c81a2be19d873717870',
+      symbol: 'FTM',
+      name: 'Fantom Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc944e90c64b2c07662a292be6244bdf05cda44a7',
+      symbol: 'GRT',
+      name: 'Graph Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30',
+      symbol: 'INJ',
+      name: 'Injective Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x58b6a8a3302369daec383334672404ee733ab239',
+      symbol: 'LPT',
+      name: 'Livepeer Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xfc98e825a2264d890f9a1e68ed50e1526abccacd',
+      symbol: 'MCO2',
+      name: 'Moss Carbon Credit',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x4575f41308EC1483f3d399aa9a2826d74Da13Deb',
+      symbol: 'OXT',
+      name: 'Orchid',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
+      symbol: 'SAND',
+      name: 'The Sandbox',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x00c83aecc790e8a4453e5dd3b0b4b3680501a7a7',
+      symbol: 'SKALE',
+      name: 'Skale',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xcc8fa225d80b9c7d42f96e9570156c65d6caaa25',
+      symbol: 'SLP',
+      name: 'Smooth Love Potion',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xdf801468a808a32656d2ed2d2d80b72a129739f4',
+      symbol: 'CUBE',
+      name: 'Somnium Space Cubes',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xb64ef51c888972c908cfacf59b47c1afbc0ab8ac',
+      symbol: 'STORJ',
+      name: 'Storj',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xd2877702675e6ceb975b4a1dff9fb7baf4c91ea9',
+      symbol: 'LUNA',
+      name: 'Wrapped LUNA Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828',
+      symbol: 'UMA',
+      name: 'UMA Voting Token v1',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+      symbol: 'UNI',
+      name: 'Uniswap',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc221b7e65ffc80de234bbb6667abdd46593d34f0',
+      symbol: 'wCFG',
+      name: 'Wrapped Centrifuge',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x18aAA7115705e8be94bfFEBDE57Af9BFc265B998',
+      symbol: 'AUDIO',
+      name: 'Audius',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+      symbol: 'MASK',
+      name: 'Mask Network',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x31c8eacbffdd875c74b94b077895bd78cf1e64a3',
+      symbol: 'RAD',
+      name: 'Radicle',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x0b38210ea11411557c13457D4dA7dC6ea731B88a',
+      symbol: 'API3',
+      name: 'API3',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x71590d4ed14d9cbacb2cff8abf919ac4d22c5b7b',
+      symbol: 'ASH',
+      name: 'The Burn Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xba5bde662c17e2adff1075610382b9b691296350',
+      symbol: 'RARE',
+      name: 'SuperRare',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xaea46A60368A7bD060eec7DF8CBa43b7EF41Ad85',
+      symbol: 'FET',
+      name: 'Fetch',
+      decimals: 18
     }
   ],
   logoURI: 'ipfs://QmQAGtNJ2rSGpnP6dh6PPKNSmZL8RTZXmgFwgTdy5Nz5mx'
@@ -635,6 +861,13 @@ const ropstenTokens = {
   keywords: ['custom', 'erc20'],
   tokens: [
     {
+      chainId: 3,
+      address: '0x067eA48882E6D728A37acfd1535ec03f8E33794a',
+      symbol: 'YAY',
+      name: 'Giveth',
+      decimals: 18
+    },
+    {
       chainId: 1,
       name: 'ETH',
       symbol: 'ETH',
@@ -645,13 +878,6 @@ const ropstenTokens = {
       address: '0xad6d458402f60fd3bd25163575031acdce07538d',
       symbol: 'DAI',
       name: 'DAI Ropsten',
-      decimals: 18
-    },
-    {
-      chainId: 3,
-      address: '0x067eA48882E6D728A37acfd1535ec03f8E33794a',
-      symbol: 'YAY',
-      name: 'Giveth Ropsten Test',
       decimals: 18
     },
     {
@@ -669,6 +895,13 @@ const xDaiTokens = {
   timestamp: null,
   keywords: ['custom', 'erc20'],
   tokens: [
+    {
+      chainId: 100,
+      name: 'TestGIV',
+      symbol: 'TestGIV',
+      address: '0x5d32A9BaF31A793dBA7275F77856A47A0F5d09b3',
+      decimals: 18
+    },
     {
       chainId: 100,
       name: 'XDAI',
@@ -857,6 +1090,435 @@ const traceTokens = {
   ]
 }
 
+const ropstenTheGivingBlockTokens = {
+  name: 'THE GIVING BLOCK ROPSTEN WHITELIST',
+  timestamp: null,
+  keywords: ['giving-block', 'erc20', 'ropsten'],
+  tokens: [
+    {
+      chainId: 3,
+      address: '0x067eA48882E6D728A37acfd1535ec03f8E33794a',
+      symbol: 'YAY',
+      name: 'Giveth',
+      decimals: 18
+    },
+    {
+      chainId: 3,
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
+    }
+  ]
+}
+
+const theGivingBlockTokens = {
+  name: 'THE GIVING BLOCK WHITELIST',
+  timestamp: null,
+  keywords: ['giving-block', 'erc20'],
+  tokens: [
+    {
+      chainId: 1,
+      address: '0x067ea48882e6d728a37acfd1535ec03f8e33794a',
+      symbol: 'GIV',
+      name: 'GIV Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xe41d2489571d322189246dafa5ebde1f4699f498',
+      symbol: 'ZRX',
+      name: 'ZRX 0x',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x111111111117dc0aa78b770fa6a738034120c302',
+      symbol: '1INCH',
+      name: '1INCH Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x80fb784b7ed66730e8b1dbd9820afd29931aab03',
+      symbol: 'LEND',
+      name: 'Lend Aave',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c',
+      symbol: 'BNT',
+      name: 'Bancor',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x0d8775f648430679a709e98d2b0cb6250d2887ef',
+      symbol: 'BAT',
+      name: 'Basic Attention Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xba100000625a3754423978a60c9317c58a424e3d',
+      symbol: 'BAL',
+      name: 'Balancer',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x514910771af9ca656af840dff83e8264ecf986ca',
+      symbol: 'LINK',
+      name: 'Chainlink',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc00e94cb662c3520282e6f5717214004a7f26888',
+      symbol: 'COMP',
+      name: 'Compound',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xD533a949740bb3306d119CC777fa900bA034cd52',
+      symbol: 'CRV',
+      name: 'Curve DAO Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      symbol: 'DAI',
+      name: 'Dai',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942',
+      symbol: 'MANA',
+      name: 'Decentraland',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c',
+      symbol: 'ENJ',
+      name: 'Enjin Coin',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x056fd409e1d7a124bd7017459dfea2f387b6d5cd',
+      symbol: 'GUSD',
+      name: 'Gemini Dollar',
+      decimals: 2
+    },
+    {
+      chainId: 1,
+      address: '0xdd974d5c2e2928dea5f71b9825b8b646686bd200',
+      symbol: 'KNC',
+      name: 'Kyber Network',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xbbbbca6a901c926f240b89eacb641d8aec7aeafd',
+      symbol: 'LRC',
+      name: 'Loopring',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2',
+      symbol: 'MKR',
+      name: 'Maker',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x09a3ecafa817268f77be1283176b946c4ff2e608',
+      symbol: 'MIR',
+      name: 'Wrapped MIR Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x45804880de22913dafe09f4980848ece6ecbaf78',
+      symbol: 'PAXG',
+      name: 'PAX Gold',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0',
+      symbol: 'MATIC',
+      name: 'Matic Network',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x408e41876cccdc0f92210600ef50372656052a38',
+      symbol: 'REN',
+      name: 'Ren',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+      symbol: 'SUSHI',
+      name: 'Sushi Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f',
+      symbol: 'SNX',
+      name: 'Synthetix Network Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xa47c8bf37f92abed4a126bda807a7b7498661acd',
+      symbol: 'UST',
+      name: 'TerraUSD',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e',
+      symbol: 'YFI',
+      name: 'yearn.finance',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x4a220e6096b25eadb88358cb44068a3248254675',
+      symbol: 'QNT',
+      name: 'Quant',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x1776e1f26f98b1a5df9cd347953a26dd3cb46671',
+      symbol: 'NMR',
+      name: 'Numeraire',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+      symbol: 'SHIB',
+      name: 'SHIBA INU',
+      decimals: 18
+    },
+
+    // >>>> HERE IT BEGINS THE NEW TOKENS THAT WERE NOT IN THE MAIN LIST BEFORE <<<<<<
+    {
+      chainId: 1,
+      address: '0xdbdb4d16eda451d0503b854cf79d55697f90c8df',
+      symbol: 'ALCX',
+      name: 'Alchemix',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xff20817765cb7f73d4bde2e66e067e58d11095c2',
+      symbol: 'AMP',
+      name: 'Amp',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x8290333cef9e6d528dd5618fb97a76f268f3edd4',
+      symbol: 'ANKR',
+      name: 'Ankr Network',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xbb0e17ef65f82ab018d8edd776e8dd940327b28b',
+      symbol: 'AXS',
+      name: 'Axie Infinity Shard',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x0391D2021f89DC339F60Fff84546EA23E337750f',
+      symbol: 'BOND',
+      name: 'BarnBridge Governance Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x321c2fe4446c7c963dc41dd58879af648838f98d',
+      symbol: 'CTX',
+      name: 'Cryptex',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x4e15361fd6b4bb609fa63c81a2be19d873717870',
+      symbol: 'FTM',
+      name: 'Fantom Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc944e90c64b2c07662a292be6244bdf05cda44a7',
+      symbol: 'GRT',
+      name: 'Graph Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30',
+      symbol: 'INJ',
+      name: 'Injective Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x58b6a8a3302369daec383334672404ee733ab239',
+      symbol: 'LPT',
+      name: 'Livepeer Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xfc98e825a2264d890f9a1e68ed50e1526abccacd',
+      symbol: 'MCO2',
+      name: 'Moss Carbon Credit',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x4575f41308EC1483f3d399aa9a2826d74Da13Deb',
+      symbol: 'OXT',
+      name: 'Orchid',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
+      symbol: 'SAND',
+      name: 'The Sandbox',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x00c83aecc790e8a4453e5dd3b0b4b3680501a7a7',
+      symbol: 'SKALE',
+      name: 'Skale',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xcc8fa225d80b9c7d42f96e9570156c65d6caaa25',
+      symbol: 'SLP',
+      name: 'Smooth Love Potion',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xdf801468a808a32656d2ed2d2d80b72a129739f4',
+      symbol: 'CUBE',
+      name: 'Somnium Space Cubes',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xb64ef51c888972c908cfacf59b47c1afbc0ab8ac',
+      symbol: 'STORJ',
+      name: 'Storj',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xd2877702675e6ceb975b4a1dff9fb7baf4c91ea9',
+      symbol: 'LUNA',
+      name: 'Wrapped LUNA Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828',
+      symbol: 'UMA',
+      name: 'UMA Voting Token v1',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+      symbol: 'UNI',
+      name: 'Uniswap',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xc221b7e65ffc80de234bbb6667abdd46593d34f0',
+      symbol: 'wCFG',
+      name: 'Wrapped Centrifuge',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x18aAA7115705e8be94bfFEBDE57Af9BFc265B998',
+      symbol: 'AUDIO',
+      name: 'Audius',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
+      symbol: 'MASK',
+      name: 'Mask Network',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x31c8eacbffdd875c74b94b077895bd78cf1e64a3',
+      symbol: 'RAD',
+      name: 'Radicle',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x0b38210ea11411557c13457D4dA7dC6ea731B88a',
+      symbol: 'API3',
+      name: 'API3',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x71590d4ed14d9cbacb2cff8abf919ac4d22c5b7b',
+      symbol: 'ASH',
+      name: 'The Burn Token',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xba5bde662c17e2adff1075610382b9b691296350',
+      symbol: 'RARE',
+      name: 'SuperRare',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0xaea46A60368A7bD060eec7DF8CBa43b7EF41Ad85',
+      symbol: 'FET',
+      name: 'Fetch',
+      decimals: 18
+    }
+  ]
+}
+
 const getTokens = network => {
   let tokens = {}
   switch (network) {
@@ -871,6 +1533,12 @@ const getTokens = network => {
       break
     case 'trace':
       tokens = traceTokens
+      break
+    case 'thegivingblock':
+      tokens = theGivingBlockTokens
+      break
+    case 'ropsten_thegivingblock':
+      tokens = ropstenTheGivingBlockTokens
       break
     default:
       tokens = mainnetTokens

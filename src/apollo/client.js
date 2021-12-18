@@ -1,40 +1,31 @@
 import { useMemo } from 'react'
-import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { setContext } from '@apollo/client/link/context'
-import gql from 'graphql-tag'
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 import { createUploadLink } from 'apollo-upload-client'
+import { setContext } from '@apollo/client/link/context'
 import merge from 'deepmerge'
 import isEqual from 'lodash.isequal'
-import { getLocalStorageTokenLabel, getLocalStorageUserLabel } from '../services/auth'
+
+import { getUser } from '../services/auth'
+import { isSSR } from '../lib/helpers'
 
 let apolloClient
 
-const ssrMode = typeof window === 'undefined'
-
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 
-function createApolloClient() {
-  // Declare variable to store authToken
-  let token
-  const appUser = getLocalStorageUserLabel()
+const httpLink = createUploadLink({
+  uri: process.env.NEXT_PUBLIC_APOLLO_SERVER
+})
 
-  const httpLink = createUploadLink({
-    uri: process.env.NEXT_PUBLIC_APOLLO_SERVER
-  })
+function createApolloClient() {
+  let token
+  const ssrMode = isSSR()
 
   const authLink = setContext((_, { headers }) => {
-    // get the authentication token from local storage if it exists
-    if (!ssrMode) token = localStorage.getItem(getLocalStorageTokenLabel())
-
-    // return the headers to the context so httpLink can read them
+    const localUser = getUser()
+    token = localUser.token
     const mutation = {
-      Authorization: token ? `Bearer ${token}` : ''
-    }
-    if (!ssrMode && localStorage.getItem(appUser)) {
-      const user = JSON.parse(localStorage.getItem(appUser))
-      const userAddress = user?.addresses && user.addresses[0]
-
-      if (userAddress) mutation['wallet-address'] = userAddress
+      Authorization: token ? `Bearer ${token}` : '',
+      'wallet-address': localUser.walletAddress || ''
     }
 
     return {
@@ -106,7 +97,7 @@ export function initializeApollo(initialState = null) {
     _apolloClient.cache.restore(data)
   }
   // For SSG and SSR always create a new Apollo Client
-  if (ssrMode) return _apolloClient
+  if (isSSR()) return _apolloClient
   // Create the Apollo Client once in the client
   if (!apolloClient) apolloClient = _apolloClient
 

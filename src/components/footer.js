@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 import { FiExternalLink } from 'react-icons/fi'
 import theme from '../utils/theme-ui'
 import SocialNetworks from './content/SocialNetworks'
+import Routes from '../lib/Routes'
 
 const Footer = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
@@ -41,15 +42,27 @@ const Footer = () => {
         )}
 
         <LinkBox>
-          <FooterLink href='/'>Home</FooterLink>
-          <FooterLink href='/projects'>Projects</FooterLink>
-          <FooterLink href='/about'>About Us</FooterLink>
-          <FooterLink href='/faq'>FAQ</FooterLink>
-          <FooterLink href='/support'>Support</FooterLink>
+          <Link href='/' passHref>
+            <FooterLink>Home</FooterLink>
+          </Link>
+          <Link href={Routes.Projects} passHref>
+            <FooterLink>Projects</FooterLink>
+          </Link>
+          <Link href={Routes.AboutUs} passHref>
+            <FooterLink>About Us</FooterLink>
+          </Link>
+          <Link href={Routes.Faq} passHref>
+            <FooterLink>FAQ</FooterLink>
+          </Link>
+          <Link href={Routes.Support} passHref>
+            <FooterLink>Support</FooterLink>
+          </Link>
         </LinkBox>
 
         <LinkBox>
-          <FooterLink href='/join'>Join Our Community</FooterLink>
+          <Link href={Routes.Join} passHref>
+            <FooterLink>Join Our Community</FooterLink>
+          </Link>
           <FooterExternalLink
             href='https://docs.giveth.io/whatisgiveth/'
             target='_blank'
@@ -71,7 +84,9 @@ const Footer = () => {
           >
             Developer Docs <ExtIcon />
           </FooterExternalLink>
-          <FooterLink href='/tos'>Terms of Use</FooterLink>
+          <Link href={Routes.Terms} passHref>
+            <FooterLink>Terms of Use</FooterLink>
+          </Link>
         </LinkBox>
 
         <LinkBox>
@@ -89,13 +104,15 @@ const Footer = () => {
           >
             Commons Stack <ExtIcon />
           </FooterExternalLink>
-          <FooterLink href='/partnerships'>Partnerships</FooterLink>
+          <Link href={Routes.Partnerships} passHref>
+            <FooterLink>Partnerships</FooterLink>
+          </Link>
           <FooterExternalLink
             href='https://docs.giveth.io/jobs/'
             target='_blank'
             rel='noopener noreferrer'
           >
-            We`&apos;re Hiring! <ExtIcon />
+            We&apos;re Hiring! <ExtIcon />
           </FooterExternalLink>
         </LinkBox>
       </InnerGrid>
@@ -112,9 +129,9 @@ const Footer = () => {
           }}
         >
           Support us{' '}
-          <FooterLink href={`/donate/${theme.donationSlug}`} sx={{ variant: 'links.nav' }}>
-            with your donation
-          </FooterLink>
+          <Link href={`/donate/${theme.donationSlug}`} passHref>
+            <FooterLink>with your donation</FooterLink>
+          </Link>
         </Text>
       </DonateSection>
 

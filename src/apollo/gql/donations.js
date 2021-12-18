@@ -1,4 +1,5 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
+
 const SAVE_DONATION = gql`
   mutation (
     $chainId: Float!
@@ -11,6 +12,8 @@ const SAVE_DONATION = gql`
     $projectId: Float!
     $transakId: String
     $transakStatus: String
+    $tokenAddress: String
+    $anonymous: Boolean
   ) {
     saveDonation(
       chainId: $chainId
@@ -23,6 +26,8 @@ const SAVE_DONATION = gql`
       projectId: $projectId
       transakId: $transakId
       transakStatus: $transakStatus
+      tokenAddress: $tokenAddress
+      anonymous: $anonymous
     )
   }
 `

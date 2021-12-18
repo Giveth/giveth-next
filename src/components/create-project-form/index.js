@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react'
-import { Box, Heading, Flex, Button, Spinner, Progress, Text } from 'theme-ui'
+import { Box, Flex, Spinner, Progress, Text } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
@@ -28,15 +28,16 @@ import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 
 const Main = props => {
   const {
-    state: { user },
-    actions: { signModalContent }
+    state: { isSignedIn },
+    actions: { loginModal, closeLoginModal }
   } = useContext(Web3Context)
 
-  return user && user.token ? (
-    <CreateProjectForm {...props} />
-  ) : (
-    <div style={{ margin: '150px 0', textAlign: 'center' }}>{signModalContent()}</div>
-  )
+  useEffect(() => {
+    if (!isSignedIn) loginModal()
+    else closeLoginModal()
+  }, [isSignedIn])
+
+  return isSignedIn ? <CreateProjectForm {...props} /> : null
 }
 
 const CreateProjectForm = props => {
@@ -105,7 +106,9 @@ const CreateProjectForm = props => {
         goBack={goBack}
       />
     ),
-    () => <ProjectEthAddressInput value={EthAddress} onChange={setEthAddress} goBack={goBack} />,
+    () => (
+      <ProjectEthAddressInput value={EthAddress} onChange={setEthereumAddress} goBack={goBack} />
+    ),
     () => (
       <FinalVerificationStep
         formData={formData}
@@ -194,18 +197,24 @@ const CreateProjectForm = props => {
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
-
+      window?.scrollTo(0, 0)
       setInputLoading(false)
       setFormData(project)
       doNextStep()
     } catch (error) {
       console.log({ error })
       setInputLoading(false)
+      window?.scrollTo(0, 0)
       Toast({
         content: error?.message || JSON.stringify(error),
         type: 'error'
       })
     }
+  }
+
+  const setEthereumAddress = addr => {
+    if (addr?.length > 42) return null
+    return setEthAddress(addr)
   }
 
   useEffect(() => {
@@ -268,7 +277,7 @@ const CreateProjectForm = props => {
 
   return (
     <>
-      <Progress max={steps.length} value={progressPercentage}>
+      <Progress style={{ position: 'fixed', top: 0 }} max={steps.length} value={progressPercentage}>
         <Text>Progress bar test text</Text>
       </Progress>
       <Box
@@ -279,28 +288,6 @@ const CreateProjectForm = props => {
         }}
       >
         <>
-          <Flex
-            sx={{
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}
-          >
-            <Heading as='h5'>CREATE A NEW PROJECT</Heading>
-            <Button
-              type='button'
-              aria-label='Cancel'
-              onClick={() => setShowCloseModal(!showCloseModal)}
-              sx={{
-                fontSize: '3',
-                fontFamily: 'body',
-                color: 'secondary',
-                background: 'unset',
-                cursor: 'pointer'
-              }}
-            >
-              Cancel
-            </Button>
-          </Flex>
           {currentStep === steps.length ? (
             <p>Creating project, please wait</p>
           ) : (
@@ -318,7 +305,9 @@ const CreateProjectForm = props => {
                     <Spinner variant='spinner.medium' />
                   </Flex>
                 ) : (
-                  <Step />
+                  <Flex sx={{ minHeight: '700px' }}>
+                    <Step />
+                  </Flex>
                 )}
                 <ConfirmationModal
                   showModal={showCloseModal}

@@ -53,6 +53,7 @@ export const ProjectDescriptionInput = ({ register, currentValue, setValue, goBa
           <React.Suspense fallback={<div />}>
             <RichTextInput
               style={{
+                height: '250px',
                 marginTop: '40px',
                 fontFamily: 'body'
               }}

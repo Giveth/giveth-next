@@ -77,27 +77,33 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
               </Flex>
             </Flex>
           ) : null}
-          {project?.walletAddress && (
-            <Flex sx={{ flexDirection: 'column' }}>
-              <Text sx={{ variant: 'text.medium', color: 'bodyLight', mb: 2 }}>
-                Project Address
-              </Text>
+          {project?.givingBlocksId ? (
+            <Text sx={{ variant: 'text.medium', color: 'bodyLight', mb: 2 }}>
+              Thank you to The Giving Block for on boarding this project
+            </Text>
+          ) : (
+            project?.walletAddress && (
+              <Flex sx={{ flexDirection: 'column' }}>
+                <Text sx={{ variant: 'text.medium', color: 'bodyLight', mb: 2 }}>
+                  Project Address
+                </Text>
 
-              <Text
-                sx={{
-                  variant: 'text.medium',
-                  color: 'bodyLight',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  mt: -2
-                }}
-                onClick={() =>
-                  window.open(`https://etherscan.io/address/${project?.walletAddress}`)
-                }
-              >
-                {project?.walletAddress}
-              </Text>
-            </Flex>
+                <Text
+                  sx={{
+                    variant: 'text.medium',
+                    color: 'bodyLight',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    mt: -2
+                  }}
+                  onClick={() =>
+                    window.open(`https://etherscan.io/address/${project?.walletAddress}`)
+                  }
+                >
+                  {project?.walletAddress}
+                </Text>
+              </Flex>
+            )
           )}
         </Funds>
       )}

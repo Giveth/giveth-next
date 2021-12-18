@@ -9,6 +9,10 @@ body {
     Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+h6 {
+  margin: 0;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -16,6 +20,10 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .pac-item {
@@ -81,4 +89,56 @@ a {
 }
 .ql-container.ql-disabled .ql-tooltip {
   display: none;
+}
+
+/* Loader CSS */
+.dot-flashing {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  animation: dot-flashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+.dot-flashing::before {
+  left: -15px;
+  animation-delay: 0s;
+}
+.dot-flashing::before,
+.dot-flashing::after {
+  border-radius: 5px;
+  width: 10px;
+  height: 10px;
+  animation: dot-flashing 1s infinite alternate;
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+.dot-flashing::after {
+  left: 15px;
+  animation-delay: 1s;
+}
+
+@keyframes dot-flashing {
+  0% {
+    background-color: #e1458d;
+  }
+  50%,
+  100% {
+    background-color: #ffc9e2;
+  }
+}
+
+@font-face {
+  font-family: 'TeX Gyre Adventor';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../public/fonts/texgyreadventor-regular-webfont.woff');
+}
+@font-face {
+  font-family: 'TeX Gyre Adventor';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../public/fonts/texgyreadventor-bold-webfont.woff');
 }

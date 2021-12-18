@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import useSWR from 'swr'
+import { FiExternalLink } from 'react-icons/fi'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
@@ -10,7 +11,8 @@ import { Avatar, Badge, Input, Flex, Spinner, Text } from 'theme-ui'
 import Jdenticon from 'react-jdenticon'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import { parseBalance } from '../../lib/util'
+import { ETHERSCAN_PREFIXES, parseBalance } from '../../lib/util'
+import { shortenAddress } from '../../lib/helpers'
 // import DropdownInput from '../dropdownInput'
 // import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 // import { useApolloClient } from '@apollo/client'
@@ -31,8 +33,7 @@ const DonationsTable = ({ donations = [] }) => {
   // const client = useApolloClient()
   const filter = 0
 
-  const fromTrace =
-    currentProjectView?.project?.fromTrace || currentProjectView?.project?.IOTraceable
+  const fromTrace = currentProjectView?.project?.traceCampaignId
 
   const traceDonationsFetch = useSWR(
     `${process.env.NEXT_PUBLIC_FEATHERS}/donations?%24limit=${limit}&%24skip=${skip}&campaignId=${currentProjectView?.project?._id}`,
@@ -147,7 +148,7 @@ const DonationsTable = ({ donations = [] }) => {
         <Table>
           <thead>
             <tr>
-              {['Date', 'Donor', 'Currency', 'Amount'].map((i, index) => {
+              {['Date', 'Donor', 'Currency', 'Amount', 'Transaction'].map((i, index) => {
                 return (
                   <th scope='col' key={index}>
                     <Text
@@ -194,7 +195,7 @@ const DonationsTable = ({ donations = [] }) => {
                         ml: 2
                       }}
                     >
-                      {i.user === null
+                      {i.user === null || i?.anonymous
                         ? 'Anonymous'
                         : i.user?.name
                         ? i.user.name
@@ -220,6 +221,41 @@ const DonationsTable = ({ donations = [] }) => {
                         ? `${i.amount ? `${i.amount} ETH` : ''} \n ~ ${i.valueUsd?.toFixed(2)} USD`
                         : i.amount}
                     </Text>
+                  </td>
+                  <td
+                    data-label='Transaction'
+                    style={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'baseline'
+                      }}
+                    >
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          color: 'secondary',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          width: '120px'
+                        }}
+                      >
+                        {shortenAddress(i?.transactionId)}
+                      </Text>
+                      <FiExternalLink
+                        size='18px'
+                        style={{ cursor: 'pointer', marginLeft: 4 }}
+                        onClick={() => {
+                          const transactionLink =
+                            i.transakTransactionLink ||
+                            `${ETHERSCAN_PREFIXES[i.transactionNetworkId]}tx/${i?.transactionId}`
+                          window.open(transactionLink)
+                        }}
+                      />
+                    </div>
                   </td>
                 </tr>
               )

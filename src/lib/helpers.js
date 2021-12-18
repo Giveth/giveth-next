@@ -3,6 +3,7 @@ import tokenAbi from 'human-standard-token-abi'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
 import Toast from '../components/toast'
+import { walletsArray } from '../utils/constants'
 // import { GivethBridge } from '@giveth/bridge-contract'
 
 export const isUserRegistered = user => {
@@ -11,6 +12,24 @@ export const isUserRegistered = user => {
 
 export const compareAddresses = (add1, add2) => {
   return add1?.toLowerCase() === add2?.toLowerCase()
+}
+
+export const isSSR = () => {
+  return typeof window === 'undefined'
+}
+
+export const breakPoints = {
+  sm: 500,
+  md: 768,
+  lg: 992,
+  xl: 1200
+}
+
+export const mediaQueries = {
+  sm: `@media (min-width: ${breakPoints.sm}px)`,
+  md: `@media (min-width: ${breakPoints.md}px)`,
+  lg: `@media (min-width: ${breakPoints.lg}px)`,
+  xl: `@media (min-width: ${breakPoints.xl}px)`
 }
 
 export const isNewProject = creationDate => {
@@ -29,6 +48,17 @@ export const shortenAddress = (address, charsLength = 4) => {
     return address
   }
   return `${address.slice(0, charsLength + prefixLength)}…${address.slice(-charsLength)}`
+}
+
+export const checkWalletName = web3 => {
+  if (!web3) return null
+  let walletName = ''
+  walletsArray.some(i => {
+    if (web3[i.name] === true) {
+      walletName = i.name
+    }
+  })
+  return walletName
 }
 
 export async function sendTransaction(
@@ -78,7 +108,6 @@ export async function sendTransaction(
       const instance = fromSigner
         ? new ethers.Contract(contractAddress, tokenAbi, fromSigner)
         : new web3Provider.Contract(tokenAbi, contractAddress)
-      console.log({ instance })
       const decimals = instance?.decimals
         ? await instance.decimals()
         : await instance.methods.decimals().call()

@@ -39,9 +39,17 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
           mt: '16px'
         }}
       >
-        Your project is published and ready to raise funds.
+        Your project is being reviewed by our team.
       </Text>
-
+      <Text
+        sx={{
+          fontSize: 6,
+          fontFamily: 'body',
+          color: 'secondary'
+        }}
+      >
+        You&apos;ll receive an email from us once your project is listed.
+      </Text>
       <Flex
         sx={{
           width: ['100%', '80%', '80%'],
@@ -106,7 +114,7 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
             </Text>
           </Link> */}
           <Flex sx={{ flexDirection: 'column' }}>
-            <Link href={`/project/${addedProject?.slug}`}>
+            <Link href={`/project/${addedProject?.slug}`} passHref>
               <Text
                 sx={{
                   cursor: 'pointer',
@@ -119,7 +127,7 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
                 View my project
               </Text>
             </Link>
-            <Link href={`https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5`}>
+            <Link href={`https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5`} passHref>
               <Text
                 sx={{
                   cursor: 'pointer',
@@ -132,7 +140,7 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
                 Verify my project
               </Text>
             </Link>
-            <Link href='/'>
+            <Link href='/' passHref>
               <Text
                 sx={{
                   cursor: 'pointer',

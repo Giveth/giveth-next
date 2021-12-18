@@ -2,6 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+
 #### Prerequisites
 - You need to use NodeJS v14 or higher.
 - You need to use yarn.

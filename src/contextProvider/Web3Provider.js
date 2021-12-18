@@ -1,69 +1,25 @@
 import React, { createContext, useEffect, useState } from 'react'
 import Onboard from 'bnc-onboard'
 import Web3 from 'web3'
-import { Button, Flex, Text } from 'theme-ui'
 
 import { client } from '../apollo/client'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import User from '../entities/user'
 import * as Auth from '../services/auth'
 import { getToken } from '../services/token'
-import { signMessage } from '../lib/helpers'
-import Modal from '../components/modal'
-import theme from '../utils/theme-ui'
+import { compareAddresses, signMessage } from '../lib/helpers'
+import { onboardWallets } from '../utils/constants'
+import WalletModal from '../components/WalletModal'
+import LoginModal from '../components/loginModal'
 
 const Context = createContext({})
 const { Provider } = Context
 
 const nativeTokenDecimals = 18
-
 const defaultNetworkId = Number(process.env.NEXT_PUBLIC_NETWORK_ID)
-const rpcUrl = process.env.NEXT_PUBLIC_ETHEREUM_NODE
 const dappId = process.env.NEXT_PUBLIC_BLOCK_NATIVE_DAPP_ID
-const portisKey = process.env.NEXT_PUBLIC_PORTIS_KEY
-const infuraKey = process.env.NEXT_PUBLIC_INFURA_ID
 
-const wallets = [
-  { walletName: 'metamask' },
-  { walletName: 'torus' },
-  {
-    walletName: 'portis',
-    apiKey: portisKey,
-  },
-  {
-    walletName: 'trezor',
-    appUrl: 'https://giveth.io/',
-    rpcUrl,
-  },
-  {
-    walletName: 'lattice',
-    appName: 'Giveth 2.0',
-    rpcUrl,
-  },
-  {
-    walletName: 'ledger',
-    rpcUrl,
-  },
-  { walletName: 'dapper' },
-  { walletName: 'coinbase' },
-  { walletName: 'status' },
-  { walletName: 'unilogin' },
-  // { walletName: 'authereum', disableNotifications: true },
-  // { walletName: 'gnosis' },
-  {
-    walletName: 'walletConnect',
-    infuraKey,
-  },
-  { walletName: 'opera' },
-  { walletName: 'operaTouch' },
-  { walletName: 'imToken', rpcUrl },
-  { walletName: 'meetone' },
-  { walletName: 'mykey' },
-  { walletName: 'wallet.io', rpcUrl },
-]
-
-const Web3Provider = (props) => {
-  const [validProvider, setValidProvider] = useState(false)
+const Web3Provider = props => {
   const [networkId, setNetworkId] = useState()
   const [web3, setWeb3] = useState()
   const [provider, setProvider] = useState()
@@ -72,111 +28,102 @@ const Web3Provider = (props) => {
   const [onboard, setOnboard] = useState({})
   const [networkName, setNetworkName] = useState()
   const [user, setUser] = useState()
-  const [showSignModal, setShowSignModal] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [showWalletModal, setShowWalletModal] = useState(false)
 
+  const isEnabled = !!web3 && !!account && !!networkId && !!user
+  const isSignedIn = isEnabled && user.token
   const isXdai = networkId === 100
 
-  const initOnBoard = () => {
-    if (validProvider) return
+  const initOnBoard = initialRun => {
+    if (web3) return
 
     const _onboard = Onboard({
       dappId,
       networkId: defaultNetworkId,
       subscriptions: {
-        wallet: (wallet) => {
-          window.localStorage.setItem('selectedWallet', wallet.name)
+        wallet: wallet => {
+          window?.localStorage.setItem('selectedWallet', wallet.name)
           const _web3 = new Web3(wallet.provider)
           _web3[wallet.name] = true
-          setValidProvider(!!wallet.provider)
           setWeb3(_web3)
           setProvider(wallet.provider)
         },
-        network: (_network) => setNetworkId(_network),
-        address: (_address) => {
-          if (!_address || _address !== Auth.getUser()?.walletAddress) {
-            Auth.logout()
-          }
-          if (user) setUser(undefined)
-          setAccount(_address)
-        },
-        balance: (_balance) => setBalance(_balance / 10 ** nativeTokenDecimals),
+        network: _network => setNetworkId(_network),
+        address: _address => setAccount(_address),
+        balance: _balance => setBalance(_balance / 10 ** nativeTokenDecimals)
       },
       walletSelect: {
-        wallets,
-      },
+        wallets: onboardWallets
+      }
     })
 
-    const previouslySelectedWallet =
-      window.localStorage.getItem('selectedWallet')
+    const previouslySelectedWallet = window?.localStorage.getItem('selectedWallet')
     if (previouslySelectedWallet) {
-      _onboard
-        .walletSelect(previouslySelectedWallet)
-        .then((selected) => selected && _onboard.walletCheck().then())
-    } else {
-      _onboard
-        .walletSelect()
-        .then((selected) => selected && _onboard.walletCheck().then())
+      _onboard.walletSelect(previouslySelectedWallet).then(selected => {
+        if (selected) {
+          _onboard.walletCheck().then()
+        }
+      })
+    } else if (!initialRun) {
+      setShowLoginModal(true)
     }
+
     setOnboard(_onboard)
   }
 
-  const switchWallet = async () => {
-    setUser()
-    onboard.walletSelect().then((selected) => {
-      if (selected) {
-        onboard.walletCheck().then()
-      }
-    })
-  }
-
-  const switchToXdai = () => {
-    window?.ethereum.request({
-      method: 'wallet_addEthereumChain',
-      params: [
-        {
-          chainId: '0x64',
-          chainName: 'xDai',
-          nativeCurrency: { name: 'xDAI', symbol: 'xDai', decimals: 18 },
-          rpcUrls: ['https://rpc.xdaichain.com/'],
-          blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
-        },
-      ],
-    })
-  }
-
-  const enableProvider = () => {
-    if (validProvider) {
-      onboard.walletCheck()
+  const switchWallet = walletName => {
+    if (onboard.walletSelect) {
+      onboard.walletSelect(walletName).then(selected => {
+        if (selected) {
+          onboard.walletCheck().then()
+        }
+      })
+    } else {
+      initOnBoard()
     }
   }
 
-  const fetchUser = () => {
+  const connectWallet = () => {
+    if (web3) {
+      onboard.walletCheck()
+    } else {
+      initOnBoard()
+    }
+  }
+
+  const fetchLocalUser = () => {
+    const localUser = Auth.getUser()
+    return new User(localUser)
+  }
+
+  const fetchDBUser = () => {
     return client
       .query({
         query: GET_USER_BY_ADDRESS,
         variables: {
-          address: account?.toLowerCase(),
+          address: account?.toLowerCase()
         },
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'network-only'
       })
-      .then((res) => {
-        return res.data?.userByAddress
-      })
+      .then(res => res.data?.userByAddress)
       .catch(console.log)
   }
 
   const updateUser = () => {
-    fetchUser().then((res) => {
+    fetchDBUser().then(res => {
       if (res) {
-        const newUser = new User(user)
-        newUser.parseDbUser(res)
+        const newUser = new User(res)
+        newUser.setToken(user.token)
         Auth.setUser(newUser)
         setUser(newUser)
       }
     })
   }
 
-  const setToken = async () => {
+  const signIn = async () => {
+    if (!web3) return false
+
     const signedMessage = await signMessage(
       process.env.NEXT_PUBLIC_OUR_SECRET,
       account,
@@ -184,71 +131,53 @@ const Web3Provider = (props) => {
       web3
     )
     if (!signedMessage) return false
-    const userWithAddress = { ...user, walletAddress: account }
-    const token = await getToken(userWithAddress, signedMessage, networkId)
-    const newUser = new User(user)
-    newUser.setToken(token)
-    Auth.setUser(newUser)
-    client.resetStore().then()
-    setUser(newUser)
+    const token = await getToken(account, signedMessage, networkId)
+
+    const localUser = fetchLocalUser()
+
+    if (account !== localUser?.walletAddress) {
+      Auth.logout()
+      const DBUser = await fetchDBUser()
+      const newUser = new User(DBUser)
+      newUser.setToken(token)
+      Auth.setUser(newUser)
+      await client.resetStore()
+      setUser(newUser)
+    } else {
+      localUser.setToken(token)
+      Auth.setUser(localUser)
+      await client.resetStore()
+      setUser(localUser)
+    }
     return true
   }
 
-  const signModalContent = () => {
-    const handleClick = () => {
-      showSignModal && setShowSignModal(false)
-      setToken().then()
-    }
-    return (
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          p: 4,
-          alignItems: 'center',
-        }}
-      >
-        <Text
-          sx={{
-            variant: 'text.large',
-            color: 'secondary',
-            marginBottom: '25px',
-          }}
-        >
-          Please Sign with your wallet to authenticate
-        </Text>
-        <Button
-          onClick={handleClick}
-          sx={{
-            cursor: 'pointer',
-            width: '170px',
-            background: theme.colors.primary,
-          }}
-        >
-          Sign
-        </Button>
-      </Flex>
-    )
+  const signOut = () => {
+    Auth.logout()
+    window.localStorage.removeItem('selectedWallet')
+    client.resetStore().then()
+    onboard.walletReset()
+    setUser(undefined)
+    setNetworkName(undefined)
   }
 
-  const showSign = () => setShowSignModal(true)
-
   useEffect(() => {
-    initOnBoard()
+    const localUser = fetchLocalUser()
+    setUser(localUser)
+    initOnBoard(true)
   }, [])
 
   useEffect(() => {
     if (account) {
       const _user = Auth.getUser()
-      const newUser = new User()
-      newUser.addWalletAddress(account)
-      if (account === _user?.walletAddress) {
-        newUser.parseDbUser(_user)
-        newUser.setToken(_user.token)
+      if (compareAddresses(account, _user?.walletAddress)) {
+        const newUser = new User(_user)
         setUser(newUser)
       } else {
-        fetchUser().then((res) => {
+        Auth.logout()
+        fetchDBUser().then(res => {
           if (res) {
-            newUser.parseDbUser(res)
+            const newUser = new User(res)
             Auth.setUser(newUser)
             setUser(newUser)
           } else {
@@ -257,6 +186,8 @@ const Web3Provider = (props) => {
           }
         })
       }
+    } else {
+      if (user) setUser(undefined)
     }
   }, [account])
 
@@ -264,11 +195,9 @@ const Web3Provider = (props) => {
     if (networkId) {
       onboard.config({ networkId })
       if (isXdai) setNetworkName('xDai')
-      else web3?.eth.net.getNetworkType().then((name) => setNetworkName(name))
+      else web3?.eth.net.getNetworkType().then(name => setNetworkName(name))
     }
   }, [networkId])
-
-  const isEnabled = !!web3 && !!account && !!networkId && !!user
 
   return (
     <Provider
@@ -276,33 +205,31 @@ const Web3Provider = (props) => {
         state: {
           account,
           balance,
-          validProvider,
           isEnabled,
           web3,
           networkId,
           networkName,
           provider,
           user,
+          isSignedIn
         },
         actions: {
           switchWallet,
-          switchToXdai,
-          enableProvider,
-          initOnBoard,
+          connectWallet,
           updateUser,
-          showSign,
-          signModalContent,
-          setToken,
-        },
+          loginModal: () => setShowLoginModal(true),
+          closeLoginModal: () => setShowLoginModal(false),
+          signIn,
+          signOut,
+          showWalletModal: () => setShowWalletModal(true)
+        }
       }}
     >
-      {showSignModal && (
-        <Modal
-          isOpen={showSignModal}
-          onRequestClose={() => setShowSignModal(false)}
-        >
-          {signModalContent()}
-        </Modal>
+      {showLoginModal && (
+        <LoginModal showModal={showLoginModal} closeModal={() => setShowLoginModal(false)} />
+      )}
+      {showWalletModal && (
+        <WalletModal showModal={showWalletModal} closeModal={() => setShowWalletModal(false)} />
       )}
       {props.children}
     </Provider>

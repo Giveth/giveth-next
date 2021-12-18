@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import Link from 'next/link'
 import { useApolloClient } from '@apollo/client'
+import Tooltip from '../tooltip'
 import styled from '@emotion/styled'
 
 import { ProjectContext } from '../../contextProvider/projectProvider'
@@ -26,6 +27,8 @@ import { TOGGLE_PROJECT_REACTION } from '../../apollo/gql/projects'
 import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
 
+import { Gray_600 } from '../styled-components/Colors'
+
 const RichTextViewer = dynamic(() => import('../richTextViewer'), {
   ssr: false
 })
@@ -42,8 +45,8 @@ const ProjectDonatorView = ({
   admin: projectAdmin
 }) => {
   const {
-    state: { user },
-    actions: { showSign }
+    state: { user, isSignedIn },
+    actions: { loginModal }
   } = useContext(Web3Context)
 
   const usePopup = useContext(PopupContext)
@@ -68,6 +71,8 @@ const ProjectDonatorView = ({
 
   const reactToProject = async () => {
     try {
+      if (!isSignedIn) return loginModal()
+
       const reaction = await client?.mutate({
         mutation: TOGGLE_PROJECT_REACTION,
         variables: {
@@ -79,11 +84,10 @@ const ProjectDonatorView = ({
       const { data } = reaction
       const { toggleProjectReaction } = data
       const { reaction: hearted, reactionCount } = toggleProjectReaction
-      console.log({ hearted })
       setHeartedCount(reactionCount)
       setHearted(hearted)
     } catch (error) {
-      showSign()
+      console.log(error)
     }
   }
 
@@ -100,6 +104,8 @@ const ProjectDonatorView = ({
         if (user) {
           setHearted(projectReactions?.find(o => o.userId === user.id))
           !project?.fromTrace && setIsOwner(project?.admin === user.id)
+        } else {
+          if (hearted) setHearted(false)
         }
 
         setCurrentProjectView({
@@ -172,10 +178,11 @@ const ProjectDonatorView = ({
           src={project.image}
           alt='project picture'
           onError={ev =>
-            (ev.target.src = 'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
+            (ev.target.src =
+              'https://htmlcolorcodes.com/assets/images/colors/light-gray-color-solid-background-1920x1080.png')
           }
           sx={{
-            objectFit: 'cover',
+            objectFit: project?.givingBlocksId ? 'contain' : 'cover',
             // objectPosition: '100% 25%',
             width: '100vw',
             margin: '0 5%',
@@ -393,7 +400,7 @@ const ProjectDonatorView = ({
                   : ''}
               </Text>
             </Button>
-            {(project?.fromTrace || project?.IOTraceable) && (
+            {project?.traceCampaignId && (
               <Button
                 variant='nofill'
                 type='button'
@@ -432,7 +439,7 @@ const ProjectDonatorView = ({
                   }}
                 >
                   <RichTextViewer
-                    content={currentProjectView?.project?.description || project?.description}
+                    content={currentProjectView?.project?.description || project?.description || ''}
                   />
                   {/* {project?.description} */}
                 </Text>
@@ -488,8 +495,24 @@ const ProjectDonatorView = ({
             {isOwner ? 'Edit' : 'Donate'}
           </Button>
 
-          {isOwner && !(project?.verified || project?.IOTraceable || project?.fromTrace) && (
-            <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5'>
+          {!!project?.givingBlocksId && (
+            <Flex
+              sx={{
+                // cursor: 'pointer',
+                alignSelf: 'center',
+                mt: 2,
+                mb: 4,
+                alignItems: 'center'
+              }}
+            >
+              {' '}
+              <Text sx={{ variant: 'text.default', mr: 2, color: Gray_600 }}>Project by</Text>
+              <Image src='/images/thegivingblock.svg' alt='the-giving-block' />
+            </Flex>
+          )}
+
+          {isOwner && !(project?.verified || project?.traceCampaignId) && (
+            <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5' passHref>
               <Text
                 sx={{
                   cursor: 'pointer',
@@ -502,7 +525,7 @@ const ProjectDonatorView = ({
             </Link>
           )}
 
-          {(project?.verified || project?.IOTraceable || project?.fromTrace) && (
+          {(project?.verified || project?.traceCampaignId) && (
             <Flex
               sx={{
                 // cursor: 'pointer',
@@ -513,8 +536,24 @@ const ProjectDonatorView = ({
             >
               <GoVerified color={theme.colors.blue} />
               <Text sx={{ variant: 'text.default', ml: 2 }}>
-                {project?.fromTrace || project?.IOTraceable ? 'Traceable' : 'Verified'}
+                {project?.traceCampaignId ? 'Traceable' : 'Verified'}
               </Text>
+              <Tooltip
+                placement='bottom'
+                isArrow
+                content={
+                  project?.traceCampaignId
+                    ? 'A traceable project has been verified as well as upgraded to a Campaign on Giveth TRACE for transparent and accountable fund management.'
+                    : project?.verified &&
+                      'Verified is a top tier status for projects that are participating in the GIVbacks program. The GIVbacks program is a revolutionary concept that rewards donors to verified projects with GIV tokens.'
+                }
+                contentStyle={{
+                  backgroundColor: '#AF9BD3'
+                }}
+                textStyle={{
+                  color: 'white'
+                }}
+              />
             </Flex>
           )}
           {/* {project?.listed === false && (
@@ -592,7 +631,7 @@ const ProjectDonatorView = ({
                 View similar projects
               </Text>
             </Link>
-          </Flex> */}
+          </Flex>  */}
           {!project?.fromTrace && (
             <>
               <Flex
@@ -606,7 +645,7 @@ const ProjectDonatorView = ({
               >
                 <Flex sx={{ alignItems: 'center', mr: 3 }}>
                   <BsHeartFill
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', marginRight: '8px' }}
                     size='18px'
                     color={hearted ? theme.colors.red : theme.colors.muted}
                     onClick={reactToProject}

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Avatar, Heading, Badge, Box, Button, Card, IconButton, Input, Flex, Text } from 'theme-ui'
+import { Avatar, Heading, Badge, Box, Button, Card, Input, Flex, Text } from 'theme-ui'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import Jdenticon from 'react-jdenticon'
 import styled from '@emotion/styled'
+import { BsHeartFill } from 'react-icons/bs'
 import { useApolloClient } from '@apollo/client'
 
 import ConfirmationModal from '../../confirmationModal'
@@ -18,8 +19,7 @@ import Toast from '../../../components/toast'
 import theme from '../../../utils/theme-ui'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
-
-// import RichTextViewer from '../../richTextViewer'
+import { isSSR } from '../../../lib/helpers'
 
 const RichTextViewer = dynamic(() => import('../../richTextViewer'), {
   ssr: false
@@ -30,84 +30,17 @@ const RichTextInput = dynamic(() => import('../../richTextInput'), {
 
 dayjs.extend(localizedFormat)
 
-const CardContainer = styled(Card)`
-  position: relative;
-  background-color: ${theme.colors.background};
-  border: 1px solid ${theme.colors.muted};
-  box-sizing: border-box;
-  border-radius: 12px;
-  margin: 0.5rem 0;
-  width: 100%;
-`
-const SpecialCardContainer = styled(Flex)`
-  width: 100%;
-  min-height: 240px;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-  background-color: ${theme.colors.secondary};
-  border: 1px solid ${theme.colors.muted};
-  box-sizing: border-box;
-  border-radius: 12px;
-  margin: 0.5rem 0;
-`
-
-const CardContent = styled(Flex)`
-  flex: 1;
-  flex-direction: column;
-  word-wrap: break-word;
-  padding: 0.5rem 1.5rem 0 1.5rem;
-`
-
-const CardFooter = styled.span`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin: -0.5rem 0 0.5rem 0;
-  padding: 0 1rem;
-`
-const Top = styled(Flex)`
-  padding: 0.5rem 0 1rem 0;
-  justify-content: space-between;
-`
-
-const Creator = styled(Flex)`
-  text-align: center;
-  align-items: center;
-  margin: 1rem 0;
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`
-const CreatorName = styled(Flex)`
-  align-items: center;
-  flex-direction: row;
-`
-
-const RaisedHandsImg = styled.img`
-  position: absolute;
-  bottom: 0;
-  right: 24px;
-  @media (max-width: 800px) {
-    display: none;
-    align-items: flex-start;
-  }
-`
-
 const TimelineCard = props => {
   const {
-    state: { user: currentUser },
-    actions: { showSign }
+    state: { user: currentUser, isSignedIn },
+    actions: { loginModal }
   } = useContext(Web3Context)
 
   const client = useApolloClient()
 
   const { content, reactions, number, isOwner } = props
-
   const [currentContent, setCurrentContent] = useState('')
+  const [hearted, setHearted] = useState(false)
   const [newTitle, setNewTitle] = useState(undefined)
   const [newInput, setNewInput] = useState('')
   const [editInput, setEditInput] = useState('')
@@ -116,10 +49,10 @@ const TimelineCard = props => {
   const [openEdit, setOpenEdit] = useState(false)
   const [user, setUser] = useState(undefined)
 
-  const isSSR = typeof window === 'undefined'
-
   const react = async () => {
     try {
+      if (!isSignedIn) return loginModal()
+
       await client?.mutate({
         mutation: TOGGLE_UPDATE_REACTION,
         variables: {
@@ -137,14 +70,13 @@ const TimelineCard = props => {
           }
         ]
       })
+      setHearted(!hearted)
       // return Toast({ content: 'You liked it!', type: 'success' })
       return true
     } catch (error) {
       console.log({ error })
     }
   }
-
-  const likedByUser = reactions?.find(r => r?.userId === user?.id)
 
   const editUpdate = async () => {
     try {
@@ -215,14 +147,19 @@ const TimelineCard = props => {
             userId: parseInt(props?.content?.userId)
           }
         })
+        const userLiked = props?.reactions?.find(i => i?.userId === currentUser?.id)
         setUser(userInfo?.data?.user)
+        setHearted(!!userLiked)
         setEditInput(props?.content?.content)
       } catch (error) {
         console.log({ error })
       }
     }
-    setup()
-  }, [])
+    if (currentUser) setup().then()
+    else {
+      if (hearted) setHearted(false)
+    }
+  }, [currentUser])
 
   useEffect(() => {
     setCurrentContent(props?.content?.content)
@@ -270,7 +207,7 @@ const TimelineCard = props => {
             value={newInput}
             onChange={e => setNewInput(e.target.value)}
           /> */}
-          {!isSSR && (
+          {!isSSR() && (
             <React.Suspense fallback={<div />}>
               <RichTextInput
                 projectId={props?.projectId}
@@ -304,7 +241,7 @@ const TimelineCard = props => {
               }}
               onClick={async () => {
                 try {
-                  if (currentUser && !currentUser.token) return showSign()
+                  if (!isSignedIn) return loginModal()
 
                   const res = await props.newUpdateOption({
                     title: newTitle,
@@ -463,26 +400,28 @@ const TimelineCard = props => {
               />
             </>
           ) : (
-            <RichTextViewer content={currentContent} />
+            <RichTextViewer content={currentContent || ''} />
           )}
         </CardContent>
         <CardFooter>
-          <div>
-            <IconButton onClick={react} sx={{ cursor: 'pointer' }}>
-              <img
-                src='/images/icon-heart.svg'
-                alt=''
-                style={{
-                  '-webkit-filter': likedByUser
-                    ? 'invert(40%) grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(400%) contrast(2)'
-                    : null
-                }}
-              />
-            </IconButton>
-            <Text sx={{ variant: 'text.default', ml: -2 }}>
-              {' '}
-              {reactions?.length > 0 ? reactions?.length : ''}{' '}
-            </Text>
+          <div
+            style={{
+              marginTop: 20,
+              marginLeft: 20,
+              marginBottom: 10,
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            <BsHeartFill
+              style={{ cursor: 'pointer' }}
+              size='18px'
+              color={hearted ? theme.colors.red : theme.colors.muted}
+              onClick={react}
+            />
+            {reactions?.length > 0 && (
+              <Text sx={{ variant: 'text.default', ml: 2 }}>{reactions?.length}</Text>
+            )}
           </div>
           {isOwner && (
             <Flex>
@@ -500,7 +439,7 @@ const TimelineCard = props => {
                     setEditInput(currentContent)
                     return setOpenEdit(false)
                   } else {
-                    currentUser && !currentUser.token ? showSign() : setConfirmDelete(true)
+                    !isSignedIn ? loginModal() : setConfirmDelete(true)
                   }
                 }}
               >
@@ -518,7 +457,7 @@ const TimelineCard = props => {
                   if (!openEdit) {
                     return setOpenEdit(true)
                   } else {
-                    currentUser && !currentUser.token ? showSign() : editUpdate()
+                    !isSignedIn ? loginModal() : editUpdate()
                   }
                 }}
               >
@@ -537,5 +476,72 @@ const TimelineCard = props => {
     </Box>
   )
 }
+
+const CardContainer = styled(Card)`
+  position: relative;
+  background-color: ${theme.colors.background};
+  border: 1px solid ${theme.colors.muted};
+  box-sizing: border-box;
+  border-radius: 12px;
+  margin: 0.5rem 0;
+  width: 100%;
+`
+const SpecialCardContainer = styled(Flex)`
+  width: 100%;
+  min-height: 240px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  background-color: ${theme.colors.secondary};
+  border: 1px solid ${theme.colors.muted};
+  box-sizing: border-box;
+  border-radius: 12px;
+  margin: 0.5rem 0;
+`
+
+const CardContent = styled(Flex)`
+  flex: 1;
+  flex-direction: column;
+  word-wrap: break-word;
+  padding: 0.5rem 1.5rem 0 1.5rem;
+`
+
+const CardFooter = styled.span`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: -0.5rem 0 0.5rem 0;
+  padding: 0 1rem;
+`
+const Top = styled(Flex)`
+  padding: 0.5rem 0 1rem 0;
+  justify-content: space-between;
+`
+
+const Creator = styled(Flex)`
+  text-align: center;
+  align-items: center;
+  margin: 1rem 0;
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`
+const CreatorName = styled(Flex)`
+  align-items: center;
+  flex-direction: row;
+`
+
+const RaisedHandsImg = styled.img`
+  position: absolute;
+  bottom: 0;
+  right: 24px;
+  @media (max-width: 800px) {
+    display: none;
+    align-items: flex-start;
+  }
+`
 
 export default TimelineCard

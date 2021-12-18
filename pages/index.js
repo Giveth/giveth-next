@@ -5,17 +5,14 @@ import GivethContent from '../src/content/giveth.json'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
 import { gqlEnums } from '../src/utils/constants'
 
-const GR12 = dynamic(() => import('../src/components/GR12'))
 const Hero = dynamic(() => import('../src/components/home/HeroSection'))
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
 const InfoSection = dynamic(() => import('../src/components/home/InfoSection'))
-const HomeTopProjects = dynamic(() =>
-  import('../src/components/home/HomeTopProjects')
-)
-const UpdatesSection = dynamic(() =>
-  import('../src/components/home/UpdatesSection')
-)
+const HomeTopProjects = dynamic(() => import('../src/components/home/HomeTopProjects'))
+const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSection'))
+
+import GIVEconBanner from '../src/components/GIVEconomyBanner'
 
 const projectsNumToShowInHomePage = 3
 
@@ -46,7 +43,7 @@ const IndexContent = ({ hideInfo, content, topProjects }) => {
   return (
     <>
       <Hero content={content} />
-      <GR12 />
+      <GIVEconBanner />
       <HomeTopProjects projects={topProjects} />
       {!hideInfo === true && <InfoSection content={content} />}
       <UpdatesSection />
@@ -54,12 +51,10 @@ const IndexContent = ({ hideInfo, content, topProjects }) => {
   )
 }
 
-const IndexPage = (props) => {
+const IndexPage = props => {
   const { content, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
-  const hideInfo = process.env.HIDE_INFO_SECTION
-    ? process.env.HIDE_INFO_SECTION
-    : false
+  const hideInfo = process.env.HIDE_INFO_SECTION ? process.env.HIDE_INFO_SECTION : false
 
   // const ceramicTest = async () => {
   //   try {
@@ -94,8 +89,8 @@ const IndexPage = (props) => {
   // }
 
   return (
-    <Layout isHomePage="true">
-      <Seo title="Home" />
+    <Layout isHomePage='true'>
+      <Seo title='Home' />
       {/* <button onClick={() => ceramicTest()}> idx test </button> */}
       <IndexContent
         hideInfo={hideInfo}
@@ -114,21 +109,16 @@ export async function getServerSideProps(props) {
     query: FETCH_ALL_PROJECTS,
     variables: {
       limit: projectsNumToShowInHomePage,
-      orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC },
-    },
+      orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC }
+    }
   })
-
-  // const medium = await fetch(
-  //   'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth'
-  // )
-  // const mediumPosts = await medium.json()
 
   return {
     props: {
       topProjects: response?.projects?.projects,
       content: GivethContent,
-      query: props.query,
-    },
+      query: props.query
+    }
   }
 }
 

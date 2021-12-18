@@ -25,10 +25,6 @@ module.exports = withBundleAnalyzer({
     ignoreBuildErrors: true
   },
   webpack: config => {
-    config.module.rules.push({
-      test: /\.md$/,
-      use: 'raw-loader'
-    })
     config.optimization = {
       ...config.optimization,
       sideEffects: true
@@ -43,13 +39,10 @@ module.exports = withBundleAnalyzer({
       'feathers.beta.giveth.io',
       'feathers.giveth.io',
       'feathers.develop.giveth.io',
-      'ipfs.giveth.io'
+      'ipfs.giveth.io',
+      'static.tgbwidget.com',
+      'tgb-production-static.s3.us-east-1.amazonaws.com'
     ]
-  },
-  // cleanDistDir: false,
-  eslint: {
-    // Warning: Dangerously allow production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true
   }
+  // cleanDistDir: false,
 })

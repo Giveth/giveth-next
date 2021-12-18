@@ -1,8 +1,8 @@
 import fetch from 'isomorphic-fetch'
+import Web3 from 'web3'
 import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import ERC20List from './erc20TokenList'
-import Web3 from 'web3'
 
 const xDaiChainId = 100
 const appNetworkId = process.env.NEXT_PUBLIC_NETWORK_ID
@@ -24,6 +24,31 @@ export function pollEvery(fn, delay) {
       stop = true
       clearTimeout(timer)
     }
+  }
+}
+
+export async function getERC20Info({ tokenAbi, contractAddress, web3 }) {
+  try {
+    const instance = new web3.eth.Contract(tokenAbi, contractAddress)
+    const name = await instance.methods.name().call()
+    const symbol = await instance.methods.symbol().call()
+    const chainId = await web3.eth.getChainId()
+    const decimals = await instance.methods.decimals().call()
+    const ERC20Info = {
+      name,
+      symbol,
+      address: contractAddress,
+      label: symbol,
+      chainId,
+      decimals,
+      value: {
+        symbol
+      }
+    }
+    return ERC20Info
+  } catch (error) {
+    console.log({ error })
+    return false
   }
 }
 

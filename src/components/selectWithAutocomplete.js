@@ -17,14 +17,17 @@ const StyledOption = styled.div`
   }
 `
 
-const SelectWithAutocomplete = ({
-  content,
-  width,
-  placeholder,
-  onSelect,
-  menuIsOpen,
-  isTokenList
-}) => {
+const SelectWithAutocomplete = props => {
+  const {
+    content,
+    width,
+    placeholder,
+    onSelect,
+    onInputChange,
+    menuIsOpen,
+    isTokenList,
+    isLoading
+  } = props
   const options = content || []
 
   const CustomOption = ({ children, value, innerProps, isDisabled }) => {
@@ -54,6 +57,7 @@ const SelectWithAutocomplete = ({
             />
           ) : (
             <Image
+              alt='eth'
               src={`/assets/cryptocurrency-icons/32/color/eth.png`}
               width='32px'
               height='32px'
@@ -83,15 +87,38 @@ const SelectWithAutocomplete = ({
 
   return (
     <Select
+      {...props}
       options={options}
       components={{ Option: CustomOption }}
       placeholder={placeholder || 'Select an option'}
       onChange={onSelect}
       menuIsOpen={menuIsOpen}
+      onInputChange={onInputChange}
+      isLoading={isLoading}
       styles={{
+        input: provided => ({
+          ...provided,
+          color: theme.colors.bodyDark,
+          /* expand the Input Component div */
+          flex: '1 1 auto',
+          /* expand the Input Component child div */
+          '> div': {
+            width: '100%'
+          },
+          /* expand the Input Component input */
+          input: {
+            width: '100% !important',
+            textAlign: 'left'
+          }
+        }),
         placeholder: provided => ({
           ...provided,
-          color: theme.colors.anotherGrey
+          color: theme.colors.anotherGrey,
+          pointerEvents: 'none',
+          userSelect: 'none',
+          MozUserSelect: 'none',
+          WebkitUserSelect: 'none',
+          msUserSelect: 'none'
         }),
         valueContainer: provided => ({
           ...provided,
@@ -103,11 +130,13 @@ const SelectWithAutocomplete = ({
         }),
         menu: provided => ({
           ...provided,
-          marginTop: '-5px'
+          marginTop: '-5px',
+          height: '200px'
         }),
         menuList: provided => ({
           ...provided,
-          maxHeight: '300px'
+          maxHeight: '300px',
+          height: '200px'
         }),
         control: () => ({
           // none of react-select's styles are passed to <Control />

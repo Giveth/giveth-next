@@ -9,11 +9,12 @@ import { Flex, Image, Spinner, Text } from 'theme-ui'
 
 import Seo from '../../components/seo'
 import { ADD_PROJECT, FETCH_PROJECTS } from '../../apollo/gql/projects'
-import Layout from '../../components/layout'
 import HighFive from '../../components/create-project-form/highFive'
 import GithubIssue from '../../components/GithubIssue'
 import Logger from '../../Logger'
 import { logout } from '../../services/auth'
+import config from '../../../config'
+import { isSSR } from '../../lib/helpers'
 // import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 // import decoratorClouds from "../images/decorator-clouds.svg";
 // import peoplePuzzle2 from "/images/people-puzzle2.svg";
@@ -29,11 +30,12 @@ const CreateProject = props => {
   const [addedProject, setAddedProject] = useState(null)
   const [inError, setInError] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
+
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   useEffect(() => {
-    if (typeof window != 'undefined') {
+    if (!isSSR()) {
       const qs = queryString.parse(window.location.search)
       setProjectId(qs?.projectId)
     }
@@ -248,11 +250,7 @@ const CreateProject = props => {
             {errorMessage}
 
             <Text
-              onClick={() => (
-                typeof window !== 'undefined' &&
-                  window?.open('https://github.com/Giveth/giveth-next/issues/new/choose'),
-                '_blank'
-              )}
+              onClick={() => window?.open(config.LINKS.REPORT_ISSUE, '_blank')}
               sx={{
                 variant: 'headings.h4',
                 color: 'secondary',
@@ -301,7 +299,7 @@ const CreateProject = props => {
     }
   }
   return (
-    <Layout noFooter noHeader>
+    <>
       <div
         style={{
           // applies width 100% to all viewport widths,
@@ -315,7 +313,7 @@ const CreateProject = props => {
 
         <ProjectForm />
       </div>
-    </Layout>
+    </>
   )
 }
 

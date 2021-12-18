@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Heading, Box, Button, Card, Flex, Text } from 'theme-ui'
+import { Heading, Box, Button, Card, Flex, Text, Image } from 'theme-ui'
 import Link from 'next/link'
-import Image from 'next/image'
+import NextImage from 'next/image'
 import dynamic from 'next/dynamic'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
@@ -26,8 +26,9 @@ const RichTextViewer = dynamic(() => import('./richTextViewer'), {
 
 const Categories = ({ categories }) => {
   const BadgeContent = ({ index, name }) => {
+    const isGivingBlock = name === 'the-giving-block'
     return (
-      <Badge key={index}>
+      <Badge key={index} isGivingBlock={isGivingBlock}>
         <Text
           sx={{ variant: 'text.paragraph', fontSize: 1 }}
           style={{
@@ -35,7 +36,7 @@ const Categories = ({ categories }) => {
             textTransform: 'uppercase'
           }}
         >
-          {name}
+          {isGivingBlock ? <Image src='/images/thegivingblock.svg' alt='giving-block' /> : name}
         </Text>
       </Badge>
     )
@@ -50,8 +51,8 @@ const Categories = ({ categories }) => {
 
 const ProjectCard = props => {
   const {
-    state: { user },
-    actions: { showSign }
+    state: { user, isSignedIn },
+    actions: { loginModal }
   } = useContext(Web3Context)
   const usePopup = useContext(PopupContext)
   const client = useApolloClient()
@@ -64,6 +65,8 @@ const ProjectCard = props => {
 
   const reactToProject = async () => {
     try {
+      if (!isSignedIn) return loginModal()
+
       const reaction = await client?.mutate({
         mutation: TOGGLE_PROJECT_REACTION,
         variables: {
@@ -78,16 +81,19 @@ const ProjectCard = props => {
       setHeartedCount(reactionCount)
       setHeartedByUser(hearted)
     } catch (err) {
-      showSign()
+      console.log(err)
     }
   }
 
   useEffect(() => {
     if (project) setHeartedCount(project.reactions?.length)
     if (user) setHeartedByUser(project?.reactions?.find(r => r.userId === user.id))
+    else {
+      if (heartedByUser) setHeartedByUser(false)
+    }
   }, [project, user])
 
-  const image = props?.image || project?.image
+  const image = props?.image || project?.image || '/images/no-image-available.jpg'
 
   return (
     <Box
@@ -138,34 +144,37 @@ const ProjectCard = props => {
                   }}
                 />
               ) : (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '186px',
-                    margin: '0 auto',
-                    cursor: 'pointer',
-                    borderRadius: '12px 12px 0px 0px',
-                    backgroundColor: '#cccccc',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    position: 'relative'
-                  }}
-                >
-                  <StyledImage
-                    src={image}
-                    layout='fill'
-                    priority={true}
-                    quality={40}
-                    // placeholder='blur'
-                    // blurDataURL='/images/giveth_bg.jpg'
-                  />
-                </div>
+                image && (
+                  <div
+                    style={{
+                      width: '100%',
+                      height: '186px',
+                      margin: '0 auto',
+                      cursor: 'pointer',
+                      borderRadius: '12px 12px 0px 0px',
+                      backgroundColor: '#cccccc',
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'no-repeat',
+                      position: 'relative'
+                    }}
+                  >
+                    <StyledImage
+                      src={image}
+                      layout='fill'
+                      priority={true}
+                      quality={40}
+                      isgivingblockproject={project?.givingBlocksId}
+                      // placeholder='blur'
+                      // blurDataURL='/images/giveth_bg.jpg'
+                    />
+                  </div>
+                )
               )}
             </a>
           </Link>
 
           <div style={{ position: 'relative' }}>
-            {project?.fromTrace || project?.IOTraceable
+            {project?.traceCampaignId
               ? projectBadge('TRACEABLE')
               : project?.verified
               ? projectBadge('VERIFIED')
@@ -233,10 +242,6 @@ const ProjectCard = props => {
           </Heading>
           {altStyle && (
             <AltCardContent>
-              <Givers>
-                {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
-              <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
-              </Givers>
               <Link
                 // href={
                 //   project?.fromTrace
@@ -302,18 +307,20 @@ const ProjectCard = props => {
                 project?.description
               ) : (
                 <RichTextViewer
-                  content={project?.description
-                    ?.replace(/<img .*?>/g, '')
-                    .replace(/<iframe .*?>/g, '')}
+                  content={
+                    project?.description
+                      ?.replace(/<img .*?>/g, '')
+                      .replace(/<iframe .*?>/g, '')
+                      .replace(/<[^>]*>/g, '') || ''
+                  }
                 />
               )}
-
               {
                 /* Description String */
                 // project?.description
               }
             </Text>
-            <CardFooter>
+            <CardFooter isGivingBlock>
               <Categories categories={project?.categories} />
             </CardFooter>
           </CardContent>
@@ -360,11 +367,14 @@ const AltCardContent = styled.span`
 `
 
 const Badge = styled.span`
+  position: ${props => (props.isGivingBlock ? 'absolute' : 'relative')};
+  left: ${props => (props.isGivingBlock ? '0' : 'none')};
+  bottom: ${props => (props.isGivingBlock ? '-10px' : 'none')};
   padding: 3px 11.76px;
-  margin: 0.4rem;
+  margin: ${props => (props.isGivingBlock ? '1rem' : '0.4rem')};
   align-items: center;
   text-align: center;
-  border: 1px solid ${theme.colors.bodyLight};
+  border: ${props => (props.isGivingBlock ? 'none' : `1px solid ${theme.colors.bodyLight}`)};
   border-radius: 48px;
   color: ${theme.colors.bodyLight};
 `
@@ -383,26 +393,14 @@ const CardFooter = styled.span`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin: 1rem 0;
+  margin: ${props => (props.isGivingBlock ? '3rem 0 2px 0' : '1rem 0')};
 `
 
-const Givers = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-self: center;
-  margin: 1.2rem 0 0.5rem 0;
-  div:first-child {
-    border-right: 2px solid #edf0fa;
-  }
-  div {
-    padding: 0 1rem;
-  }
-`
-
-const StyledImage = styled(Image)`
+const StyledImage = styled(NextImage)`
   cursor: pointer;
-  border-radius: 12px 12px 0px 0px;
-  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+  background: ${props => (props?.isgivingblockproject ? 'white' : 'none')};
+  object-fit: ${props => (props?.isgivingblockproject ? 'contain' : 'cover')};
 `
 
 export default ProjectCard

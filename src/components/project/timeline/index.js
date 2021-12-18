@@ -9,41 +9,6 @@ const Card = React.lazy(() => import('./card'))
 
 dayjs.extend(localizedFormat)
 
-const VerticalTimeline = styled.div`
-  position: relative;
-  margin: 1rem auto;
-  &:after {
-    content: '';
-    position: absolute;
-    width: 1px;
-    background-color: ${theme.colors.muted};
-    top: 0;
-    bottom: 0;
-    left: 0;
-    margin-right: 3px;
-    margin-bottom: 240px;
-  }
-`
-
-const Container = styled.div`
-  padding: 10px 40px;
-  position: relative;
-  background-color: inherit;
-  width: 100%;
-  @media (max-width: 600px) {
-    padding: 10px 0 10px 40px;
-  }
-`
-const LeftInfo = styled(Flex)`
-  flex-direction: column;
-  text-align: center;
-  padding: 0.5rem 0;
-  background-color: ${theme.colors.background};
-  position: absolute;
-  top: 15px;
-  z-index: 1;
-`
-
 const Timeline = ({ content = [], addUpdate, project, isOwner, refreshQuery }) => {
   const isSSR = typeof window === 'undefined'
   const newUpdateOption = true
@@ -132,5 +97,40 @@ const Timeline = ({ content = [], addUpdate, project, isOwner, refreshQuery }) =
     </VerticalTimeline>
   )
 }
+
+const VerticalTimeline = styled.div`
+  position: relative;
+  margin: 1rem auto;
+  &:after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    background-color: ${theme.colors.muted};
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin-right: 3px;
+    margin-bottom: 240px;
+  }
+`
+
+const Container = styled.div`
+  padding: 10px 40px;
+  position: relative;
+  background-color: inherit;
+  width: 100%;
+  @media (max-width: 600px) {
+    padding: 10px 0 10px 40px;
+  }
+`
+const LeftInfo = styled(Flex)`
+  flex-direction: column;
+  text-align: center;
+  padding: 0.5rem 0;
+  background-color: ${theme.colors.background};
+  position: absolute;
+  top: 15px;
+  z-index: 1;
+`
 
 export default Timeline

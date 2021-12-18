@@ -50,6 +50,7 @@ export const ProjectCategoryInput = ({ value, setValue, categoryList = [], goBac
         }}
       >
         {categoryList?.map(category => {
+          if (category?.name === 'the-giving-block') return null
           return (
             <Label
               sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}

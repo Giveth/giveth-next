@@ -5,27 +5,26 @@ import ErrorPage from '../src/components/errorPage'
 import { client } from '../src/apollo/client'
 import ProjectsList from '../src/components/ProjectsList'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
-import GR12 from '../src/components/GR12'
+import GIVEconBanner from '../src/components/GIVEconomyBanner'
 
 const Seo = dynamic(() => import('../src/components/seo'))
 const Layout = dynamic(() => import('../src/components/layout'))
 
-const itemsPerPage = 6
+const itemsPerPage = 15
 
-const Project = (props) => {
+const Projects = props => {
   const { projects, categories, totalCount, errors, query } = props
 
   return (
     <Layout>
-      <Seo title="Projects" />
-      <GR12 />
+      <Seo title='Projects' />
+      <GIVEconBanner />
       {projects && !errors ? (
         <ProjectsList
           query={query}
           projects={projects}
           categories={categories}
           totalCount={totalCount}
-          itemsPerPage={itemsPerPage}
         />
       ) : (
         <ErrorPage json={errors} />
@@ -45,9 +44,9 @@ export async function getServerSideProps(props) {
       query: FETCH_ALL_PROJECTS,
       variables: {
         orderBy: { field: gqlEnums.QUALITYSCORE, direction: gqlEnums.DESC },
-        limit: itemsPerPage,
+        limit: itemsPerPage
       },
-      fetchPolicy: 'no-cache',
+      fetchPolicy: 'no-cache'
     })
     projects = fetchProject?.projects?.projects
     categories = fetchProject?.projects?.categories
@@ -64,9 +63,9 @@ export async function getServerSideProps(props) {
       categories: categories || null,
       totalCount: totalCount || null,
       errors: JSON.stringify(errors) || null,
-      query: props.query,
-    },
+      query: props.query
+    }
   }
 }
 
-export default Project
+export default Projects

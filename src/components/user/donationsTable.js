@@ -1,11 +1,12 @@
 import React from 'react'
-import { titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import styled from '@emotion/styled'
-import theme from '../../utils/theme-ui'
 import { Badge, Flex, Text } from 'theme-ui'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
+
+import theme from '../../utils/theme-ui'
+import { titleCase } from '../../utils'
 
 dayjs.extend(localizedFormat)
 
@@ -168,7 +169,7 @@ const Table = styled.table`
     border-bottom: 1px solid #eaebee;
     padding: 0.35em;
   }
-  thead th:first-child {
+  thead th:first-of-type {
     border-left: none;
     width: 10em;
     min-width: 10em;
