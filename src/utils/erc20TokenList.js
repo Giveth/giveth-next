@@ -899,7 +899,7 @@ const xDaiTokens = {
       chainId: 100,
       name: 'TestGIV',
       symbol: 'TestGIV',
-      address: '0x5d32A9BaF31A793dBA7275F77856A47A0F5d09b3',
+      address: '0x7aade4907a8e2412beacbe42e51aaee5b6085f24',
       decimals: 18
     },
     {
