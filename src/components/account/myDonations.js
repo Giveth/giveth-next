@@ -11,6 +11,7 @@ import SearchIcon from '../../images/svg/general/search-icon.svg'
 import theme from '../../utils/theme-ui'
 import { titleCase } from '../../utils'
 import { ETHERSCAN_PREFIXES } from '../../lib/util'
+import { shortenAddress } from '../../lib/helpers'
 // import DropdownInput from '../dropdownInput'
 // import { ProjectContext } from '../../contextProvider/projectProvider'
 // import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json
@@ -214,7 +215,7 @@ const MyDonations = props => {
                             width: '120px'
                           }}
                         >
-                          {i?.transactionId}
+                          {shortenAddress(i?.transactionId)}
                         </Text>
                         <FiCopy
                           size='18px'
@@ -223,7 +224,7 @@ const MyDonations = props => {
                         />{' '}
                         <FiExternalLink
                           size='18px'
-                          style={{ cursor: 'pointer' }}
+                          style={{ cursor: 'pointer', marginLeft: 4 }}
                           onClick={() => {
                             const transactionLink =
                               i.transakTransactionLink ||
