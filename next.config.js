@@ -43,6 +43,7 @@ module.exports = withBundleAnalyzer({
       'static.tgbwidget.com',
       'tgb-production-static.s3.us-east-1.amazonaws.com'
     ]
-  }
+  },
+  poweredByHeader: false
   // cleanDistDir: false,
 })
