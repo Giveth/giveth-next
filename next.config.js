@@ -16,6 +16,10 @@ module.exports = withBundleAnalyzer({
           {
             key: 'Cache-Control',
             value: 'public, max-age=9999999999, must-revalidate'
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY'
           }
         ]
       }
