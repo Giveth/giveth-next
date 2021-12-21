@@ -73,7 +73,7 @@
     "react-spring": "^9.1.2",
     "react-toastify": "^7.0.4",
     "swr": "^0.5.5",
-    "theme-ui": "^0.7.5",
+    "theme-ui": "^0.12.1",
     "use-query-params": "^1.2.2",
     "web3": "^1.6.0"
   },
