@@ -134,11 +134,11 @@ a {
   font-family: 'TeX Gyre Adventor';
   font-style: normal;
   font-weight: normal;
-  src: url('../public/fonts/texgyreadventor-regular-webfont.woff');
+  src: url('/fonts/texgyreadventor-regular-webfont.woff');
 }
 @font-face {
   font-family: 'TeX Gyre Adventor';
   font-style: normal;
   font-weight: 700;
-  src: url('../public/fonts/texgyreadventor-bold-webfont.woff');
+  src: url('/fonts/texgyreadventor-bold-webfont.woff');
 }
