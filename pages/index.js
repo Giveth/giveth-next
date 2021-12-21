@@ -4,6 +4,7 @@ import { client } from '../src/apollo/client'
 import GivethContent from '../src/content/giveth.json'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
 import { gqlEnums } from '../src/utils/constants'
+import GIVEconBanner from '../src/components/GIVEconomyBanner'
 
 const Hero = dynamic(() => import('../src/components/home/HeroSection'))
 const Seo = dynamic(() => import('../src/components/seo'))
@@ -11,8 +12,6 @@ const Layout = dynamic(() => import('../src/components/layout'))
 const InfoSection = dynamic(() => import('../src/components/home/InfoSection'))
 const HomeTopProjects = dynamic(() => import('../src/components/home/HomeTopProjects'))
 const UpdatesSection = dynamic(() => import('../src/components/home/UpdatesSection'))
-
-import GIVEconBanner from '../src/components/GIVEconomyBanner'
 
 const projectsNumToShowInHomePage = 3
 
