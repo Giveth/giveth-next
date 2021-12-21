@@ -9,6 +9,7 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
+
 import { PopupContext } from '../contextProvider/popupProvider'
 import CopyToClipboard from '../components/copyToClipboard'
 import Modal from './modal'
@@ -44,11 +45,11 @@ function ChangeNetworkPopup({ close, onlyMainnet }) {
         style={{ alignSelf: 'center' }}
         alt='decorator-exclamation img'
       />
-      <Flex sx={{ flexDirection: 'column', alignItems: 'center', mx: 6 }}>
-        <Text color='secondary' variant='headings.h4' sx={{ mx: 4, pt: 4 }}>
+      <Flex sx={{ flexDirection: 'column', alignItems: 'center', mx: 4 }}>
+        <Text color='secondary' variant='headings.h4' sx={{ pt: 4 }}>
           Please change the Network
         </Text>
-        <Text color='secondary' variant='text.default' sx={{ mx: 4, width: '50%' }}>
+        <Text color='secondary' variant='text.default' sx={{ width: '50%' }}>
           Please select the {isDev ? 'Ropsten' : 'Ethereum Mainnet'} {onlyMainnet ? '' : ' or xDAI'}{' '}
           network in your wallet and try again
         </Text>
@@ -56,10 +57,10 @@ function ChangeNetworkPopup({ close, onlyMainnet }) {
       <Button
         mt={4}
         sx={{
-          width: '290px',
           variant: 'buttons.default',
           backgroundColor: 'secondary'
         }}
+        style={{ padding: '17px 60px' }}
         onClick={() => {
           switchNetwork()
           close()
@@ -69,7 +70,7 @@ function ChangeNetworkPopup({ close, onlyMainnet }) {
       </Button>
       <Image
         src={'/images/worried_woman.png'}
-        style={{ position: 'absolute', left: -4, bottom: 0, zIndex: -1 }}
+        style={{ position: 'absolute', left: -60, bottom: 0, zIndex: -1 }}
         alt='worried woman img'
       />
     </Flex>
@@ -110,10 +111,10 @@ function IncompleteProfilePopup({ close }) {
           <Button
             mt={4}
             sx={{
-              width: '290px',
               variant: 'buttons.default',
               backgroundColor: 'secondary'
             }}
+            style={{ padding: '17px 60px' }}
           >
             COMPLETE PROFILE
           </Button>
@@ -140,9 +141,7 @@ function InsufficientFundsPopup({ close }) {
   return (
     <Flex
       sx={{
-        flexDirection: 'column',
-        width: '645px',
-        height: '520px'
+        flexDirection: 'column'
       }}
     >
       <Text
@@ -161,12 +160,11 @@ function InsufficientFundsPopup({ close }) {
         sx={{
           flexDirection: 'column',
           alignItems: 'center',
-          position: 'absolute',
           textAlign: 'center',
           top: '5%',
           py: 4,
           my: 4,
-          ml: 4,
+          mx: 4,
           mb: 6
         }}
       >
@@ -184,10 +182,10 @@ function InsufficientFundsPopup({ close }) {
         <Button
           mt={4}
           sx={{
-            width: '290px',
             variant: 'buttons.default',
             backgroundColor: 'secondary'
           }}
+          style={{ padding: '15px 80px' }}
           onClick={close}
         >
           Ok
@@ -199,7 +197,8 @@ function InsufficientFundsPopup({ close }) {
           width: '50%',
           position: 'absolute',
           right: -10,
-          bottom: -10
+          bottom: -10,
+          zIndex: -1
         }}
         alt='signup-bg'
       />
