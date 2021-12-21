@@ -34,17 +34,19 @@ const WalletMenu = () => {
 
   return (
     <Wrapper
-      isOpen={isOpen}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
+      onClick={() => setIsOpen(!isOpen)}
     >
-      <UserAvatar src={defaultProfileIcon} />
-      <UserDetails>
-        <Link_Medium color={Primary_Deep_800}>
-          {user?.name || shortenAddress(user.walletAddress)}
-        </Link_Medium>
-        <Overline_Small color={Giv_800}>Connected to {networkName}</Overline_Small>
-      </UserDetails>
+      <WalletClosed isOpen={isOpen}>
+        <UserAvatar src={defaultProfileIcon} />
+        <UserDetails>
+          <Link_Medium color={Primary_Deep_800}>
+            {user?.name || shortenAddress(user.walletAddress)}
+          </Link_Medium>
+          <Overline_Small color={Giv_800}>Connected to {networkName}</Overline_Small>
+        </UserDetails>
+      </WalletClosed>
 
       <WalletOpened isOpen={isOpen}>
         <Title>WALLET</Title>
@@ -83,6 +85,17 @@ const WalletMenu = () => {
     </Wrapper>
   )
 }
+
+const WalletClosed = styled(FlexCenter)`
+  position: relative;
+  z-index: 1080;
+  border-radius: 72px;
+  background: white;
+  height: 48px;
+  box-shadow: ${props => (props.isOpen ? 'none' : Shadow.Dark['500'])};
+  padding: 0 12.5px;
+  cursor: pointer;
+`
 
 const UserDetails = styled.div`
   padding-left: 8px;
@@ -127,14 +140,11 @@ const UserAvatar = styled(Image)`
   height: 24px;
 `
 
-const Wrapper = styled(FlexCenter)`
-  padding: 0 12.5px;
-  cursor: pointer;
-  border-radius: 72px;
-  background: white;
-  height: 48px;
+const Wrapper = styled.div`
+  position: relative;
+  z-index: 1000;
   color: ${Primary_Deep_800};
-  box-shadow: ${props => (props.isOpen ? 'none' : Shadow.Dark['500'])};
+  box-shadow: unset;
 `
 
 const WalletOpened = styled.div`
@@ -143,9 +153,9 @@ const WalletOpened = styled.div`
   box-shadow: ${Shadow.Dark[500]};
   width: 250px;
   position: absolute;
-  right: 32px;
-  top: 55px;
-  z-index: -1;
+  right: 0;
+  top: 22px;
+  z-index: 1070;
   padding: 40px 0 5px 0;
   color: ${Primary_Deep_800};
   max-height: ${props => (props.isOpen ? '600px' : '0px')};

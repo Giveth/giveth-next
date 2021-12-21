@@ -25,7 +25,7 @@ const config = {
   },
   GIV_TOKEN: {
     MAINNET: '0x067eA48882E6D728A37acfd1535ec03f8E33794a',
-    XDAI: '0x5d32A9BaF31A793dBA7275F77856A47A0F5d09b3'
+    XDAI: '0x7aade4907a8e2412beacbe42e51aaee5b6085f24'
   }
 }
 

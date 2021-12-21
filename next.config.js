@@ -18,6 +18,15 @@ module.exports = withBundleAnalyzer({
             value: 'public, max-age=9999999999, must-revalidate'
           }
         ]
+      },
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY'
+          }
+        ]
       }
     ]
   },
@@ -49,6 +58,7 @@ module.exports = withBundleAnalyzer({
       'static.tgbwidget.com',
       'tgb-production-static.s3.us-east-1.amazonaws.com'
     ]
-  }
+  },
+  poweredByHeader: false
   // cleanDistDir: false,
 })
