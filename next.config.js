@@ -38,6 +38,12 @@ module.exports = withBundleAnalyzer({
       ...config.optimization,
       sideEffects: true
     }
+    config.optimization.splitChunks.cacheGroups = {
+      common: {
+        name: 'common',
+        chunks: 'all'
+      }
+    }
     return config
   },
   images: {
