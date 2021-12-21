@@ -25,7 +25,8 @@ function createApolloClient() {
     token = localUser.token
     const mutation = {
       Authorization: token ? `Bearer ${token}` : '',
-      'wallet-address': localUser.walletAddress || ''
+      'wallet-address': localUser.walletAddress || '',
+      VERCEL_KEY: process.env.VERCEL_KEY
     }
 
     return {

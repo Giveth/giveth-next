@@ -157,18 +157,7 @@ const Tos = () => {
               and benefits in no pecuniary way from the content provided by you or the projects that
               are funded by you.
             </p>
-            <h3>NONPROFIT STATUS</h3>
 
-            <p>
-              On 09.07.2020, the Giveth Foundation was established as a component of the SDG Impact
-              Fund, which is an IRS recognized 501(c)(3) tax-exempt public charity and not for
-              profit corporation having its principal office in the city of Cartersville and State
-              of Georgia as described in the Internal Revenue Code Sections 501(c)(3), 509(a)(1),
-              and 170(b)(1)(A)(vi The SDG Impact Fund (Tax ID# 46-2368538) is an IRS recognized
-              501(c)(3) tax-exempt public charity as described in the Internal Revenue Code Sections
-              501(c)(3), 509(a)(1), and 170(b)(1)(A)(vi). All money and property transferred to The
-              SDG Impact Fund shall be an irrevocable gift to the charity.
-            </p>
             <h3>COST AND FEES</h3>
             <p>
               Use of the Giveth Site and Tools is free. When donating cryptocurrency there are
@@ -338,6 +327,7 @@ const Tos = () => {
               nonprofit organizations are tax-exempt under section 501(c)(x) of the Internal Revenue
               Code. For international organizations, we confirm they are the equivalent of a
               501(c)(x) organization and confirm they are registered in their respective countries.
+              Not all verified projects are registered nonprofit organizations.
             </p>
             <p>
               However, each Donor must make its own determinations that an Entity requesting
@@ -346,7 +336,9 @@ const Tos = () => {
               Donors, and is not and will not be responsible for the use of any Donations. Giveth
               similarly is not and will not be responsible for ensuring that information (including
               credentials) an Entity or Donor provides is accurate or up-to-date. We don’t control
-              the actions of any Entities or Donors.
+              the actions of any Entities or Donors. We do not support donors in obtaining tax
+              deductions and if a donor receives GIVbacks for donating to a verified project, we can
+              not guarantee that the donation is legally tax deductible.
             </p>
             <h2>CONTENT AND USER SUBMISSIONS</h2>
 
