@@ -1,4 +1,4 @@
-import { formatUnits } from '@ethersproject/units'
+import { ethers } from 'ethers'
 import config from '../../config'
 
 export const ETHERSCAN_PREFIXES = {
@@ -38,7 +38,7 @@ export function formatEtherscanLink(type, data) {
  * @returns {string}
  */
 export const parseBalance = (balance, decimals = 18, decimalsToDisplay = 3) =>
-  Number(formatUnits(balance, decimals)).toFixed(decimalsToDisplay)
+  Number(ethers.utils.formatUnits(balance, decimals)).toFixed(decimalsToDisplay)
 
 export const toBase64 = file =>
   new Promise((resolve, reject) => {

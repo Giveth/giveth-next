@@ -62,23 +62,19 @@ const WalletMenu = () => {
           )}
         </Subtitle>
         <Menus>
-          {walletMenuArray.map(i => {
-            if (i?.external) {
-              return (
-                <MenuItem>
-                  <a href={i.url} rel='noreferrer' target='_blank'>
-                    {i.title}
-                  </a>
-                </MenuItem>
-              )
-            } else {
-              return (
-                <Link href={i.url} key={i.title} passHref>
-                  <MenuItem>{i.title}</MenuItem>
-                </Link>
-              )
-            }
-          })}
+          {walletMenuArray.map(i =>
+            i?.external ? (
+              <MenuItem>
+                <a href={i.url} rel='noreferrer' target='_blank'>
+                  {i.title}
+                </a>
+              </MenuItem>
+            ) : (
+              <Link href={i.url} key={i.title} passHref>
+                <MenuItem>{i.title}</MenuItem>
+              </Link>
+            )
+          )}
           {user?.token && <MenuItem onClick={signOut}>Sign out</MenuItem>}
         </Menus>
       </WalletOpened>
