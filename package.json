@@ -83,7 +83,7 @@
   "devDependencies": {
     "@babel/core": "7.0.0",
     "@babel/plugin-syntax-jsx": "^7.16.5",
-    "@emotion/babel-plugin": "^11.3.0",
+    "@emotion/babel-plugin": "^11.7.1",
     "@testing-library/cypress": "^7.0.6",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-plugin-styled-components": "latest",
