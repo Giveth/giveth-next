@@ -14,7 +14,7 @@ function GIVEconomyBanner() {
   const lastDay = new Date('10/10/2022')
 
   const showme = today >= firstDay && today <= lastDay
-  if (!showme && process.env.NEXT_PUBLIC_NETWORK !== 'ropsten') return null
+  if (!showme) return <> </>
 
   const handleClick = e => {
     if (e.target.name === 'givBannerBtn') {
