@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import TooltipImg from '../images/svg/general/decorators/tooltip.svg'
 
 const Tooltip = styled.div`
-  margin: 0 0.5rem;
   position: relative;
   border-radius: 48px;
   .tooltip-text {
@@ -74,7 +73,7 @@ const Tooltip = styled.div`
   }
 
   &.right .tooltip-arrow {
-    top: 0px;
+    top: 0;
     left: auto;
     margin-left: 23px;
     border-width: 5px 5px 5px 0;
@@ -88,7 +87,7 @@ const Tooltip = styled.div`
   }
 
   &.left .tooltip-arrow {
-    top: 0px;
+    top: 0;
     right: 22px;
     border-width: 5px 0 5px 5px;
     border-left-color: #af9bd3;

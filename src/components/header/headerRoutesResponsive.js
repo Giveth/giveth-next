@@ -7,7 +7,7 @@ import { headerRoutes } from './headerRoutes'
 import { FlexCenter } from '../styled-components/Grid'
 import { Shadow } from '../styled-components/Shadow'
 import { mediaQueries } from '../../lib/helpers'
-import HeaderItemNonMobile from './headerItemNonMobile'
+import HeaderRoutesItem from './headerRoutesItem'
 
 const HeaderRoutesResponsive = () => {
   const router = useRouter()
@@ -23,7 +23,7 @@ const HeaderRoutesResponsive = () => {
       </DrawerClosed>
       <DrawerOpened isOpen={isOpen}>
         {headerRoutes.map((i, index) => (
-          <HeaderItemNonMobile
+          <HeaderRoutesItem
             key={i.title}
             href={i.href}
             title={i.title}

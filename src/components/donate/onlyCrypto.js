@@ -4,21 +4,20 @@ import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
 import NextImage from 'next/image'
 import { Button, Flex, Text, Label, Checkbox, Image } from 'theme-ui'
-// import QRCode from 'qrcode.react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { ethers } from 'ethers'
+import { toast } from 'react-toastify'
+import tokenAbi from 'human-standard-token-abi'
+// import QRCode from 'qrcode.react'
 
 import Modal from '../modal'
 import { checkNetwork, getERC20List, pollEvery, getERC20Info } from '../../utils'
 import useComponentVisible from '../../utils/useComponentVisible'
 import CopyToClipboard from '../copyToClipboard'
-// import SVGLogo from '../../images/svg/donation/qr.svg'
 import iconQuestionMark from '../../images/icon-question-mark.svg'
 import theme from '../../utils/theme-ui'
-import tokenAbi from 'human-standard-token-abi'
 import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
-import { toast } from 'react-toastify'
 import * as transaction from '../../services/transaction'
 import { saveDonation, saveDonationTransaction } from '../../services/donation'
 import InProgressModal from './inProgressModal'
@@ -27,10 +26,11 @@ import GeminiModal from './geminiModal'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
-import { isUserRegistered, sendTransaction } from '../../lib/helpers'
+import { sendTransaction } from '../../lib/helpers'
 import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 import { switchToXdai, switchNetwork } from '../../lib/util'
 import config from '../../../config'
+// import SVGLogo from '../../images/svg/donation/qr.svg'
 
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
@@ -336,13 +336,13 @@ const OnlyCrypto = props => {
       //   ? isTraceable
       //   : switchTraceable
       let traceable = false
-
+      let userToken = user?.token
       // Sign message for registered users to get user info, no need to sign for anonymous
-      if (isUserRegistered(user) && !user.token) {
-        const isSigned = await signIn()
-        if (!isSigned) return
+      if (!userToken) {
+        const tokenFromSignin = await signIn()
+        if (!tokenFromSignin) return
+        userToken = tokenFromSignin
       }
-
       if (!project?.walletAddress) {
         return Toast({
           content: 'There is no eth address assigned for this project',
@@ -632,16 +632,19 @@ const OnlyCrypto = props => {
 
             <OpenAmount>
               {isComponentVisible && (
-                <Flex
-                  sx={{
+                <div
+                  style={{
                     position: 'absolute',
-                    backgroundColor: 'background',
-                    marginTop: '100px',
-                    right: '0'
+                    backgroundColor: 'white',
+                    top: '50px',
+                    right: 0,
+                    left: 0,
+                    borderRadius: '10px',
+                    zIndex: 10
                   }}
                 >
                   <Select
-                    width='400px'
+                    width='100%'
                     content={erc20List}
                     isTokenList
                     menuIsOpen
@@ -686,7 +689,7 @@ const OnlyCrypto = props => {
                         : 'search for a token or paste address'
                     }
                   />
-                </Flex>
+                </div>
               )}
               <InputComponent
                 sx={{
@@ -1003,6 +1006,7 @@ const AmountSection = styled.div`
 `
 
 const AmountContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

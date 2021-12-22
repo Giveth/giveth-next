@@ -6,7 +6,7 @@ import { Primary_Deep_800 } from '../styled-components/Colors'
 import { Shadow } from '../styled-components/Shadow'
 import { headerRoutes } from './headerRoutes'
 import { mediaQueries } from '../../lib/helpers'
-import HeaderItemNonMobile from './headerItemNonMobile'
+import HeaderRoutesItem from './headerRoutesItem'
 
 const HeaderRoutesDesktop = () => {
   const router = useRouter()
@@ -15,7 +15,7 @@ const HeaderRoutesDesktop = () => {
   return (
     <Wrapper>
       {headerRoutes.map((i, index) => (
-        <HeaderItemNonMobile
+        <HeaderRoutesItem
           key={i.title}
           href={i.href}
           title={i.title}

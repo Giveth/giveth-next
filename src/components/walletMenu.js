@@ -64,7 +64,7 @@ const WalletMenu = () => {
         <Menus>
           {walletMenuArray.map(i =>
             i?.external ? (
-              <MenuItem>
+              <MenuItem key={i.title}>
                 <a href={i.url} rel='noreferrer' target='_blank'>
                   {i.title}
                 </a>
