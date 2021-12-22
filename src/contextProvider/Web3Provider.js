@@ -149,7 +149,7 @@ const Web3Provider = props => {
       await client.resetStore()
       setUser(localUser)
     }
-    return true
+    return token
   }
 
   const signOut = () => {

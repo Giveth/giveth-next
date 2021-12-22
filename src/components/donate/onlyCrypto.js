@@ -26,7 +26,7 @@ import GeminiModal from './geminiModal'
 import { Context as Web3Context } from '../../contextProvider/Web3Provider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
-import { isUserRegistered, sendTransaction } from '../../lib/helpers'
+import { sendTransaction } from '../../lib/helpers'
 import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 import { switchToXdai, switchNetwork } from '../../lib/util'
 import config from '../../../config'
@@ -336,13 +336,13 @@ const OnlyCrypto = props => {
       //   ? isTraceable
       //   : switchTraceable
       let traceable = false
-
+      let userToken = user?.token
       // Sign message for registered users to get user info, no need to sign for anonymous
-      if (isUserRegistered(user) && !user.token) {
-        const isSigned = await signIn()
-        if (!isSigned) return
+      if (!userToken) {
+        const tokenFromSignin = await signIn()
+        if (!tokenFromSignin) return
+        userToken = tokenFromSignin
       }
-
       if (!project?.walletAddress) {
         return Toast({
           content: 'There is no eth address assigned for this project',
@@ -635,7 +635,7 @@ const OnlyCrypto = props => {
                 <div
                   style={{
                     position: 'absolute',
-                    backgroundColor: 'background',
+                    backgroundColor: 'white',
                     top: '50px',
                     right: 0,
                     left: 0,
