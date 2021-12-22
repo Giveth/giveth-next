@@ -42,8 +42,7 @@ const WalletMenu = () => {
         <UserAvatar src={defaultProfileIcon} />
         <UserDetails>
           <Link_Medium color={Primary_Deep_800}>
-            {truncate(user?.name, 11) || shortenAddress(user.walletAddress)}
-            {}
+            {user?.name ? truncate(user?.name, 11) : shortenAddress(user.walletAddress)}
           </Link_Medium>
           <Overline_Small color={Giv_800}>Connected to {networkName}</Overline_Small>
         </UserDetails>

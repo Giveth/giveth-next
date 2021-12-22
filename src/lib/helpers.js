@@ -51,7 +51,7 @@ export const shortenAddress = (address, charsLength = 4) => {
 }
 
 export function truncate(str, n) {
-  return str.length > n ? str.substr(0, n - 1) + '...' : str
+  return str?.length > n ? str?.substr(0, n - 1) + '...' : str
 }
 
 export const checkWalletName = web3 => {
