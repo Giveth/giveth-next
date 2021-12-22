@@ -10,10 +10,10 @@ export const headerRoutes = [
     title: 'Projects',
     href: Routes.Projects
   },
-  {
-    title: 'GIVeconomy',
-    href: config.LINKS.GIVECONOMY
-  },
+  // {
+  //   title: 'GIVeconomy',
+  //   href: config.LINKS.GIVECONOMY
+  // },
   {
     title: 'Community',
     href: Routes.Join
