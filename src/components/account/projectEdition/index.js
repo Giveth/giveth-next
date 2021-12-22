@@ -96,6 +96,7 @@ function ProjectEdition(props) {
   }, [project])
 
   async function updateProject(data) {
+    console.log({ data })
     try {
       // Validate eth address if changed
       let ethAddress = data.editWalletAddress
@@ -182,7 +183,7 @@ function ProjectEdition(props) {
         showModal={showModal}
         setShowModal={setShowModal}
         title='Success!'
-        subtitle='Please allow a few minutes for your changes to be displayed.'
+        subtitle='Your changes are now under review.'
         confirmation={{
           do: () => router.push(`/project/${fetchedProject?.projectBySlug?.slug}`),
           title: 'View Project'

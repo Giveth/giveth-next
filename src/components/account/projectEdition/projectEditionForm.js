@@ -9,6 +9,7 @@ import { toggleProjectActivation } from '../../../services/project'
 import Toast from '../../toast'
 import ImageSection from './imageSection'
 import { categoryList, maxSelectedCategory } from '../../../utils/constants'
+import ConfirmationModal from './confirmationModal'
 
 const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
@@ -30,6 +31,7 @@ function ProjectEditionForm(props) {
 
   const [desc, setDesc] = useState('')
   const [isActive, setIsActive] = useState(null)
+  const [startEditionModal, setStartEditionModal] = useState(false)
 
   const { register, handleSubmit, setValue } = useForm() // initialize the hook
 
@@ -107,6 +109,23 @@ function ProjectEditionForm(props) {
             My Projects
           </Text>
         </Flex>
+        <ConfirmationModal
+          showModal={startEditionModal}
+          setShowModal={setStartEditionModal}
+          title='Important'
+          subtitle='Changes made to this project will be reviewed by an admin. Until it is approved, this project will not be publicly shown on the giveth.io projects page.'
+          confirmation={{
+            do: () => {
+              updateProject(startEditionModal)
+              setStartEditionModal(false)
+            },
+            title: 'Save'
+          }}
+          secondary={{
+            do: () => setStartEditionModal(false),
+            title: 'Cancel'
+          }}
+        />
 
         <form
           onSubmit={handleSubmit(() => {
@@ -168,7 +187,8 @@ function ProjectEditionForm(props) {
 
       <form
         onSubmit={handleSubmit(data => {
-          updateProject({ ...data, desc })
+          setStartEditionModal({ ...data, desc })
+          // updateProject({ ...data, desc })
         })}
       >
         <>

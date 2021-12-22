@@ -19,7 +19,8 @@ const ConfirmationModal = ({
       flexDirection: 'column',
       alignItems: 'center',
       width: '600px',
-      height: '308px',
+      height: '360px',
+      padding: '0 20px',
       backgroundColor: 'white',
       boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)',
       borderRadius: '2px'
