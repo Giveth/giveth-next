@@ -13,7 +13,7 @@ import {
 import { PopupContext } from '../contextProvider/popupProvider'
 import CopyToClipboard from '../components/copyToClipboard'
 import Modal from './modal'
-import { switchNetwork } from '../lib/util'
+import { switchNetwork, switchToXdai } from '../lib/util'
 
 const isDev = process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
 
@@ -62,7 +62,7 @@ function ChangeNetworkPopup({ close, onlyMainnet }) {
         }}
         style={{ padding: '17px 60px' }}
         onClick={() => {
-          switchNetwork()
+          onlyMainnet ? switchNetwork() : switchToXdai()
           close()
         }}
       >
