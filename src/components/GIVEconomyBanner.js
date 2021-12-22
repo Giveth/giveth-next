@@ -9,6 +9,7 @@ import config from '../../config'
 
 function GIVEconomyBanner() {
   const router = useRouter()
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
   const today = new Date()
   const firstDay = new Date('12/21/2021')
@@ -16,8 +17,6 @@ function GIVEconomyBanner() {
 
   const showme = today >= firstDay && today <= lastDay
   if (!showme) return <> </>
-
-  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
   const handleClick = e => {
     if (e.target.name === 'givBannerBtn') {
