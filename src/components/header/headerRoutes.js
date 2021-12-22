@@ -1,5 +1,5 @@
 import Routes from '../../lib/Routes'
-import config from '../../../config'
+// import config from '../../../config'
 
 export const headerRoutes = [
   {
