@@ -50,6 +50,10 @@ export const shortenAddress = (address, charsLength = 4) => {
   return `${address.slice(0, charsLength + prefixLength)}…${address.slice(-charsLength)}`
 }
 
+export function truncate(str, n) {
+  return str.length > n ? str.substr(0, n - 1) + '...' : str
+}
+
 export const checkWalletName = web3 => {
   if (!web3) return null
   let walletName = ''
