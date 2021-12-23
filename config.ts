@@ -13,6 +13,7 @@ const config = {
     BACKEND: 'https://serve.giveth.io/graphql',
     FRONTEND: 'https://giveth.io/',
     REPORT_ISSUE: 'https://github.com/Giveth/giveth-next/issues/new',
+    PROJECT_VERIFY: 'https://giveth.typeform.com/verification',
     GIVECONOMY: 'https://liquidity-mining-dapp.vercel.app/',
     DISCORD: 'https://discord.gg/Uq2TaXP9bC',
     DISCOURSE: 'https://forum.giveth.io/',

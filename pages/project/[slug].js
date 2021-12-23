@@ -11,7 +11,7 @@ import NotFoundPage from '../404'
 
 const Seo = dynamic(() => import('../../src/components/seo'))
 const Layout = dynamic(() => import('../../src/components/layout'))
-const DonatorView = dynamic(() => import('../../src/components/project/donatorView'))
+const DonatorView = dynamic(() => import('../../src/components/project/donorView'))
 
 const Project = props => {
   return props.error ? (
