@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
-import { Giv_100, Pinky_500, Gray_800, Primary_Deep_800 } from '../styled-components/Colors'
-import { mediaQueries } from '../../lib/helpers'
+import { Giv_100, Pinky_500, Primary_Deep_800 } from '../styled-components/Colors'
 
 const HeaderRoutesItem = ({ href, title, active }) => (
   <Link href={href} passHref>
