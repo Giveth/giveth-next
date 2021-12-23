@@ -1,5 +1,5 @@
 import Routes from '../../lib/Routes'
-import config from '../../../config'
+// import config from '../../../config'
 
 export const headerRoutes = [
   {
@@ -10,10 +10,10 @@ export const headerRoutes = [
     title: 'Projects',
     href: Routes.Projects
   },
-  {
-    title: 'GIVeconomy',
-    href: config.LINKS.GIVECONOMY
-  },
+  // {
+  //   title: 'GIVeconomy',
+  //   href: config.LINKS.GIVECONOMY
+  // },
   {
     title: 'Community',
     href: Routes.Join

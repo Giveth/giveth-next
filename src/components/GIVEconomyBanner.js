@@ -11,11 +11,12 @@ function GIVEconomyBanner() {
   const router = useRouter()
   const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
-  const today = new Date()
-  const firstDay = new Date('12/21/2021')
-  const lastDay = new Date('10/10/2022')
+  // const today = new Date()
+  // const firstDay = new Date('12/24/2021')
+  // const lastDay = new Date('10/10/2022')
 
-  const showme = today >= firstDay && today <= lastDay
+  // const showme = today >= firstDay && today <= lastDay
+  const showme = false
   if (!showme) return <> </>
 
   const handleClick = e => {
