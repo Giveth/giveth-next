@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import styled from '@emotion/styled'
-import useMediaQuery from 'react-responsive'
+import { useMediaQuery } from 'react-responsive'
 
 import theme from '../src/utils/theme-ui'
 import { fetchEntries } from '../src/utils/contentfulPosts'

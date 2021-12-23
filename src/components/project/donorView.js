@@ -29,6 +29,8 @@ import FirstGiveBadge from './firstGiveBadge'
 
 import { Gray_600 } from '../styled-components/Colors'
 
+import config from '../../../config'
+
 const RichTextViewer = dynamic(() => import('../richTextViewer'), {
   ssr: false
 })
@@ -37,7 +39,7 @@ const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
 const ProjectTraces = React.lazy(() => import('./projectTraces'))
 
-const ProjectDonatorView = ({
+const ProjectDonorView = ({
   project,
   donations: projectDonations,
   updates: projectUpdates,
@@ -400,7 +402,7 @@ const ProjectDonatorView = ({
                   : ''}
               </Text>
             </Button>
-            {project?.traceCampaignId && (
+            {/* {project?.traceCampaignId && (
               <Button
                 variant='nofill'
                 type='button'
@@ -421,7 +423,7 @@ const ProjectDonatorView = ({
                   Traces
                 </Text>
               </Button>
-            )}
+            )} */}
           </Flex>
           <Box sx={{ mt: '30px' }}>
             {currentTab === 'description' ? (
@@ -512,7 +514,7 @@ const ProjectDonatorView = ({
           )}
 
           {isOwner && !(project?.verified || project?.traceCampaignId) && (
-            <Link href='https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5' passHref>
+            <Link href={config.LINKS.PROJECT_VERIFY} passHref>
               <Text
                 sx={{
                   cursor: 'pointer',
@@ -723,4 +725,4 @@ const NoImage = styled.div`
   align-items: center;
 `
 
-export default ProjectDonatorView
+export default ProjectDonorView

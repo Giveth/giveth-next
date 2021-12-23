@@ -271,7 +271,7 @@ const ProjectsList = props => {
                 ))}
               </Grid>
 
-              {pageCount > 1 && (
+              {pageCount?.current > 1 ? (
                 <>
                   <StyledButton onClick={loadMore} outline>
                     {isLoading ? <div className='dot-flashing' /> : 'LOAD MORE'}
@@ -282,6 +282,19 @@ const ProjectsList = props => {
                     </a>
                   </Link>
                 </>
+              ) : (
+                <Box
+                  sx={{
+                    variant: 'headings.h5',
+                    width: ['100%', null, null],
+                    fontWeight: '500',
+                    color: 'attention',
+                    mx: [4, 5, 5],
+                    mt: -5
+                  }}
+                >
+                  Nothing was found
+                </Box>
               )}
             </div>
           </Flex>

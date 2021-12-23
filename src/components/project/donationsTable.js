@@ -13,6 +13,7 @@ import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { ETHERSCAN_PREFIXES, parseBalance } from '../../lib/util'
 import { shortenAddress } from '../../lib/helpers'
+import { useMediaQuery } from 'react-responsive'
 // import DropdownInput from '../dropdownInput'
 // import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 // import { useApolloClient } from '@apollo/client'
@@ -31,6 +32,8 @@ const DonationsTable = ({ donations = [] }) => {
   const [isSearching, setIsSearching] = React.useState(false)
   const { currentProjectView } = React.useContext(ProjectContext)
   // const client = useApolloClient()
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
+
   const filter = 0
 
   const fromTrace = currentProjectView?.project?.traceCampaignId
@@ -170,7 +173,7 @@ const DonationsTable = ({ donations = [] }) => {
               if (!i) return null
               return (
                 <tr key={key}>
-                  <td data-label='Account' style={{ variant: 'text.small', color: 'secondary' }}>
+                  <td data-label='Date' style={{ variant: 'text.small', color: 'secondary' }}>
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
                       {i.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
                     </Text>
@@ -178,16 +181,17 @@ const DonationsTable = ({ donations = [] }) => {
                   <DonorBox
                     data-label='Donor'
                     sx={{
-                      variant: 'text.small',
                       color: 'secondary',
                       svg: { borderRadius: '50%' }
                     }}
                   >
-                    {i.user?.avatar ? (
-                      <Avatar src={i.user?.avatar} />
-                    ) : (
-                      <Jdenticon size='32' value={i.fromWalletAddress || i.giverAddress} />
-                    )}
+                    {!isMobile ? (
+                      i.user?.avatar ? (
+                        <Avatar src={i.user?.avatar} />
+                      ) : (
+                        <Jdenticon size='32' value={i.fromWalletAddress || i.giverAddress} />
+                      )
+                    ) : null}
                     <Text
                       sx={{
                         variant: 'text.small',
@@ -201,7 +205,9 @@ const DonationsTable = ({ donations = [] }) => {
                         ? i.user.name
                         : i.user?.firstName && i.user?.lastName
                         ? `${i.user.firstName} ${i.user.lastName}`
-                        : i.user?.walletAddress || i.fromWalletAddress || i.giverAddress}
+                        : shortenAddress(i.user?.walletAddress) ||
+                          shortenAddress(i.fromWalletAddress) ||
+                          shortenAddress(i.giverAddress)}
                     </Text>
                   </DonorBox>
                   <td data-label='Currency' style={{ variant: 'text.small', color: 'secondary' }}>
@@ -226,10 +232,11 @@ const DonationsTable = ({ donations = [] }) => {
                     data-label='Transaction'
                     style={{ variant: 'text.small', color: 'secondary' }}
                   >
-                    <div
-                      style={{
+                    <Flex
+                      sx={{
                         display: 'flex',
                         flexDirection: 'row',
+                        justifyContent: ['flex-end', 'flex-start', 'flex-start'],
                         alignItems: 'baseline'
                       }}
                     >
@@ -255,7 +262,7 @@ const DonationsTable = ({ donations = [] }) => {
                           window.open(transactionLink)
                         }}
                       />
-                    </div>
+                    </Flex>
                   </td>
                 </tr>
               )
@@ -389,7 +396,8 @@ const Table = styled.table`
     }
 
     td::before {
-      content: attr(aria-label);
+      content: attr(data-label);
+      color: ${theme.colors.secondary};
       float: left;
       font-size: 0.8rem;
       font-weight: bold;

@@ -12,6 +12,7 @@ const HeaderRoutesItem = ({ href, title, active }) => (
 const RoutesItem = styled.a`
   padding: 7px 15px;
   font-weight: 400;
+  font-size: 14px;
   cursor: pointer;
   border-radius: 72px;
   :hover {
@@ -22,6 +23,12 @@ const RoutesItem = styled.a`
     :hover {
       color: ${Primary_Deep_800} !important;
     }
+  }
+  @media (max-width: 700px) {
+    &.active {
+      background: transparent;
+    }
+    padding: 2px 0 15px 15px;
   }
 `
 

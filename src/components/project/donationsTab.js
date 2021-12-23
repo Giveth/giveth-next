@@ -1,12 +1,15 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { useMediaQuery } from 'react-responsive'
 import { Spinner, Flex, Text } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import DonationsTable from './donationsTable'
+import { shortenAddress } from '../../lib/helpers'
 
 const DonationsTab = ({ project, donations: projectDonations }) => {
   const [loading, setLoading] = React.useState(true)
   const donations = projectDonations?.filter(el => el != null)
+  const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
   const totalDonations = project?.fromTrace
     ? project?.donationCounters?.reduce((a, b) => {
         return a + b?.donationCount
@@ -46,8 +49,8 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
               <Text sx={{ variant: 'text.large', color: 'secondary' }}>TOTAL FUNDS RAISED:</Text>
               <Flex
                 sx={{
-                  flexDirection: 'row',
-                  alignItems: 'flex-end'
+                  flexDirection: ['column', 'column', 'row'],
+                  alignItems: ['flex-start', 'flex-start', 'flex-end']
                 }}
               >
                 <Text
@@ -100,7 +103,7 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
                     window.open(`https://etherscan.io/address/${project?.walletAddress}`)
                   }
                 >
-                  {project?.walletAddress}
+                  {isMobile ? shortenAddress(project?.walletAddress, 8) : project?.walletAddress}
                 </Text>
               </Flex>
             )

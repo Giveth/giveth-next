@@ -14,14 +14,18 @@ const HeaderRoutesDesktop = () => {
 
   return (
     <Wrapper>
-      {headerRoutes.map((i, index) => (
-        <HeaderRoutesItem
-          key={i.title}
-          href={i.href}
-          title={i.title}
-          active={activeMenu === index}
-        />
-      ))}
+      {headerRoutes.map((i, index) => {
+        if (i?.desktopOnly) {
+          return (
+            <HeaderRoutesItem
+              key={i.title}
+              href={i.href}
+              title={i.title}
+              active={activeMenu === index}
+            />
+          )
+        }
+      })}
     </Wrapper>
   )
 }

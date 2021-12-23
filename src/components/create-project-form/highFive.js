@@ -4,6 +4,7 @@ import { Text, Flex, Box } from 'theme-ui'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from 'react-share'
+import config from '../../../config'
 
 const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDescription }) => {
   const shareTitle = `Check out on @Givethio`
@@ -127,7 +128,7 @@ const HighFive = ({ project, addedProject, projectImage, projectTitle, projectDe
                 View my project
               </Text>
             </Link>
-            <Link href={`https://hlfkiwoiwhi.typeform.com/to/pXxk0HO5`} passHref>
+            <Link href={config.LINKS.PROJECT_VERIFY} passHref>
               <Text
                 sx={{
                   cursor: 'pointer',

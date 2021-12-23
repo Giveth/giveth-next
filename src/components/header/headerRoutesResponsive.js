@@ -6,6 +6,8 @@ import { useRouter } from 'next/router'
 import { headerRoutes } from './headerRoutes'
 import { FlexCenter } from '../styled-components/Grid'
 import { Shadow } from '../styled-components/Shadow'
+import { Body_P } from '../styled-components/Typography'
+import { Gray_900 } from '../styled-components/Colors'
 import { mediaQueries } from '../../lib/helpers'
 import HeaderRoutesItem from './headerRoutesItem'
 
@@ -19,17 +21,22 @@ const HeaderRoutesResponsive = () => {
     <Wrapper onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
       <DrawerClosed isOpen={isOpen}>
         <Image src={'/images/drawer_menu.svg'} alt={'drawer menu'} />
-        {activeMenu}
+        <Body_P color={Gray_900}>{activeMenu}</Body_P>
       </DrawerClosed>
       <DrawerOpened isOpen={isOpen}>
-        {headerRoutes.map((i, index) => (
-          <HeaderRoutesItem
-            key={i.title}
-            href={i.href}
-            title={i.title}
-            active={activeIndex === index}
-          />
-        ))}
+        <Image src={'/images/drawer_menu.svg'} alt={'drawer menu'} />
+        <HeaderItems>
+          {headerRoutes.map((i, index) => {
+            return (
+              <HeaderRoutesItem
+                key={i.title}
+                href={i.href}
+                title={i.title}
+                active={activeIndex === index}
+              />
+            )
+          })}
+        </HeaderItems>
       </DrawerOpened>
     </Wrapper>
   )
@@ -43,34 +50,43 @@ const DrawerClosed = styled(FlexCenter)`
   padding: 0 14px;
   height: 48px;
   cursor: pointer;
-  z-index: 1080;
+  z-index: ${props => (props.isOpen ? '0' : '1080')};
 `
 
 const DrawerOpened = styled.div`
   position: absolute;
-  top: 20px;
-  left: 0;
+  top: 10px;
+  width: 190px;
+  align-items: flex-start;
   background: white;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 35px 20px 20px 20px;
-  border-radius: 12px;
+  display: ${props => (props.isOpen ? 'flex' : 'none')};
+  flex-direction: row;
+  padding: 15px 20px 20px 20px;
+  border-radius: 18px;
   box-shadow: ${Shadow.Dark['500']};
   transition: max-height 0.25s ease-in, opacity 0.25s ease-in;
   visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
   opacity: ${props => (props.isOpen ? 1 : 0)};
-
+  z-index: ${props => (props.isOpen ? '1080' : '0')};
   > * {
     opacity: ${props => (props.isOpen ? 1 : 0)};
     transition: opacity 0.25s ease-in;
     transition-delay: 0.25s;
   }
+  ${mediaQueries.sm} {
+    padding: 15px 20px 10px 20px;
+    img {
+      padding: 5px 0 0 0;
+    }
+  }
+`
+const HeaderItems = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const Wrapper = styled.div`
   position: relative;
-  display: none;
 
   ${mediaQueries.sm} {
     display: flex;
