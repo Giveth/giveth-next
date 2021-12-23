@@ -19,12 +19,15 @@ const RoutesItem = styled.a`
     color: ${Pinky_500} !important;
   }
   &.active {
-    // background: ${Giv_100};
+    background: ${Giv_100};
     :hover {
       color: ${Primary_Deep_800} !important;
     }
   }
   @media (max-width: 700px) {
+    &.active {
+      background: transparent;
+    }
     padding: 2px 0 15px 15px;
   }
 `
