@@ -12,7 +12,7 @@ const Hero = ({ content }) => {
     <HeroSection>
       {isMobile ? null : <HeroSideImage />}
       <div id='placeholder' />
-      <HeroText p={['10px', null, '80px']}>
+      <HeroText p={['10px', null, '80px']} mb={['-100px', 0, 0]} mt={['-100px', 0, 0]}>
         {' '}
         <Heading
           sx={{

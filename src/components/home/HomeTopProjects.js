@@ -93,6 +93,10 @@ const CreateLink = styled.a`
   :hover {
     color: ${theme.colors.hover};
   }
+
+  @media (max-width: 576px) {
+    display: none;
+  }
 `
 
 export default HomeTopProjects
