@@ -96,7 +96,6 @@ function ProjectEdition(props) {
   }, [project])
 
   async function updateProject(data) {
-    console.log({ data })
     try {
       // Validate eth address if changed
       let ethAddress = data.editWalletAddress
