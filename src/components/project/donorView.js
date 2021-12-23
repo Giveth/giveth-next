@@ -402,7 +402,7 @@ const ProjectDonorView = ({
                   : ''}
               </Text>
             </Button>
-            {project?.traceCampaignId && (
+            {/* {project?.traceCampaignId && (
               <Button
                 variant='nofill'
                 type='button'
@@ -423,7 +423,7 @@ const ProjectDonorView = ({
                   Traces
                 </Text>
               </Button>
-            )}
+            )} */}
           </Flex>
           <Box sx={{ mt: '30px' }}>
             {currentTab === 'description' ? (
