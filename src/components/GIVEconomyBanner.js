@@ -3,11 +3,13 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { Flex, Button, Text } from 'theme-ui'
 import LevitatingCard from './hoc/levitatingCard'
+import { useMediaQuery } from 'react-responsive'
 import { Mustard_500 } from './styled-components/Colors'
 import config from '../../config'
 
 function GIVEconomyBanner() {
   const router = useRouter()
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
   // const today = new Date()
   // const firstDay = new Date('12/24/2021')
@@ -28,7 +30,9 @@ function GIVEconomyBanner() {
 
   return (
     <>
-      <LevitatingCard style={{ margin: '0 15% 5% 15%', zIndex: 1, marginBottom: '100px' }}>
+      <LevitatingCard
+        style={{ margin: isMobile ? '15% 0' : '0 15% 5% 15%', zIndex: 1, marginBottom: '100px' }}
+      >
         <Flex
           sx={{
             cursor: 'pointer',
@@ -39,7 +43,7 @@ function GIVEconomyBanner() {
             backgroundSize: ['cover', '100% 100%', '100% 100%'],
             backgroundRepeat: 'no-repeat',
             zIndex: -1,
-            borderRadius: [0, '12px', '12px'],
+            borderRadius: '12px',
             pb: 3
           }}
           onClick={handleClick}
@@ -65,7 +69,9 @@ function GIVEconomyBanner() {
               The GIVeconomy
             </Text>
             <Flex sx={{ textAlign: 'center', mt: '-10px' }}>
-              <Image src='/images/yellowGurve.svg' width='146px' height='30px' alt='gurve' />
+              {!isMobile && (
+                <Image src='/images/yellowGurve.svg' width='146px' height='30px' alt='gurve' />
+              )}
               <Text
                 sx={{
                   fontFamily: 'TeX Gyre Adventor',
@@ -96,14 +102,13 @@ function GIVEconomyBanner() {
               name='givBannerBtn'
               sx={{
                 maxWidth: '326px',
-                height: '52px',
                 fontWeight: 'bold',
                 fontSize: 2,
                 lineHeight: 'button',
                 letterSpacing: 'normal',
                 ml: 4,
                 zIndex: 2,
-                px: 5
+                px: [4, 5, 5]
               }}
               onClick={() => router.push(`${config.LINKS.GIVECONOMY}/claim`)}
             >

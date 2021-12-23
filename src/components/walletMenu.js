@@ -17,7 +17,7 @@ import { FlexCenter } from './styled-components/Grid'
 import { Shadow } from './styled-components/Shadow'
 import defaultProfileIcon from '../../public/images/default_user_profile.png'
 import { switchNetwork } from '../lib/util'
-import { shortenAddress } from '../lib/helpers'
+import { truncate, shortenAddress } from '../lib/helpers'
 import { networkInfo } from '../lib/NetworksObj'
 import Routes from '../lib/Routes'
 import config from '../../config'
@@ -42,7 +42,7 @@ const WalletMenu = () => {
         <UserAvatar src={defaultProfileIcon} />
         <UserDetails>
           <Link_Medium color={Primary_Deep_800}>
-            {user?.name || shortenAddress(user.walletAddress)}
+            {user?.name ? truncate(user?.name, 11) : shortenAddress(user.walletAddress)}
           </Link_Medium>
           <Overline_Small color={Giv_800}>Connected to {networkName}</Overline_Small>
         </UserDetails>
@@ -96,6 +96,9 @@ const WalletClosed = styled(FlexCenter)`
 const UserDetails = styled.div`
   padding-left: 8px;
   padding-right: 20px;
+  @media (max-width: 768px) {
+    padding-right: 0;
+  }
 `
 
 const walletMenuArray = [

@@ -49,7 +49,7 @@ export const toBase64 = file =>
   })
 
 export const switchNetwork = currentNetworkId => {
-  let chainId = config.SECONDARY_NETWORK.chain
+  let chainId = config.PRIMARY_NETWORK.chain
   const defaultNetworkId = config.PRIMARY_NETWORK.id
   if (currentNetworkId === defaultNetworkId) {
     chainId = config.SECONDARY_NETWORK.chain
