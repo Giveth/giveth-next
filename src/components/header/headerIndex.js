@@ -80,9 +80,6 @@ const ButtonResponsive = styled(FlexCenter)`
   > span {
     height: 37px;
   }
-  ${mediaQueries.sm} {
-    display: flex;
-  }
   ${mediaQueries.md} {
     display: none;
   }
@@ -109,7 +106,7 @@ const RightMenus = styled.div`
 
 const Wrapper = styled.div`
   position: fixed;
-  top: 0;
+  top: 2px;
   left: 0;
   width: 100%;
   display: flex;
@@ -135,7 +132,6 @@ const LogoBackground = styled(FlexCenter)`
     width: 40px;
     height: 40px;
   }
-
   ${mediaQueries.md} {
     width: 66px;
     height: 66px;
@@ -143,6 +139,9 @@ const LogoBackground = styled(FlexCenter)`
       width: 50px;
       height: 50px;
     }
+  }
+  @media (max-width: 500px) {
+    display: none;
   }
 `
 

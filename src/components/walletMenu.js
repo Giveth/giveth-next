@@ -41,10 +41,10 @@ const WalletMenu = () => {
       <WalletClosed isOpen={isOpen}>
         <UserAvatar src={defaultProfileIcon} />
         <UserDetails>
-          <Link_Medium color={Primary_Deep_800}>
+          <NameText color={Primary_Deep_800}>
             {user?.name ? truncate(user?.name, 11) : shortenAddress(user.walletAddress)}
-          </Link_Medium>
-          <Overline_Small color={Giv_800}>Connected to {networkName}</Overline_Small>
+          </NameText>
+          <ConnectedText color={Giv_800}>Connected to {networkName}</ConnectedText>
         </UserDetails>
       </WalletClosed>
 
@@ -98,6 +98,7 @@ const UserDetails = styled.div`
   padding-right: 20px;
   @media (max-width: 768px) {
     padding-right: 0;
+    padding-left: 0;
   }
 `
 
@@ -179,6 +180,21 @@ const Subtitle = styled(Overline_Small)`
   display: flex;
   justify-content: space-between;
   margin-bottom: 7px;
+`
+
+const NameText = styled(Link_Medium)`
+  @media (max-width: 500px) {
+    // font-size: 12px;
+    display: none;
+  }
+`
+
+const ConnectedText = styled(Overline_Small)`
+  @media (max-width: 500px) {
+    // font-size: 7px;
+    // margin-top: -5px;
+    display: none;
+  }
 `
 
 const Title = styled(Overline_Small)`

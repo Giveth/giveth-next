@@ -2,7 +2,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import { Label, Input, Grid, Text, Button, Textarea, Image } from 'theme-ui'
 import styled from '@emotion/styled'
-import useMediaQuery from 'react-responsive'
+import { useMediaQuery } from 'react-responsive'
 import theme from '../src/utils/theme-ui'
 
 const Seo = dynamic(() => import('../src/components/seo'))
