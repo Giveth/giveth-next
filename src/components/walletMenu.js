@@ -16,7 +16,7 @@ import {
 import { FlexCenter } from './styled-components/Grid'
 import { Shadow } from './styled-components/Shadow'
 import defaultProfileIcon from '../../public/images/default_user_profile.png'
-import { switchNetwork } from '../lib/util'
+import { switchNetwork, switchToXdai } from '../lib/util'
 import { truncate, shortenAddress } from '../lib/helpers'
 import { networkInfo } from '../lib/NetworksObj'
 import Routes from '../lib/Routes'
@@ -58,7 +58,18 @@ const WalletMenu = () => {
         <Subtitle>
           <Body_P bold>{networkName}</Body_P>
           {web3?.MetaMask && (
-            <StyledButton onClick={() => switchNetwork(networkId)}>Switch network</StyledButton>
+            <StyledButton
+              onClick={() => {
+                console.log({ networkId })
+                if (networkId === 100) {
+                  switchNetwork(networkId)
+                } else {
+                  switchToXdai()
+                }
+              }}
+            >
+              Switch network
+            </StyledButton>
           )}
         </Subtitle>
         <Menus>
