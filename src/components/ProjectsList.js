@@ -107,7 +107,7 @@ const ProjectsList = props => {
   function checkCategory() {
     const categoryFromQuery = query?.category
     if (categoryFromQuery) {
-      categories.some(i => i.name === categoryFromQuery && setCategory(i))
+      categories?.some(i => i.name === categoryFromQuery && setCategory(i))
     }
   }
 
@@ -271,7 +271,7 @@ const ProjectsList = props => {
                 ))}
               </Grid>
 
-              {pageCount?.current > 1 ? (
+              {pageCount > 1 && pageCount > pageNum?.current && filteredProjects?.length > 0 ? (
                 <>
                   <StyledButton onClick={loadMore} outline>
                     {isLoading ? <div className='dot-flashing' /> : 'LOAD MORE'}
@@ -285,7 +285,6 @@ const ProjectsList = props => {
               ) : (
                 <Box
                   sx={{
-                    variant: 'headings.h5',
                     width: ['100%', null, null],
                     fontWeight: '500',
                     color: 'attention',
@@ -293,7 +292,18 @@ const ProjectsList = props => {
                     mt: -5
                   }}
                 >
-                  Nothing was found
+                  {pageCount <= pageNum?.current ? (
+                    <StyledButton onClick={() => window?.scrollTo(0, 0)} ghost>
+                      {' '}
+                      Back to the top{' '}
+                    </StyledButton>
+                  ) : (
+                    filteredProjects?.length === 0 && (
+                      <StyledButton ghost style={{ cursor: 'initial' }}>
+                        Nothing was found
+                      </StyledButton>
+                    )
+                  )}
                 </Box>
               )}
             </div>
