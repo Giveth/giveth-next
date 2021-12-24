@@ -16,7 +16,7 @@ const Context = createContext({})
 const { Provider } = Context
 
 const nativeTokenDecimals = 18
-const defaultNetworkId = Number(process.env.NEXT_PUBLIC_NETWORK_ID)
+const defaultNetworkId = 100 // Defaulting to xDAI
 const dappId = process.env.NEXT_PUBLIC_BLOCK_NATIVE_DAPP_ID
 
 const Web3Provider = props => {
