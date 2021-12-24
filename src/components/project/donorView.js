@@ -68,7 +68,6 @@ const ProjectDonorView = ({
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
-  const donations = projectDonations
   const isSSR = typeof window === 'undefined'
   const reactToProject = async () => {
     try {
