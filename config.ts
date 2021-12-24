@@ -14,7 +14,7 @@ const config = {
     FRONTEND: 'https://giveth.io/',
     REPORT_ISSUE: 'https://github.com/Giveth/giveth-next/issues/new',
     PROJECT_VERIFY: 'https://giveth.typeform.com/verification',
-    GIVECONOMY: 'https://liquidity-mining-dapp.vercel.app/',
+    GIVECONOMY: 'https://giv.giveth.io/',
     DISCORD: 'https://discord.gg/Uq2TaXP9bC',
     DISCOURSE: 'https://forum.giveth.io/',
     GITHUB: 'https://github.com/Giveth/',
@@ -25,8 +25,8 @@ const config = {
     REDDIT: 'https://reddit.com/r/giveth'
   },
   GIV_TOKEN: {
-    MAINNET: '0x067eA48882E6D728A37acfd1535ec03f8E33794a',
-    XDAI: '0x7aade4907a8e2412beacbe42e51aaee5b6085f24'
+    MAINNET: '0x900db999074d9277c5da2a43f252d74366230da0',
+    XDAI: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75'
   }
 }
 
