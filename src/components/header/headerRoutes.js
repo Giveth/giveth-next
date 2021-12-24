@@ -1,5 +1,5 @@
 import Routes from '../../lib/Routes'
-// import config from '../../../config'
+import config from '../../../config'
 
 export const headerRoutes = [
   {
@@ -12,10 +12,11 @@ export const headerRoutes = [
     href: Routes.Projects,
     desktopOnly: true
   },
-  // {
-  //   title: 'GIVeconomy',
-  //   href: config.LINKS.GIVECONOMY
-  // },
+  {
+    title: 'GIVeconomy',
+    href: config.LINKS.GIVECONOMY,
+    desktopOnly: true
+  },
   {
     title: 'Community',
     href: Routes.Join,

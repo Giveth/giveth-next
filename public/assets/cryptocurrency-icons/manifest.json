@@ -835,6 +835,11 @@
     "color": "#2d475b"
   },
   {
+    "symbol": "GIV",
+    "name": "Giveth Token",
+    "color": "#4d28e3"
+  },
+  {
     "symbol": "GAS",
     "name": "Gas",
     "color": "#58bf00"
