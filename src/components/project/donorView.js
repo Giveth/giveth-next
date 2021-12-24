@@ -68,9 +68,8 @@ const ProjectDonorView = ({
   const [hearted, setHearted] = useState(false)
   const [heartedCount, setHeartedCount] = useState(null)
 
-  const donations = currentProjectView?.donations?.filter(el => el != null)
+  const donations = projectDonations
   const isSSR = typeof window === 'undefined'
-
   const reactToProject = async () => {
     try {
       if (!isSignedIn) return loginModal()
@@ -100,7 +99,7 @@ const ProjectDonorView = ({
           setIsDeactivated(true)
           return
         }
-        const ethBalance = projectDonations?.reduce((prev, current) => prev + current?.amount, 0)
+        const ethBalance = projectDonations?.totalEthBalance
         setHeartedCount(projectReactions?.length)
 
         if (user) {
@@ -118,7 +117,9 @@ const ProjectDonorView = ({
           admin: projectAdmin,
           updates: projectUpdates
         })
-        setTotalGivers([...new Set(projectDonations?.map(data => data?.fromWalletAddress))].length)
+        setTotalGivers(
+          [...new Set(projectDonations?.donations?.map(data => data?.fromWalletAddress))].length
+        )
 
         setReady(true)
       } catch (error) {
@@ -397,8 +398,8 @@ const ProjectDonorView = ({
                 }}
               >
                 Donations{' '}
-                {!isMobile && currentProjectView?.donations?.length > 0 && !project?.fromTrace
-                  ? `( ${currentProjectView.donations.length} )`
+                {!isMobile && projectDonations?.totalCount && !project?.fromTrace
+                  ? `( ${projectDonations?.totalCount} )`
                   : ''}
               </Text>
             </Button>
@@ -589,7 +590,7 @@ const ProjectDonorView = ({
                 ? project?.donationCounters?.reduce((a, b) => {
                     return a + b?.donationCount
                   }, 0)
-                : donations?.length || 0}
+                : projectDonations?.totalCount || 0}
             </Text>
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>

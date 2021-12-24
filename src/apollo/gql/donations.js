@@ -92,6 +92,37 @@ const PROJECT_DONATIONS = gql`
   }
 `
 
+const PROJECT_DONATIONS_BY_ID = gql`
+  query donationsByProjectId($projectId: Float!, $skip: Float, $take: Float) {
+    donationsByProjectId(projectId: $projectId, skip: $skip, take: $take) {
+      donations {
+        transactionId
+        transactionNetworkId
+        toWalletAddress
+        fromWalletAddress
+        anonymous
+        amount
+        valueUsd
+        valueEth
+        priceEth
+        priceUsd
+        user {
+          id
+          name
+          walletAddress
+          firstName
+          lastName
+        }
+        createdAt
+        currency
+      }
+      totalCount
+      totalUsdBalance
+      totalEthBalance
+    }
+  }
+`
+
 const USERS_DONATIONS = gql`
   query {
     donationsByDonor {
@@ -140,6 +171,7 @@ export {
   USERS_DONATIONS,
   WALLET_DONATIONS,
   PROJECT_DONATIONS,
+  PROJECT_DONATIONS_BY_ID,
   SAVE_DONATION_TRANSACTION,
   FETCH_ETH_PRICE,
   FETCH_TOKEN_PRICE

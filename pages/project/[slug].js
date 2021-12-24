@@ -6,7 +6,7 @@ import {
   GET_PROJECT_REACTIONS
 } from '../../src/apollo/gql/projects'
 import { GET_USER } from '../../src/apollo/gql/auth'
-import { PROJECT_DONATIONS } from '../../src/apollo/gql/donations'
+import { PROJECT_DONATIONS_BY_ID } from '../../src/apollo/gql/donations'
 import NotFoundPage from '../404'
 
 const Seo = dynamic(() => import('../../src/components/seo'))
@@ -48,14 +48,16 @@ export async function getServerSideProps(props) {
     })
     project = fetchProject?.projectBySlug
     // Fetch Donations
-    const { data: donationsToProject } = await client.query({
-      query: PROJECT_DONATIONS,
+    const { data: projectDonations } = await client.query({
+      query: PROJECT_DONATIONS_BY_ID,
       variables: {
-        toWalletAddresses: [fetchProject?.projectBySlug?.walletAddress]
+        skip: 0,
+        take: 1000, // TODO: Fix this on migration to typescript and add pagination
+        projectId: parseInt(fetchProject?.projectBySlug?.id)
       },
       fetchPolicy: 'no-cache'
     })
-    donations = donationsToProject?.donationsToWallets
+    donations = projectDonations?.donationsByProjectId
 
     // Fetch Updates
     const { data: updatesOfProject } = await client?.query({
@@ -89,7 +91,7 @@ export async function getServerSideProps(props) {
         })
       : null
   } catch (e) {
-    console.log({ e })
+    console.log({ e: JSON.stringify(e) })
     errors = e
   }
 

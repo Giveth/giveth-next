@@ -8,24 +8,26 @@ import { shortenAddress } from '../../lib/helpers'
 
 const DonationsTab = ({ project, donations: projectDonations }) => {
   const [loading, setLoading] = React.useState(true)
-  const donations = projectDonations?.filter(el => el != null)
+  const donations = projectDonations?.donations?.filter(el => el != null)
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
-  const totalDonations = project?.fromTrace
-    ? project?.donationCounters?.reduce((a, b) => {
-        return a + b?.donationCount
-      }, 0)
-    : donations
-    ? donations?.reduce((total, donation) => total + donation?.amount || 0, 0)
-    : 0
-  const totalUSDonations = project?.fromTrace
-    ? null
-    : donations
-    ? donations?.reduce((total, donation) => total + donation?.valueUsd || 0, 0)
-    : 0
-  const totalETHDonations = donations
-    ? donations?.reduce((total, donation) => total + donation?.valueEth || 0, 0)
-    : 0
-
+  // const totalDonations = project?.fromTrace
+  //   ? project?.donationCounters?.reduce((a, b) => {
+  //       return a + b?.donationCount
+  //     }, 0)
+  //   : donations
+  //   ? donations?.reduce((total, donation) => total + donation?.amount || 0, 0)
+  //   : 0
+  const totalDonations = projectDonations?.totalCount
+  // const totalUSDonations = project?.fromTrace
+  //   ? null
+  //   : donations
+  //   ? donations?.reduce((total, donation) => total + donation?.valueUsd || 0, 0)
+  //   : 0
+  const totalUSDonations = projectDonations?.totalUsdBalance
+  // const totalETHDonations = donations
+  //   ? donations?.reduce((total, donation) => total + donation?.valueEth || 0, 0)
+  //   : 0
+  const totalETHDonations = projectDonations?.totalEthBalance
   React.useEffect(() => {
     setLoading(false)
   }, [])
