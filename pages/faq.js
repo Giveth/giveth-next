@@ -7,10 +7,13 @@ const ContentFaq = dynamic(() => import('../src/components/content/ContentFaq'))
 const Layout = dynamic(() => import('../src/components/layout'))
 const Seo = dynamic(() => import('../src/components/seo'))
 
-const Faq = ({ faqs }) => {
+const Faq = ({ faqs, givethFaqs, giveconomyFaqs }) => {
   return (
     <Layout>
       <Seo title='FAQ' />
+      <Box>
+        <ContentFaq faqs={givethFaqs} isopen />
+      </Box>
       <Box>
         <ContentFaq faqs={faqs} isopen />
       </Box>
@@ -23,12 +26,22 @@ export async function getServerSideProps() {
   const faqReq = await fetchEntries({
     contentType: 'faqEntry'
   })
+  const givethFaqReq = await fetchEntries({
+    contentType: 'givethFaqEntry'
+  })
+  const giveconomyFaqReq = await fetchEntries({
+    contentType: 'giveconomyFaqEntry'
+  })
 
   const faqs = faqReq?.map(f => f.fields)
+  const givethFaqs = givethFaqReq?.map(f => f.fields)
+  const giveconomyFaqs = giveconomyFaqReq?.map(f => f.fields)
 
   return {
     props: {
-      faqs: faqs || {}
+      faqs: faqs || {},
+      givethFaqs: givethFaqs || {},
+      giveconomyFaqs: giveconomyFaqs || {}
     }
   }
 }
