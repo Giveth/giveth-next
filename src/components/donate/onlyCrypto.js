@@ -174,7 +174,6 @@ const OnlyCrypto = props => {
       stopPolling.current = undefined
     }
   }
-
   const pollToken = useCallback(() => {
     clearPoll()
 

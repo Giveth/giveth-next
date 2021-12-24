@@ -16,7 +16,7 @@ function GIVEconomyBanner() {
   // const lastDay = new Date('10/10/2022')
 
   // const showme = today >= firstDay && today <= lastDay
-  const showme = false
+  const showme = true
   if (!showme) return <> </>
 
   const handleClick = e => {
