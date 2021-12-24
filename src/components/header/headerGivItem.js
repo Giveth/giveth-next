@@ -36,7 +36,6 @@ const HeaderGivItem = () => {
       () => ({
         request: async () => {
           try {
-            const env = process.env.NEXT_PUBLIC_ENVIRONMENT
             const instance = new web3.eth.Contract(
               tokenAbi,
               networkId === 100 ? config.GIV_TOKEN.XDAI : config.GIV_TOKEN.MAINNET
