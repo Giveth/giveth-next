@@ -14,7 +14,8 @@ export const headerRoutes = [
   },
   {
     title: 'GIVeconomy',
-    href: config.LINKS.GIVECONOMY
+    href: config.LINKS.GIVECONOMY,
+    desktopOnly: true
   },
   {
     title: 'Community',
