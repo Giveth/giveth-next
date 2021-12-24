@@ -37,9 +37,6 @@ const HeaderGivItem = () => {
         request: async () => {
           try {
             const env = process.env.NEXT_PUBLIC_ENVIRONMENT
-            const isDev = env === 'dev'
-            // TODO: REMOVE THIS WHEN WE HAVE OUR TOKEN DEPLOYED
-            if (!isDev) return 0
             const instance = new web3.eth.Contract(
               tokenAbi,
               networkId === 100 ? config.GIV_TOKEN.XDAI : config.GIV_TOKEN.MAINNET
