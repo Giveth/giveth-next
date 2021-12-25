@@ -52,7 +52,7 @@ export async function getServerSideProps(props) {
       query: PROJECT_DONATIONS_BY_ID,
       variables: {
         skip: 0,
-        take: 1000, // TODO: Fix this on migration to typescript and add pagination
+        take: 3000, // TODO: Fix this on migration to typescript and add pagination
         projectId: parseInt(fetchProject?.projectBySlug?.id)
       },
       fetchPolicy: 'no-cache'
