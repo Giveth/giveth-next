@@ -208,7 +208,7 @@ const ContentItem = styled(Grid)`
   justify-items: center;
   padding: 1.5rem;
   width: 250px;
-  height: 250px;
+  min-height: 250px;
   border: 1px solid ${theme.colors.muted};
   border-radius: 12px;
 `
