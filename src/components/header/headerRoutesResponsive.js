@@ -18,7 +18,11 @@ const HeaderRoutesResponsive = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <Wrapper onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
+    <Wrapper
+      onMouseEnter={() => setIsOpen(true)}
+      onClick={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
       <DrawerClosed isOpen={isOpen}>
         <Image src={'/images/drawer_menu.svg'} alt={'drawer menu'} />
         <Body_P color={Gray_900}>{activeMenu}</Body_P>
