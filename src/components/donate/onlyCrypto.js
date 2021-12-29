@@ -151,7 +151,7 @@ const OnlyCrypto = props => {
   useEffect(() => {
     web3?.eth.getGasPrice().then(wei => {
       const gwei = isXdai ? 1 : web3.utils.fromWei(wei, 'gwei')
-      const ethFromGwei = web3.utils.fromWei(wei, 'ether')
+      const ethFromGwei = web3.utils.fromWei(isXdai ? '1' : wei, 'ether')
       gwei && setGasPrice(Number(gwei))
       ethFromGwei && setGasETHPrice(Number(ethFromGwei) * 21000)
     })
@@ -786,7 +786,13 @@ const OnlyCrypto = props => {
                     title: 'Network fee',
                     logo: { iconQuestionMark },
                     amount: [
-                      `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(gasPrice)} GWEI`,
+                      `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(gasPrice).toLocaleString(
+                        'en-US',
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        }
+                      )} GWEI`,
                       `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 6
