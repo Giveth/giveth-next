@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import namehash from 'eth-ens-namehash'
 import config from '../../config'
 
 export const ETHERSCAN_PREFIXES = {
@@ -76,4 +77,16 @@ export const switchToXdai = () => {
       }
     ]
   })
+}
+
+export const reverseENS = async (web3, address) => {
+  try {
+    const lookup = address.toLowerCase().substr(2) + '.addr.reverse'
+    const ResolverContract = await web3.eth.ens.resolver(lookup)
+    const nh = namehash.hash(lookup)
+    const name = await ResolverContract.methods.name(nh).call()
+    return name
+  } catch (error) {
+    return null
+  }
 }

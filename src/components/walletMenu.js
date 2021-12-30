@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import styled from '@emotion/styled'
@@ -16,7 +16,7 @@ import {
 import { FlexCenter } from './styled-components/Grid'
 import { Shadow } from './styled-components/Shadow'
 import defaultProfileIcon from '../../public/images/default_user_profile.png'
-import { switchNetwork, switchToXdai } from '../lib/util'
+import { switchNetwork, switchToXdai, reverseENS } from '../lib/util'
 import { truncate, shortenAddress } from '../lib/helpers'
 import { networkInfo } from '../lib/NetworksObj'
 import Routes from '../lib/Routes'
@@ -28,9 +28,16 @@ const WalletMenu = () => {
     actions: { showWalletModal, signOut }
   } = useContext(Web3Context)
 
+  const [ensName, setENSName] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
-
   const networkName = networkInfo(networkId).networkName
+  useEffect(() => {
+    const getENSName = async () => {
+      const ens = await reverseENS(web3, user?.walletAddress)
+      setENSName(ens)
+    }
+    getENSName()
+  }, [user])
 
   return (
     <Wrapper
@@ -42,7 +49,11 @@ const WalletMenu = () => {
         <UserAvatar src={defaultProfileIcon} />
         <UserDetails>
           <NameText color={Primary_Deep_800}>
-            {user?.name ? truncate(user?.name, 11) : shortenAddress(user.walletAddress)}
+            {ensName
+              ? ensName
+              : user?.name
+              ? truncate(user?.name, 11)
+              : shortenAddress(user.walletAddress)}
           </NameText>
           <ConnectedText color={Giv_800}>Connected to {networkName}</ConnectedText>
         </UserDetails>
