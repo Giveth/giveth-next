@@ -33,6 +33,7 @@
     "bnc-onboard": "^1.34.2",
     "contentful": "^8.3.2",
     "dayjs": "^1.10.4",
+    "eth-ens-namehash": "^2.0.8",
     "ethers": "^5.1.4",
     "graphql": "^15.5.0",
     "human-standard-token-abi": "^2.0.0",
