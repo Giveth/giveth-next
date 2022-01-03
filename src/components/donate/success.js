@@ -9,14 +9,13 @@ import { ETHERSCAN_PREFIXES } from '../../lib/util'
 const Success = props => {
   const { project, transakTx, hash, currentChainId } = props
 
-  const downloadPDF = () => {
-    const filename = 'donation_invoice.pdf'
-    const link = document.createElement('a')
-    link.setAttribute('download', filename)
-    const event = new MouseEvent('click')
-    link.dispatchEvent(event)
-  }
-
+  // const downloadPDF = () => {
+  //   const filename = 'donation_invoice.pdf'
+  //   const link = document.createElement('a')
+  //   link.setAttribute('download', filename)
+  //   const event = new MouseEvent('click')
+  //   link.dispatchEvent(event)
+  // }
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <>
@@ -78,23 +77,34 @@ const Success = props => {
               View transaction details
             </Link>
           </Receipt>
-        ) : (
-          <Receipt sx={{ my: 4 }}>
-            <DownloadReceipt onClick={downloadPDF}>
-              <Text
-                sx={{
-                  variant: 'text.paragraph',
-                  pt: -1,
-                  color: 'bodyLight'
-                }}
-              >
-                Download receipt
-              </Text>
-              <BillIcon />
-            </DownloadReceipt>
-          </Receipt>
-        )}
+        ) : // <Receipt sx={{ my: 4 }}>
+        //   <DownloadReceipt onClick={downloadPDF}>
+        //     <Text
+        //       sx={{
+        //         variant: 'text.paragraph',
+        //         pt: -1,
+        //         color: 'bodyLight'
+        //       }}
+        //     >
+        //       Download receipt
+        //     </Text>
+        //     <BillIcon />
+        //   </DownloadReceipt>
+        // </Receipt>
+        null}
 
+        {
+          // TODO: We also need to check the token list to show this message
+          project?.verified && (
+            <Text sx={{ variant: 'text.large', color: 'background', pt: -1, width: '100%', mt: 4 }}>
+              <strong>You're eligible for GIVbacks!</strong> <br /> GIV rewards from the GIVbacks
+              program will be distributed after the end of the current round. <br /> Learn more:{' '}
+              <a style={{ textDecoration: 'underline' }} href='ttps://giv.giveth.io/givbacks'>
+                giv.giveth.io/givbacks
+              </a>
+            </Text>
+          )
+        }
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
           Thank you for your support{' '}
           <div>
@@ -119,7 +129,7 @@ const Success = props => {
 const Content = styled(Flex)`
   flex-direction: column;
   z-index: 10;
-  min-width: 32vw;
+  width: 32vw;
   word-wrap: break-word;
 `
 
