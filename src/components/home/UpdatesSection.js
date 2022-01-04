@@ -20,6 +20,7 @@ const UpdatesSection = () => {
       setMediumPosts(posts?.items?.slice(0, 2) || {})
     }
     getPosts()
+    console.log(mediumPosts)
   }, [])
 
   if (!mediumPosts) return null
@@ -52,6 +53,7 @@ const UpdatesSection = () => {
              * Map medium content nodes from node Object and destructure to variables
              * */}
             {mediumPosts?.map(node => {
+              console.log(node.thumbnail)
               return (
                 <Grid
                   columns={(1, 'auto')}
@@ -73,6 +75,7 @@ const UpdatesSection = () => {
                   >
                     {node.title}
                   </Text>
+                  <Image src={node.thumbnail} width='100%' height='100%' alt={node.title} />
                   <Text sx={{ variant: 'text.large', color: 'secondary' }}>
                     {/* {previewContent.subtitle} */}
                   </Text>
