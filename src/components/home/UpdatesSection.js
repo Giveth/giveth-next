@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import { Grid, Box, Heading, Text } from 'theme-ui'
+import { Grid, Box, Heading, Text, Image } from 'theme-ui'
 import styled from '@emotion/styled'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -20,7 +19,6 @@ const UpdatesSection = () => {
       setMediumPosts(posts?.items?.slice(0, 2) || {})
     }
     getPosts()
-    console.log(mediumPosts)
   }, [])
 
   if (!mediumPosts) return null
@@ -53,7 +51,6 @@ const UpdatesSection = () => {
              * Map medium content nodes from node Object and destructure to variables
              * */}
             {mediumPosts?.map(node => {
-              console.log(node.thumbnail)
               return (
                 <Grid
                   columns={(1, 'auto')}
@@ -75,7 +72,7 @@ const UpdatesSection = () => {
                   >
                     {node.title}
                   </Text>
-                  <Image src={node.thumbnail} width='100%' height='100%' alt={node.title} />
+                  <Image src={node.thumbnail} width='60%' height='60%' alt={node.title} />
                   <Text sx={{ variant: 'text.large', color: 'secondary' }}>
                     {/* {previewContent.subtitle} */}
                   </Text>
