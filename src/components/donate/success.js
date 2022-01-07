@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Link, Flex, Text } from 'theme-ui'
+import { Link, Flex, Text } from 'theme-ui'
 import { useMediaQuery } from 'react-responsive'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../animations/confetti'
