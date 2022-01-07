@@ -96,7 +96,7 @@ const Success = props => {
         // </Receipt>
         null}
 
-        {isGivBackEligible && project?.verified && (
+        {isGivBackEligible && (project?.verified || project?.traceCampaignId) && (
           <Text sx={{ variant: 'text.large', color: 'background', pt: -1, width: '100%', mt: 4 }}>
             <strong>You're eligible for GIVbacks!</strong> <br /> GIV rewards from the GIVbacks
             program will be distributed after the end of the current round. <br /> Learn more:{' '}

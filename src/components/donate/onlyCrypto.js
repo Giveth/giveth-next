@@ -85,7 +85,6 @@ const OnlyCrypto = props => {
   const tokenAddress = selectedToken?.address
   const isXdai = networkId === xdaiChain.id
   const isGivingBlockProject = project?.givingBlocksId
-
   useEffect(() => {
     fetchEthPrice().then(setMainTokenPrice)
   }, [])
@@ -738,10 +737,11 @@ const OnlyCrypto = props => {
                 <BsCaretDownFill size='12px' color={theme.colors.secondary} />
               </Flex>
             </OpenAmount>
-            {true && (
+            {!givBackEligible && (project?.verified || project?.traceCampaignId) && (
               <Text sx={{ ml: 2, mt: 3, color: 'white', width: '100%' }}>
                 This token is not eligible for GIVbacks.
                 <a
+                  target='_blank'
                   style={{ textDecoration: 'underline' }}
                   href='https://forum.giveth.io/t/givbacks-token-list/253'
                 >
