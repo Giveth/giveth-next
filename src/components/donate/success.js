@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Link, Flex, Text } from 'theme-ui'
 import { useMediaQuery } from 'react-responsive'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../animations/confetti'
-import BillIcon from '../../images/svg/donation/bill-icon.svg'
+// import BillIcon from '../../images/svg/donation/bill-icon.svg'
 import { ETHERSCAN_PREFIXES } from '../../lib/util'
 
 const Success = props => {
   const { project, transakTx, hash, currentChainId } = props
+  const isGivBackEligible = hash?.givBackEligible
 
   // const downloadPDF = () => {
   //   const filename = 'donation_invoice.pdf'
@@ -16,7 +17,9 @@ const Success = props => {
   //   const event = new MouseEvent('click')
   //   link.dispatchEvent(event)
   // }
+
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+
   return (
     <>
       <Flex
@@ -93,18 +96,15 @@ const Success = props => {
         // </Receipt>
         null}
 
-        {
-          // TODO: We also need to check the token list to show this message
-          project?.verified && (
-            <Text sx={{ variant: 'text.large', color: 'background', pt: -1, width: '100%', mt: 4 }}>
-              <strong>You're eligible for GIVbacks!</strong> <br /> GIV rewards from the GIVbacks
-              program will be distributed after the end of the current round. <br /> Learn more:{' '}
-              <a style={{ textDecoration: 'underline' }} href='ttps://giv.giveth.io/givbacks'>
-                giv.giveth.io/givbacks
-              </a>
-            </Text>
-          )
-        }
+        {isGivBackEligible && project?.verified && (
+          <Text sx={{ variant: 'text.large', color: 'background', pt: -1, width: '100%', mt: 4 }}>
+            <strong>You're eligible for GIVbacks!</strong> <br /> GIV rewards from the GIVbacks
+            program will be distributed after the end of the current round. <br /> Learn more:{' '}
+            <a style={{ textDecoration: 'underline' }} href='ttps://giv.giveth.io/givbacks'>
+              giv.giveth.io/givbacks
+            </a>
+          </Text>
+        )}
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
           Thank you for your support{' '}
           <div>

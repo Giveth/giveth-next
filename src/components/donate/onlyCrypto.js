@@ -77,6 +77,7 @@ const OnlyCrypto = props => {
   const [icon, setIcon] = useState(null)
   const [anonymous, setAnonymous] = useState(false)
   const [selectLoading, setSelectLoading] = useState(false)
+  const [givBackEligible, setGivBackEligible] = useState(true)
   const switchTraceable = false
   const donateToGiveth = false
 
@@ -420,7 +421,8 @@ const OnlyCrypto = props => {
                     props.setHashSent({
                       transactionHash,
                       tokenSymbol,
-                      subtotal
+                      subtotal,
+                      givBackEligible
                     })
                     setUnconfirmed(false)
                   } else {
@@ -628,7 +630,6 @@ const OnlyCrypto = props => {
                 </Text>
               )}
             </Flex>
-
             <OpenAmount>
               {isComponentVisible && (
                 <div
@@ -655,6 +656,10 @@ const OnlyCrypto = props => {
                       setIsComponentVisible(false)
                       setCustomInput('')
                       setErc20List([...erc20OriginalList])
+                      const givBackEligibilty = erc20OriginalList?.find(
+                        t => t?.symbol === i?.symbol
+                      )
+                      setGivBackEligible(givBackEligibilty)
                     }}
                     onInputChange={i => {
                       // It's a contract
@@ -671,8 +676,6 @@ const OnlyCrypto = props => {
                             !found && setErc20List([...erc20List, pastedToken])
                             setCustomInput(pastedToken?.symbol)
                             setSelectLoading(false)
-                            // setSelectedToken(pastedToken)
-                            // setIsComponentVisible(false)
                           })
                         } catch (error) {
                           setSelectLoading(false)
@@ -735,6 +738,20 @@ const OnlyCrypto = props => {
                 <BsCaretDownFill size='12px' color={theme.colors.secondary} />
               </Flex>
             </OpenAmount>
+            {!givBackEligible && project?.verified && (
+              <Text sx={{ ml: 2, mt: 3, color: 'white', width: '100%', fontSize: '15px' }}>
+                The token you have selected to donate is not eligible for GIVbacks. <br /> Please
+                refer to our
+                <a
+                  style={{ textDecoration: 'underline' }}
+                  href='https://forum.giveth.io/t/givbacks-token-list/253'
+                >
+                  {' '}
+                  GIVbacks Token List forum post{' '}
+                </a>
+                to see the full list of eligible tokens.
+              </Text>
+            )}
           </AmountContainer>
           <>
             {/* <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
@@ -1000,6 +1017,7 @@ const Content = styled.div`
 const AmountSection = styled.div`
   display: flex;
   flex-direction: column;
+  width: 500px;
   margin: 1.3rem 0 0 0;
   @media (max-width: 800px) {
     display: flex;
