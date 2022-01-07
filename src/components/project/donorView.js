@@ -537,9 +537,11 @@ const ProjectDonorView = ({
               }}
             >
               <GoVerified color={theme.colors.blue} />
-              <Text sx={{ variant: 'text.default', ml: 2 }}>
-                {project?.traceCampaignId ? 'Traceable' : 'Verified'}
-              </Text>
+              <Text sx={{ variant: 'text.default', mx: 2 }}>Verified</Text>
+              {project?.traceCampaignId && (
+                <Text sx={{ variant: 'text.default', mr: 2 }}> {' & '}Traceable</Text>
+              )}
+
               <Tooltip
                 placement='bottom'
                 isArrow

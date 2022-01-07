@@ -175,7 +175,7 @@ const ProjectCard = props => {
 
           <div style={{ position: 'relative' }}>
             {project?.traceCampaignId
-              ? projectBadge('TRACEABLE')
+              ? projectBadge('TRACEABLE & VERIFIED')
               : project?.verified
               ? projectBadge('VERIFIED')
               : isNewProject(project?.creationDate)

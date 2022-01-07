@@ -180,6 +180,7 @@ const DonateIndex = props => {
         </ProjectContainer>
         <Payment>
           <Success
+            project={project}
             transakTx={transakTx}
             sessionId={paymentSessionId}
             hash={hashSent}

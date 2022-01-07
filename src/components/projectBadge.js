@@ -4,6 +4,36 @@ import styled from '@emotion/styled'
 import theme from '../utils/theme-ui'
 
 const projectBadge = text => {
+  if (text === 'TRACEABLE & VERIFIED')
+    return (
+      <>
+        <Dot>
+          <DotInner>
+            <Text
+              sx={{
+                variant: 'text.overlineSmall',
+                color: 'background'
+              }}
+            >
+              Traceable
+            </Text>
+          </DotInner>
+        </Dot>
+        <SecondDot>
+          <DotInner>
+            <Text
+              sx={{
+                variant: 'text.overlineSmall',
+                color: 'background'
+              }}
+            >
+              Verified
+            </Text>
+          </DotInner>
+        </SecondDot>
+      </>
+    )
+
   return (
     <Dot>
       <DotInner>
@@ -31,6 +61,21 @@ const Dot = styled.span`
   position: absolute;
   bottom: -34px;
   left: 24px;
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 10px;
+`
+
+const SecondDot = styled.span`
+  background-color: ${theme.colors.secondary};
+  height: 78px;
+  width: 78px;
+  display: grid;
+  color: ${theme.colors.background};
+  border: 6px solid ${theme.colors.background};
+  border-radius: 50%;
+  position: absolute;
+  bottom: -34px;
+  left: 100px;
   font-family: 'Red Hat Text', sans-serif;
   font-size: 10px;
 `
