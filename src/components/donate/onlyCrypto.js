@@ -738,18 +738,16 @@ const OnlyCrypto = props => {
                 <BsCaretDownFill size='12px' color={theme.colors.secondary} />
               </Flex>
             </OpenAmount>
-            {!givBackEligible && project?.verified && (
-              <Text sx={{ ml: 2, mt: 3, color: 'white', width: '100%', fontSize: '15px' }}>
-                The token you have selected to donate is not eligible for GIVbacks. <br /> Please
-                refer to our
+            {true && (
+              <Text sx={{ ml: 2, mt: 3, color: 'white', width: '100%' }}>
+                This token is not eligible for GIVbacks.
                 <a
                   style={{ textDecoration: 'underline' }}
                   href='https://forum.giveth.io/t/givbacks-token-list/253'
                 >
                   {' '}
-                  GIVbacks Token List forum post{' '}
+                  Learn More
                 </a>
-                to see the full list of eligible tokens.
               </Text>
             )}
           </AmountContainer>
