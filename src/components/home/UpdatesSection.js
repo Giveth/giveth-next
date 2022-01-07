@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import { Grid, Box, Heading, Text } from 'theme-ui'
+import { Grid, Box, Heading, Text, Image } from 'theme-ui'
 import styled from '@emotion/styled'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -73,6 +72,7 @@ const UpdatesSection = () => {
                   >
                     {node.title}
                   </Text>
+                  <Image src={node.thumbnail} width='60%' height='60%' alt={node.title} />
                   <Text sx={{ variant: 'text.large', color: 'secondary' }}>
                     {/* {previewContent.subtitle} */}
                   </Text>
