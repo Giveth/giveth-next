@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Box, Link, Flex, Text } from 'theme-ui'
 import { useMediaQuery } from 'react-responsive'
 import styled from '@emotion/styled'
@@ -98,9 +98,14 @@ const Success = props => {
 
         {isGivBackEligible && (project?.verified || project?.traceCampaignId) && (
           <Text sx={{ variant: 'text.large', color: 'background', pt: -1, width: '100%', mt: 4 }}>
-            <strong>You're eligible for GIVbacks!</strong> <br /> GIV rewards from the GIVbacks
+            <strong>You&apos;re eligible for GIVbacks!</strong> <br /> GIV rewards from the GIVbacks
             program will be distributed after the end of the current round. <br /> Learn more:{' '}
-            <a style={{ textDecoration: 'underline' }} href='ttps://giv.giveth.io/givbacks'>
+            <a
+              target='_blank'
+              rel='noreferrer'
+              style={{ textDecoration: 'underline' }}
+              href='ttps://giv.giveth.io/givbacks'
+            >
               giv.giveth.io/givbacks
             </a>
           </Text>
@@ -140,16 +145,16 @@ const Receipt = styled.div`
   align-items: center;
 `
 
-const DownloadReceipt = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex: 0.5;
-  border: 2px solid #aaafca;
-  border-radius: 6px;
-  padding: 20px 14px;
-  align-items: center;
-  cursor: pointer;
-`
+// const DownloadReceipt = styled(Box)`
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: space-between;
+//   flex: 0.5;
+//   border: 2px solid #aaafca;
+//   border-radius: 6px;
+//   padding: 20px 14px;
+//   align-items: center;
+//   cursor: pointer;
+// `
 
 export default Success

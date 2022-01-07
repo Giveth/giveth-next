@@ -742,6 +742,7 @@ const OnlyCrypto = props => {
                 This token is not eligible for GIVbacks.
                 <a
                   target='_blank'
+                  rel='noreferrer'
                   style={{ textDecoration: 'underline' }}
                   href='https://forum.giveth.io/t/givbacks-token-list/253'
                 >
