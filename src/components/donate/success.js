@@ -43,9 +43,7 @@ const Success = props => {
         >
           You&apos;re a giver now!
         </Text>
-        <Text sx={{ variant: 'headings.h5', color: 'background' }}>
-          Thank you for supporting <strong> {project?.title} </strong>.
-        </Text>
+        <Text sx={{ variant: 'headings.h5', color: 'background' }}>Thanks for your support.</Text>
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: -1 }}>
           Your <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong> contribution goes
           a long way!
@@ -111,7 +109,6 @@ const Success = props => {
           </Text>
         )}
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
-          Thank you for your support{' '}
           <div>
             <Link
               sx={{
