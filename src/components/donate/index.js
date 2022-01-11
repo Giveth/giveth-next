@@ -112,6 +112,7 @@ const DonateIndex = props => {
 
   const ShareIcons = ({ message, centered }) => {
     const shareTitle = `I am a Giver and you can be one too! 💙 @givethio. Let’s Build the Future of Giving together! 🙌 🌈 #maketheworldabetterplace 🌏 💜`
+    const shareTitleFB = `I am a Giver and you can be one too! Let’s Build the Future of Giving together! #maketheworldabetterplace`
     const url = typeof window !== 'undefined' ? window?.location?.href : null
     return (
       <Share
@@ -134,7 +135,7 @@ const DonateIndex = props => {
           <LinkedinShareButton title={shareTitle} summary={shareTitle} url={url}>
             <LinkedinIcon size={40} round />
           </LinkedinShareButton>
-          <FacebookShareButton quote={shareTitle} url={url} hashtag='#Giveth'>
+          <FacebookShareButton quote={shareTitleFB} url={url} hashtag='#Giveth'>
             <FacebookIcon size={40} round />
           </FacebookShareButton>
         </SocialIcons>
