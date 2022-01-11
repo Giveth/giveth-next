@@ -17,6 +17,7 @@ import ProjectEditionForm from './projectEditionForm'
 import { getAddressFromENS, isAddressENS } from '../../../lib/wallet'
 import { Context as Web3Context } from '../../../contextProvider/Web3Provider'
 import { compareAddresses } from '../../../lib/helpers'
+import Logger from '../../../Logger'
 
 function ProjectEdition(props) {
   const {
@@ -79,6 +80,7 @@ function ProjectEdition(props) {
           setLoading(false)
           setShowModal(true)
         } catch (error) {
+          Logger.captureException(error)
           setUpdateProjectOnServer(false)
           setLoading(false)
           Toast({

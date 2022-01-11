@@ -5,6 +5,7 @@ import { ProjectContext } from '../../contextProvider/projectProvider'
 import LoadingModal from '../loadingModal'
 import Toast from '../toast'
 import Timeline from './timeline'
+import Logger from '../../Logger'
 
 const UpdatesTab = ({ project, isOwner }) => {
   const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE)
@@ -64,6 +65,7 @@ const UpdatesTab = ({ project, isOwner }) => {
       setLoading(false)
       return data
     } catch (error) {
+      Logger.captureException(error)
       setLoading(false)
       console.error('addUpdate')
       console.log({ error })
