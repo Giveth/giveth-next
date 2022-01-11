@@ -31,6 +31,7 @@ import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 import { switchToXdai, switchNetwork } from '../../lib/util'
 import config from '../../../config'
 // import SVGLogo from '../../images/svg/donation/qr.svg'
+import Logger from '../../Logger'
 
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
@@ -441,6 +442,7 @@ const OnlyCrypto = props => {
                     }
                   }
                 } catch (error) {
+                  Logger.captureException(error)
                   console.log({ error })
                   toast.dismiss()
                 }
@@ -473,6 +475,7 @@ const OnlyCrypto = props => {
       // transaction.notify(transactionHash)
     } catch (error) {
       toast.dismiss()
+      Logger.captureException(error)
       if (
         error?.data?.code === 'INSUFFICIENT_FUNDS' ||
         error?.data?.code === 'UNPREDICTABLE_GAS_LIMIT'
