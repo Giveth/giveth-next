@@ -131,7 +131,7 @@ const DonateIndex = props => {
           <TwitterShareButton title={shareTitle} url={url} hashtags={['Giveth']}>
             <TwitterIcon size={40} round />
           </TwitterShareButton>
-          <LinkedinShareButton title={shareTitle} summary={project?.description} url={url}>
+          <LinkedinShareButton title={shareTitle} summary={shareTitle} url={url}>
             <LinkedinIcon size={40} round />
           </LinkedinShareButton>
           <FacebookShareButton quote={shareTitle} url={url} hashtag='#Giveth'>
