@@ -217,7 +217,7 @@ const ProjectListing = props => {
             )}
 
             {project?.traceCampaignId
-              ? projectBadge('TRACEABLE')
+              ? projectBadge('TRACEABLE & VERIFIED')
               : project?.verified
               ? projectBadge('VERIFIED')
               : isNewProject(project?.creationDate)

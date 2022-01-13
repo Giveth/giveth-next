@@ -111,7 +111,8 @@ const DonateIndex = props => {
   }
 
   const ShareIcons = ({ message, centered }) => {
-    const shareTitle = `Check out on @Givethio`
+    const shareTitle = `I am a Giver and you can be one too! 💙 @givethio. Let’s Build the Future of Giving together! 🙌 🌈 #maketheworldabetterplace 🌏 💜`
+    const shareTitleFB = `I am a Giver and you can be one too! Let’s Build the Future of Giving together! #maketheworldabetterplace`
     const url = typeof window !== 'undefined' ? window?.location?.href : null
     return (
       <Share
@@ -128,13 +129,13 @@ const DonateIndex = props => {
             }
           }}
         >
-          <TwitterShareButton title={shareTitle} url={url} hashtags={['giveth']}>
+          <TwitterShareButton title={shareTitle} url={url} hashtags={['Giveth']}>
             <TwitterIcon size={40} round />
           </TwitterShareButton>
-          <LinkedinShareButton title={shareTitle} summary={project?.description} url={url}>
+          <LinkedinShareButton title={shareTitle} summary={shareTitle} url={url}>
             <LinkedinIcon size={40} round />
           </LinkedinShareButton>
-          <FacebookShareButton quote={shareTitle} url={url} hashtag='#giveth'>
+          <FacebookShareButton quote={shareTitleFB} url={url} hashtag='#Giveth'>
             <FacebookIcon size={40} round />
           </FacebookShareButton>
         </SocialIcons>
@@ -180,6 +181,7 @@ const DonateIndex = props => {
         </ProjectContainer>
         <Payment>
           <Success
+            project={project}
             transakTx={transakTx}
             sessionId={paymentSessionId}
             hash={hashSent}

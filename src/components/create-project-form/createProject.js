@@ -33,7 +33,6 @@ const CreateProject = props => {
 
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
-
   useEffect(() => {
     if (!isSSR()) {
       const qs = queryString.parse(window.location.search)

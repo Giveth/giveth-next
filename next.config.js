@@ -56,7 +56,8 @@ module.exports = withBundleAnalyzer({
       'feathers.develop.giveth.io',
       'ipfs.giveth.io',
       'static.tgbwidget.com',
-      'tgb-production-static.s3.us-east-1.amazonaws.com'
+      'tgb-production-static.s3.us-east-1.amazonaws.com',
+      'cdn-images-1.medium.com'
     ]
   },
   poweredByHeader: false

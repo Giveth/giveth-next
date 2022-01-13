@@ -1,23 +1,25 @@
 import React from 'react'
-import { Box, Link, Flex, Text } from 'theme-ui'
+import { Link, Flex, Text } from 'theme-ui'
 import { useMediaQuery } from 'react-responsive'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../animations/confetti'
-import BillIcon from '../../images/svg/donation/bill-icon.svg'
+// import BillIcon from '../../images/svg/donation/bill-icon.svg'
 import { ETHERSCAN_PREFIXES } from '../../lib/util'
 
 const Success = props => {
   const { project, transakTx, hash, currentChainId } = props
+  const isGivBackEligible = hash?.givBackEligible
 
-  const downloadPDF = () => {
-    const filename = 'donation_invoice.pdf'
-    const link = document.createElement('a')
-    link.setAttribute('download', filename)
-    const event = new MouseEvent('click')
-    link.dispatchEvent(event)
-  }
+  // const downloadPDF = () => {
+  //   const filename = 'donation_invoice.pdf'
+  //   const link = document.createElement('a')
+  //   link.setAttribute('download', filename)
+  //   const event = new MouseEvent('click')
+  //   link.dispatchEvent(event)
+  // }
 
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+
   return (
     <>
       <Flex
@@ -41,9 +43,7 @@ const Success = props => {
         >
           You&apos;re a giver now!
         </Text>
-        <Text sx={{ variant: 'headings.h5', color: 'background' }}>
-          Thank you for supporting <strong> {project?.title} </strong>.
-        </Text>
+        <Text sx={{ variant: 'headings.h5', color: 'background' }}>Thanks for your support.</Text>
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: -1 }}>
           Your <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong> contribution goes
           a long way!
@@ -78,25 +78,37 @@ const Success = props => {
               View transaction details
             </Link>
           </Receipt>
-        ) : (
-          <Receipt sx={{ my: 4 }}>
-            <DownloadReceipt onClick={downloadPDF}>
-              <Text
-                sx={{
-                  variant: 'text.paragraph',
-                  pt: -1,
-                  color: 'bodyLight'
-                }}
-              >
-                Download receipt
-              </Text>
-              <BillIcon />
-            </DownloadReceipt>
-          </Receipt>
-        )}
+        ) : // <Receipt sx={{ my: 4 }}>
+        //   <DownloadReceipt onClick={downloadPDF}>
+        //     <Text
+        //       sx={{
+        //         variant: 'text.paragraph',
+        //         pt: -1,
+        //         color: 'bodyLight'
+        //       }}
+        //     >
+        //       Download receipt
+        //     </Text>
+        //     <BillIcon />
+        //   </DownloadReceipt>
+        // </Receipt>
+        null}
 
+        {isGivBackEligible && (project?.verified || project?.traceCampaignId) && (
+          <Text sx={{ variant: 'text.large', color: 'background', pt: -1, width: '100%', mt: 4 }}>
+            <strong>You&apos;re eligible for GIVbacks!</strong> <br /> GIV rewards from the GIVbacks
+            program will be distributed after the end of the current round. <br /> Learn more:{' '}
+            <a
+              target='_blank'
+              rel='noreferrer'
+              style={{ textDecoration: 'underline' }}
+              href='ttps://giv.giveth.io/givbacks'
+            >
+              giv.giveth.io/givbacks
+            </a>
+          </Text>
+        )}
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
-          Thank you for your support{' '}
           <div>
             <Link
               sx={{
@@ -119,7 +131,7 @@ const Success = props => {
 const Content = styled(Flex)`
   flex-direction: column;
   z-index: 10;
-  min-width: 32vw;
+  width: 32vw;
   word-wrap: break-word;
 `
 
@@ -130,16 +142,16 @@ const Receipt = styled.div`
   align-items: center;
 `
 
-const DownloadReceipt = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex: 0.5;
-  border: 2px solid #aaafca;
-  border-radius: 6px;
-  padding: 20px 14px;
-  align-items: center;
-  cursor: pointer;
-`
+// const DownloadReceipt = styled(Box)`
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: space-between;
+//   flex: 0.5;
+//   border: 2px solid #aaafca;
+//   border-radius: 6px;
+//   padding: 20px 14px;
+//   align-items: center;
+//   cursor: pointer;
+// `
 
 export default Success

@@ -31,6 +31,7 @@ import { getAddressFromENS, isAddressENS } from '../../lib/wallet'
 import { switchToXdai, switchNetwork } from '../../lib/util'
 import config from '../../../config'
 // import SVGLogo from '../../images/svg/donation/qr.svg'
+import Logger from '../../Logger'
 
 const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
@@ -77,6 +78,7 @@ const OnlyCrypto = props => {
   const [icon, setIcon] = useState(null)
   const [anonymous, setAnonymous] = useState(false)
   const [selectLoading, setSelectLoading] = useState(false)
+  const [givBackEligible, setGivBackEligible] = useState(true)
   const switchTraceable = false
   const donateToGiveth = false
 
@@ -84,7 +86,6 @@ const OnlyCrypto = props => {
   const tokenAddress = selectedToken?.address
   const isXdai = networkId === xdaiChain.id
   const isGivingBlockProject = project?.givingBlocksId
-
   useEffect(() => {
     fetchEthPrice().then(setMainTokenPrice)
   }, [])
@@ -420,7 +421,8 @@ const OnlyCrypto = props => {
                     props.setHashSent({
                       transactionHash,
                       tokenSymbol,
-                      subtotal
+                      subtotal,
+                      givBackEligible
                     })
                     setUnconfirmed(false)
                   } else {
@@ -440,6 +442,7 @@ const OnlyCrypto = props => {
                     }
                   }
                 } catch (error) {
+                  Logger.captureException(error)
                   console.log({ error })
                   toast.dismiss()
                 }
@@ -472,6 +475,7 @@ const OnlyCrypto = props => {
       // transaction.notify(transactionHash)
     } catch (error) {
       toast.dismiss()
+      Logger.captureException(error)
       if (
         error?.data?.code === 'INSUFFICIENT_FUNDS' ||
         error?.data?.code === 'UNPREDICTABLE_GAS_LIMIT'
@@ -628,7 +632,6 @@ const OnlyCrypto = props => {
                 </Text>
               )}
             </Flex>
-
             <OpenAmount>
               {isComponentVisible && (
                 <div
@@ -655,6 +658,10 @@ const OnlyCrypto = props => {
                       setIsComponentVisible(false)
                       setCustomInput('')
                       setErc20List([...erc20OriginalList])
+                      const givBackEligibilty = erc20OriginalList?.find(
+                        t => t?.symbol === i?.symbol
+                      )
+                      setGivBackEligible(givBackEligibilty)
                     }}
                     onInputChange={i => {
                       // It's a contract
@@ -671,8 +678,6 @@ const OnlyCrypto = props => {
                             !found && setErc20List([...erc20List, pastedToken])
                             setCustomInput(pastedToken?.symbol)
                             setSelectLoading(false)
-                            // setSelectedToken(pastedToken)
-                            // setIsComponentVisible(false)
                           })
                         } catch (error) {
                           setSelectLoading(false)
@@ -735,6 +740,20 @@ const OnlyCrypto = props => {
                 <BsCaretDownFill size='12px' color={theme.colors.secondary} />
               </Flex>
             </OpenAmount>
+            {!givBackEligible && (project?.verified || project?.traceCampaignId) && (
+              <Text sx={{ ml: 2, mt: 3, color: 'white', width: '100%' }}>
+                This token is not eligible for GIVbacks.
+                <a
+                  target='_blank'
+                  rel='noreferrer'
+                  style={{ textDecoration: 'underline' }}
+                  href='https://forum.giveth.io/t/givbacks-token-list/253'
+                >
+                  {' '}
+                  Learn More
+                </a>
+              </Text>
+            )}
           </AmountContainer>
           <>
             {/* <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
@@ -1000,6 +1019,7 @@ const Content = styled.div`
 const AmountSection = styled.div`
   display: flex;
   flex-direction: column;
+  width: 500px;
   margin: 1.3rem 0 0 0;
   @media (max-width: 800px) {
     display: flex;
