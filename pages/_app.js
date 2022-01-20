@@ -10,9 +10,12 @@ import OnboardJS from '../src/contextProvider/Web3Provider'
 
 import '../styles/globals.css'
 import '../src/components/richImageUploader/quill.imageUploader.css'
+import { OverlayMaintenace } from '../src/components/overlays/Maintenance'
+import { useState } from 'react'
 
 function MyApp({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps)
+  const [showMaintenance, setShowMaintenance] = useState(true)
 
   return (
     <>
@@ -30,6 +33,7 @@ function MyApp({ Component, pageProps }) {
           </ApolloProvider>
         </ThemeProvider>
       </OnboardJS>
+      {showMaintenance && <OverlayMaintenace setShowMaintenance={setShowMaintenance} />}
     </>
   )
 }
