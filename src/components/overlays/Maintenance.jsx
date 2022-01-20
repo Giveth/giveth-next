@@ -2,14 +2,19 @@ import styled from '@emotion/styled'
 import { Giv_500, Gray_100, Semantic_Warning_400 } from '../styled-components/Colors'
 import { H1, H4 } from '../styled-components/Typography'
 
-export const OverlayMaintenace = () => {
+export const OverlayMaintenace = ({ setShowMaintenance }) => {
   return (
     <OverlayMaintenaceContainer>
       <Arc1 src='/images/arc-2.png' />
       <Arc2 src='/images/arc-2.png' />
       <Gear1 src='/images/gear.png' />
       <Gear2 src='/images/gear.png' />
-      <Gear3 src='/images/gear.png' />
+      <Gear3
+        src='/images/gear.png'
+        onClick={() => {
+          setShowMaintenance(false)
+        }}
+      />
       <Gear4 src='/images/gear.png' />
       <Alert src='/images/alert-gold.png' />
       <Title>Giveth.io is currently offline for scheduled maintenance! </Title>
