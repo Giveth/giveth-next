@@ -102,7 +102,7 @@ const Success = props => {
               target='_blank'
               rel='noreferrer'
               style={{ textDecoration: 'underline' }}
-              href='ttps://giv.giveth.io/givbacks'
+              href='https://giv.giveth.io/givbacks'
             >
               giv.giveth.io/givbacks
             </a>
