@@ -16,7 +16,7 @@ import { useState } from 'react'
 function MyApp({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps)
   const [showMaintenance, setShowMaintenance] = useState(
-    process.env.NEXT_PUBLIC_MAINTENANCE.toLowerCase() === 'true'
+    process.env.NEXT_PUBLIC_MAINTENANCE === 'true'
   )
 
   return (
