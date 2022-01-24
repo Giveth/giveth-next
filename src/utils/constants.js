@@ -45,6 +45,7 @@ export const gqlEnums = {
 const rpcUrl = process.env.NEXT_PUBLIC_ETHEREUM_NODE
 const portisKey = process.env.NEXT_PUBLIC_PORTIS_KEY
 const infuraKey = process.env.NEXT_PUBLIC_INFURA_ID
+const CONTACT_EMAIL = 'info@giveth.io'
 
 export const onboardWallets = [
   { walletName: 'metamask' },
@@ -56,6 +57,7 @@ export const onboardWallets = [
   {
     walletName: 'trezor',
     appUrl: 'https://giveth.io/',
+    email: CONTACT_EMAIL,
     rpcUrl
   },
   {
