@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
+import { ApolloClient, InMemoryCache, gql, from } from '@apollo/client'
 import { createUploadLink } from 'apollo-upload-client'
+import { RetryLink } from '@apollo/client/link/retry'
 import { setContext } from '@apollo/client/link/context'
 import merge from 'deepmerge'
 import isEqual from 'lodash.isequal'
@@ -12,6 +13,7 @@ let apolloClient
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 
+const retryLink = new RetryLink()
 const httpLink = createUploadLink({
   uri: process.env.NEXT_PUBLIC_APOLLO_SERVER
 })
@@ -39,7 +41,8 @@ function createApolloClient() {
 
   return new ApolloClient({
     ssrMode,
-    link: authLink.concat(httpLink),
+    // link: authLink.concat(retryLink).concat(httpLink),
+    link: from([authLink, retryLink, httpLink]),
     cache: new InMemoryCache(),
     defaultOptions: {
       watchQuery: {

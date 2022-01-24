@@ -9,7 +9,6 @@ import { ETHERSCAN_PREFIXES } from '../../lib/util'
 const Success = props => {
   const { project, transakTx, hash, currentChainId } = props
   const isGivBackEligible = hash?.givBackEligible
-
   // const downloadPDF = () => {
   //   const filename = 'donation_invoice.pdf'
   //   const link = document.createElement('a')

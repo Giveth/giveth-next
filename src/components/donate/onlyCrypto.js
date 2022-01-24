@@ -658,9 +658,13 @@ const OnlyCrypto = props => {
                       setIsComponentVisible(false)
                       setCustomInput('')
                       setErc20List([...erc20OriginalList])
-                      const givBackEligibilty = erc20OriginalList?.find(
-                        t => t?.symbol === i?.symbol
-                      )
+                      let givBackEligibilty = erc20OriginalList?.find(t => t?.symbol === i?.symbol)
+                      if (
+                        i?.symbol?.toUpperCase() === 'ETH' ||
+                        i?.symbol?.toUpperCase() === 'XDAI'
+                      ) {
+                        givBackEligibilty = true
+                      }
                       setGivBackEligible(givBackEligibilty)
                     }}
                     onInputChange={i => {
