@@ -404,6 +404,12 @@ const OnlyCrypto = props => {
               saveDonationErrors
             })
             // onTransactionHash callback for event emitter
+            if (saveDonationErrors?.length > 0) {
+              return Toast({
+                content: JSON.stringify(saveDonationErrors),
+                type: 'error'
+              })
+            }
             transaction.confirmEtherTransaction(
               transactionHash,
               res => {
