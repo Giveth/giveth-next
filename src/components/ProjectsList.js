@@ -300,7 +300,7 @@ const ProjectsList = props => {
                   ) : (
                     filteredProjects?.length === 0 && (
                       <StyledButton ghost style={{ cursor: 'initial' }}>
-                        Nothing was found
+                        Cannot find any projects that match your search
                       </StyledButton>
                     )
                   )}
