@@ -108,7 +108,7 @@ const Footer = () => {
             <FooterLink>Partnerships</FooterLink>
           </Link>
           <FooterExternalLink
-            href='https://docs.giveth.io/jobs/'
+            href='https://giveth.recruitee.com/'
             target='_blank'
             rel='noopener noreferrer'
           >
