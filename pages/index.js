@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import { client } from '../src/apollo/client'
 import GivethContent from '../src/content/giveth.json'
 import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
@@ -39,13 +40,33 @@ const projectsNumToShowInHomePage = 3
 // ceramic.did = did
 
 const IndexContent = ({ hideInfo, content, topProjects }) => {
+  const router = useRouter()
+  const updatesRef = useRef(null)
+  const [isSubscribe, setIsSubscribe] = useState(false)
+
+  useEffect(() => {
+    const split = router?.asPath.split('#')[1]
+    setIsSubscribe(split === 'subscribe')
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+    if (isSubscribe === true) {
+      setTimeout(() => window.scrollTo(0, updatesRef.current.offsetTop), 1000)
+    }
+  }, [isSubscribe])
+
   return (
     <>
       <Hero content={content} />
       <GIVEconBanner />
       <HomeTopProjects projects={topProjects} />
       {!hideInfo === true && <InfoSection content={content} />}
-      <UpdatesSection />
+      <div ref={updatesRef}>
+        <UpdatesSection />
+      </div>
     </>
   )
 }
