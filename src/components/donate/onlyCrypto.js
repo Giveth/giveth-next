@@ -752,14 +752,13 @@ const OnlyCrypto = props => {
             </OpenAmount>
             {!givBackEligible && (project?.verified || project?.traceCampaignId) && (
               <Text sx={{ ml: 2, mt: 3, color: 'white', width: '100%' }}>
-                This token is not eligible for GIVbacks.
+                This token is not eligible for GIVbacks.{' '}
                 <a
                   target='_blank'
                   rel='noreferrer'
                   style={{ textDecoration: 'underline' }}
                   href='https://forum.giveth.io/t/givbacks-token-list/253'
                 >
-                  {' '}
                   Learn More
                 </a>
               </Text>
