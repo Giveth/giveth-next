@@ -71,7 +71,12 @@ const ProjectsList = props => {
           : { field: sortBy.value, direction: gqlEnums.DESC },
       limit: itemsPerPage,
       skip: itemsPerPage * (loadNum || 0),
-      filterBy: sortBy.value === gqlEnums.ACCEPTGIV ? { field: sortBy.value, value: true } : null
+      filterBy:
+        sortBy.value === gqlEnums.ACCEPTGIV
+          ? { field: sortBy.value, value: true }
+          : sortBy.value === gqlEnums.TRACEABLE
+          ? { field: sortBy.value, value: true }
+          : null
     }
 
     if (sortBy.direction) variables.orderBy.direction = sortBy.direction
