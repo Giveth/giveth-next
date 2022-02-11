@@ -50,7 +50,6 @@ const ProjectDonorView = ({
     state: { user, isSignedIn },
     actions: { loginModal }
   } = useContext(Web3Context)
-
   const usePopup = useContext(PopupContext)
 
   const { currentProjectView, setCurrentProjectView } = useContext(ProjectContext)

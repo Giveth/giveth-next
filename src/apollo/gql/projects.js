@@ -42,7 +42,7 @@ const FETCH_ALL_PROJECTS = gql`
         categories {
           name
         }
-        reactions {
+        reaction {
           reaction
           id
           projectUpdateId
@@ -345,19 +345,25 @@ const ADD_PROJECT_UPDATE = gql`
 `
 
 const GET_PROJECT_UPDATES = gql`
-  query GetProjectUpdates($projectId: Float!, $take: Float!, $skip: Float!) {
-    getProjectUpdates(projectId: $projectId, take: $take, skip: $skip) {
-      projectUpdate {
+  query GetProjectUpdates($projectId: Int!, $take: Int!, $skip: Int!, $connectedWalletUserId: Int) {
+    getProjectUpdates(
+      projectId: $projectId
+      take: $take
+      skip: $skip
+      connectedWalletUserId: $connectedWalletUserId
+    ) {
+      id
+      title
+      projectId
+      userId
+      content
+      isMain
+      totalReactions
+      reaction {
         id
-        title
-        content
-        createdAt
-        projectId
         userId
-      }
-      reactions {
         reaction
-        userId
+        projectUpdateId
       }
     }
   }
@@ -395,6 +401,37 @@ const TOGGLE_PROJECT_REACTION = gql`
       reaction
       reactionCount
     }
+  }
+`
+const LIKE_PROJECT_QUERY = `
+  mutation ($projectId: Int!) {
+    likeProject(projectId: $projectId) {
+      id
+      projectId
+      reaction
+    }
+  }
+`
+
+const UNLIKE_PROJECT_QUERY = `
+  mutation ($reactionId: Int!) {
+    unlikeProject(reactionId: $reactionId)
+  }
+`
+
+const LIKE_PROJECT_UPDATE_QUERY = `
+  mutation ($projectUpdateId: Int!) {
+    likeProjectUpdate(projectUpdateId: $projectUpdateId) {
+      id
+      projectUpdateId
+      reaction
+    }
+  }
+`
+
+const UNLIKE_PROJECT_UPDATE_QUERY = `
+  mutation ($reactionId: Int!) {
+    unlikeProjectUpdate(reactionId: $reactionId)
   }
 `
 
@@ -524,5 +561,9 @@ export {
   WALLET_ADDRESS_IS_VALID,
   GET_CATEGORIES,
   UPLOAD_IMAGE,
-  TITLE_IS_VALID
+  TITLE_IS_VALID,
+  LIKE_PROJECT_UPDATE_QUERY,
+  UNLIKE_PROJECT_UPDATE_QUERY,
+  LIKE_PROJECT_QUERY,
+  UNLIKE_PROJECT_QUERY
 }

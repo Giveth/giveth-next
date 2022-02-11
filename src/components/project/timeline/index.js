@@ -47,12 +47,12 @@ const Timeline = ({ content = [], addUpdate, project, isOwner, refreshQuery }) =
       {content
         ?.slice(0)
         ?.sort((a, b) => {
-          return (b?.projectUpdate?.createdAt).localeCompare(a?.projectUpdate?.createdAt)
+          return b?.projectUpdate?.createdAt?.localeCompare(a?.projectUpdate?.createdAt)
         })
         .map((i, index) => {
           const date = dayjs(i?.projectUpdate?.createdAt)
           return (
-            <Container key={i.projectUpdate.id}>
+            <Container key={i?.projectUpdate?.id}>
               <LeftInfo sx={{ left: '-13px' }}>
                 <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
                   {date?.format('MMM') || ''}
@@ -65,8 +65,8 @@ const Timeline = ({ content = [], addUpdate, project, isOwner, refreshQuery }) =
               {!isSSR && (
                 <React.Suspense fallback={<div />}>
                   <Card
-                    content={i?.projectUpdate}
-                    reactions={i?.reactions}
+                    content={i}
+                    reactions={i?.reaction}
                     number={content.length - index}
                     project={project}
                     refreshQuery={refreshQuery}
