@@ -403,7 +403,7 @@ const TOGGLE_PROJECT_REACTION = gql`
     }
   }
 `
-const LIKE_PROJECT_QUERY = `
+const LIKE_PROJECT_QUERY = gql`
   mutation ($projectId: Int!) {
     likeProject(projectId: $projectId) {
       id
@@ -413,13 +413,13 @@ const LIKE_PROJECT_QUERY = `
   }
 `
 
-const UNLIKE_PROJECT_QUERY = `
+const UNLIKE_PROJECT_QUERY = gql`
   mutation ($reactionId: Int!) {
     unlikeProject(reactionId: $reactionId)
   }
 `
 
-const LIKE_PROJECT_UPDATE_QUERY = `
+const LIKE_PROJECT_UPDATE_QUERY = gql`
   mutation ($projectUpdateId: Int!) {
     likeProjectUpdate(projectUpdateId: $projectUpdateId) {
       id
@@ -429,7 +429,7 @@ const LIKE_PROJECT_UPDATE_QUERY = `
   }
 `
 
-const UNLIKE_PROJECT_UPDATE_QUERY = `
+const UNLIKE_PROJECT_UPDATE_QUERY = gql`
   mutation ($reactionId: Int!) {
     unlikeProjectUpdate(reactionId: $reactionId)
   }

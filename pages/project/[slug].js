@@ -32,7 +32,6 @@ const Project = props => {
 export async function getServerSideProps(props) {
   const { query } = props
   const slug = decodeURI(query?.slug).replace(/\s/g, '')
-
   let errors,
     project,
     donations,
