@@ -11,9 +11,10 @@ import { useApolloClient } from '@apollo/client'
 import ConfirmationModal from '../../confirmationModal'
 import { GET_USER } from '../../../apollo/gql/auth'
 import {
-  TOGGLE_UPDATE_REACTION,
   EDIT_PROJECT_UPDATE,
-  DELETE_PROJECT_UPDATE
+  DELETE_PROJECT_UPDATE,
+  LIKE_PROJECT_UPDATE_QUERY,
+  UNLIKE_PROJECT_UPDATE_QUERY
 } from '../../../apollo/gql/projects'
 import Toast from '../../../components/toast'
 import theme from '../../../utils/theme-ui'
@@ -48,17 +49,20 @@ const TimelineCard = props => {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const [user, setUser] = useState(undefined)
-
   const react = async () => {
     try {
       if (!isSignedIn) return loginModal()
 
+      let action = UNLIKE_PROJECT_UPDATE_QUERY
+      let variables = { reactionId: parseInt(content?.reaction?.id) }
+      if (hearted === false) {
+        // like it
+        action = LIKE_PROJECT_UPDATE_QUERY
+        variables.projectUpdateId = parseInt(props?.content?.id)
+      }
       await client?.mutate({
-        mutation: TOGGLE_UPDATE_REACTION,
-        variables: {
-          reaction: 'heart',
-          updateId: parseFloat(props?.content?.id)
-        },
+        mutation: action,
+        variables,
         refetchQueries: [
           {
             query: props?.refreshQuery,
