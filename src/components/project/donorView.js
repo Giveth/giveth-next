@@ -23,7 +23,7 @@ import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
 import { BsHeartFill } from 'react-icons/bs'
 
-import { TOGGLE_PROJECT_REACTION } from '../../apollo/gql/projects'
+import { LIKE_PROJECT_QUERY, UNLIKE_PROJECT_QUERY } from '../../apollo/gql/projects'
 import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
 
@@ -72,12 +72,16 @@ const ProjectDonorView = ({
     try {
       if (!isSignedIn) return loginModal()
 
+      let action = UNLIKE_PROJECT_QUERY
+      let variables = { reactionId: parseInt(project?.reaction?.id) }
+      if (hearted === false) {
+        // like it
+        action = LIKE_PROJECT_QUERY
+        variables.projectId = parseInt(project?.id)
+      }
       const reaction = await client?.mutate({
-        mutation: TOGGLE_PROJECT_REACTION,
-        variables: {
-          reaction: 'heart',
-          projectId: parseFloat(project?.id)
-        }
+        mutation: action,
+        variables
       })
 
       const { data } = reaction
@@ -86,7 +90,7 @@ const ProjectDonorView = ({
       setHeartedCount(reactionCount)
       setHearted(hearted)
     } catch (error) {
-      console.log(error)
+      console.log({ error })
     }
   }
 
