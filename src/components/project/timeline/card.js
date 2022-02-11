@@ -164,7 +164,6 @@ const TimelineCard = props => {
   useEffect(() => {
     setCurrentContent(props?.content?.content)
   }, [props])
-
   if (props.newUpdateOption) {
     return (
       <Box style={{ width: '100%' }}>
