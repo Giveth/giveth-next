@@ -49,6 +49,7 @@ module.exports = withBundleAnalyzer({
   images: {
     domains: [
       'gateway.pinata.cloud',
+      'giveth.mypinata.cloud',
       'imgur.com',
       'i.imgur.com',
       'feathers.beta.giveth.io',
